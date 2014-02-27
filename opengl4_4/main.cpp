@@ -805,22 +805,6 @@ void renderScene(void) {
     setUniforms();
 	
 	if(mouseIsDown){
-		
-		/*
-
-		This is code to try and do the picking using the frame buffer
-		It did not end up working due to the following error being returned by 
-			the check of the frame buffer status:
-			GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT​
-
-		enableWriting();
-		drawTriangles();
-		disableWriting();
-		
-		readPixel(startX,startY);
-		printf("%d ",pixelData.DrawID);
-		printf("%d ",pixelData.ObjectID);
-		printf("%d\n",pixelData.PrimID);*/
 
 		drawTriangles();
 		readIfObjectClicked();

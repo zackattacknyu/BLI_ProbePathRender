@@ -6,13 +6,28 @@ uniform vec2 mouseCoordinates;
 //interpolated texture values from vertex shader
 in vec2 UV;
 
+//which components to display
+uniform bool specularOn;
+uniform bool diffuseOn;
+uniform bool ambientOn;
+
+//if object is picked, color is displayed
+uniform bool showTrueColor;
+
 //values that stay constant
 uniform sampler2D zrdTextureSampler;
 
 in vec3 LightCoordinates;
 
 in vec4 Color;
+in vec4 Position;
+in vec3 Normal;
 out vec4 outputF;
+
+//for the picking
+uniform uint gDrawIndex; 
+uniform uint gObjectIndex; 
+out uvec3 FragColor;
 
 //the following source of information proved to be quite useful
 //		http://cs.nyu.edu/~elif/phong.pdf
@@ -22,8 +37,11 @@ out vec4 outputF;
  
 void main()
 {	
-
-	outputF = Color;
-	//outputColor = texture(zrdTextureSampler,UV).rgb;
-	//outputF = vec4(outputColor,Color.w);
+	vec3 outputColor;
+	if(showTrueColor){
+		outputColor = Color.xyz;
+	}else{
+		outputColor = texture(zrdTextureSampler,UV).rgb;
+	}
+	outputF = vec4(outputColor,Color.w);
 }
