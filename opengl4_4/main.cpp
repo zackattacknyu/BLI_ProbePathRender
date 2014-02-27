@@ -1114,7 +1114,11 @@ void mouseButton(int button, int state, int x, int y)
 int iterationNumber = 0;
 void rotateIdle(){
 	if(animated){
-		myAngle += 0.0005;
+		double deltaT = 0.0005;
+		double deltaX = 2*deltaT;
+		double deltaY = deltaT*deltaT;
+		xdistance += deltaX;
+		ydistance += deltaY;
 	}
 	glutPostRedisplay();
 }
