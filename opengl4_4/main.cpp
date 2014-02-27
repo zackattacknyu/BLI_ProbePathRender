@@ -952,17 +952,6 @@ void readKeyboard( unsigned char key, int x, int y ){
 	//printf("Key Pressed: %d\n",key);
   switch( key ){
 	  case  0x1B: /* esc */
-	  case 'b':
-		  lightMode = (lightMode + 1)%3;
-		  printf("Light Mode: %d\n",lightMode);
-		  if(lightMode == 0){
-			  printf("Light is stationary in scene\n\n");
-		  }else if(lightMode == 1){
-			  printf("Light stays stationary with respect to object and camera\n\n");
-		  }else if(lightMode == 2){
-			  printf("Light stays stationary with respect to camera but not object\n\n");
-		  }
-		  break;
 	  case  't':
 		  transparent = !transparent;
 		break;
@@ -980,78 +969,48 @@ void readKeyboard( unsigned char key, int x, int y ){
 
 		  break;
 
-		  //light movements
-	  case 'w':
-		  lightY = lightY + 0.1;
-		  break;
-	  case 's':
-		  lightY = lightY - 0.1;
-		  break;
-	  case 'a':
-		  lightX = lightX - 0.1;
-		  break;
-	  case 'd':
-		  lightX = lightX + 0.1;
-		  break;
-	  case 'r':
-		  lightZ = lightZ - 0.1;
-		  break;
-	  case 'f':
-		  lightZ = lightZ + 0.1;
-		  break;
 	  case 'g':
 		  animated = !animated;
 		  break;
 
 		  //camera movements
-	  case 'i':
+	  case 'f':
 		  cameraZ = cameraZ + 0.1;
 		  lookAtZ = lookAtZ + 0.1;
 		  break;
-	  case 'k':
+	  case 'r':
 		  cameraZ = cameraZ - 0.1;
 		  lookAtZ = lookAtZ - 0.1;
 		  break;
-	  case 'j':
+	  case 'a':
 		  cameraX = cameraX + 0.1;
 		  lookAtX = lookAtX + 0.1;
 		  break;
-	  case 'l':
+	  case 'd':
 		  cameraX = cameraX - 0.1;
 		  lookAtX = lookAtX - 0.1;
 		  break;
-	  case 'y':
+	  case 'w':
 		  cameraY = cameraY - 0.1;
 		  lookAtY = lookAtY - 0.1;
 		  break;
-	  case 'h':
+	  case 's':
 		  cameraY = cameraY + 0.1;
 		  lookAtY = lookAtY + 0.1;
 		  break;
 
 		  //look at movements
-	  case 'p':
+	  case 'i':
 		  lookAtY = lookAtY - 0.1;
 		  break;
-	  case 'm':
+	  case 'k':
 		  lookAtY = lookAtY + 0.1;
 		  break;
-	  case 'o':
+	  case 'l':
 		  lookAtX = lookAtX - 0.1;
 		  break;
-	  case 'n':
+	  case 'j':
 		  lookAtX = lookAtX + 0.1;
-		  break;
-
-		  //turn on/off different lighting modes
-	  case 'x':
-		  ambient = !ambient;
-		  break;
-	  case 'c':
-		  specular = !specular;
-		  break;
-	  case 'v':
-		  diffuse = !diffuse;
 		  break;
 
 		  //make translation possible with keyboard
@@ -1113,9 +1072,6 @@ void mouseMove(int x, int y)
 
 void readIfObjectClicked(){
 	glReadPixels(startX,screenHeight-startY,1,1,GL_RGB,GL_UNSIGNED_BYTE,&pixelColorInfo);
-	//printf("\nColor=%d,",pixelColorInfo.redComponent);
-	//printf("%d,",pixelColorInfo.greenComponent);
-	//printf("%d\n",pixelColorInfo.blueComponent);
 	if(pixelColorInfo.redComponent == 128 && pixelColorInfo.greenComponent == 128 && pixelColorInfo.blueComponent == 128){
 		showTrueColor = false;
 	}else{
