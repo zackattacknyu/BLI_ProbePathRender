@@ -1,0 +1,11 @@
+/Debug/
+/glew/
+/glut/
+/Release/
+/ipch/
+/*.v11.suo
+/*.suo
+/*.sdf
+/*.opensdf
+/glut-3.7.6-bin.zip
+/glew-1.10.0-win32.zip

@@ -1,0 +1,121 @@
+#version 330
+uniform mat4 viewMatrix, projMatrix;
+#extension GL_EXT_gpu_shader4 : enable 
+uniform vec2 mouseCoordinates;
+
+//interpolated texture values from vertex shader
+in vec2 UV;
+
+//which components to display
+uniform bool specularOn;
+uniform bool diffuseOn;
+uniform bool ambientOn;
+
+//if object is picked, color is displayed
+uniform bool showTrueColor;
+
+//values that stay constant
+uniform sampler2D zrdTextureSampler;
+
+in vec3 LightCoordinates;
+
+in vec4 Color;
+in vec4 Position;
+in vec3 Normal;
+out vec4 outputF;
+
+//for the picking
+uniform uint gDrawIndex; 
+uniform uint gObjectIndex; 
+out uvec3 FragColor;
+
+//the following source of information proved to be quite useful
+//		http://cs.nyu.edu/~elif/phong.pdf
+
+//will also use this for the lighting
+//		http://www.ics.uci.edu/~gopi/CS211A/classes/illumination.pdf
+ 
+void main()
+{	
+    FragColor = uvec3(gObjectIndex, gDrawIndex, gl_PrimitiveID + 1);
+
+	//using 4 entries for color to allow alpha channel
+	//	this will let us implement transparency
+	//outputF = vec4(Color,0.1);
+	outputF = Color;
+
+	float ambientFactor = 0.2;
+	vec3 ambientMaterial = vec3(ambientFactor,ambientFactor,ambientFactor);
+
+	vec3 lightColor = vec3(1,1,1);
+	//vec3 lightCoordinates = vec3(-1,0,1);
+	vec3 cameraCoordinates = vec3(0,0,-10);
+	float specularPower = 7;
+
+	vec3 lightVector = LightCoordinates - vec3(Position);
+	float lightDistance = length(lightVector);
+	lightVector = normalize(lightVector);
+
+	//get the attentuation
+	//	A = 1/(a + b*r + c*r^2)
+	float attenuation_a = 0.02;
+	float attenuation_b = 0.01;
+	float attenuation_c = 0.05;
+	float attenuation_denominator = attenuation_a + attenuation_b*lightDistance + attenuation_c*lightDistance*lightDistance;
+	float attenuation = 1/attenuation_denominator;
+
+	//reflection vector is calculated as follows:
+	//		R = L - 2(N.L)N 
+	//	    where R is reflection vector, N is normal vector normalized, and L is light vector normalized
+
+	//gets the specular component
+	//vec3 eyeVector = cameraCoordinates - vec3(Position);
+	vec3 eyeVector = -1*vec3(Position);
+	eyeVector = normalize(eyeVector);
+	vec3 normalVector = normalize(Normal);
+	vec3 reflectionVector = lightVector - 2 * dot(normalVector,lightVector) * normalVector;
+	float specularPart = pow(dot(reflectionVector,eyeVector),specularPower);
+	float specular = max(0,specularPart);
+
+	//gets the diffuse component
+	float diffuse = max(0,dot(lightVector,normalVector));
+
+	if(diffuse == 0){
+		specular = 0;
+	}
+
+	vec3 specularLight = lightColor*specular*attenuation;
+	vec3 diffuseLight = lightColor*diffuse*attenuation;
+
+	//vec3 outputColor = min(Color.xyz* (ambientMaterial + diffuseLight + specularLight), vec3(1.0));
+	//vec3 outputLight = ambientMaterial + diffuseLight + specularLight;
+	vec3 outputLight = vec3(0,0,0);
+
+	//toggles different forms of lighting on/off
+	bool lightOff = true;
+	if(ambientOn){
+		outputLight = outputLight + ambientMaterial;
+		lightOff = false;
+	}
+	if(diffuseOn){
+		outputLight = outputLight + diffuseLight;
+		lightOff = false;
+	}
+	if(specularOn){
+		outputLight = outputLight + specularLight;
+		lightOff = false;
+	}
+	if(lightOff){
+		outputLight = vec3(1,1,1);
+	}
+
+	vec3 unlitColor;
+	unlitColor = texture(zrdTextureSampler,UV).rgb;
+
+	if(showTrueColor){
+		unlitColor = Color.xyz;
+	}
+
+	vec3 outputColor = unlitColor*outputLight;
+	outputF = vec4(outputColor,Color.w);
+}
