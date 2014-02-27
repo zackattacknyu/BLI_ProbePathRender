@@ -65,36 +65,7 @@ void main()
 	// view
 	// projection
 
-	mat4 normalMatrix = transpose(inverse(viewMatrix));
-	vec4 tempVector = normalMatrix * vec4(normal.x, normal.y, normal.z,0);
-	Normal = vec3(tempVector[0],tempVector[1],tempVector[2]);
-    //Normal = normal;
 	gl_Position = projMatrix * viewMatrix * position ;
-
-	vec4 tempLightCoords = vec4(lightCoordinates.xyz,1.0);
-
-
-	if(lightMode == 0){
-
-		//light should stay stationary. 
-		Position = projMatrix*viewMatrix*position;
-
-	}else if(lightMode == 1){
-
-		//light stays stationary with respect to object and camera
-		Position = viewMatrix* position;
-		tempLightCoords = viewMatrix*tempLightCoords;
-
-	}else if(lightMode == 2){
-		
-		//here is the light stays stationary when you move the camera
-		//		but not when you move the object
-		Position = currentViewMatrix*position;
-		tempLightCoords = viewMatrix*tempLightCoords;
-	}
-
-
-	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;
 
 }
