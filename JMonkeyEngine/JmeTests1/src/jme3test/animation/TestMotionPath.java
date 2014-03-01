@@ -121,9 +121,9 @@ public class TestMotionPath extends SimpleApplication {
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         mat.setFloat("Shininess", 1f);
         mat.setBoolean("UseMaterialColors", true);
-        mat.setColor("Ambient", ColorRGBA.Black);
-        mat.setColor("Diffuse", ColorRGBA.DarkGray);
-        mat.setColor("Specular", ColorRGBA.White.mult(0.6f));
+        mat.setColor("Ambient", ColorRGBA.White);
+        mat.setColor("Diffuse", ColorRGBA.White);
+        mat.setColor("Specular", ColorRGBA.White);
         Material matSoil = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         matSoil.setBoolean("UseMaterialColors", true);
         matSoil.setColor("Ambient", ColorRGBA.Black);
