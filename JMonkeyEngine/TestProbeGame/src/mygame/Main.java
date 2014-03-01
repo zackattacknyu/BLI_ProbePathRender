@@ -45,7 +45,8 @@ public class Main extends SimpleApplication {
         littleObject = new Geometry("Box", b);
         Material ballMat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
         Spatial sampleMesh = assetManager.loadModel("Models/textured_mesh.obj");
-        sampleMesh.setMaterial(ballMat);
+        sampleMesh.setMaterial(ballMat); 
+        sampleMesh.scale(40f);
         
         rootNode.attachChild(sampleMesh);
         littleObject.setName("Cube");
