@@ -25,7 +25,7 @@ public class Main extends SimpleApplication {
         Box b = new Box(1, 1, 1);
         Geometry geom = new Geometry("Box", b);
 
-        Spatial simpleBall = assetManager.loadModel("Models/textured_mesh.obj");
+        Spatial simpleBall = assetManager.loadModel("Models/simpleCube.obj");
         Material ballMat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
         simpleBall.setMaterial(ballMat);
         
