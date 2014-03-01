@@ -25,12 +25,17 @@ public class Main extends SimpleApplication {
         Box b = new Box(1, 1, 1);
         Geometry geom = new Geometry("Box", b);
 
-        Spatial chestModel = assetManager.loadModel("Models/textured_mesh.obj");
+        Spatial simpleBall = assetManager.loadModel("Models/textured_mesh.obj");
+        //Material ballMat = new Material(assetManager,"Materials/textured_mesh.mtl");
+        
+        
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
         geom.setMaterial(mat);
 
-        rootNode.attachChild(geom);
+        simpleBall.setMaterial(mat);
+        //rootNode.attachChild(geom);
+        rootNode.attachChild(simpleBall);
     }
 
     @Override
