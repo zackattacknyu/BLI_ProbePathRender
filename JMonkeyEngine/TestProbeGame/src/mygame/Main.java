@@ -26,14 +26,14 @@ public class Main extends SimpleApplication {
         Geometry geom = new Geometry("Box", b);
 
         Spatial simpleBall = assetManager.loadModel("Models/textured_mesh.obj");
-        //Material ballMat = new Material(assetManager,"Materials/textured_mesh.mtl");
-        
+        Material ballMat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
+        simpleBall.setMaterial(ballMat);
         
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
         geom.setMaterial(mat);
 
-        simpleBall.setMaterial(mat);
+        //simpleBall.setMaterial(mat);
         //rootNode.attachChild(geom);
         rootNode.attachChild(simpleBall);
     }
