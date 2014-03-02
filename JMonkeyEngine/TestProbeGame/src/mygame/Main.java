@@ -60,15 +60,9 @@ public class Main extends SimpleApplication {
         
         cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
         path = new MotionPath();
-        path.addWayPoint(new Vector3f(0, 0, 0));
-        path.addWayPoint(new Vector3f(1, 1, 1));
-        path.addWayPoint(new Vector3f(10, 3, 50));
-        //path.addWayPoint(new Vector3f(-40, 3, 10));
-        //path.addWayPoint(new Vector3f(-40, 3, 0));
-        //path.addWayPoint(new Vector3f(-40, 8, 0));
-        //path.addWayPoint(new Vector3f(10, 8, 0));
-        //path.addWayPoint(new Vector3f(10, 8, 10));
-        //path.addWayPoint(new Vector3f(15, 8, 10));
+        path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
+        path.addWayPoint(new Vector3f(-3.0130f,1.6770f,10.9500f));
+        path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
         path.enableDebugShape(assetManager, rootNode);
         
         path.setPathSplineType(Spline.SplineType.Linear);
@@ -107,6 +101,10 @@ public class Main extends SimpleApplication {
     private void initInputs() {
         inputManager.addMapping("display_hidePath", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("tensionUp", new KeyTrigger(KeyInput.KEY_U));
+        inputManager.addMapping("tensionDown", new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("SwitchPathInterpolation", new KeyTrigger(KeyInput.KEY_I));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -128,6 +126,23 @@ public class Main extends SimpleApplication {
                         playing = true;
                         motionControl.play();
                     }
+                }
+                
+                if (name.equals("SwitchPathInterpolation") && keyPressed) {
+                    if (path.getPathSplineType() == Spline.SplineType.CatmullRom){
+                        path.setPathSplineType(Spline.SplineType.Linear);
+                    } else {
+                        path.setPathSplineType(Spline.SplineType.CatmullRom);
+                    }
+                }
+
+                if (name.equals("tensionUp") && keyPressed) {
+                    path.setCurveTension(path.getCurveTension() + 0.1f);
+                    System.err.println("Tension : " + path.getCurveTension());
+                }
+                if (name.equals("tensionDown") && keyPressed) {
+                    path.setCurveTension(path.getCurveTension() - 0.1f);
+                    System.err.println("Tension : " + path.getCurveTension());
                 }
 
 
