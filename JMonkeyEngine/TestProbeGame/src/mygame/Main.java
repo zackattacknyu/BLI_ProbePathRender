@@ -61,7 +61,7 @@ public class Main extends SimpleApplication {
         cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
         path = new MotionPath();
         path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
-        path.addWayPoint(new Vector3f(-3.0130f,1.6770f,10.9500f));
+        path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
         path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
         path.enableDebugShape(assetManager, rootNode);
         
