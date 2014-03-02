@@ -32,6 +32,7 @@ public class Main extends SimpleApplication {
     private boolean playing = false;
     private MotionPath path;
     private MotionEvent motionControl;
+    private BitmapText wayPointsText;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -45,6 +46,7 @@ public class Main extends SimpleApplication {
         littleObject = new Geometry("Box", b);
         Material ballMat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
         Spatial sampleMesh = assetManager.loadModel("Models/textured_mesh.obj");
+        //Spatial sampleMesh = assetManager.loadModel("Models/exp_mesh5.ply");
         sampleMesh.setMaterial(ballMat); 
         sampleMesh.scale(40f);
         
@@ -58,14 +60,15 @@ public class Main extends SimpleApplication {
         
         cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
         path = new MotionPath();
-        path.addWayPoint(new Vector3f(10, 3, 0));
-        path.addWayPoint(new Vector3f(10, 3, 10));
-        path.addWayPoint(new Vector3f(-40, 3, 10));
-        path.addWayPoint(new Vector3f(-40, 3, 0));
-        path.addWayPoint(new Vector3f(-40, 8, 0));
-        path.addWayPoint(new Vector3f(10, 8, 0));
-        path.addWayPoint(new Vector3f(10, 8, 10));
-        path.addWayPoint(new Vector3f(15, 8, 10));
+        path.addWayPoint(new Vector3f(0, 0, 0));
+        path.addWayPoint(new Vector3f(1, 1, 1));
+        path.addWayPoint(new Vector3f(10, 3, 50));
+        //path.addWayPoint(new Vector3f(-40, 3, 10));
+        //path.addWayPoint(new Vector3f(-40, 3, 0));
+        //path.addWayPoint(new Vector3f(-40, 8, 0));
+        //path.addWayPoint(new Vector3f(10, 8, 0));
+        //path.addWayPoint(new Vector3f(10, 8, 10));
+        //path.addWayPoint(new Vector3f(15, 8, 10));
         path.enableDebugShape(assetManager, rootNode);
         
         path.setPathSplineType(Spline.SplineType.Linear);
@@ -76,22 +79,13 @@ public class Main extends SimpleApplication {
         motionControl.setInitialDuration(10f);
         motionControl.setSpeed(2f);       
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        final BitmapText wayPointsText = new BitmapText(guiFont, false);
+        wayPointsText = new BitmapText(guiFont, false);
         wayPointsText.setSize(guiFont.getCharSet().getRenderedSize());
+        wayPointsText.setLocalTranslation(
+                (cam.getWidth() - wayPointsText.getLineWidth()) / 2, 
+                cam.getHeight(), 0);
 
         guiNode.attachChild(wayPointsText);
-
-        path.addListener(new MotionPathListener() {
-
-            public void onWayPointReach(MotionEvent control, int wayPointIndex) {
-                if (path.getNbWayPoints() == wayPointIndex + 1) {
-                    wayPointsText.setText(control.getSpatial().getName() + "Finished!!! ");
-                } else {
-                    wayPointsText.setText(control.getSpatial().getName() + " Reached way point " + wayPointIndex);
-                }
-                wayPointsText.setLocalTranslation((cam.getWidth() - wayPointsText.getLineWidth()) / 2, cam.getHeight(), 0);
-            }
-        });
 
         flyCam.setEnabled(false);
         ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -129,6 +123,7 @@ public class Main extends SimpleApplication {
                     if (playing) {
                         playing = false;
                         motionControl.stop();
+                        wayPointsText.setText(String.valueOf(motionControl.getCurrentValue()));
                     } else {
                         playing = true;
                         motionControl.play();
