@@ -20,6 +20,14 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * test
@@ -59,6 +67,19 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(littleObject);
         
         cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
+        
+        Path sampleDataFile = Paths.get("textFiles/sampleData.txt");
+        ArrayList<String> lines = new ArrayList<String>();
+        try {
+            lines = (ArrayList<String>) Files.readAllLines(sampleDataFile, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(String line: lines){
+            System.out.println(line);
+        }
+        
         path = new MotionPath();
         path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
         path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
