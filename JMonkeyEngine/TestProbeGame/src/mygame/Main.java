@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,11 +77,8 @@ public class Main extends SimpleApplication {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        for(String line: lines){
-            System.out.println(line);
-        }
-        
         path = new MotionPath();
+        path.addWayPoint(lineToWayPoint(lines.get(2)));
         path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
         path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
         path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
@@ -106,6 +104,18 @@ public class Main extends SimpleApplication {
         ChaseCamera chaser = new ChaseCamera(cam, littleObject);
         chaser.registerWithInput(inputManager);
         initInputs();
+    }
+    
+    /**
+     * This converts the line of probe data into a way point
+     * @param line
+     * @return 
+     */
+    public Vector3f lineToWayPoint(String line){
+        String[] parts = line.split(",");
+        Float xPart = Float.valueOf(parts[5]);
+        Float yPart = Float.valueOf(parts[6]);
+        return new Vector3f(xPart,yPart,27.9500f);
     }
 
     @Override
