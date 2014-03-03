@@ -78,10 +78,12 @@ public class Main extends SimpleApplication {
         }
         
         path = new MotionPath();
-        path.addWayPoint(lineToWayPoint(lines.get(2)));
-        path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
-        path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
-        path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
+        for(String line: lines){
+            path.addWayPoint(lineToWayPoint(line));
+        }
+        //path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
+        //path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
+        //path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
         path.enableDebugShape(assetManager, rootNode);
         
         path.setPathSplineType(Spline.SplineType.Linear);
@@ -115,7 +117,7 @@ public class Main extends SimpleApplication {
         String[] parts = line.split(",");
         Float xPart = Float.valueOf(parts[5]);
         Float yPart = Float.valueOf(parts[6]);
-        return new Vector3f(xPart,yPart,27.9500f);
+        return new Vector3f(xPart,yPart,22.8080f);
     }
 
     @Override
