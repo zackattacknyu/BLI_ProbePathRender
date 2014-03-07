@@ -10,8 +10,11 @@ The RXTX library was found here
 http://mfizz.com/oss/rxtx-for-java
 
 Before running, make sure to do the following:
+
 1. Copy the win64/rxtxSerial.dll into C:\Windows\SysWOW64
+
 2. Append the directory containing rxtxSerial.dll into your PATH environment variable.
 
-The directory we care about is the following:
+
+The directory we care about where the dll file is located is the following:
 BLI_ProbePathRender\JMonkeyEngine\mfz-rxtx-2.2-20081207-win-x64\mfz-rxtx-2.2-20081207-win-x64
