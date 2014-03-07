@@ -16,5 +16,7 @@ Before running, make sure to do the following:
 2. Append the directory containing rxtxSerial.dll into your PATH environment variable.
 
 
+
 The directory we care about where the dll file is located is the following:
+
 BLI_ProbePathRender\JMonkeyEngine\mfz-rxtx-2.2-20081207-win-x64\mfz-rxtx-2.2-20081207-win-x64
