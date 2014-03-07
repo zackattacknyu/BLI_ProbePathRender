@@ -15,12 +15,18 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.shape.Line;
+import com.jme3.util.BufferUtils;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -77,10 +83,54 @@ public class Main extends SimpleApplication {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+        
+        ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
+        ArrayList<Float> lineVertexList = new ArrayList<Float>(lines.size()*3);
+        ArrayList<Short> indexList = new ArrayList<Short>(lines.size());
+        
+        Vector3f currentVertex;
         path = new MotionPath();
+        short currentIndex = 0;
         for(String line: lines){
-            path.addWayPoint(lineToWayPoint(line));
+            currentVertex = lineToWayPoint(line);
+            path.addWayPoint(currentVertex);
+            lineVertices.add(currentVertex);
+            lineVertexList.add(currentVertex.getX());
+            lineVertexList.add(currentVertex.getY());
+            lineVertexList.add(currentVertex.getZ());
+            indexList.add(currentIndex); currentIndex++;
         }
+        Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lines.size()]);
+        ColorRGBA lineColor = ColorRGBA.Black;
+        ColorRGBA[] lineColors = new ColorRGBA[lines.size()];
+        for(int j=0; j < lineColors.length; j++){
+            lineColors[j] = lineColor;
+        }
+        
+        float[] vertices = new float[lines.size()*3];
+        short[] indices = new short[lines.size()];
+        int index = 0;
+        for(Float vertex:lineVertexList){
+            vertices[index] = vertex; index++;
+        }
+        index = 0;
+        for(Short indexVal: indexList){
+            indices[index] = indexVal; index++;
+        }
+        
+        Mesh mesh = new Mesh();
+        mesh.setMode(Mesh.Mode.Lines);
+        mesh.setBuffer(VertexBuffer.Type.Position, 3, vertices);
+        mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
+        mesh.setLineWidth(10f);
+        Spatial probePathLine = new Geometry("Line",mesh);
+        probePathLine.setName("probeLine");
+        probePathLine.setLocalScale(1);
+        probePathLine.setMaterial(ballMat);
+        rootNode.attachChild(probePathLine);
+        
+        
         try{
             SerialTest.executeMain();
         }catch(Exception e){
