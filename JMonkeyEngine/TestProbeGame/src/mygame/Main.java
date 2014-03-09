@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 public class Main extends SimpleApplication {
     
     private Spatial littleObject;
-    private boolean active = true;
+    private boolean active = false;
     private boolean playing = false;
     private MotionPath path;
     private MotionEvent motionControl;
@@ -133,7 +133,7 @@ public class Main extends SimpleApplication {
         
         try{
             SerialTest.executeMain();
-        }catch(Exception e){
+        }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!");
                     
         }
@@ -141,7 +141,7 @@ public class Main extends SimpleApplication {
         //path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
         //path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
         //path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
-        path.enableDebugShape(assetManager, rootNode);
+        //path.enableDebugShape(assetManager, rootNode);
         
         path.setPathSplineType(Spline.SplineType.Linear);
 
@@ -159,7 +159,7 @@ public class Main extends SimpleApplication {
 
         guiNode.attachChild(wayPointsText);
 
-        flyCam.setEnabled(false);
+        flyCam.setEnabled(true);
         ChaseCamera chaser = new ChaseCamera(cam, littleObject);
         chaser.registerWithInput(inputManager);
         initInputs();
