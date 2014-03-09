@@ -109,19 +109,19 @@ public class Main extends SimpleApplication {
         }
         
         float[] vertices = new float[lines.size()*3];
-        short[] indices = new short[lines.size()];
+        short[] indices = new short[lines.size()*2];
         int index = 0;
         for(Float vertex:lineVertexList){
             vertices[index] = vertex; index++;
         }
-        index = 0;
-        for(Short indexVal: indexList){
-            indices[index] = indexVal; index++;
+        for(index=0; index<indexList.size()-1; index++){
+            indices[2*index]=(short)index;
+            indices[2*index+1]=(short)(index+1);
         }
         
         Mesh mesh = new Mesh();
         mesh.setMode(Mesh.Mode.Lines);
-        mesh.setBuffer(VertexBuffer.Type.Position, 3, vertices);
+        mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
         mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
         mesh.setLineWidth(10f);
         Spatial probePathLine = new Geometry("Line",mesh);
