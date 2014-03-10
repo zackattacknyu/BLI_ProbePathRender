@@ -56,92 +56,60 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        Box b = new Box(0.5f, 0.5f, 0.5f);
-        //cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
-        littleObject = new Geometry("Box", b);
-        Material ballMat = new Material(assetManager, "Common/MatDefs/Misc/ShowNormals.j3md");
-        Spatial sampleMesh = assetManager.loadModel("Models/textured_mesh.obj");
-        //Spatial sampleMesh = assetManager.loadModel("Models/exp_mesh5.ply");
-        sampleMesh.setMaterial(ballMat); 
-        sampleMesh.scale(40f);
+        String objFileLocation = "Models/textured_mesh.obj";
+        String sampleDataLocation = "textFiles/sampleData.txt";
         
-        rootNode.attachChild(sampleMesh);
-        littleObject.setName("Cube");
-        littleObject.setLocalScale(1);
-        littleObject.setMaterial(ballMat);
-
-
+        Material ballMat = new Material(assetManager, 
+                "Common/MatDefs/Misc/ShowNormals.j3md");
+        rootNode.attachChild(ModelHelper.generateModel(
+                objFileLocation, ballMat, assetManager));
+        initLittleBox(ballMat);
         rootNode.attachChild(littleObject);
-        
-        cam.setLocation(new Vector3f(8.4399185f, 11.189463f, 14.267577f));
-        
-        Path sampleDataFile = Paths.get("textFiles/sampleData.txt");
-        ArrayList<String> lines = new ArrayList<String>();
-        try {
-            lines = (ArrayList<String>) Files.readAllLines(sampleDataFile, StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
-        ArrayList<Float> lineVertexList = new ArrayList<Float>(lines.size()*3);
-        ArrayList<Short> indexList = new ArrayList<Short>(lines.size());
-        
-        Vector3f currentVertex;
-        path = new MotionPath();
-        short currentIndex = 0;
-        for(String line: lines){
-            currentVertex = lineToWayPoint(line);
-            path.addWayPoint(currentVertex);
-            lineVertices.add(currentVertex);
-            lineVertexList.add(currentVertex.getX());
-            lineVertexList.add(currentVertex.getY());
-            lineVertexList.add(currentVertex.getZ());
-            indexList.add(currentIndex); currentIndex++;
-        }
-        Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lines.size()]);
-        ColorRGBA lineColor = ColorRGBA.Black;
-        ColorRGBA[] lineColors = new ColorRGBA[lines.size()];
-        for(int j=0; j < lineColors.length; j++){
-            lineColors[j] = lineColor;
-        }
-        
-        float[] vertices = new float[lines.size()*3];
-        short[] indices = new short[lines.size()*2];
-        int index = 0;
-        for(Float vertex:lineVertexList){
-            vertices[index] = vertex; index++;
-        }
-        for(index=0; index<indexList.size()-1; index++){
-            indices[2*index]=(short)index;
-            indices[2*index+1]=(short)(index+1);
-        }
-        
-        Mesh mesh = new Mesh();
-        mesh.setMode(Mesh.Mode.Lines);
-        mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
-        mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
-        mesh.setLineWidth(10f);
-        Spatial probePathLine = new Geometry("Line",mesh);
-        probePathLine.setName("probeLine");
-        probePathLine.setLocalScale(1);
-        probePathLine.setMaterial(ballMat);
-        rootNode.attachChild(probePathLine);
-        
-        
+
+        ArrayList<Vector3f> lineVertices = 
+                ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
+        path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
+        rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat)); 
         try{
             SerialTest.executeMain();
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!");
                     
         }
-        
-        //path.addWayPoint(new Vector3f(5.5900f,1.6770f,27.9500f));
-        //path.addWayPoint(new Vector3f(-3.0130f,1.6770f,22.8080f));
-        //path.addWayPoint(new Vector3f(-11.6160f,1.6770f,27.9500f));
-        //path.enableDebugShape(assetManager, rootNode);
+        enableFlyCam();
+        initPathInputs();
+    }
+    
+    
+    
+    private void initLittleBox(Material ballMat){
+        Box b = new Box(0.5f, 0.5f, 0.5f);
+        littleObject = new Geometry("Box", b);
+        littleObject.setName("Cube");
+        littleObject.setLocalScale(1);
+        littleObject.setMaterial(ballMat);
+    }
+
+    @Override
+    public void simpleUpdate(float tpf) {
+        //TODO: add update code
+    }
+
+    @Override
+    public void simpleRender(RenderManager rm) {
+        //TODO: add render code
+    }
+   
+    private void enableFlyCam(){
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(true);
+        flyCam.setMoveSpeed(10f);
+        flyCam.setRotationSpeed(10f);
+    }
+
+    private void initPathInputs() {
+        //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
+        //chaser.registerWithInput(inputManager);
         
         path.setPathSplineType(Spline.SplineType.Linear);
 
@@ -158,37 +126,7 @@ public class Main extends SimpleApplication {
                 cam.getHeight(), 0);
 
         guiNode.attachChild(wayPointsText);
-
-        flyCam.setEnabled(true);
-        ChaseCamera chaser = new ChaseCamera(cam, littleObject);
-        chaser.registerWithInput(inputManager);
-        initInputs();
-    }
-    
-    /**
-     * This converts the line of probe data into a way point
-     * @param line
-     * @return 
-     */
-    public Vector3f lineToWayPoint(String line){
-        String[] parts = line.split(",");
-        Float xPart = Float.valueOf(parts[5]);
-        Float yPart = Float.valueOf(parts[6]);
-        return new Vector3f(xPart,yPart,22.8080f);
-    }
-
-    @Override
-    public void simpleUpdate(float tpf) {
-        //TODO: add update code
-    }
-
-    @Override
-    public void simpleRender(RenderManager rm) {
-        //TODO: add render code
-    }
-   
-
-    private void initInputs() {
+        
         inputManager.addMapping("display_hidePath", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("tensionUp", new KeyTrigger(KeyInput.KEY_U));
