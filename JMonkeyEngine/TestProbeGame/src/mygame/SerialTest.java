@@ -12,6 +12,7 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
+import java.util.HashMap;
 
 /*
  * 
@@ -46,8 +47,16 @@ public class SerialTest implements SerialPortEventListener {
 	private static final int TIME_OUT = 2000;
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 57600;
+        
+        private static HashMap<String,Integer> dataLocations;
 
 	public void initialize() {
+            dataLocations = new HashMap<String,Integer>(10);
+            dataLocations.put("timestamp", 0);
+            dataLocations.put("yaw", 2);
+            dataLocations.put("pitch", 3);
+            dataLocations.put("roll", 4);
+            
             CommPortIdentifier portId = null;
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -103,6 +112,26 @@ public class SerialTest implements SerialPortEventListener {
                 serialPort.close();
             }
 	}
+        
+        public String getOutputLine(String rawData){
+            StringBuilder outputLine = new StringBuilder(50);
+            //output.append("rawData= " + rawData);
+            //output.append("   ");
+            //ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,"timestamp,null,yaw,pitch,roll");
+            ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,dataLocations);
+            outputLine.append("timestamp=");
+            outputLine.append(ardData.getTimestamp());
+            outputLine.append("   ");
+            outputLine.append("yaw=");
+            outputLine.append(ardData.getYaw());
+            outputLine.append("   ");
+            outputLine.append("pitch=");
+            outputLine.append(ardData.getPitch());
+            outputLine.append("   ");
+            outputLine.append("roll=");
+            outputLine.append(ardData.getRoll());
+            return outputLine.toString();
+        }
 
 	/**
 	 * Handle an event on the serial port. Read the data and print it.
@@ -111,7 +140,7 @@ public class SerialTest implements SerialPortEventListener {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
                         String inputLine=input.readLine();
-                        System.out.println(inputLine);
+                        System.out.println(getOutputLine(inputLine));
                 } catch (Exception e) {
                         System.err.println(e.toString());
                 }

@@ -70,12 +70,13 @@ public class Main extends SimpleApplication {
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
         path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
         rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat)); 
-        try{
+        SerialTest.executeMain();
+        /*try{
             SerialTest.executeMain();
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!");
                     
-        }
+        }*/
         enableFlyCam();
         initPathInputs();
     }
@@ -101,6 +102,7 @@ public class Main extends SimpleApplication {
     }
    
     private void enableFlyCam(){
+        cam.setLocation(new Vector3f(0,0,-10));
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(true);
         flyCam.setMoveSpeed(10f);

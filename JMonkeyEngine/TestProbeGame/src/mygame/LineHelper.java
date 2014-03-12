@@ -49,6 +49,7 @@ public class LineHelper {
         probePathLine.setLocalScale(1);
         probePathLine.setMaterial(ballMat);
         
+        
         return probePathLine;
     }
     
