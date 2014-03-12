@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 
 
-public class SerialTest implements SerialPortEventListener {
+public class SerialReader implements SerialPortEventListener {
 	SerialPort serialPort;
         /** The port we're normally going to use. */
 	/*private static final String PORT_NAMES[] = { 
@@ -51,12 +51,7 @@ public class SerialTest implements SerialPortEventListener {
         private static HashMap<String,Integer> dataLocations;
 
 	public void initialize() {
-            dataLocations = new HashMap<String,Integer>(10);
-            dataLocations.put("timestamp", 0);
-            dataLocations.put("yaw", 2);
-            dataLocations.put("pitch", 3);
-            dataLocations.put("roll", 4);
-            
+            makeDataLocationsMap();
             CommPortIdentifier portId = null;
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -113,11 +108,16 @@ public class SerialTest implements SerialPortEventListener {
             }
 	}
         
+        private void makeDataLocationsMap(){
+            dataLocations = new HashMap<String,Integer>(10);
+            dataLocations.put("timestamp", 0);
+            dataLocations.put("yaw", 2);
+            dataLocations.put("pitch", 3);
+            dataLocations.put("roll", 4);
+        }
+        
         public String getOutputLine(String rawData){
             StringBuilder outputLine = new StringBuilder(50);
-            //output.append("rawData= " + rawData);
-            //output.append("   ");
-            //ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,"timestamp,null,yaw,pitch,roll");
             ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,dataLocations);
             outputLine.append("timestamp=");
             outputLine.append(ardData.getTimestamp());
@@ -149,7 +149,7 @@ public class SerialTest implements SerialPortEventListener {
 	}
 
         public static void executeMain(){
-            SerialTest main = new SerialTest();
+            SerialReader main = new SerialReader();
             main.initialize();
             Thread t=new Thread() {
                 public void run() {

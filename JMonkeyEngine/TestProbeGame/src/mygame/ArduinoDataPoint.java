@@ -41,39 +41,6 @@ public class ArduinoDataPoint {
         }
     }
     
-    public ArduinoDataPoint(String data, String format){
-        
-        String[] dataParts = data.split(",");
-        String[] formatParts = format.split(",");
-        String formatPart;
-        float currentNumber = 0;
-        
-        for(int index = 0; index < formatParts.length; index++){
-            formatPart = formatParts[index].toLowerCase();
-            
-            if(!formatPart.equals("null")){
-                currentNumber = Float.parseFloat(dataParts[index]);
-            }
-            
-            if(formatPart.equals("yaw")){
-                yaw = currentNumber;
-            }else if(formatPart.equals("pitch")){
-                pitch = currentNumber;
-            }else if(formatPart.equals("roll")){
-                roll = currentNumber;
-            }else if(formatPart.equals("x")){
-                x = currentNumber;
-            }else if(formatPart.equals("y")){
-                y = currentNumber;
-            }else if(formatPart.equals("timestamp")){
-                timestamp = currentNumber;
-            }
-            
-            
-        }
-        
-    }
-    
     public float getTimestamp() {
         return timestamp;
     }
