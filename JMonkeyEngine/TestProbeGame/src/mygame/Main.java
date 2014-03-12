@@ -101,7 +101,8 @@ public class Main extends SimpleApplication {
     }
    
     private void enableFlyCam(){
-        cam.setLocation(new Vector3f(0,0,-10));
+        cam.setLocation(new Vector3f(0,0,-20));
+        cam.lookAt(new Vector3f(0,0,10), new Vector3f(0,1,0));
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(true);
         flyCam.setMoveSpeed(10f);
