@@ -119,6 +119,8 @@ public class Main extends SimpleApplication {
         littleObject.setMaterial(ballMat);
     }
 
+    private float lastXangle = 0;
+    private float currentXangle = 0;
     @Override
     public void simpleUpdate(float tpf) {
         /*explained here is how the update loop works
@@ -128,7 +130,10 @@ public class Main extends SimpleApplication {
         //this rotates the little cube depending on the rotation
         if(currentRotation != null){
             try{
-                littleObject.rotate(currentArdData.getPitch()/10000.0f, 0, 0);
+                littleObject.rotate(-1*lastXangle, 0, 0);
+                currentXangle = currentArdData.getPitch()/100.0f;
+                littleObject.rotate(currentXangle, 0, 0);
+                lastXangle = currentXangle;
                 //littleObject.rotate(currentRotation);
             }catch(Exception e){
                 System.out.println(e);
