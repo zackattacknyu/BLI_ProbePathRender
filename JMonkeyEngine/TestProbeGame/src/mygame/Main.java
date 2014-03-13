@@ -70,16 +70,36 @@ public class Main extends SimpleApplication {
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
         path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
         rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat)); 
-        try{
-            SerialReader.executeMain();
-        }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!");
-                    
-        }
         
         setDefaultCamera();
         enableFlyCam();
         initPathInputs();
+        serialThread.start();
+    }
+    
+    Thread serialThread = new Thread(){
+        public void run(){
+            executeSerialReading();
+        }
+    };
+    
+    public void executeSerialReading(){
+        try{
+            SerialReader serial = new SerialReader();
+            serial.beginExecution();
+            String previousOutput = "";
+            String currentOutput = "";
+            while(true){
+                currentOutput = serial.getCurrentOutput();
+                if(!currentOutput.equals(previousOutput)){
+                    System.out.println(currentOutput);
+                }
+                previousOutput = currentOutput;
+            }
+        }catch(Throwable e){
+            System.out.println("READING SERIAL DATA FAILED!");
+                    
+        }
     }
     
     

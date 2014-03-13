@@ -48,6 +48,8 @@ public class SerialReader implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 57600;
         
+        private String currentOutput = "null";
+        
         private static HashMap<String,Integer> dataLocations;
 
 	public void initialize() {
@@ -140,22 +142,33 @@ public class SerialReader implements SerialPortEventListener {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
                         String inputLine=input.readLine();
-                        System.out.println(getOutputLine(inputLine));
+                        currentOutput = getOutputLine(inputLine);
                 } catch (Exception e) {
                         System.err.println(e.toString());
                 }
             }
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
+        
+        public String getCurrentOutput(){
+            return currentOutput;
+        }
 
         public static void executeMain(){
             SerialReader main = new SerialReader();
-            main.initialize();
+            main.beginExecution();
+        }
+        
+        public void beginExecution(){
+            initialize();
             Thread t=new Thread() {
                 public void run() {
                         //the following line will keep this app alive for 1000 seconds,
                         //waiting for events to occur and responding to them (printing incoming messages to console).
-                        try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
+                        try {
+                            Thread.sleep(1000000);
+                        } catch (InterruptedException ie) {
+                        }
                 }
             };
             t.start();
