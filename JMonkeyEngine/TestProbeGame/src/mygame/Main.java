@@ -128,7 +128,7 @@ public class Main extends SimpleApplication {
         //this rotates the little cube depending on the rotation
         if(currentRotation != null){
             try{
-                littleObject.rotate(currentArdData.getYaw(), 0, 0);
+                littleObject.rotate(currentArdData.getPitch()/10000.0f, 0, 0);
                 //littleObject.rotate(currentRotation);
             }catch(Exception e){
                 System.out.println(e);
