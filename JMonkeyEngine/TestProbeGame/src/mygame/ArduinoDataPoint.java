@@ -4,6 +4,7 @@
  */
 package mygame;
 
+import com.jme3.math.Quaternion;
 import java.util.HashMap;
 
 /**
@@ -21,6 +22,8 @@ public class ArduinoDataPoint {
     private float x;
     private float y;
     
+    private Quaternion rotation;
+    
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
@@ -31,6 +34,7 @@ public class ArduinoDataPoint {
         pitch = getPart("pitch");
         roll = getPart("roll");
         timestamp = getPart("timestamp");
+        rotation = new Quaternion(yaw,pitch,roll,1);
     }
     
     private float getPart(String partName){
@@ -39,6 +43,10 @@ public class ArduinoDataPoint {
         }else{
             return 0;
         }
+    }
+
+    public Quaternion getRotation() {
+        return rotation;
     }
     
     public float getTimestamp() {

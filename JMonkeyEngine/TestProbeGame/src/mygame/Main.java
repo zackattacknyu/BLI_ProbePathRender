@@ -48,6 +48,8 @@ public class Main extends SimpleApplication {
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
+    private ArduinoDataPoint currentArdData;
+    private Quaternion currentRotation;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -89,10 +91,15 @@ public class Main extends SimpleApplication {
             serial.beginExecution();
             String previousOutput = "";
             String currentOutput = "";
+            ArduinoDataPoint currentData;
             while(true){
                 currentOutput = serial.getCurrentOutput();
                 if(!currentOutput.equals(previousOutput)){
                     System.out.println(currentOutput);
+                    currentArdData = serial.getCurrentData();
+                    if(currentArdData != null){
+                        currentRotation = currentArdData.getRotation();
+                    }
                 }
                 previousOutput = currentOutput;
             }
@@ -114,7 +121,21 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+        /*explained here is how the update loop works
+         * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
+         */
+        
+        //this rotates the little cube depending on the rotation
+        if(currentRotation != null){
+            try{
+                littleObject.rotate(currentArdData.getYaw(), 0, 0);
+                //littleObject.rotate(currentRotation);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            
+        }
+        
     }
 
     @Override

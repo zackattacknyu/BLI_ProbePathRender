@@ -49,6 +49,11 @@ public class SerialReader implements SerialPortEventListener {
 	private static final int DATA_RATE = 57600;
         
         private String currentOutput = "null";
+        private ArduinoDataPoint currentData;
+
+    public ArduinoDataPoint getCurrentData() {
+        return currentData;
+    }
         
         private static HashMap<String,Integer> dataLocations;
 
@@ -132,6 +137,7 @@ public class SerialReader implements SerialPortEventListener {
             outputLine.append("   ");
             outputLine.append("roll=");
             outputLine.append(ardData.getRoll());
+            currentData = ardData;
             return outputLine.toString();
         }
 
