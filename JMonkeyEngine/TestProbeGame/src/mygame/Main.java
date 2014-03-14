@@ -121,6 +121,11 @@ public class Main extends SimpleApplication {
 
     private float lastXangle = 0;
     private float currentXangle = 0;
+    private float lastZangle = 0;
+    private float currentZangle = 0;
+    private float lastYangle = 0;
+    private float currentYangle = 0;
+    private boolean rotationReadOnce = false;
     @Override
     public void simpleUpdate(float tpf) {
         /*explained here is how the update loop works
@@ -128,13 +133,28 @@ public class Main extends SimpleApplication {
          */
         
         //this rotates the little cube depending on the rotation
-        if(currentRotation != null){
+        if(currentRotation != null && currentArdData.getTimestamp() > 5000){
             try{
-                littleObject.rotate(-1*lastXangle, 0, 0);
                 currentXangle = currentArdData.getPitch()/100.0f;
-                littleObject.rotate(currentXangle, 0, 0);
+                currentYangle = currentArdData.getRoll()/100.0f;
+                currentZangle = currentArdData.getYaw()/100.0f;
+                if(rotationReadOnce){
+                    littleObject.rotate(0,0,-1*lastZangle);
+                    littleObject.rotate(0,-1*lastYangle,0);
+                    littleObject.rotate(-1*lastXangle,0,0);
+                    
+                    littleObject.rotate(currentXangle, 0, 0);
+                    littleObject.rotate(0,currentYangle,0);
+                    littleObject.rotate(0, 0, currentZangle);
+                    
+                }else{
+                    rotationReadOnce = true;
+                }
+                
                 lastXangle = currentXangle;
-                //littleObject.rotate(currentRotation);
+                lastYangle = currentYangle;
+                lastZangle = currentZangle;
+                
             }catch(Exception e){
                 System.out.println(e);
             }
