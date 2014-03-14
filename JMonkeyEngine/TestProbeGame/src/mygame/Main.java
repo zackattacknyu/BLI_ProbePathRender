@@ -133,6 +133,11 @@ public class Main extends SimpleApplication {
          */
         
         //this rotates the little cube depending on the rotation
+        float deltaXangle, deltaYangle, deltaZangle;
+        
+        //the measurements vary by +- 0.02 when the probe is still, 
+        //  thus the threshold we care about is 0.02/100 = 0.0002
+        float threshold = 0.0002f;
         if(currentRotation != null && currentArdData.getTimestamp() > 5000){
             try{
                 currentXangle = currentArdData.getPitch()/100.0f;
@@ -143,9 +148,21 @@ public class Main extends SimpleApplication {
                     //littleObject.rotate(0,-1*lastYangle,0);
                     //littleObject.rotate(-1*lastXangle,0,0);
                     
-                    littleObject.rotate(currentXangle-lastXangle, 0, 0);
-                    littleObject.rotate(0,currentYangle-lastYangle,0);
-                    littleObject.rotate(0, 0, currentZangle-lastZangle);
+                    deltaXangle = currentXangle - lastXangle;
+                    deltaYangle = currentYangle - lastYangle;
+                    deltaZangle = currentZangle - lastZangle;
+                    
+                    if(Math.abs(deltaXangle) > threshold){
+                        littleObject.rotate(deltaXangle, 0, 0);
+                    }
+                    if(Math.abs(deltaYangle) > threshold){
+                        littleObject.rotate(0,deltaYangle,0);
+                    }
+                    if(Math.abs(deltaZangle) > threshold){
+                        littleObject.rotate(0, 0, deltaZangle);
+                    }
+                    
+                    
                     
                 }else{
                     rotationReadOnce = true;
