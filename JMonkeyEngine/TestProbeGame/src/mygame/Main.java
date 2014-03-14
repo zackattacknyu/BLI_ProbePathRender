@@ -139,13 +139,13 @@ public class Main extends SimpleApplication {
                 currentYangle = currentArdData.getRoll()/100.0f;
                 currentZangle = currentArdData.getYaw()/100.0f;
                 if(rotationReadOnce){
-                    littleObject.rotate(0,0,-1*lastZangle);
-                    littleObject.rotate(0,-1*lastYangle,0);
-                    littleObject.rotate(-1*lastXangle,0,0);
+                    //littleObject.rotate(0,0,-1*lastZangle);
+                    //littleObject.rotate(0,-1*lastYangle,0);
+                    //littleObject.rotate(-1*lastXangle,0,0);
                     
-                    littleObject.rotate(currentXangle, 0, 0);
-                    littleObject.rotate(0,currentYangle,0);
-                    littleObject.rotate(0, 0, currentZangle);
+                    littleObject.rotate(currentXangle-lastXangle, 0, 0);
+                    littleObject.rotate(0,currentYangle-lastYangle,0);
+                    littleObject.rotate(0, 0, currentZangle-lastZangle);
                     
                 }else{
                     rotationReadOnce = true;
