@@ -34,7 +34,7 @@ public class SerialReader implements SerialPortEventListener {
                     "/dev/ttyUSB0", // Linux
                     "COM3", // Windows
 	};*/
-        private static final String PORT_NAME = "COM3";
+        private static final String PORT_NAME = "COM4";
 	/**
 	* A BufferedReader which will be fed by a InputStreamReader 
 	* converting the bytes into characters 
@@ -118,9 +118,11 @@ public class SerialReader implements SerialPortEventListener {
         private void makeDataLocationsMap(){
             dataLocations = new HashMap<String,Integer>(10);
             dataLocations.put("timestamp", 0);
-            dataLocations.put("yaw", 2);
-            dataLocations.put("pitch", 3);
-            dataLocations.put("roll", 4);
+            dataLocations.put("x", 1);
+            dataLocations.put("y", 2);
+            dataLocations.put("yaw", 3);
+            dataLocations.put("pitch", 4);
+            dataLocations.put("roll", 5);
         }
         
         public String getOutputLine(String rawData){
@@ -128,6 +130,12 @@ public class SerialReader implements SerialPortEventListener {
             ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,dataLocations);
             outputLine.append("timestamp=");
             outputLine.append(ardData.getTimestamp());
+            outputLine.append("   ");
+            outputLine.append("X=");
+            outputLine.append(ardData.getX());
+            outputLine.append("   ");
+            outputLine.append("Y=");
+            outputLine.append(ardData.getY());
             outputLine.append("   ");
             outputLine.append("yaw=");
             outputLine.append(ardData.getYaw());
@@ -148,6 +156,7 @@ public class SerialReader implements SerialPortEventListener {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
                         String inputLine=input.readLine();
+                        //System.out.println(inputLine);
                         currentOutput = getOutputLine(inputLine);
                 } catch (Exception e) {
                         System.err.println(e.toString());

@@ -135,10 +135,16 @@ public class Main extends SimpleApplication {
         //this rotates the little cube depending on the rotation
         float deltaXangle, deltaYangle, deltaZangle;
         
+        float deltaX, deltaY;
+        
+        //the time before it will start using the readings.
+        // intended to give the user time to hit the probe reset
+        float timeThreshold = 3000;
+        
         //the measurements vary by +- 0.02 when the probe is still, 
         //  thus the threshold we care about is 0.02/100 = 0.0002
         float threshold = 0.0002f;
-        if(currentRotation != null && currentArdData.getTimestamp() > 5000){
+        if(currentRotation != null && currentArdData.getTimestamp() > timeThreshold){
             try{
                 currentXangle = currentArdData.getPitch()/100.0f;
                 currentYangle = currentArdData.getRoll()/100.0f;
@@ -171,6 +177,17 @@ public class Main extends SimpleApplication {
                 lastXangle = currentXangle;
                 lastYangle = currentYangle;
                 lastZangle = currentZangle;
+                
+                deltaX = currentArdData.getX();
+                deltaY = currentArdData.getY();
+                
+                if(deltaX > 128) deltaX = deltaX - 256;
+                if(deltaY > 128) deltaY = deltaY - 256;
+                
+                deltaX = deltaX/200.0f;
+                deltaY = deltaY/200.0f;
+                
+                littleObject.move(deltaX, deltaY, 0);
                 
             }catch(Exception e){
                 System.out.println(e);

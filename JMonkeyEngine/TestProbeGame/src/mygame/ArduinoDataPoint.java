@@ -30,6 +30,8 @@ public class ArduinoDataPoint {
     public ArduinoDataPoint(String data, HashMap<String,Integer> dataLocations){
         this.dataLocations = dataLocations;
         dataParts = data.split(",");
+        x = getPart("x");
+        y = getPart("y");
         yaw = getPart("yaw");
         pitch = getPart("pitch");
         roll = getPart("roll");
@@ -68,6 +70,8 @@ public class ArduinoDataPoint {
     public float getY() {
         return y;
     }
-    
+    public float getX() {
+        return x;
+    }
     
 }
