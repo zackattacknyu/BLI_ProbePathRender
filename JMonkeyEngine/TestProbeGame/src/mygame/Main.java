@@ -184,10 +184,10 @@ public class Main extends SimpleApplication {
                 if(deltaX > 128) deltaX = deltaX - 256;
                 if(deltaY > 128) deltaY = deltaY - 256;
                 
-                deltaX = deltaX/200.0f;
-                deltaY = deltaY/200.0f;
+                deltaX = deltaX/500.0f;
+                deltaY = deltaY/500.0f;
                 
-                littleObject.move(deltaX, deltaY, 0);
+                littleObject.move(deltaX, -deltaY, 0);
                 
             }catch(Exception e){
                 System.out.println(e);
@@ -239,9 +239,21 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("tensionDown", new KeyTrigger(KeyInput.KEY_J));
         inputManager.addMapping("SwitchPathInterpolation", new KeyTrigger(KeyInput.KEY_I));
         
+        inputManager.addMapping("moveInward", new KeyTrigger(KeyInput.KEY_R));
+        inputManager.addMapping("moveOutward", new KeyTrigger(KeyInput.KEY_F));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("moveInward") && keyPressed){
+                    System.out.println("Object wants to move inward");
+                    littleObject.move(0, 0, 1.0f/100.0f);
+                }
+                if(name.equals("moveOutward") && keyPressed){
+                    littleObject.move(0,0, -1.0f/100.0f);
+                }
+                
                 if (name.equals("display_hidePath") && keyPressed) {
                     if (active) {
                         active = false;
