@@ -51,6 +51,8 @@ public class Main extends SimpleApplication {
     private ArduinoDataPoint currentArdData;
     private Quaternion currentRotation;
     private SerialReader serial;
+    private String currentSerialOutput = "";
+    private String previousSerialOutput = "";
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -80,32 +82,7 @@ public class Main extends SimpleApplication {
         
         serial = new SerialReader();
         serial.beginExecution();
-        serialThread.start();
     }
-    
-    Thread serialThread = new Thread(){
-        public void run(){
-            try{
-                //serial.beginExecution();
-                String previousOutput = "";
-                String currentOutput = "";
-                while(true){
-                    currentOutput = serial.getCurrentOutput();
-                    if(!currentOutput.equals(previousOutput)){
-                        System.out.println(currentOutput);
-                        currentArdData = serial.getCurrentData();
-                        if(currentArdData != null){
-                            currentRotation = currentArdData.getRotation();
-                        }
-                    }
-                    previousOutput = currentOutput;
-                }
-            }catch(Throwable e){
-                System.out.println("READING SERIAL DATA FAILED!");
-
-            }
-        }
-    };
     
     
     
@@ -129,6 +106,23 @@ public class Main extends SimpleApplication {
         /*explained here is how the update loop works
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
+        
+        
+        try{
+            currentSerialOutput = serial.getCurrentOutput();
+            if(!currentSerialOutput.equals(previousSerialOutput)){
+                System.out.println(currentSerialOutput);
+                currentArdData = serial.getCurrentData();
+                if(currentArdData != null){
+                    currentRotation = currentArdData.getRotation();
+                }
+            }
+            previousSerialOutput = currentSerialOutput;
+        }catch(Throwable e){
+            System.out.println("READING SERIAL DATA FAILED!");
+
+        }
+        
         
         //this rotates the little cube depending on the rotation
         float deltaXangle, deltaYangle, deltaZangle;
