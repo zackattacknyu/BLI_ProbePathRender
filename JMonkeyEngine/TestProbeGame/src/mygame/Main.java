@@ -51,8 +51,7 @@ public class Main extends SimpleApplication {
     private ArduinoDataPoint currentArdData;
     private ArduinoDataPoint previousArdData;
     private SerialReader serial;
-    private String currentSerialOutput = "";
-    private String previousSerialOutput = "";
+    private ArduinoDataInterpreter dataInterpreter;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -79,6 +78,8 @@ public class Main extends SimpleApplication {
         setDefaultCamera();
         enableFlyCam();
         initPathInputs();
+        
+        dataInterpreter = new ArduinoDataInterpreter();
         
         serial = new SerialReader();
         serial.beginExecution();
@@ -107,84 +108,11 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        
-        try{
-            currentArdData = serial.getCurrentData();
-            if(currentArdData == null){
-                System.out.println("Waiting to receive input...");
-            }else{
-                if(!currentArdData.equals(previousArdData)){
-                    System.out.println(currentArdData);
-                    previousArdData = currentArdData;
-                }
-            }
-        }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!: " + e);
-        }
-        
-        
-        //this rotates the little cube depending on the rotation
-        float deltaXangle, deltaYangle, deltaZangle;
-        
-        float deltaX, deltaY;
-        
-        //the time before it will start using the readings.
-        // intended to give the user time to hit the probe reset
-        float timeThreshold = 3000;
-        
-        //the measurements vary by +- 0.02 when the probe is still, 
-        //  thus the threshold we care about is 0.02/100 = 0.0002
-        float threshold = 0.0002f;
-        if(currentArdData != null && currentArdData.getTimestamp() > timeThreshold){
-            try{
-                currentXangle = currentArdData.getPitch()/100.0f;
-                currentYangle = currentArdData.getRoll()/100.0f;
-                currentZangle = currentArdData.getYaw()/100.0f;
-                if(rotationReadOnce){
-                    //littleObject.rotate(0,0,-1*lastZangle);
-                    //littleObject.rotate(0,-1*lastYangle,0);
-                    //littleObject.rotate(-1*lastXangle,0,0);
-                    
-                    deltaXangle = currentXangle - lastXangle;
-                    deltaYangle = currentYangle - lastYangle;
-                    deltaZangle = currentZangle - lastZangle;
-                    
-                    if(Math.abs(deltaXangle) > threshold){
-                        littleObject.rotate(deltaXangle, 0, 0);
-                    }
-                    if(Math.abs(deltaYangle) > threshold){
-                        littleObject.rotate(0,deltaYangle,0);
-                    }
-                    if(Math.abs(deltaZangle) > threshold){
-                        littleObject.rotate(0, 0, deltaZangle);
-                    }
-                    
-                    
-                    
-                }else{
-                    rotationReadOnce = true;
-                }
-                
-                lastXangle = currentXangle;
-                lastYangle = currentYangle;
-                lastZangle = currentZangle;
-                
-                deltaX = currentArdData.getX();
-                deltaY = currentArdData.getY();
-                
-                if(deltaX > 128) deltaX = deltaX - 256;
-                if(deltaY > 128) deltaY = deltaY - 256;
-                
-                deltaX = deltaX/500.0f;
-                deltaY = deltaY/500.0f;
-                
-                littleObject.move(deltaX, -deltaY, 0);
-                
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            
-        }
+        dataInterpreter.updateData();
+        littleObject.rotate(dataInterpreter.getDeltaXangle(), 0, 0);
+        littleObject.rotate(0,dataInterpreter.getDeltaYangle(),0);
+        littleObject.rotate(0, 0, dataInterpreter.getDeltaZangle());
+        littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
         
     }
 
