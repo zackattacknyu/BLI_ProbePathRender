@@ -79,13 +79,14 @@ public class Main extends SimpleApplication {
         initPathInputs();
         
         serial = new SerialReader();
+        serial.beginExecution();
         serialThread.start();
     }
     
     Thread serialThread = new Thread(){
         public void run(){
             try{
-                serial.beginExecution();
+                //serial.beginExecution();
                 String previousOutput = "";
                 String currentOutput = "";
                 while(true){
