@@ -50,6 +50,7 @@ public class Main extends SimpleApplication {
     private BitmapText wayPointsText;
     private ArduinoDataPoint currentArdData;
     private Quaternion currentRotation;
+    private SerialReader serial;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -76,38 +77,34 @@ public class Main extends SimpleApplication {
         setDefaultCamera();
         enableFlyCam();
         initPathInputs();
+        
+        serial = new SerialReader();
         serialThread.start();
     }
     
     Thread serialThread = new Thread(){
         public void run(){
-            executeSerialReading();
+            try{
+                serial.beginExecution();
+                String previousOutput = "";
+                String currentOutput = "";
+                while(true){
+                    currentOutput = serial.getCurrentOutput();
+                    if(!currentOutput.equals(previousOutput)){
+                        System.out.println(currentOutput);
+                        currentArdData = serial.getCurrentData();
+                        if(currentArdData != null){
+                            currentRotation = currentArdData.getRotation();
+                        }
+                    }
+                    previousOutput = currentOutput;
+                }
+            }catch(Throwable e){
+                System.out.println("READING SERIAL DATA FAILED!");
+
+            }
         }
     };
-    
-    public void executeSerialReading(){
-        try{
-            SerialReader serial = new SerialReader();
-            serial.beginExecution();
-            String previousOutput = "";
-            String currentOutput = "";
-            ArduinoDataPoint currentData;
-            while(true){
-                currentOutput = serial.getCurrentOutput();
-                if(!currentOutput.equals(previousOutput)){
-                    System.out.println(currentOutput);
-                    currentArdData = serial.getCurrentData();
-                    if(currentArdData != null){
-                        currentRotation = currentArdData.getRotation();
-                    }
-                }
-                previousOutput = currentOutput;
-            }
-        }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!");
-                    
-        }
-    }
     
     
     
