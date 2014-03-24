@@ -40,6 +40,7 @@ public class ArduinoDataInterpreter {
     float deltaX = 0;
     float deltaY = 0;
     private boolean updateExists = false;
+    private boolean showOutput = true;
     private boolean rotationReadOnce = false;
     
     //the time before it will start using the readings.
@@ -59,7 +60,10 @@ public class ArduinoDataInterpreter {
             currentArdData = serial.getCurrentData();
             if(currentArdData != null){
                 if(!currentArdData.equals(previousArdData)){
-                    System.out.println(currentArdData);
+                    
+                    if(showOutput){
+                        System.out.println(currentArdData);
+                    }
                     updateExists = true;
                 }
             }
@@ -71,8 +75,44 @@ public class ArduinoDataInterpreter {
     private void processArdData(){
         
         if(updateExists){
+            
+            
+            //see comments at top for stage explanation
+            switch(currentStage){
+
+                case 1:
+                    System.out.println("Data is being received");
+                    System.out.println("Hit the Reset Button");
+                    showOutput = false;
+                    currentStage = 2;
+                    break;
+                case 2:
+                    
+                    //reset was pressed
+                    if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
+                        System.out.println("Resetting the stream");
+                        currentStage = 3;
+                    }
+                    
+                    break;
+                case 3:
+                    
+                    showOutput = true;
+                    
+                    break;
+                case 4:
+                    
+                    break;
+                case 5:
+                    
+                    break;
+            }
+            
             previousArdData = currentArdData;
+            
         }
+        
+        
         
     }
     
@@ -80,55 +120,7 @@ public class ArduinoDataInterpreter {
         
         readSerialData();
         processArdData();
-        //see comments at top for stage explanation
-        /*switch(currentStage){
-            
-            case 1:
-                try{
-                    currentArdData = serial.getCurrentData();
-                    if(currentArdData != null){
-                        //System.out.println("Just Read Ard Data:" + currentArdData);
-                        previousArdData = currentArdData;
-                        currentStage = 2;
-                    }
-                }catch(Throwable e){
-                    System.out.println("READING SERIAL DATA FAILED!: " + e);
-                }
-                
-                break;
-                
-            case 2:
-                
-                System.out.println("In Stage 2");
-                currentArdData = serial.getCurrentData();
-                if(currentArdData == null){
-                    System.out.println("Waiting to receive input...");
-                }else{
-                    if(!currentArdData.equals(previousArdData)){
-                        System.out.println(currentArdData);
-                        if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
-                            currentStage++;
-                        }
-                        previousArdData = currentArdData;
-                    }
-                }
-                
-                break;
-                
-            case 3:
-                System.out.println();
-                break;
-                
-            case 4:
-                
-                break;
-                
-            case 5:
-                
-                break;
-            
-            
-        }*/
+        
         
         //processObjectUpdate();
     }
