@@ -48,9 +48,6 @@ public class Main extends SimpleApplication {
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
-    private ArduinoDataPoint currentArdData;
-    private ArduinoDataPoint previousArdData;
-    private SerialReader serial;
     private ArduinoDataInterpreter dataInterpreter;
 
     public static void main(String[] args) {
@@ -80,9 +77,6 @@ public class Main extends SimpleApplication {
         initPathInputs();
         
         dataInterpreter = new ArduinoDataInterpreter();
-        
-        serial = new SerialReader();
-        serial.beginExecution();
     }
     
     
@@ -95,13 +89,6 @@ public class Main extends SimpleApplication {
         littleObject.setMaterial(ballMat);
     }
 
-    private float lastXangle = 0;
-    private float currentXangle = 0;
-    private float lastZangle = 0;
-    private float currentZangle = 0;
-    private float lastYangle = 0;
-    private float currentYangle = 0;
-    private boolean rotationReadOnce = false;
     @Override
     public void simpleUpdate(float tpf) {
         /*explained here is how the update loop works
