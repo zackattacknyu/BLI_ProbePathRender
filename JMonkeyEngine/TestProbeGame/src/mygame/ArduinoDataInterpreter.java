@@ -5,10 +5,25 @@
 package mygame;
 
 /**
- *
+ *The Data Interpretation will go through 5 stages:
+ * 
+ * Stage 1: Wait for Input Data to come in
+ *          - Passed the stage once the non-null check on Arduino data passes
+ * Stage 2: Wait for Reset to be pressed
+ *          - Passed the stage once timestamp has decreased
+ * Stage 3: Establish the baseline
+ *          - The data between timestampe 1000 and 3000 will be used for this
+ * Stage 4: Read any changes
+ *          - if the data comes in is greater than allowed thresholds
+ * Stage 5: Reestablish the baseline
+ *          - Once it is stable data
+ * 
  * @author BLI
  */
 public class ArduinoDataInterpreter {
+    
+    //see above for explanation of stages
+    private int currentStage = 1;
     
     private SerialReader serial;
     private ArduinoDataPoint currentArdData;
@@ -24,36 +39,101 @@ public class ArduinoDataInterpreter {
     float deltaZangle=0; 
     float deltaX = 0;
     float deltaY = 0;
+    private boolean updateExists = false;
     private boolean rotationReadOnce = false;
+    
+    //the time before it will start using the readings.
+        // intended to give the user time to hit the probe reset
+    private float timeThreshold = 3000;
 
     public ArduinoDataInterpreter() {
         
         serial = new SerialReader();
         serial.beginExecution();
-        
+        System.out.println("Waiting to receive input...");
     }
     
-    public void updateData(){
+    private void readSerialData(){
+        updateExists = false;
         try{
             currentArdData = serial.getCurrentData();
-            if(currentArdData == null){
-                System.out.println("Waiting to receive input...");
-            }else{
+            if(currentArdData != null){
                 if(!currentArdData.equals(previousArdData)){
                     System.out.println(currentArdData);
-                    previousArdData = currentArdData;
+                    updateExists = true;
                 }
             }
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!: " + e);
         }
+    }
+    
+    private void processArdData(){
         
-       
+        if(updateExists){
+            previousArdData = currentArdData;
+        }
         
-        //the time before it will start using the readings.
-        // intended to give the user time to hit the probe reset
-        float timeThreshold = 3000;
+    }
+    
+    public void updateData(){
         
+        readSerialData();
+        processArdData();
+        //see comments at top for stage explanation
+        /*switch(currentStage){
+            
+            case 1:
+                try{
+                    currentArdData = serial.getCurrentData();
+                    if(currentArdData != null){
+                        //System.out.println("Just Read Ard Data:" + currentArdData);
+                        previousArdData = currentArdData;
+                        currentStage = 2;
+                    }
+                }catch(Throwable e){
+                    System.out.println("READING SERIAL DATA FAILED!: " + e);
+                }
+                
+                break;
+                
+            case 2:
+                
+                System.out.println("In Stage 2");
+                currentArdData = serial.getCurrentData();
+                if(currentArdData == null){
+                    System.out.println("Waiting to receive input...");
+                }else{
+                    if(!currentArdData.equals(previousArdData)){
+                        System.out.println(currentArdData);
+                        if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
+                            currentStage++;
+                        }
+                        previousArdData = currentArdData;
+                    }
+                }
+                
+                break;
+                
+            case 3:
+                System.out.println();
+                break;
+                
+            case 4:
+                
+                break;
+                
+            case 5:
+                
+                break;
+            
+            
+        }*/
+        
+        //processObjectUpdate();
+    }
+    
+    private void processObjectUpdate(){
         //the measurements vary by +- 0.02 when the probe is still, 
         //  thus the threshold we care about is 0.02/100 = 0.0002
         float threshold = 0.0002f;
@@ -63,9 +143,6 @@ public class ArduinoDataInterpreter {
                 currentYangle = currentArdData.getRoll()/100.0f;
                 currentZangle = currentArdData.getYaw()/100.0f;
                 if(rotationReadOnce){
-                    //littleObject.rotate(0,0,-1*lastZangle);
-                    //littleObject.rotate(0,-1*lastYangle,0);
-                    //littleObject.rotate(-1*lastXangle,0,0);
                     
                     deltaXangle = currentXangle - lastXangle;
                     deltaYangle = currentYangle - lastYangle;
