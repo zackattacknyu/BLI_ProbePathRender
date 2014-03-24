@@ -47,8 +47,7 @@ public class SerialReader implements SerialPortEventListener {
 	private static final int TIME_OUT = 2000;
 	/** Default bits per second for COM port. */
 	private static final int DATA_RATE = 57600;
-        
-        private String currentOutput = "null";
+
         private ArduinoDataPoint currentData;
 
     public ArduinoDataPoint getCurrentData() {
@@ -125,29 +124,6 @@ public class SerialReader implements SerialPortEventListener {
             dataLocations.put("roll", 5);
         }
         
-        public String getOutputLine(String rawData){
-            StringBuilder outputLine = new StringBuilder(50);
-            ArduinoDataPoint ardData = new ArduinoDataPoint(rawData,dataLocations);
-            outputLine.append("timestamp=");
-            outputLine.append(ardData.getTimestamp());
-            outputLine.append("   ");
-            outputLine.append("X=");
-            outputLine.append(ardData.getX());
-            outputLine.append("   ");
-            outputLine.append("Y=");
-            outputLine.append(ardData.getY());
-            outputLine.append("   ");
-            outputLine.append("yaw=");
-            outputLine.append(ardData.getYaw());
-            outputLine.append("   ");
-            outputLine.append("pitch=");
-            outputLine.append(ardData.getPitch());
-            outputLine.append("   ");
-            outputLine.append("roll=");
-            outputLine.append(ardData.getRoll());
-            currentData = ardData;
-            return outputLine.toString();
-        }
 
 	/**
 	 * Handle an event on the serial port. Read the data and print it.
@@ -155,18 +131,17 @@ public class SerialReader implements SerialPortEventListener {
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
-                        String inputLine=input.readLine();
-                        //System.out.println(inputLine);
-                        currentOutput = getOutputLine(inputLine);
+                    String inputLine=input.readLine();
+                    currentData = new ArduinoDataPoint(inputLine,dataLocations);
                 } catch (Exception e) {
-                        System.err.println(e.toString());
+                    System.err.println(e.toString());
                 }
             }
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
         
         public String getCurrentOutput(){
-            return currentOutput;
+            return String.valueOf(currentData);
         }
 
         public static void executeMain(){

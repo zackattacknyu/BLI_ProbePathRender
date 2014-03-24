@@ -49,7 +49,7 @@ public class Main extends SimpleApplication {
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
     private ArduinoDataPoint currentArdData;
-    private Quaternion currentRotation;
+    private ArduinoDataPoint previousArdData;
     private SerialReader serial;
     private String currentSerialOutput = "";
     private String previousSerialOutput = "";
@@ -109,18 +109,17 @@ public class Main extends SimpleApplication {
         
         
         try{
-            currentSerialOutput = serial.getCurrentOutput();
-            if(!currentSerialOutput.equals(previousSerialOutput)){
-                System.out.println(currentSerialOutput);
-                currentArdData = serial.getCurrentData();
-                if(currentArdData != null){
-                    currentRotation = currentArdData.getRotation();
+            currentArdData = serial.getCurrentData();
+            if(currentArdData == null){
+                System.out.println("Waiting to receive input...");
+            }else{
+                if(!currentArdData.equals(previousArdData)){
+                    System.out.println(currentArdData);
+                    previousArdData = currentArdData;
                 }
             }
-            previousSerialOutput = currentSerialOutput;
         }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!");
-
+            System.out.println("READING SERIAL DATA FAILED!: " + e);
         }
         
         
@@ -136,7 +135,7 @@ public class Main extends SimpleApplication {
         //the measurements vary by +- 0.02 when the probe is still, 
         //  thus the threshold we care about is 0.02/100 = 0.0002
         float threshold = 0.0002f;
-        if(currentRotation != null && currentArdData.getTimestamp() > timeThreshold){
+        if(currentArdData != null && currentArdData.getTimestamp() > timeThreshold){
             try{
                 currentXangle = currentArdData.getPitch()/100.0f;
                 currentYangle = currentArdData.getRoll()/100.0f;

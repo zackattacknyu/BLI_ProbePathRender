@@ -19,6 +19,8 @@ public class ArduinoDataPoint {
     private float pitch;
     private float roll;
 
+    
+
     private float x;
     private float y;
     
@@ -47,6 +49,60 @@ public class ArduinoDataPoint {
         }
     }
 
+    @Override
+    public String toString() {
+        return "timestamp=" + timestamp 
+                + ", yaw=" + yaw 
+                + ", pitch=" + pitch 
+                + ", roll=" + roll 
+                + ", x=" + x 
+                + ", y=" + y;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Float.floatToIntBits(this.timestamp);
+        hash = 79 * hash + Float.floatToIntBits(this.yaw);
+        hash = 79 * hash + Float.floatToIntBits(this.pitch);
+        hash = 79 * hash + Float.floatToIntBits(this.roll);
+        hash = 79 * hash + Float.floatToIntBits(this.x);
+        hash = 79 * hash + Float.floatToIntBits(this.y);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ArduinoDataPoint other = (ArduinoDataPoint) obj;
+        if (Float.floatToIntBits(this.timestamp) != Float.floatToIntBits(other.timestamp)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.yaw) != Float.floatToIntBits(other.yaw)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.pitch) != Float.floatToIntBits(other.pitch)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.roll) != Float.floatToIntBits(other.roll)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
     public Quaternion getRotation() {
         return rotation;
     }
