@@ -25,6 +25,7 @@ public class ArduinoDataInterpreter {
     
     private SerialReader serial;
     private ArduinoDataPoint currentArdData;
+    private ArduinoDataPoint lastArdData;
     private ArduinoDataPoint previousArdData;
     private float lastXangle = 0;
     private float currentXangle = 0;
@@ -37,6 +38,9 @@ public class ArduinoDataInterpreter {
     float deltaZangle=0; 
     float deltaX = 0;
     float deltaY = 0;
+    float deltaPitch = 0;
+    float deltaRoll = 0;
+    float deltaYaw = 0;
     
     //flag for only showing output and not processing it
     private boolean onlyDoOutput = false;
@@ -71,6 +75,9 @@ public class ArduinoDataInterpreter {
     //the time before it will start using the readings.
         // intended to give the user time to hit the probe reset
     private float timeThreshold = 3000;
+    
+    //factor to multiply mean error by before processing the change
+    private float thresholdFactor = 0.5f;
 
     public ArduinoDataInterpreter() {
         
@@ -184,9 +191,11 @@ public class ArduinoDataInterpreter {
         initXData.processData();
         initYData.processData();
         
-        lastXangle = currentArdData.getPitch()/100.0f;
-        lastYangle = currentArdData.getRoll()/100.0f;
-        lastZangle = currentArdData.getYaw()/100.0f;
+//        lastXangle = currentArdData.getPitch()/100.0f;
+//        lastYangle = currentArdData.getRoll()/100.0f;
+//        lastZangle = currentArdData.getYaw()/100.0f;
+        
+        lastArdData = currentArdData;
 
     }
     
@@ -220,32 +229,41 @@ public class ArduinoDataInterpreter {
     }
     
     private void processYawPitchRoll(){
-        
-        float thresholdFactor =2;
+
         currentXangle = currentArdData.getPitch()/100.0f;
         currentYangle = currentArdData.getRoll()/100.0f;
         currentZangle = currentArdData.getYaw()/100.0f;
 
-        deltaXangle = currentXangle - lastXangle;
-        deltaYangle = currentYangle - lastYangle;
-        deltaZangle = currentZangle - lastZangle;
+//        deltaXangle = currentXangle - lastXangle;
+//        deltaYangle = currentYangle - lastYangle;
+//        deltaZangle = currentZangle - lastZangle;
+        
+        deltaPitch = currentArdData.getPitch() - lastArdData.getPitch();
+        deltaRoll = currentArdData.getRoll() - lastArdData.getRoll();
+        deltaYaw = currentArdData.getYaw() - lastArdData.getYaw();
 
-        if(Math.abs(deltaXangle) <= thresholdFactor*initPitchData.getMeanError()){
+        if(Math.abs(deltaPitch) <= thresholdFactor*initPitchData.getMeanError()){
             deltaXangle = 0;
         }else{
-            lastXangle = currentXangle;
+            //lastXangle = currentXangle;
+            deltaXangle = deltaPitch/100.0f;
+            lastArdData = currentArdData;
         }
         
-        if(Math.abs(deltaYangle) <= thresholdFactor*initRollData.getMeanError()){
+        if(Math.abs(deltaRoll) <= thresholdFactor*initRollData.getMeanError()){
             deltaYangle = 0;
         }else{
-            lastYangle = currentYangle;
+            //lastYangle = currentYangle;
+            deltaYangle = deltaRoll/100.0f;
+            lastArdData = currentArdData;
         }
         
-        if(Math.abs(deltaZangle) <= thresholdFactor*initYawData.getMeanError()){
+        if(Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
             deltaZangle = 0;
         }else{
-            lastZangle = currentZangle;
+            //lastZangle = currentZangle;
+            lastZangle = deltaYaw/100.0f;
+            lastArdData = currentArdData;
         }
     }
     private void showInitMessage(){
