@@ -39,9 +39,31 @@ public class ArduinoDataInterpreter {
     float deltaZangle=0; 
     float deltaX = 0;
     float deltaY = 0;
+    
     private boolean updateExists = false;
     private boolean showOutput = true;
+    private boolean stage3preCalibMessageShown = false;
+    private boolean stage3calibMessageShown = false;
+    private boolean stage4initMessageShown = false;
     private boolean rotationReadOnce = false;
+    
+    /*
+     * When callibrating the data,
+     *  the data will be from start time to end
+     *  time. The estimated time between reads
+     *  is used to help initialize the data set
+     *  used to process the raw data.
+     */
+    private float calibStartTimeMs = 1000;
+    private float calibEndTimeMs = 3000;
+    private float estTimeBetweenReads = 20;
+    private int numberElements;
+    
+    private DataSet initYawData;
+    private DataSet initPitchData;
+    private DataSet initRollData;
+    private DataSet initXData;
+    private DataSet initYData;
     
     //the time before it will start using the readings.
         // intended to give the user time to hit the probe reset
@@ -52,6 +74,15 @@ public class ArduinoDataInterpreter {
         serial = new SerialReader();
         serial.beginExecution();
         System.out.println("Waiting to receive input...");
+        
+        numberElements = (int) ((calibEndTimeMs-calibStartTimeMs)/estTimeBetweenReads);
+        
+        initYawData = new DataSet(numberElements);
+        initPitchData = new DataSet(numberElements);
+        initRollData = new DataSet(numberElements);
+        initXData = new DataSet(numberElements);
+        initYData = new DataSet(numberElements);
+        
     }
     
     private void readSerialData(){
@@ -82,7 +113,8 @@ public class ArduinoDataInterpreter {
 
                 case 1:
                     System.out.println("Data is being received");
-                    System.out.println("Hit the Reset Button");
+                    System.out.println();
+                    System.out.println("Now hit the Reset Button");
                     showOutput = false;
                     currentStage = 2;
                     break;
@@ -90,17 +122,88 @@ public class ArduinoDataInterpreter {
                     
                     //reset was pressed
                     if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
+                        System.out.println();
                         System.out.println("Resetting the stream");
                         currentStage = 3;
                     }
                     
                     break;
+                    
                 case 3:
                     
-                    showOutput = true;
+                    if(currentArdData.getTimestamp() >= calibStartTimeMs){
+                        
+                        if(!stage3calibMessageShown){
+                            
+                            System.out.println();
+                            System.out.println("Now calibrating the probe");
+                            System.out.println("Do not move the probe");
+                            stage3calibMessageShown = true;
+                            
+                        }
+                        
+                        if(currentArdData.getTimestamp() <= calibEndTimeMs){
+                            
+                            initYawData.addToDataSet(currentArdData.getYaw());
+                            initPitchData.addToDataSet(currentArdData.getPitch());
+                            initRollData.addToDataSet(currentArdData.getRoll());
+                            initXData.addToDataSet(currentArdData.getX());
+                            initYData.addToDataSet(currentArdData.getY());
+                            
+                        }else{
+                            
+                            initYawData.processData();
+                            initPitchData.processData();
+                            initRollData.processData();
+                            initXData.processData();
+                            initYData.processData();
+                            
+                            System.out.println("Init Data Established");
+                            System.out.println(
+                                "Mean: yaw=" + initYawData.getMean()
+                                + ", pitch=" + initPitchData.getMean()
+                                + ", roll=" + initRollData.getMean()
+                                + ", x=" + initXData.getMean()
+                                + ", y=" + initYData.getMean()
+                                    );
+                            System.out.println(
+                                "Mean Error: yaw=" + initYawData.getMeanError()
+                                + ", pitch=" + initPitchData.getMeanError()
+                                + ", roll=" + initRollData.getMeanError()
+                                + ", x=" + initXData.getMeanError()
+                                + ", y=" + initYData.getMeanError()
+                                    );
+                            System.out.println(
+                                "Mean Squared Error: yaw=" + initYawData.getMeanSquaredError()
+                                + ", pitch=" + initPitchData.getMeanSquaredError()
+                                + ", roll=" + initRollData.getMeanSquaredError()
+                                + ", x=" + initXData.getMeanSquaredError()
+                                + ", y=" + initYData.getMeanSquaredError()
+                                    );
+                            
+                            currentStage = 4;
+                            
+                            
+                        }
+                        
+                    }else{
+                        
+                        if(!stage3preCalibMessageShown){
+                            System.out.println("Waiting to calibrate the probe");
+                            stage3preCalibMessageShown = true;
+                        }
+                        
+                        
+                    }
+                    
                     
                     break;
                 case 4:
+                    
+                    if(!stage4initMessageShown){
+                        System.out.println("Now onto stage 4");
+                        stage4initMessageShown = true;
+                    }
                     
                     break;
                 case 5:
