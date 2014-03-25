@@ -40,6 +40,11 @@ public class ArduinoDataInterpreter {
     float deltaX = 0;
     float deltaY = 0;
     
+    //flag for only showing output and not processing it
+    private boolean onlyDoOutput = false;
+
+    
+    
     private boolean updateExists = false;
     private boolean showOutput = true;
     private boolean stage3preCalibMessageShown = false;
@@ -222,7 +227,11 @@ public class ArduinoDataInterpreter {
     public void updateData(){
         
         readSerialData();
-        processArdData();
+        
+        if(!onlyDoOutput){
+            processArdData();
+        }
+        
         
         
         //processObjectUpdate();
@@ -279,6 +288,10 @@ public class ArduinoDataInterpreter {
         }
     }
 
+    public void setOnlyDoOutput(boolean onlyDoOutput) {
+        this.onlyDoOutput = onlyDoOutput;
+    }
+    
     public float getDeltaXangle() {
         return deltaXangle;
     }

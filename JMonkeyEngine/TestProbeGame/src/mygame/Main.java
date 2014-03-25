@@ -95,6 +95,9 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
+        //keep this if we just want to test the serial output
+        //dataInterpreter.setOnlyDoOutput(true);
+        
         dataInterpreter.updateData();
         littleObject.rotate(dataInterpreter.getDeltaXangle(), 0, 0);
         littleObject.rotate(0,dataInterpreter.getDeltaYangle(),0);
