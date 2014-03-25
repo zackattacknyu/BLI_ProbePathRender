@@ -70,7 +70,7 @@ public class ArduinoDataInterpreter {
     private DataSet initYData;
     
     //factor to multiply mean error by before processing the change
-    private float thresholdFactor = 1.5f;
+    private float thresholdFactor = 5.0f;
 
     public ArduinoDataInterpreter() {
         
@@ -147,7 +147,7 @@ public class ArduinoDataInterpreter {
                 case 4:
                     showStage4Message();
                     processObjectUpdate();
-                    showOutput = true;
+                    //showOutput = true;
                     break;
             }
             
@@ -231,6 +231,7 @@ public class ArduinoDataInterpreter {
             deltaXangle = 0;
         }else{
             deltaXangle = getEulerAngle(deltaPitch);
+            //System.out.println("Delta X angle:" + deltaXangle);
             lastPitch = currentArdData.getPitch();
         }
         
@@ -238,6 +239,7 @@ public class ArduinoDataInterpreter {
             deltaYangle = 0;
         }else{
             deltaYangle = getEulerAngle(deltaRoll);
+            //System.out.println("Delta Y angle:" + deltaYangle);
             lastRoll = currentArdData.getRoll();
         }
         
@@ -245,6 +247,9 @@ public class ArduinoDataInterpreter {
             deltaZangle = 0;
         }else{
             deltaZangle = getEulerAngle(deltaYaw);
+//            System.out.println("deltaYaw:" + deltaYaw);
+//            System.out.println("MeanYawError:" + initYawData.getMeanError());
+//            System.out.println("Delta Z angle:" + deltaZangle);
             lastYaw = currentArdData.getYaw();
         }
     }
