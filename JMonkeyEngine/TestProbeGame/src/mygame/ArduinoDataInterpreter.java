@@ -27,12 +27,6 @@ public class ArduinoDataInterpreter {
     private ArduinoDataPoint currentArdData;
     private ArduinoDataPoint lastArdData;
     private ArduinoDataPoint previousArdData;
-    private float lastXangle = 0;
-    private float currentXangle = 0;
-    private float lastZangle = 0;
-    private float currentZangle = 0;
-    private float lastYangle = 0;
-    private float currentYangle = 0;
     float deltaXangle=0;
     float deltaYangle=0;
     float deltaZangle=0; 
@@ -41,6 +35,9 @@ public class ArduinoDataInterpreter {
     float deltaPitch = 0;
     float deltaRoll = 0;
     float deltaYaw = 0;
+    float lastPitch = 0;
+    float lastRoll = 0;
+    float lastYaw = 0;
     
     //flag for only showing output and not processing it
     private boolean onlyDoOutput = false;
@@ -62,7 +59,7 @@ public class ArduinoDataInterpreter {
      *  used to process the raw data.
      */
     private float calibStartTimeMs = 1000;
-    private float calibEndTimeMs = 3000;
+    private float calibEndTimeMs = 6000;
     private float estTimeBetweenReads = 20;
     private int numberElements;
     
@@ -72,12 +69,8 @@ public class ArduinoDataInterpreter {
     private DataSet initXData;
     private DataSet initYData;
     
-    //the time before it will start using the readings.
-        // intended to give the user time to hit the probe reset
-    private float timeThreshold = 3000;
-    
     //factor to multiply mean error by before processing the change
-    private float thresholdFactor = 0.5f;
+    private float thresholdFactor = 1.5f;
 
     public ArduinoDataInterpreter() {
         
@@ -154,6 +147,7 @@ public class ArduinoDataInterpreter {
                 case 4:
                     showStage4Message();
                     processObjectUpdate();
+                    showOutput = true;
                     break;
             }
             
@@ -191,11 +185,10 @@ public class ArduinoDataInterpreter {
         initXData.processData();
         initYData.processData();
         
-//        lastXangle = currentArdData.getPitch()/100.0f;
-//        lastYangle = currentArdData.getRoll()/100.0f;
-//        lastZangle = currentArdData.getYaw()/100.0f;
+        lastPitch = currentArdData.getPitch();
+        lastRoll = currentArdData.getRoll();
+        lastYaw = currentArdData.getYaw();
         
-        lastArdData = currentArdData;
 
     }
     
@@ -229,43 +222,37 @@ public class ArduinoDataInterpreter {
     }
     
     private void processYawPitchRoll(){
-
-        currentXangle = currentArdData.getPitch()/100.0f;
-        currentYangle = currentArdData.getRoll()/100.0f;
-        currentZangle = currentArdData.getYaw()/100.0f;
-
-//        deltaXangle = currentXangle - lastXangle;
-//        deltaYangle = currentYangle - lastYangle;
-//        deltaZangle = currentZangle - lastZangle;
         
-        deltaPitch = currentArdData.getPitch() - lastArdData.getPitch();
-        deltaRoll = currentArdData.getRoll() - lastArdData.getRoll();
-        deltaYaw = currentArdData.getYaw() - lastArdData.getYaw();
+        deltaPitch = currentArdData.getPitch() - lastPitch;
+        deltaRoll = currentArdData.getRoll() - lastRoll;
+        deltaYaw = currentArdData.getYaw() - lastYaw;
 
         if(Math.abs(deltaPitch) <= thresholdFactor*initPitchData.getMeanError()){
             deltaXangle = 0;
         }else{
-            //lastXangle = currentXangle;
-            deltaXangle = deltaPitch/100.0f;
-            lastArdData = currentArdData;
+            deltaXangle = getEulerAngle(deltaPitch);
+            lastPitch = currentArdData.getPitch();
         }
         
         if(Math.abs(deltaRoll) <= thresholdFactor*initRollData.getMeanError()){
             deltaYangle = 0;
         }else{
-            //lastYangle = currentYangle;
-            deltaYangle = deltaRoll/100.0f;
-            lastArdData = currentArdData;
+            deltaYangle = getEulerAngle(deltaRoll);
+            lastRoll = currentArdData.getRoll();
         }
         
         if(Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
             deltaZangle = 0;
         }else{
-            //lastZangle = currentZangle;
-            lastZangle = deltaYaw/100.0f;
-            lastArdData = currentArdData;
+            deltaZangle = getEulerAngle(deltaYaw);
+            lastYaw = currentArdData.getYaw();
         }
     }
+    
+    private float getEulerAngle(float quaternionPart){
+        return quaternionPart/100.0f;
+    }
+    
     private void showInitMessage(){
 
         System.out.println("Data is being received");
