@@ -15,8 +15,6 @@ package mygame;
  *          - The data between timestampe 1000 and 3000 will be used for this
  * Stage 4: Read any changes
  *          - if the data comes in is greater than allowed thresholds
- * Stage 5: Reestablish the baseline
- *          - Once it is stable data
  * 
  * @author BLI
  */
@@ -111,15 +109,10 @@ public class ArduinoDataInterpreter {
     private void processArdData(){
         
         if(updateExists){
-            
-            
-            //see comments at top for stage explanation
             switch(currentStage){
 
                 case 1:
-                    System.out.println("Data is being received");
-                    System.out.println();
-                    System.out.println("Now hit the Reset Button");
+                    showInitMessage();
                     showOutput = false;
                     currentStage = 2;
                     break;
@@ -127,8 +120,7 @@ public class ArduinoDataInterpreter {
                     
                     //reset was pressed
                     if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
-                        System.out.println();
-                        System.out.println("Resetting the stream");
+                        showResetMessage();
                         currentStage = 3;
                     }
                     
@@ -136,83 +128,25 @@ public class ArduinoDataInterpreter {
                     
                 case 3:
                     
-                    if(currentArdData.getTimestamp() >= calibStartTimeMs){
-                        
-                        if(!stage3calibMessageShown){
-                            
-                            System.out.println();
-                            System.out.println("Now calibrating the probe");
-                            System.out.println("Do not move the probe");
-                            stage3calibMessageShown = true;
-                            
-                        }
-                        
-                        if(currentArdData.getTimestamp() <= calibEndTimeMs){
-                            
-                            initYawData.addToDataSet(currentArdData.getYaw());
-                            initPitchData.addToDataSet(currentArdData.getPitch());
-                            initRollData.addToDataSet(currentArdData.getRoll());
-                            initXData.addToDataSet(currentArdData.getX());
-                            initYData.addToDataSet(currentArdData.getY());
-                            
-                        }else{
-                            
-                            initYawData.processData();
-                            initPitchData.processData();
-                            initRollData.processData();
-                            initXData.processData();
-                            initYData.processData();
-                            
-                            System.out.println("Init Data Established");
-                            System.out.println(
-                                "Mean: yaw=" + initYawData.getMean()
-                                + ", pitch=" + initPitchData.getMean()
-                                + ", roll=" + initRollData.getMean()
-                                + ", x=" + initXData.getMean()
-                                + ", y=" + initYData.getMean()
-                                    );
-                            System.out.println(
-                                "Mean Error: yaw=" + initYawData.getMeanError()
-                                + ", pitch=" + initPitchData.getMeanError()
-                                + ", roll=" + initRollData.getMeanError()
-                                + ", x=" + initXData.getMeanError()
-                                + ", y=" + initYData.getMeanError()
-                                    );
-                            System.out.println(
-                                "Mean Squared Error: yaw=" + initYawData.getMeanSquaredError()
-                                + ", pitch=" + initPitchData.getMeanSquaredError()
-                                + ", roll=" + initRollData.getMeanSquaredError()
-                                + ", x=" + initXData.getMeanSquaredError()
-                                + ", y=" + initYData.getMeanSquaredError()
-                                    );
-                            
-                            currentStage = 4;
-                            
-                            
-                        }
-                        
-                    }else{
-                        
-                        if(!stage3preCalibMessageShown){
-                            System.out.println("Waiting to calibrate the probe");
-                            stage3preCalibMessageShown = true;
-                        }
-                        
-                        
-                    }
+                    processCurrentCalibrationPoint();
                     
+                    if(currentArdData.getTimestamp() >= calibStartTimeMs){
+                        showCalibMessage();
+                        if(currentArdData.getTimestamp() <= calibEndTimeMs){
+                            processCurrentCalibrationPoint();
+                        }else{
+                            processCalibration();
+                            displayCalibrationResults();
+                            currentStage = 4;
+                        }
+                    }else{
+                        showPreCalibMessage();
+                    }
                     
                     break;
                 case 4:
-                    
-                    if(!stage4initMessageShown){
-                        System.out.println("Now onto stage 4");
-                        stage4initMessageShown = true;
-                    }
-                    
-                    break;
-                case 5:
-                    
+                    showStage4Message();
+                    processObjectUpdate();
                     break;
             }
             
@@ -224,6 +158,40 @@ public class ArduinoDataInterpreter {
         
     }
     
+    private void showStage4Message(){
+        if(!stage4initMessageShown){
+            System.out.println();
+            System.out.println("Now Processing Probe Data");
+            stage4initMessageShown = true;
+        }
+    }
+    
+    private void processCurrentCalibrationPoint(){
+        
+        initYawData.addToDataSet(currentArdData.getYaw());
+        initPitchData.addToDataSet(currentArdData.getPitch());
+        initRollData.addToDataSet(currentArdData.getRoll());
+        initXData.addToDataSet(currentArdData.getX());
+        initYData.addToDataSet(currentArdData.getY());
+        
+    }
+    
+    private void processCalibration(){
+        
+        initYawData.processData();
+        initPitchData.processData();
+        initRollData.processData();
+        initXData.processData();
+        initYData.processData();
+        
+        lastXangle = currentArdData.getPitch()/100.0f;
+        lastYangle = currentArdData.getRoll()/100.0f;
+        lastZangle = currentArdData.getYaw()/100.0f;
+
+    }
+    
+
+    
     public void updateData(){
         
         readSerialData();
@@ -231,61 +199,111 @@ public class ArduinoDataInterpreter {
         if(!onlyDoOutput){
             processArdData();
         }
-        
-        
-        
-        //processObjectUpdate();
     }
     
     private void processObjectUpdate(){
-        //the measurements vary by +- 0.02 when the probe is still, 
-        //  thus the threshold we care about is 0.02/100 = 0.0002
-        float threshold = 0.0002f;
-        if(currentArdData != null && currentArdData.getTimestamp() > timeThreshold){
-            try{
-                currentXangle = currentArdData.getPitch()/100.0f;
-                currentYangle = currentArdData.getRoll()/100.0f;
-                currentZangle = currentArdData.getYaw()/100.0f;
-                if(rotationReadOnce){
-                    
-                    deltaXangle = currentXangle - lastXangle;
-                    deltaYangle = currentYangle - lastYangle;
-                    deltaZangle = currentZangle - lastZangle;
-                    
-                    if(Math.abs(deltaXangle) <= threshold){
-                        deltaXangle = 0;
-                    }
-                    if(Math.abs(deltaYangle) <= threshold){
-                        deltaYangle = 0;
-                    }
-                    if(Math.abs(deltaZangle) <= threshold){
-                        deltaZangle = 0;
-                    }
-                    
-                    
-                    
-                }else{
-                    rotationReadOnce = true;
-                }
-                
-                lastXangle = currentXangle;
-                lastYangle = currentYangle;
-                lastZangle = currentZangle;
-                
-                deltaX = currentArdData.getX();
-                deltaY = currentArdData.getY();
-                
-                if(deltaX > 128) deltaX = deltaX - 256;
-                if(deltaY > 128) deltaY = deltaY - 256;
-                
-                deltaX = deltaX/500.0f;
-                deltaY = deltaY/500.0f;
-                
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            
+        
+        processYawPitchRoll();
+        processXYdata();
+
+    }
+    
+    private void processXYdata(){
+        deltaX = currentArdData.getX();
+        deltaY = currentArdData.getY();
+
+        if(deltaX > 128) deltaX = deltaX - 256;
+        if(deltaY > 128) deltaY = deltaY - 256;
+
+        deltaX = deltaX/500.0f;
+        deltaY = deltaY/500.0f;
+    }
+    
+    private void processYawPitchRoll(){
+        
+        float thresholdFactor =2;
+        currentXangle = currentArdData.getPitch()/100.0f;
+        currentYangle = currentArdData.getRoll()/100.0f;
+        currentZangle = currentArdData.getYaw()/100.0f;
+
+        deltaXangle = currentXangle - lastXangle;
+        deltaYangle = currentYangle - lastYangle;
+        deltaZangle = currentZangle - lastZangle;
+
+        if(Math.abs(deltaXangle) <= thresholdFactor*initPitchData.getMeanError()){
+            deltaXangle = 0;
+        }else{
+            lastXangle = currentXangle;
         }
+        
+        if(Math.abs(deltaYangle) <= thresholdFactor*initRollData.getMeanError()){
+            deltaYangle = 0;
+        }else{
+            lastYangle = currentYangle;
+        }
+        
+        if(Math.abs(deltaZangle) <= thresholdFactor*initYawData.getMeanError()){
+            deltaZangle = 0;
+        }else{
+            lastZangle = currentZangle;
+        }
+    }
+    private void showInitMessage(){
+
+        System.out.println("Data is being received");
+        System.out.println();
+        System.out.println("Now hit the Reset Button");
+    }
+    
+    private void showCalibMessage(){
+        
+        if(!stage3calibMessageShown){
+                            
+            System.out.println();
+            System.out.println("Now calibrating the probe");
+            System.out.println("Do not move the probe");
+            stage3calibMessageShown = true;
+
+        }
+        
+    }
+    
+    private void showPreCalibMessage(){
+        if(!stage3preCalibMessageShown){
+            System.out.println("Waiting to calibrate the probe");
+            stage3preCalibMessageShown = true;
+        }
+        
+    }
+    private void showResetMessage(){
+        System.out.println();
+        System.out.println("Resetting the stream");
+    }
+    
+    private void displayCalibrationResults(){
+        System.out.println("Init Data Established");
+        System.out.println(
+            "Mean: yaw=" + initYawData.getMean()
+            + ", pitch=" + initPitchData.getMean()
+            + ", roll=" + initRollData.getMean()
+            + ", x=" + initXData.getMean()
+            + ", y=" + initYData.getMean()
+                );
+        System.out.println(
+            "Mean Error: yaw=" + initYawData.getMeanError()
+            + ", pitch=" + initPitchData.getMeanError()
+            + ", roll=" + initRollData.getMeanError()
+            + ", x=" + initXData.getMeanError()
+            + ", y=" + initYData.getMeanError()
+                );
+        System.out.println(
+            "Mean Squared Error: yaw=" + initYawData.getMeanSquaredError()
+            + ", pitch=" + initPitchData.getMeanSquaredError()
+            + ", roll=" + initRollData.getMeanSquaredError()
+            + ", x=" + initXData.getMeanSquaredError()
+            + ", y=" + initYData.getMeanSquaredError()
+                );
+        
     }
 
     public void setOnlyDoOutput(boolean onlyDoOutput) {
