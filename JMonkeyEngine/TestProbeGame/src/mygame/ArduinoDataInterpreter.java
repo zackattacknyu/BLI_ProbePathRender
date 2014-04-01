@@ -40,8 +40,11 @@ public class ArduinoDataInterpreter {
     float lastYaw = 0;
     
     //flag for only showing output and not processing it
-    private boolean onlyDoOutput = false;
+    private boolean onlyDoOutput = true;
 
+    //flag for determining if calibration will be done first
+    //only relevant if onlyDoOutput is set to false
+    private boolean doCalibration = false;
     
     
     private boolean updateExists = false;
@@ -62,6 +65,9 @@ public class ArduinoDataInterpreter {
     private float calibEndTimeMs = 6000;
     private float estTimeBetweenReads = 20;
     private int numberElements;
+    
+    //when it should process raw object updates if no calibration is done
+    private float rawProcessingStartTime = 3000;
     
     private DataSet initYawData;
     private DataSet initPitchData;
@@ -109,47 +115,56 @@ public class ArduinoDataInterpreter {
     private void processArdData(){
         
         if(updateExists){
-            switch(currentStage){
+            
+            if(doCalibration){
+                switch(currentStage){
 
-                case 1:
-                    showInitMessage();
-                    showOutput = false;
-                    currentStage = 2;
-                    break;
-                case 2:
-                    
-                    //reset was pressed
-                    if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
-                        showResetMessage();
-                        currentStage = 3;
-                    }
-                    
-                    break;
-                    
-                case 3:
-                    
-                    processCurrentCalibrationPoint();
-                    
-                    if(currentArdData.getTimestamp() >= calibStartTimeMs){
-                        showCalibMessage();
-                        if(currentArdData.getTimestamp() <= calibEndTimeMs){
-                            processCurrentCalibrationPoint();
-                        }else{
-                            processCalibration();
-                            displayCalibrationResults();
-                            currentStage = 4;
+                    case 1:
+                        showInitMessage();
+                        showOutput = false;
+                        currentStage = 2;
+                        break;
+                    case 2:
+
+                        //reset was pressed
+                        if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
+                            showResetMessage();
+                            currentStage = 3;
                         }
-                    }else{
-                        showPreCalibMessage();
-                    }
-                    
-                    break;
-                case 4:
-                    showStage4Message();
+
+                        break;
+
+                    case 3:
+
+                        processCurrentCalibrationPoint();
+
+                        if(currentArdData.getTimestamp() >= calibStartTimeMs){
+                            showCalibMessage();
+                            if(currentArdData.getTimestamp() <= calibEndTimeMs){
+                                processCurrentCalibrationPoint();
+                            }else{
+                                processCalibration();
+                                displayCalibrationResults();
+                                currentStage = 4;
+                            }
+                        }else{
+                            showPreCalibMessage();
+                        }
+
+                        break;
+                    case 4:
+                        showStage4Message();
+                        processObjectUpdate();
+                        //showOutput = true;
+                        break;
+                }
+            }else{
+                if(currentArdData.getTimestamp() >= rawProcessingStartTime){
                     processObjectUpdate();
-                    //showOutput = true;
-                    break;
+                }
+                
             }
+            
             
             previousArdData = currentArdData;
             
@@ -227,7 +242,7 @@ public class ArduinoDataInterpreter {
         deltaRoll = currentArdData.getRoll() - lastRoll;
         deltaYaw = currentArdData.getYaw() - lastYaw;
 
-        if(Math.abs(deltaPitch) <= thresholdFactor*initPitchData.getMeanError()){
+        if(doCalibration && Math.abs(deltaPitch) <= thresholdFactor*initPitchData.getMeanError()){
             deltaXangle = 0;
         }else{
             deltaXangle = getEulerAngle(deltaPitch);
@@ -235,7 +250,7 @@ public class ArduinoDataInterpreter {
             lastPitch = currentArdData.getPitch();
         }
         
-        if(Math.abs(deltaRoll) <= thresholdFactor*initRollData.getMeanError()){
+        if(doCalibration && Math.abs(deltaRoll) <= thresholdFactor*initRollData.getMeanError()){
             deltaYangle = 0;
         }else{
             deltaYangle = getEulerAngle(deltaRoll);
@@ -243,7 +258,7 @@ public class ArduinoDataInterpreter {
             lastRoll = currentArdData.getRoll();
         }
         
-        if(Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
+        if(doCalibration && Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
             deltaZangle = 0;
         }else{
             deltaZangle = getEulerAngle(deltaYaw);
