@@ -119,9 +119,9 @@ public class SerialReader implements SerialPortEventListener {
             dataLocations.put("timestamp", 0);
             dataLocations.put("x", 1);
             dataLocations.put("y", 2);
-            dataLocations.put("yaw", 3);
-            dataLocations.put("pitch", 4);
-            dataLocations.put("roll", 5);
+            dataLocations.put("yaw", 4);
+            dataLocations.put("pitch", 5);
+            dataLocations.put("roll", 6);
         }
         
 
