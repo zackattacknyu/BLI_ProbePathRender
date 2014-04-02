@@ -44,7 +44,7 @@ public class ArduinoDataInterpreter {
 
     //flag for determining if calibration will be done first
     //only relevant if onlyDoOutput is set to false
-    private boolean doCalibration = false;
+    private boolean doCalibration = true;
     
     
     private boolean updateExists = false;
@@ -76,7 +76,8 @@ public class ArduinoDataInterpreter {
     private DataSet initYData;
     
     //factor to multiply mean error by before processing the change
-    private float thresholdFactor = 5.0f;
+    //private float thresholdFactor = 5.0f;
+    private float thresholdFactor = 2.0f;
 
     public ArduinoDataInterpreter() {
         
