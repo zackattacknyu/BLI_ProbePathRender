@@ -21,6 +21,19 @@ import java.util.ArrayList;
  */
 public class LineHelper {
     
+    
+    public static ArrayList<Vector3f> convertPathRecordingToLineVertices(PathRecorder path){
+        ArrayList<Float> xVals = path.getxCoords();
+        ArrayList<Float> yVals = path.getyCoords();
+        ArrayList<Vector3f> pathVertices = new ArrayList<Vector3f>(xVals.size());
+        Vector3f currentVertex;
+        for(int index = 0; index < xVals.size(); index++){         
+            currentVertex = new Vector3f(xVals.get(index),yVals.get(index),0);
+            pathVertices.add(currentVertex);
+        }
+        return pathVertices;
+    }
+    
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material ballMat){
         
         short[] indices = new short[lineVertices.size()*2];

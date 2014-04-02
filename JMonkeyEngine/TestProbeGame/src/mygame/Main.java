@@ -45,10 +45,15 @@ public class Main extends SimpleApplication {
     private Spatial littleObject;
     private boolean active = false;
     private boolean playing = false;
+    private boolean pathDisplayed = false;
+    private ArrayList<Vector3f> pathVertices;
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
+    private Material ballMat;
     private ArduinoDataInterpreter dataInterpreter;
+    
+    private PathRecorder cubePath;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -60,7 +65,7 @@ public class Main extends SimpleApplication {
         String objFileLocation = "Models/textured_mesh.obj";
         String sampleDataLocation = "textFiles/sampleData.txt";
         
-        Material ballMat = new Material(assetManager, 
+        ballMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/ShowNormals.j3md");
         rootNode.attachChild(ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager));
@@ -70,7 +75,7 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> lineVertices = 
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
         path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
-        rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat)); 
+        rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat));
         
         setDefaultCamera();
         enableFlyCam();
@@ -83,6 +88,7 @@ public class Main extends SimpleApplication {
     
     private void initLittleBox(Material ballMat){
         Box b = new Box(0.5f, 0.5f, 0.5f);
+        cubePath = new PathRecorder(0,0);
         littleObject = new Geometry("Box", b);
         littleObject.setName("Cube");
         littleObject.setLocalScale(1);
@@ -104,6 +110,22 @@ public class Main extends SimpleApplication {
         littleObject.rotate(0, 0, dataInterpreter.getDeltaZangle());
         littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
         
+        /*
+         * Around here is where we will want to record the xy path
+         */
+        float timestamp = dataInterpreter.getCurrentTimestamp();
+        if(timestamp >= 5000 && timestamp <= 10000){
+            cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
+        }else if(timestamp > 10000){
+            if(!pathDisplayed){
+                
+                pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
+                rootNode.attachChild(LineHelper.createLineFromVertices(pathVertices, ballMat)); 
+                
+                pathDisplayed = true;
+            }
+            
+        }
     }
 
     @Override

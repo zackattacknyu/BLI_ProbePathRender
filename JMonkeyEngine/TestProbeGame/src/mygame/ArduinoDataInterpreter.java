@@ -360,4 +360,12 @@ public class ArduinoDataInterpreter {
         return deltaY;
     }
     
+    public float getCurrentTimestamp(){
+        if(currentArdData == null){
+            return 0;
+        }else{
+            return currentArdData.getTimestamp();
+        }
+        
+    }
 }
