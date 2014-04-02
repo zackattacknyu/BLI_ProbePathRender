@@ -39,12 +39,14 @@ public class ArduinoDataInterpreter {
     float lastRoll = 0;
     float lastYaw = 0;
     
+    public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
+    
     //flag for only showing output and not processing it
-    private boolean onlyDoOutput = true;
+    private boolean onlyDoOutput = false;
 
     //flag for determining if calibration will be done first
     //only relevant if onlyDoOutput is set to false
-    private boolean doCalibration = true;
+    private boolean doCalibration = false;
     
     
     private boolean updateExists = false;
@@ -270,8 +272,10 @@ public class ArduinoDataInterpreter {
         }
     }
     
-    private float getEulerAngle(float quaternionPart){
-        return quaternionPart/100.0f;
+    //converts degrees, which the data is in, to radians, which is used
+    //  by JMonkeyEngine for the rotation
+    private float getEulerAngle(float degrees){
+        return degrees*degreeToRadianFactor;
     }
     
     private void showInitMessage(){
