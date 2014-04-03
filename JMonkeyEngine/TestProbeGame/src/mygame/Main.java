@@ -46,12 +46,14 @@ public class Main extends SimpleApplication {
     private boolean active = false;
     private boolean playing = false;
     private boolean pathDisplayed = false;
+    private boolean recordingPath = false;
     private ArrayList<Vector3f> pathVertices;
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
     private Material ballMat;
     private ArduinoDataInterpreter dataInterpreter;
+    private float currentX = 0, currentY = 0;
     
     private PathRecorder cubePath;
 
@@ -110,21 +112,14 @@ public class Main extends SimpleApplication {
         littleObject.rotate(0, 0, dataInterpreter.getDeltaZangle());
         littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
         
+        currentX = currentX + dataInterpreter.getDeltaX();
+        currentY = currentY - dataInterpreter.getDeltaY();
+        
         /*
          * Around here is where we will want to record the xy path
          */
-        float timestamp = dataInterpreter.getCurrentTimestamp();
-        if(timestamp >= 5000 && timestamp <= 10000){
+        if(recordingPath){
             cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
-        }else if(timestamp > 10000){
-            if(!pathDisplayed){
-                
-                pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
-                rootNode.attachChild(LineHelper.createLineFromVertices(pathVertices, ballMat)); 
-                
-                pathDisplayed = true;
-            }
-            
         }
     }
 
@@ -173,16 +168,30 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("moveInward", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping("moveOutward", new KeyTrigger(KeyInput.KEY_F));
         
+        inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
                 if(name.equals("moveInward") && keyPressed){
-                    System.out.println("Object wants to move inward");
-                    littleObject.move(0, 0, 1.0f/100.0f);
+                    littleObject.move(0, 0, 1.0f/20.0f);
                 }
                 if(name.equals("moveOutward") && keyPressed){
-                    littleObject.move(0,0, -1.0f/100.0f);
+                    littleObject.move(0,0, -1.0f/20.0f);
+                }
+                
+                if(name.equals("startStopNewPath") && keyPressed){
+                    if(recordingPath){
+                        System.out.println("Recording New Path Stopped");
+                        pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
+                        rootNode.attachChild(LineHelper.createLineFromVertices(pathVertices, ballMat));
+                        recordingPath = false;
+                    }else{
+                        cubePath = new PathRecorder(currentX,currentY);
+                        System.out.println("Now Recording new path");
+                        recordingPath = true;
+                    }
                 }
                 
                 if (name.equals("display_hidePath") && keyPressed) {
@@ -226,7 +235,14 @@ public class Main extends SimpleApplication {
             }
         };
 
-        inputManager.addListener(acl, "display_hidePath", "play_stop", "SwitchPathInterpolation", "tensionUp", "tensionDown");
+        inputManager.addListener(acl, "display_hidePath", 
+                "play_stop", 
+                "SwitchPathInterpolation", 
+                "tensionUp", 
+                "tensionDown",
+                "moveInward",
+                "moveOutward",
+                "startStopNewPath");
 
     }
 }
