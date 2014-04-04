@@ -43,6 +43,8 @@ import java.util.logging.Logger;
 public class Main extends SimpleApplication {
     
     private Spatial littleObject;
+    private Spatial startBox;
+    private Spatial endBox;
     private boolean active = false;
     private boolean playing = false;
     private boolean pathDisplayed = false;
@@ -73,6 +75,14 @@ public class Main extends SimpleApplication {
                 objFileLocation, ballMat, assetManager));
         initLittleBox(ballMat);
         rootNode.attachChild(littleObject);
+        
+        startBox = initSampleBox(ballMat, "startCube");
+        endBox = initSampleBox(ballMat, "endCube");
+        
+        rootNode.attachChild(startBox);
+        rootNode.attachChild(endBox);
+        
+        endBox.move(4.0f, 4.0f, 0.0f);
 
         ArrayList<Vector3f> lineVertices = 
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
@@ -95,6 +105,15 @@ public class Main extends SimpleApplication {
         littleObject.setName("Cube");
         littleObject.setLocalScale(1);
         littleObject.setMaterial(ballMat);
+    }
+    
+    private Spatial initSampleBox(Material ballMat, String name){
+        Box b = new Box(0.5f, 0.5f, 0.5f);
+        Spatial sampleBox = new Geometry("Box", b);
+        sampleBox.setName(name);
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(ballMat);
+        return sampleBox;
     }
 
     @Override
