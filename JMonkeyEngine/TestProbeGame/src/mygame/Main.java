@@ -87,7 +87,7 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> lineVertices = 
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
         path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
-        rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat));
+        //rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat));
         
         setDefaultCamera();
         enableFlyCam();
@@ -204,7 +204,15 @@ public class Main extends SimpleApplication {
                     if(recordingPath){
                         System.out.println("Recording New Path Stopped");
                         pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
-                        rootNode.attachChild(LineHelper.createLineFromVertices(pathVertices, ballMat));
+                        Spatial currentLine = LineHelper.createLineFromVertices(pathVertices, ballMat);
+                        float realLastX = 4.0f;
+                        float realLastY = 4.0f;
+                        //float realLastZ = 0.0f;
+                        float lastX = cubePath.getLastX();
+                        float lastY = cubePath.getLastY();
+                        //float lastZ = 0.0f;
+                        currentLine.scale(realLastX/lastX, realLastY/lastY, 0);
+                        rootNode.attachChild(currentLine);
                         recordingPath = false;
                     }else{
                         cubePath = new PathRecorder(currentX,currentY);

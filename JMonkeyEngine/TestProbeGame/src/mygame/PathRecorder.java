@@ -38,6 +38,14 @@ public class PathRecorder {
     public ArrayList<Float> getyCoords() {
         return yCoords;
     }
+
+    public float getLastX() {
+        return lastX;
+    }
+
+    public float getLastY() {
+        return lastY;
+    }
     
     
     
