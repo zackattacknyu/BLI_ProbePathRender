@@ -13,6 +13,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector2f;
@@ -55,7 +56,9 @@ public class Main extends SimpleApplication {
     private BitmapText wayPointsText;
     private Material ballMat;
     private ArduinoDataInterpreter dataInterpreter;
-    private float currentX = 0, currentY = 0;
+    private float currentX = 0, currentY = 0, currentYaw = 0;
+    
+    private BitmapText yawText, xText, yText;
     
     private PathRecorder cubePath;
 
@@ -83,7 +86,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(endBox);
         
         endBox.move(4.0f, 4.0f, 0.0f);
-
+        
         ArrayList<Vector3f> lineVertices = 
                 ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
         path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
@@ -92,6 +95,7 @@ public class Main extends SimpleApplication {
         setDefaultCamera();
         enableFlyCam();
         initPathInputs();
+        initDebugText();
         
         dataInterpreter = new ArduinoDataInterpreter();
     }
@@ -126,20 +130,36 @@ public class Main extends SimpleApplication {
         //dataInterpreter.setOnlyDoOutput(true);
         
         dataInterpreter.updateData();
-        littleObject.rotate(dataInterpreter.getDeltaXangle(), 0, 0);
-        littleObject.rotate(0,dataInterpreter.getDeltaYangle(),0);
+        //littleObject.rotate(dataInterpreter.getDeltaXangle(), 0, 0);
+        //littleObject.rotate(0,dataInterpreter.getDeltaYangle(),0);
         littleObject.rotate(0, 0, dataInterpreter.getDeltaZangle());
-        littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
+        //littleObject.rotate(dataInterpreter.getDeltaXangle(),dataInterpreter.getDeltaYangle(), dataInterpreter.getDeltaZangle());
+        //littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
         
-        currentX = currentX + dataInterpreter.getDeltaX();
-        currentY = currentY - dataInterpreter.getDeltaY();
+        //currentX = currentX + dataInterpreter.getDeltaX();
+        //currentY = currentY - dataInterpreter.getDeltaY();
+        
+        currentYaw = currentYaw + dataInterpreter.getDeltaYawRadians();
+        
+        Vector2f currentDisp = LineHelper.getXYDisplacement(
+                dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 
+                currentYaw);
+        littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
+        
+        currentX = currentX + currentDisp.getX();
+        currentY = currentY + currentDisp.getY();
         
         /*
          * Around here is where we will want to record the xy path
          */
         if(recordingPath){
-            cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
+            //cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
+            cubePath.addToPath(currentDisp);
         }
+        
+        xText.setText("current X = " + currentX);
+        yText.setText("current Y = " + currentY);
+        yawText.setText("current Yaw = " + currentYaw);
     }
 
     @Override
@@ -156,6 +176,34 @@ public class Main extends SimpleApplication {
         flyCam.setDragToRotate(true);
         flyCam.setMoveSpeed(10f);
         flyCam.setRotationSpeed(10f);
+    }
+    
+    private void initDebugText(){
+        
+        yawText = new BitmapText(guiFont,false);
+        yawText.setSize(guiFont.getCharSet().getRenderedSize());
+        yawText.setLocalTranslation(
+                (cam.getWidth() - yawText.getLineWidth()) / 2, 
+                cam.getHeight(), 0);
+        guiNode.attachChild(yawText);
+        
+        
+        xText = new BitmapText(guiFont,false);
+        xText.setSize(guiFont.getCharSet().getRenderedSize());
+        xText.setLocalTranslation(
+                (cam.getWidth() - xText.getLineWidth()) / 2, 
+                (cam.getHeight() - xText.getLineHeight()), 0);
+        guiNode.attachChild(xText);
+        
+        yText = new BitmapText(guiFont,false);
+        yText.setSize(guiFont.getCharSet().getRenderedSize());
+        yText.setLocalTranslation(
+                (cam.getWidth() - yText.getLineWidth()) / 2, 
+                (cam.getHeight() - yText.getLineHeight()*2), 0);
+        guiNode.attachChild(yText);
+        
+        
+        
     }
 
     private void initPathInputs() {

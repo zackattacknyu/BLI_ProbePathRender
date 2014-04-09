@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.scene.Geometry;
@@ -32,6 +33,19 @@ public class LineHelper {
             pathVertices.add(currentVertex);
         }
         return pathVertices;
+    }
+    
+    public static Vector2f getXYDisplacement(float deltaX, float deltaY, float yawInRadians){
+        
+        float cosTheta = (float) Math.cos(yawInRadians);
+        float sinTheta = (float) Math.sin(yawInRadians);
+        
+        float newDeltaX = deltaX*cosTheta-deltaY*sinTheta;
+        float newDeltaY = deltaX*sinTheta+deltaY*cosTheta;
+        
+        return new Vector2f(newDeltaX,newDeltaY);
+        
+        
     }
     
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material ballMat){

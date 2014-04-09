@@ -4,6 +4,7 @@
  */
 package mygame;
 
+import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 
 /**
@@ -29,6 +30,10 @@ public class PathRecorder {
         yCoords.add(currentY);
         lastX = currentX;
         lastY = currentY;
+    }
+    
+    public void addToPath(Vector2f xyDisplacement){
+        addToPath(xyDisplacement.getX(),xyDisplacement.getY());
     }
 
     public ArrayList<Float> getxCoords() {

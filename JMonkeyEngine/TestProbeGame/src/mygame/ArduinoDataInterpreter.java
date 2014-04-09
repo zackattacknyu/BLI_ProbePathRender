@@ -4,6 +4,8 @@
  */
 package mygame;
 
+import com.jme3.math.FastMath;
+
 /**
  *The Data Interpretation will go through 5 stages:
  * 
@@ -235,8 +237,8 @@ public class ArduinoDataInterpreter {
         if(deltaX > 128) deltaX = deltaX - 256;
         if(deltaY > 128) deltaY = deltaY - 256;
 
-        deltaX = deltaX/500.0f;
-        deltaY = deltaY/500.0f;
+        deltaX = deltaX/1000.0f;
+        deltaY = deltaY/1000.0f;
     }
     
     private void processYawPitchRoll(){
@@ -275,8 +277,18 @@ public class ArduinoDataInterpreter {
     //converts degrees, which the data is in, to radians, which is used
     //  by JMonkeyEngine for the rotation
     private float getEulerAngle(float degrees){
-        return degrees*degreeToRadianFactor;
+        return degrees*FastMath.DEG_TO_RAD;
     }
+
+    public float getDeltaYawRadians() {
+        if(doCalibration && Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
+            return 0;
+        }else{
+            return getEulerAngle(deltaYaw);
+        }
+    }
+    
+    
     
     private void showInitMessage(){
 
