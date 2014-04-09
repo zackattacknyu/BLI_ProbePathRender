@@ -13,7 +13,6 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector2f;
@@ -132,11 +131,10 @@ public class Main extends SimpleApplication {
         //dataInterpreter.setOnlyDoOutput(true);
         
         dataInterpreter.updateData();
-        //littleObject.rotate(dataInterpreter.getDeltaXangle(), 0, 0);
-        //littleObject.rotate(0,dataInterpreter.getDeltaYangle(),0);
-        littleObject.rotate(0, 0, dataInterpreter.getDeltaZangle());
-        //littleObject.rotate(dataInterpreter.getDeltaXangle(),dataInterpreter.getDeltaYangle(), dataInterpreter.getDeltaZangle());
-        //littleObject.move(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 0);
+        
+        //use this style for displaying the rotation
+        littleObject.setLocalRotation(LineHelper.getRotationMatrix(dataInterpreter.getCurrentYaw()));
+        
         
         //currentX = currentX + dataInterpreter.getDeltaX();
         //currentY = currentY - dataInterpreter.getDeltaY();
@@ -144,7 +142,7 @@ public class Main extends SimpleApplication {
         Vector2f currentDisp = LineHelper.getXYDisplacement(
                 dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 
                 dataInterpreter.getCurrentYaw());
-        littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
+        //littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
         
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();

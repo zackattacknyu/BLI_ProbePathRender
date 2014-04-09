@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
@@ -45,6 +46,15 @@ public class LineHelper {
         
         return new Vector2f(newDeltaX,newDeltaY);
         
+        
+    }
+    
+    public static Matrix3f getRotationMatrix(float yawInRadians){
+        
+        float cosTheta = (float) Math.cos(yawInRadians);
+        float sinTheta = (float) Math.sin(yawInRadians);
+        
+        return new Matrix3f(cosTheta,-sinTheta,0,sinTheta,cosTheta,0,0,0,1);
         
     }
     
