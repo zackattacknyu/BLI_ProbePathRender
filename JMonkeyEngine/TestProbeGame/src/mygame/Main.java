@@ -103,11 +103,13 @@ public class Main extends SimpleApplication {
     
     
     private void initLittleBox(Material ballMat){
-        Box b = new Box(0.5f, 0.5f, 0.5f);
+        //Box b = new Box(0.5f, 0.5f, 0.5f);
         cubePath = new PathRecorder(0,0);
-        littleObject = new Geometry("Box", b);
-        littleObject.setName("Cube");
-        littleObject.setLocalScale(1);
+        //littleObject = new Geometry("Box", b);
+        littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", ballMat, assetManager);
+        littleObject.setName("Probe");
+        littleObject.setLocalScale(1.0f/50.0f);
+        littleObject.setLocalTranslation(0.0f, 0.0f, 0.0f);
         littleObject.setMaterial(ballMat);
     }
     
