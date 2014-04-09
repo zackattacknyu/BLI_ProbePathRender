@@ -139,9 +139,18 @@ public class Main extends SimpleApplication {
         //currentX = currentX + dataInterpreter.getDeltaX();
         //currentY = currentY - dataInterpreter.getDeltaY();
         
-        Vector2f currentDisp = LineHelper.getXYDisplacement(
+        boolean useYaw = false;
+        
+        Vector2f currentDisp;
+        
+        if(useYaw){
+            currentDisp = LineHelper.getXYDisplacement(
                 dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 
                 dataInterpreter.getCurrentYaw());
+        }else{
+            currentDisp = new Vector2f(dataInterpreter.getDeltaX(),dataInterpreter.getDeltaY());
+        }
+        
         //littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
         
         currentX = currentX + currentDisp.getX();
