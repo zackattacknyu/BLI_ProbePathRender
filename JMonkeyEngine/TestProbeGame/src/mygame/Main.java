@@ -141,11 +141,9 @@ public class Main extends SimpleApplication {
         //currentX = currentX + dataInterpreter.getDeltaX();
         //currentY = currentY - dataInterpreter.getDeltaY();
         
-        currentYaw = currentYaw + dataInterpreter.getDeltaYawRadians();
-        
         Vector2f currentDisp = LineHelper.getXYDisplacement(
                 dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 
-                currentYaw);
+                dataInterpreter.getCurrentYaw());
         littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
         
         currentX = currentX + currentDisp.getX();
@@ -161,7 +159,7 @@ public class Main extends SimpleApplication {
         
         xText.setText("current X = " + currentX);
         yText.setText("current Y = " + currentY);
-        yawText.setText("current Yaw = " + currentYaw);
+        yawText.setText("current Yaw = " + dataInterpreter.getCurrentYaw()*FastMath.RAD_TO_DEG);
     }
 
     @Override
@@ -182,29 +180,30 @@ public class Main extends SimpleApplication {
     
     private void initDebugText(){
         
-        yawText = new BitmapText(guiFont,false);
-        yawText.setSize(guiFont.getCharSet().getRenderedSize());
+        yawText = initializeNewText();
         yawText.setLocalTranslation(
                 (cam.getWidth() - yawText.getLineWidth()) / 2, 
-                cam.getHeight(), 0);
-        guiNode.attachChild(yawText);
+                cam.getHeight(), 0);       
         
-        
-        xText = new BitmapText(guiFont,false);
-        xText.setSize(guiFont.getCharSet().getRenderedSize());
+        xText = initializeNewText();
         xText.setLocalTranslation(
                 (cam.getWidth() - xText.getLineWidth()) / 2, 
                 (cam.getHeight() - xText.getLineHeight()), 0);
-        guiNode.attachChild(xText);
         
-        yText = new BitmapText(guiFont,false);
-        yText.setSize(guiFont.getCharSet().getRenderedSize());
+        
+        yText = initializeNewText();
         yText.setLocalTranslation(
                 (cam.getWidth() - yText.getLineWidth()) / 2, 
                 (cam.getHeight() - yText.getLineHeight()*2), 0);
-        guiNode.attachChild(yText);
         
+    }
+    
+    private BitmapText initializeNewText(){
         
+        BitmapText newText = new BitmapText(guiFont,false);
+        newText.setSize(guiFont.getCharSet().getRenderedSize());
+        guiNode.attachChild(newText);
+        return newText;
         
     }
 

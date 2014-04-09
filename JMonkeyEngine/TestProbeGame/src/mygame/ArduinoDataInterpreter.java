@@ -279,13 +279,16 @@ public class ArduinoDataInterpreter {
     private float getEulerAngle(float degrees){
         return degrees*FastMath.DEG_TO_RAD;
     }
-
-    public float getDeltaYawRadians() {
-        if(doCalibration && Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
-            return 0;
+    
+    public float getCurrentYaw(){
+        if(currentStage > 3){
+            return getEulerAngle(currentArdData.getYaw()-initYawData.getMean());
+        }else if(!doCalibration){
+            return getEulerAngle(currentArdData.getYaw());
         }else{
-            return getEulerAngle(deltaYaw);
+            return 0;
         }
+        
     }
     
     
