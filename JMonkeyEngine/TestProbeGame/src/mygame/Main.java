@@ -283,6 +283,12 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("readModeChange", new KeyTrigger(KeyInput.KEY_V));
         
+        inputManager.addMapping("moveUp", new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        inputManager.addMapping("moveDown", new KeyTrigger(KeyInput.KEY_NUMPAD2));
+        
+        inputManager.addMapping("moveLeft", new KeyTrigger(KeyInput.KEY_NUMPAD4));
+        inputManager.addMapping("moveRight", new KeyTrigger(KeyInput.KEY_NUMPAD6));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -292,6 +298,22 @@ public class Main extends SimpleApplication {
                 }
                 if(name.equals("moveOutward") && keyPressed){
                     littleObject.move(0,0, -1.0f/20.0f);
+                }
+                
+                if(name.equals("moveUp") && keyPressed){
+                    littleObject.move(0, 1.0f/20.0f, 0);
+                }
+                
+                if(name.equals("moveDown") && keyPressed){
+                    littleObject.move(0, -1.0f/20.0f, 0);
+                }
+                
+                if(name.equals("moveLeft") && keyPressed){
+                    littleObject.move(1.0f/20.0f, 0, 0);
+                }
+                
+                if(name.equals("moveRight") && keyPressed){
+                    littleObject.move(-1.0f/20.0f, 0, 0);
                 }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
@@ -415,7 +437,11 @@ public class Main extends SimpleApplication {
                 "startStopNewPath",
                 "recalibrateX",
                 "recalibrateY",
-                "readModeChange");
+                "readModeChange",
+                "moveUp",
+                "moveDown",
+                "moveLeft",
+                "moveRight");
 
     }
 }
