@@ -289,6 +289,9 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("moveLeft", new KeyTrigger(KeyInput.KEY_NUMPAD4));
         inputManager.addMapping("moveRight", new KeyTrigger(KeyInput.KEY_NUMPAD6));
         
+        inputManager.addMapping("rotateClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD1));
+        inputManager.addMapping("rotateCounterClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD3));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -298,6 +301,15 @@ public class Main extends SimpleApplication {
                 }
                 if(name.equals("moveOutward") && keyPressed){
                     littleObject.move(0,0, -1.0f/20.0f);
+                }
+                
+                if(name.equals("rotateClockwise") && keyPressed){
+                    System.out.println("Rotate Clockwise");
+                    littleObject.rotate(0.0f, 0.0f, -0.2f);
+                }
+                if(name.equals("rotateCounterClockwise") && keyPressed){
+                    System.out.println("Rotate Counter Clockwise");
+                    littleObject.rotate(0.0f, 0.0f, 0.2f);
                 }
                 
                 if(name.equals("moveUp") && keyPressed){
@@ -441,7 +453,9 @@ public class Main extends SimpleApplication {
                 "moveUp",
                 "moveDown",
                 "moveLeft",
-                "moveRight");
+                "moveRight",
+                "rotateClockwise",
+                "rotateCounterClockwise");
 
     }
 }
