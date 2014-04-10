@@ -352,6 +352,17 @@ public class Main extends SimpleApplication {
                     calibratingX = !calibratingX;
                     
                 }
+                
+                if(name.equals("recalibrateY") && keyPressed){
+                    if(calibratingY){
+                        scaleYtext.setText("Virtual Y to real Y scale factor (Press Y to recalibrate): #");
+                    }else{
+                        scaleYtext.setText("Calculating Virtual Y to real Y scale factor (Press Y to stop calibration): ");
+                    }
+                    
+                    calibratingY = !calibratingY;
+                    
+                }
 
 
             }
