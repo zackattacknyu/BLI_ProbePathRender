@@ -208,23 +208,33 @@ public class Main extends SimpleApplication {
                 (cam.getHeight() - yText.getLineHeight()*2), 0);
         
         scaleXtext = initializeNewText();
-        scaleXtext.setText("Virtual X to real X scale factor (Press X to recalibrate): ");
+        scaleXtext.setText("Virtual X to real X scale factor "
+                + "(Press X to recalibrate):"
+                + "------------------------- ");
         scaleXtext.setLocalTranslation(
                 (cam.getWidth() - scaleXtext.getLineWidth()), 
                 (scaleXtext.getLineHeight()*3), 0);
+        scaleXtext.setText("Virtual X to real X scale factor "
+                + "(Press X to recalibrate): ");
         
         
         scaleYtext = initializeNewText();
-        scaleYtext.setText("Virtual Y to real Y scale factor (Press Y to recalibrate): ");
+        scaleYtext.setText("Virtual Y to real Y scale factor "
+                + "(Press Y to recalibrate):"
+                + "------------------------- ");
         scaleYtext.setLocalTranslation(
                 (cam.getWidth() - scaleYtext.getLineWidth()), 
                 (scaleYtext.getLineHeight()*2), 0);
+        scaleYtext.setText("Virtual Y to real Y scale factor "
+                + "(Press Y to recalibrate):");
         
         readModeText = initializeNewText();
-        readModeText.setText("Probe Output Reading Mode (Press V to change): ");
+        readModeText.setText("Probe Output Reading (Press V to change): "
+                + "---------------------------------------------------------");
         readModeText.setLocalTranslation(
                 (cam.getWidth() - readModeText.getLineWidth()), 
                 (readModeText.getLineHeight()), 0);
+        readModeText.setText("Probe Output Reading (Press V to change):");
         
     }
     
@@ -361,6 +371,33 @@ public class Main extends SimpleApplication {
                     }
                     
                     calibratingY = !calibratingY;
+                    
+                }
+                
+                if(name.equals("readModeChange") && keyPressed){
+                    
+                    switch(readMode){
+                        case 0:
+                            readModeText.setText("Probe Output Reading "
+                                    + "(Press V to change): "
+                                    + "Raw Output Mode");
+                            break;
+                            
+                        case 1:
+                            readModeText.setText("Probe Output Reading "
+                                    + "(Press V to change): "
+                                    + "Low-Pass Filter Mode");
+                            break;
+                            
+                        case 2:
+                            readModeText.setText("Probe Output Reading "
+                                    + "(Press V to change): "
+                                    + "Mean Error as Threshold Mode");
+                            break;
+                    }
+                    
+                    readMode++;
+                    readMode = (short) (readMode%3);
                     
                 }
 
