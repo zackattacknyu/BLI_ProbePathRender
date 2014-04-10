@@ -392,7 +392,7 @@ public class Main extends SimpleApplication {
                         case 2:
                             readModeText.setText("Probe Output Reading "
                                     + "(Press V to change): "
-                                    + "Mean Error as Threshold Mode");
+                                    + "Mean Error as Threshold Mode (Press B to recalculate)");
                             break;
                     }
                     
