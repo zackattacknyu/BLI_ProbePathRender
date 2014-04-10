@@ -59,6 +59,10 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText;
     
+    private boolean calibratingX = false, calibratingY = false;
+    
+    private short readMode = 0;
+    
     private PathRecorder cubePath;
 
     public static void main(String[] args) {
@@ -336,6 +340,17 @@ public class Main extends SimpleApplication {
                 if (name.equals("tensionDown") && keyPressed) {
                     path.setCurveTension(path.getCurveTension() - 0.1f);
                     System.err.println("Tension : " + path.getCurveTension());
+                }
+                
+                if(name.equals("recalibrateX") && keyPressed){
+                    if(calibratingX){
+                        scaleXtext.setText("Virtual X to real X scale factor (Press X to recalibrate): #");
+                    }else{
+                        scaleXtext.setText("Calculating Virtual X to real X scale factor (Press X to stop calibration): ");
+                    }
+                    
+                    calibratingX = !calibratingX;
+                    
                 }
 
 
