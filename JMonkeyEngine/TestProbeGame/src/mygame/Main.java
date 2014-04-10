@@ -57,7 +57,7 @@ public class Main extends SimpleApplication {
     private ArduinoDataInterpreter dataInterpreter;
     private float currentX = 0, currentY = 0, currentYaw = 0;
     
-    private BitmapText yawText, xText, yText;
+    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText;
     
     private PathRecorder cubePath;
 
@@ -203,6 +203,25 @@ public class Main extends SimpleApplication {
                 (cam.getWidth() - yText.getLineWidth()) / 2, 
                 (cam.getHeight() - yText.getLineHeight()*2), 0);
         
+        scaleXtext = initializeNewText();
+        scaleXtext.setText("Virtual X to real X scale factor (Press X to recalibrate): ");
+        scaleXtext.setLocalTranslation(
+                (cam.getWidth() - scaleXtext.getLineWidth()), 
+                (scaleXtext.getLineHeight()*3), 0);
+        
+        
+        scaleYtext = initializeNewText();
+        scaleYtext.setText("Virtual Y to real Y scale factor (Press Y to recalibrate): ");
+        scaleYtext.setLocalTranslation(
+                (cam.getWidth() - scaleYtext.getLineWidth()), 
+                (scaleYtext.getLineHeight()*2), 0);
+        
+        readModeText = initializeNewText();
+        readModeText.setText("Probe Output Reading Mode (Press V to change): ");
+        readModeText.setLocalTranslation(
+                (cam.getWidth() - readModeText.getLineWidth()), 
+                (readModeText.getLineHeight()), 0);
+        
     }
     
     private BitmapText initializeNewText(){
@@ -244,6 +263,11 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("moveOutward", new KeyTrigger(KeyInput.KEY_F));
         
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
+        
+        inputManager.addMapping("recalibrateX", new KeyTrigger(KeyInput.KEY_X));
+        inputManager.addMapping("recalibrateY", new KeyTrigger(KeyInput.KEY_Y));
+        
+        inputManager.addMapping("readModeChange", new KeyTrigger(KeyInput.KEY_V));
         
         ActionListener acl = new ActionListener() {
 
@@ -325,7 +349,10 @@ public class Main extends SimpleApplication {
                 "tensionDown",
                 "moveInward",
                 "moveOutward",
-                "startStopNewPath");
+                "startStopNewPath",
+                "recalibrateX",
+                "recalibrateY",
+                "readModeChange");
 
     }
 }
