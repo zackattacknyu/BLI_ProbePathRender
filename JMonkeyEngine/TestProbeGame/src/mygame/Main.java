@@ -55,7 +55,9 @@ public class Main extends SimpleApplication {
     private BitmapText wayPointsText;
     private Material ballMat;
     private ArduinoDataInterpreter dataInterpreter;
-    private float currentX = 0, currentY = 0, currentYaw = 0;
+    private float currentX = 0, currentY = 0, baselineYaw = 0, currentYaw = 0;
+    private float currentManualDeltaX = 0, currentManualDeltaY = 0;
+    private float currentDeltaX = 0, currentDeltaY = 0;
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText;
     
@@ -64,6 +66,7 @@ public class Main extends SimpleApplication {
     private short readMode = 0;
     
     private PathRecorder cubePath;
+    
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -137,28 +140,33 @@ public class Main extends SimpleApplication {
         dataInterpreter.updateData();
         
         //use this style for displaying the rotation
-        littleObject.setLocalRotation(LineHelper.getRotationMatrix(dataInterpreter.getCurrentYaw()));
+        currentYaw = dataInterpreter.getCurrentYaw() + baselineYaw;
+        littleObject.setLocalRotation(LineHelper.getRotationMatrix(currentYaw));
         
         
         //currentX = currentX + dataInterpreter.getDeltaX();
         //currentY = currentY - dataInterpreter.getDeltaY();
         
-        boolean useYaw = false;
+        boolean useYaw = true;
         
         Vector2f currentDisp;
         
+        currentDeltaX = dataInterpreter.getDeltaX() + currentManualDeltaX;
+        currentDeltaY = -dataInterpreter.getDeltaY() - currentManualDeltaY;
+        
         if(useYaw){
-            currentDisp = LineHelper.getXYDisplacement(
-                dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY(), 
-                dataInterpreter.getCurrentYaw());
+            currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
         }else{
-            currentDisp = new Vector2f(dataInterpreter.getDeltaX(),dataInterpreter.getDeltaY());
+            currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
         }
         
-        //littleObject.move(currentDisp.getX(),currentDisp.getY(),0);
+        currentManualDeltaX = 0;
+        currentManualDeltaY = 0;
         
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();
+        
+        littleObject.setLocalTranslation(currentX, currentY, 0.0f);
         
         /*
          * Around here is where we will want to record the xy path
@@ -170,7 +178,7 @@ public class Main extends SimpleApplication {
         
         xText.setText("current X = " + currentX);
         yText.setText("current Y = " + currentY);
-        yawText.setText("current Yaw = " + dataInterpreter.getCurrentYaw()*FastMath.RAD_TO_DEG);
+        yawText.setText("current Yaw = " + currentYaw*FastMath.RAD_TO_DEG);
     }
 
     @Override
@@ -304,28 +312,26 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("rotateClockwise") && keyPressed){
-                    System.out.println("Rotate Clockwise");
-                    littleObject.rotate(0.0f, 0.0f, -0.2f);
+                    baselineYaw = baselineYaw - 1.0f/20.0f;
                 }
                 if(name.equals("rotateCounterClockwise") && keyPressed){
-                    System.out.println("Rotate Counter Clockwise");
-                    littleObject.rotate(0.0f, 0.0f, 0.2f);
+                    baselineYaw = baselineYaw + 1.0f/20.0f;
                 }
                 
                 if(name.equals("moveUp") && keyPressed){
-                    littleObject.move(0, 1.0f/20.0f, 0);
+                    currentManualDeltaY = 1.0f/20.0f;
                 }
                 
                 if(name.equals("moveDown") && keyPressed){
-                    littleObject.move(0, -1.0f/20.0f, 0);
+                    currentManualDeltaY = -1.0f/20.0f;
                 }
                 
                 if(name.equals("moveLeft") && keyPressed){
-                    littleObject.move(1.0f/20.0f, 0, 0);
+                    currentManualDeltaX = 1.0f/20.0f;
                 }
                 
                 if(name.equals("moveRight") && keyPressed){
-                    littleObject.move(-1.0f/20.0f, 0, 0);
+                    currentManualDeltaX = -1.0f/20.0f;
                 }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
