@@ -53,7 +53,7 @@ public class Main extends SimpleApplication {
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
-    private Material ballMat;
+    private Material ballMat,probeMat;
     private ArduinoDataInterpreter dataInterpreter;
     private float currentX = 0, currentY = 0, baselineYaw = 0, currentYaw = 0;
     private float currentManualDeltaX = 0, currentManualDeltaY = 0;
@@ -82,7 +82,12 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/ShowNormals.j3md");
         rootNode.attachChild(ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager));
-        initLittleBox(ballMat);
+        
+        probeMat = new Material(assetManager, 
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
+        initLittleBox(probeMat);
+        
         rootNode.attachChild(littleObject);
         
         startBox = initSampleBox(ballMat, "startCube");
@@ -108,15 +113,15 @@ public class Main extends SimpleApplication {
     
     
     
-    private void initLittleBox(Material ballMat){
+    private void initLittleBox(Material material){
         //Box b = new Box(0.5f, 0.5f, 0.5f);
         cubePath = new PathRecorder(0,0);
         //littleObject = new Geometry("Box", b);
-        littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", ballMat, assetManager);
+        littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
         littleObject.setName("Probe");
         littleObject.setLocalScale(1.0f/50.0f);
         littleObject.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        littleObject.setMaterial(ballMat);
+        littleObject.setMaterial(material);
     }
     
     private Spatial initSampleBox(Material ballMat, String name){
@@ -152,7 +157,7 @@ public class Main extends SimpleApplication {
         Vector2f currentDisp;
         
         currentDeltaX = dataInterpreter.getDeltaX() + currentManualDeltaX;
-        currentDeltaY = -dataInterpreter.getDeltaY() - currentManualDeltaY;
+        currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
         
         if(useYaw){
             currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
