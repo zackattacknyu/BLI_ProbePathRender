@@ -49,6 +49,13 @@ public class LineHelper {
         
     }
     
+    public static Vector2f scaleDisplacement(Vector2f displacement, float xScale, float yScale){
+        float xVal = displacement.getX();
+        float yVal = displacement.getY();
+        
+        return new Vector2f(xVal*xScale,yVal*yScale);
+    }
+    
     public static Matrix3f getRotationMatrix(float yawInRadians){
         
         float cosTheta = (float) Math.cos(yawInRadians);

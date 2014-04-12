@@ -59,7 +59,7 @@ public class Main extends SimpleApplication {
     private float currentManualDeltaX = 0, currentManualDeltaY = 0;
     private float currentDeltaX = 0, currentDeltaY = 0;
     
-    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText;
+    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText;
     
     private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
     
@@ -158,7 +158,7 @@ public class Main extends SimpleApplication {
         
         Vector2f currentDisp;
         
-        currentDeltaX = dataInterpreter.getDeltaX() + currentManualDeltaX;
+        currentDeltaX = -dataInterpreter.getDeltaX() + currentManualDeltaX;
         currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
         
         if(useYaw){
@@ -166,6 +166,8 @@ public class Main extends SimpleApplication {
         }else{
             currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
         }
+        
+        currentDisp = LineHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
         
         currentManualDeltaX = 0;
         currentManualDeltaY = 0;
@@ -232,6 +234,11 @@ public class Main extends SimpleApplication {
         scaleXtext.setText("Virtual X to real X scale factor "
                 + "(Press X to recalibrate): " + scaleFactorX);
         
+        recordingText = initializeNewText();
+        recordingText.setText("Press N to record a new path");
+        recordingText.setLocalTranslation(
+                (cam.getWidth() - recordingText.getLineWidth()) / 2, 
+                (cam.getHeight() - recordingText.getLineHeight()*3), 0);
         
         scaleYtext = initializeNewText();
         scaleYtext.setText("Virtual Y to real Y scale factor "
@@ -249,7 +256,9 @@ public class Main extends SimpleApplication {
         readModeText.setLocalTranslation(
                 (cam.getWidth() - readModeText.getLineWidth()), 
                 (readModeText.getLineHeight()), 0);
-        readModeText.setText("Probe Output Reading (Press V to change):");
+        readModeText.setText("Probe Output Reading (Press V to change): Only Show Output");
+        
+        
         
     }
     
@@ -296,6 +305,8 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("recalibrateX", new KeyTrigger(KeyInput.KEY_X));
         inputManager.addMapping("recalibrateY", new KeyTrigger(KeyInput.KEY_Y));
         
+        inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
+        
         inputManager.addMapping("readModeChange", new KeyTrigger(KeyInput.KEY_V));
         
         inputManager.addMapping("moveUp", new KeyTrigger(KeyInput.KEY_NUMPAD8));
@@ -325,6 +336,11 @@ public class Main extends SimpleApplication {
                     baselineYaw = baselineYaw + 1.0f/20.0f;
                 }
                 
+                if(name.equals("resetProbe") && keyPressed){
+                    currentX = 0;
+                    currentY = 0;
+                }
+                
                 if(name.equals("moveUp") && keyPressed){
                     currentManualDeltaY = 1.0f/20.0f;
                 }
@@ -347,17 +363,15 @@ public class Main extends SimpleApplication {
                         pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
                         Spatial currentLine = LineHelper.createLineFromVertices(pathVertices, ballMat);
                         
-                        /*
-                         * TODO: Put in code here to display GUI text
-                         *          saying that the path is recording
-                         */
-                        
+                        recordingText.setText("Press N to record a new path");
                         float xDist = cubePath.getLastX()-cubePath.getFirstX();
                         float yDist = cubePath.getLastY()-cubePath.getFirstY();
-                        currentLine.scale(xDist*scaleFactorX, yDist*scaleFactorY, 0);
+                        //currentLine.scale(xDist*scaleFactorX, yDist*scaleFactorY, 0);
                         rootNode.attachChild(currentLine);
                         recordingPath = false;
                     }else{
+                        
+                        recordingText.setText("Now recording new path (Press N to stop recording)");
                         cubePath = new PathRecorder(currentX,currentY);
                         System.out.println("Now Recording new path");
                         recordingPath = true;
@@ -404,13 +418,13 @@ public class Main extends SimpleApplication {
                 if(name.equals("recalibrateX") && keyPressed){
                     if(calibratingX){
                         float lastX = cubePath.getLastX() - cubePath.getFirstX();
-                        float realLastX = 4.0f;
+                        float realLastX = 8.0f;
                         scaleFactorX = realLastX/lastX;
                         scaleXtext.setText("Virtual X to real X scale factor "
                                 + "(Press X to recalibrate): "
                                 + scaleFactorX);
                     }else{
-                        scaleXtext.setText("Now calibrating. Press X when probe is at (4,0) ");
+                        scaleXtext.setText("Now calibrating. Press X has been moved 8 units right ");
                         cubePath = new PathRecorder(currentX,currentY);
                     }
                     
@@ -423,13 +437,13 @@ public class Main extends SimpleApplication {
                 if(name.equals("recalibrateY") && keyPressed){
                     if(calibratingY){
                         float lastY = cubePath.getLastY()- cubePath.getFirstY();
-                        float realLastY = 4.0f;
+                        float realLastY = 8.0f;
                         scaleFactorY = realLastY/lastY;
                         scaleYtext.setText("Virtual X to real X scale factor "
                                 + "(Press X to recalibrate): "
                                 + scaleFactorY);
                     }else{
-                        scaleYtext.setText("Now calibrating. Press Y when probe is at (4,0) ");
+                        scaleYtext.setText("Now calibrating. Press Y has been moved 8 units up ");
                         cubePath = new PathRecorder(currentX,currentY);
                     }
                     
@@ -443,16 +457,21 @@ public class Main extends SimpleApplication {
                         case 0:
                             readModeText.setText("Probe Output Reading "
                                     + "(Press V to change): "
+                                    + "Only Show Output");
+                            break;
+                        case 1:
+                            readModeText.setText("Probe Output Reading "
+                                    + "(Press V to change): "
                                     + "Raw Output Mode");
                             break;
                             
-                        case 1:
+                        case 2:
                             readModeText.setText("Probe Output Reading "
                                     + "(Press V to change): "
                                     + "Low-Pass Filter Mode");
                             break;
                             
-                        case 2:
+                        case 3:
                             readModeText.setText("Probe Output Reading "
                                     + "(Press V to change): "
                                     + "Mean Error as Threshold Mode (Press B to recalculate)");
@@ -460,7 +479,7 @@ public class Main extends SimpleApplication {
                     }
                     
                     readMode++;
-                    readMode = (short) (readMode%3);
+                    readMode = (short) (readMode%4);
                     
                 }
 
@@ -484,7 +503,8 @@ public class Main extends SimpleApplication {
                 "moveLeft",
                 "moveRight",
                 "rotateClockwise",
-                "rotateCounterClockwise");
+                "rotateCounterClockwise",
+                "resetProbe");
 
     }
 }
