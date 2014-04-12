@@ -234,8 +234,11 @@ public class ArduinoDataInterpreter {
         deltaX = currentArdData.getX();
         deltaY = currentArdData.getY();
 
-        if(deltaX > 128) deltaX = deltaX - 256;
-        if(deltaY > 128) deltaY = deltaY - 256;
+        /*
+         * TODO: Comment these lines and re-test
+         */
+        //if(deltaX > 128) deltaX = deltaX - 256;
+        //if(deltaY > 128) deltaY = deltaY - 256;
 
         deltaX = deltaX/1000.0f;
         deltaY = deltaY/1000.0f;

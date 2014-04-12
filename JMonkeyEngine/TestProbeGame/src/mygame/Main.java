@@ -346,13 +346,15 @@ public class Main extends SimpleApplication {
                         System.out.println("Recording New Path Stopped");
                         pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
                         Spatial currentLine = LineHelper.createLineFromVertices(pathVertices, ballMat);
-                        float realLastX = 4.0f;
-                        float realLastY = 4.0f;
-                        //float realLastZ = 0.0f;
-                        float lastX = cubePath.getLastX();
-                        float lastY = cubePath.getLastY();
-                        //float lastZ = 0.0f;
-                        currentLine.scale(realLastX/lastX, realLastY/lastY, 0);
+                        
+                        /*
+                         * TODO: Put in code here to display GUI text
+                         *          saying that the path is recording
+                         */
+                        
+                        float xDist = cubePath.getLastX()-cubePath.getFirstX();
+                        float yDist = cubePath.getLastY()-cubePath.getFirstY();
+                        currentLine.scale(xDist*scaleFactorX, yDist*scaleFactorY, 0);
                         rootNode.attachChild(currentLine);
                         recordingPath = false;
                     }else{
