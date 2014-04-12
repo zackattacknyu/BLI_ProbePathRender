@@ -258,7 +258,8 @@ public class Main extends SimpleApplication {
         
         readModeText = initializeNewText();
         readModeText.setText("Probe Output Reading (Press V to change): "
-                + "---------------------------------------------------------");
+                + "---------------------------------------"
+                + "------------------------------------------------");
         readModeText.setLocalTranslation(
                 (cam.getWidth() - readModeText.getLineWidth()), 
                 (readModeText.getLineHeight()), 0);
@@ -324,6 +325,8 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("rotateClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD1));
         inputManager.addMapping("rotateCounterClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD3));
         
+        inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -370,9 +373,6 @@ public class Main extends SimpleApplication {
                         Spatial currentLine = LineHelper.createLineFromVertices(pathVertices, ballMat);
                         
                         recordingText.setText("Press N to record a new path");
-                        float xDist = cubePath.getLastX()-cubePath.getFirstX();
-                        float yDist = cubePath.getLastY()-cubePath.getFirstY();
-                        //currentLine.scale(xDist*scaleFactorX, yDist*scaleFactorY, 0);
                         rootNode.attachChild(currentLine);
                         recordingPath = false;
                     }else{
@@ -490,6 +490,11 @@ public class Main extends SimpleApplication {
                     
                     
                 }
+                
+                if(name.equals("recalibrateProbe") && keyPressed){
+                    readModeText.setText("Now Recalibrating. Press B again to stop.");
+                    
+                }
 
 
             }
@@ -512,7 +517,8 @@ public class Main extends SimpleApplication {
                 "moveRight",
                 "rotateClockwise",
                 "rotateCounterClockwise",
-                "resetProbe");
+                "resetProbe",
+                "recalibrateProbe");
 
     }
 }
