@@ -58,6 +58,8 @@ public class ArduinoDataInterpreter {
     private boolean stage4initMessageShown = false;
     private boolean rotationReadOnce = false;
     
+    private boolean calibrating = false;
+    
     /*
      * When callibrating the data,
      *  the data will be from start time to end
@@ -291,6 +293,22 @@ public class ArduinoDataInterpreter {
         
     }
     
+    public void startStopCalibration(){
+        
+        calibrating = !calibrating; 
+        
+        if(calibrating){
+            
+            //start the calibration code
+            
+        }else{
+            
+            //end the calibration
+            
+        }
+        
+    }
+    
     
     
     private void showInitMessage(){
@@ -367,6 +385,10 @@ public class ArduinoDataInterpreter {
         return deltaZangle;
     }
 
+    public boolean isCalibrating() {
+        return calibrating;
+    }
+    
     public float getDeltaX() {
         return deltaX;
     }

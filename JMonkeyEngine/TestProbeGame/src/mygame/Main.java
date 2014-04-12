@@ -492,7 +492,23 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("recalibrateProbe") && keyPressed){
-                    readModeText.setText("Now Recalibrating. Press B again to stop.");
+                    
+                    if(readMode == 3){
+                        
+                        if(dataInterpreter.isCalibrating()){
+                        
+                            readModeText.setText("Probe Output Reading "
+                                        + "(Press V to change): "
+                                        + "Mean Error as Threshold Mode (Press B to recalculate)");
+                            
+                            dataInterpreter.startStopCalibration();
+
+                        }else{
+                            readModeText.setText("Now Recalibrating. Press B again to stop.");
+                            dataInterpreter.startStopCalibration();
+                        }
+                        
+                    }
                     
                 }
 
