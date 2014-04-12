@@ -59,7 +59,7 @@ public class Main extends SimpleApplication {
     private float currentManualDeltaX = 0, currentManualDeltaY = 0;
     private float currentDeltaX = 0, currentDeltaY = 0;
     
-    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText;
+    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
     private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
     
@@ -239,6 +239,12 @@ public class Main extends SimpleApplication {
         recordingText.setLocalTranslation(
                 (cam.getWidth() - recordingText.getLineWidth()) / 2, 
                 (cam.getHeight() - recordingText.getLineHeight()*3), 0);
+        
+        resetProbeText = initializeNewText();
+        resetProbeText.setText("Press H to reset probe to (0,0)");
+        resetProbeText.setLocalTranslation(
+                (cam.getWidth() - resetProbeText.getLineWidth()) / 2, 
+                (cam.getHeight() - resetProbeText.getLineHeight()*4), 0);
         
         scaleYtext = initializeNewText();
         scaleYtext.setText("Virtual Y to real Y scale factor "
@@ -453,6 +459,9 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("readModeChange") && keyPressed){
                     
+                    readMode++;
+                    readMode = (short) (readMode%4);
+                    
                     switch(readMode){
                         case 0:
                             readModeText.setText("Probe Output Reading "
@@ -478,8 +487,7 @@ public class Main extends SimpleApplication {
                             break;
                     }
                     
-                    readMode++;
-                    readMode = (short) (readMode%4);
+                    
                     
                 }
 
