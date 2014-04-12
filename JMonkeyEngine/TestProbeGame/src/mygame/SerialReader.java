@@ -34,7 +34,7 @@ public class SerialReader implements SerialPortEventListener {
                     "/dev/ttyUSB0", // Linux
                     "COM3", // Windows
 	};*/
-        private static final String PORT_NAME = "COM4";
+        private static final String PORT_NAME = "COM6";
 	/**
 	* A BufferedReader which will be fed by a InputStreamReader 
 	* converting the bytes into characters 
@@ -119,9 +119,9 @@ public class SerialReader implements SerialPortEventListener {
             dataLocations.put("timestamp", 0);
             dataLocations.put("x", 1);
             dataLocations.put("y", 2);
-            dataLocations.put("yaw", 4);
-            dataLocations.put("pitch", 5);
-            dataLocations.put("roll", 6);
+            dataLocations.put("yaw", 3);
+            dataLocations.put("pitch", 4);
+            dataLocations.put("roll", 5);
         }
         
 

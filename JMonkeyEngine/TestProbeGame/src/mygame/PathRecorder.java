@@ -17,10 +17,21 @@ public class PathRecorder {
     private ArrayList<Float> yCoords = new ArrayList<Float>(100);
     
     private float lastX, lastY;
+    private float firstX, firstY;
     
     public PathRecorder(float xStart, float yStart){
         lastX = xStart;
         lastY = yStart;
+        firstX = xStart;
+        firstY = yStart;
+    }
+
+    public float getFirstX() {
+        return firstX;
+    }
+
+    public float getFirstY() {
+        return firstY;
     }
     
     public void addToPath(float deltaX, float deltaY){

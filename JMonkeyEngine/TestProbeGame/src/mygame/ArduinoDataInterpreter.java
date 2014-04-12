@@ -44,7 +44,7 @@ public class ArduinoDataInterpreter {
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
     //flag for only showing output and not processing it
-    private boolean onlyDoOutput = false;
+    private boolean onlyDoOutput = true;
 
     //flag for determining if calibration will be done first
     //only relevant if onlyDoOutput is set to false

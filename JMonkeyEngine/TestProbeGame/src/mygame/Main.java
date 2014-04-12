@@ -61,6 +61,8 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText;
     
+    private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
+    
     private boolean calibratingX = false, calibratingY = false;
     
     private short readMode = 0;
@@ -176,7 +178,7 @@ public class Main extends SimpleApplication {
         /*
          * Around here is where we will want to record the xy path
          */
-        if(recordingPath){
+        if(recordingPath || calibratingX || calibratingY){
             //cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
             cubePath.addToPath(currentDisp);
         }
@@ -228,7 +230,7 @@ public class Main extends SimpleApplication {
                 (cam.getWidth() - scaleXtext.getLineWidth()), 
                 (scaleXtext.getLineHeight()*3), 0);
         scaleXtext.setText("Virtual X to real X scale factor "
-                + "(Press X to recalibrate): ");
+                + "(Press X to recalibrate): " + scaleFactorX);
         
         
         scaleYtext = initializeNewText();
@@ -239,7 +241,7 @@ public class Main extends SimpleApplication {
                 (cam.getWidth() - scaleYtext.getLineWidth()), 
                 (scaleYtext.getLineHeight()*2), 0);
         scaleYtext.setText("Virtual Y to real Y scale factor "
-                + "(Press Y to recalibrate):");
+                + "(Press Y to recalibrate): " + scaleFactorY);
         
         readModeText = initializeNewText();
         readModeText.setText("Probe Output Reading (Press V to change): "
@@ -399,20 +401,34 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("recalibrateX") && keyPressed){
                     if(calibratingX){
-                        scaleXtext.setText("Virtual X to real X scale factor (Press X to recalibrate): #");
+                        float lastX = cubePath.getLastX() - cubePath.getFirstX();
+                        float realLastX = 4.0f;
+                        scaleFactorX = realLastX/lastX;
+                        scaleXtext.setText("Virtual X to real X scale factor "
+                                + "(Press X to recalibrate): "
+                                + scaleFactorX);
                     }else{
-                        scaleXtext.setText("Calculating Virtual X to real X scale factor (Press X to stop calibration): ");
+                        scaleXtext.setText("Now calibrating. Press X when probe is at (4,0) ");
+                        cubePath = new PathRecorder(currentX,currentY);
                     }
                     
                     calibratingX = !calibratingX;
+                    
+                    
                     
                 }
                 
                 if(name.equals("recalibrateY") && keyPressed){
                     if(calibratingY){
-                        scaleYtext.setText("Virtual Y to real Y scale factor (Press Y to recalibrate): #");
+                        float lastY = cubePath.getLastY()- cubePath.getFirstY();
+                        float realLastY = 4.0f;
+                        scaleFactorY = realLastY/lastY;
+                        scaleYtext.setText("Virtual X to real X scale factor "
+                                + "(Press X to recalibrate): "
+                                + scaleFactorY);
                     }else{
-                        scaleYtext.setText("Calculating Virtual Y to real Y scale factor (Press Y to stop calibration): ");
+                        scaleYtext.setText("Now calibrating. Press Y when probe is at (4,0) ");
+                        cubePath = new PathRecorder(currentX,currentY);
                     }
                     
                     calibratingY = !calibratingY;
