@@ -44,7 +44,7 @@ public class ArduinoDataInterpreter {
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
     //flag for only showing output and not processing it
-    private boolean onlyDoOutput = true;
+    private boolean onlyDoOutput = false;
 
     //flag for determining if calibration will be done first
     //only relevant if onlyDoOutput is set to false
@@ -234,9 +234,6 @@ public class ArduinoDataInterpreter {
         deltaX = currentArdData.getX();
         deltaY = currentArdData.getY();
 
-        /*
-         * TODO: Comment these lines and re-test
-         */
         //if(deltaX > 128) deltaX = deltaX - 256;
         //if(deltaY > 128) deltaY = deltaY - 256;
 
