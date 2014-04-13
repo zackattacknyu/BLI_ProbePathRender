@@ -61,7 +61,8 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
-    private float scaleFactorX = 0.002f,scaleFactorY = 0.002f;
+    private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
+    //private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
     
     private boolean calibratingX = false, calibratingY = false;
     
@@ -201,8 +202,10 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        cam.setLocation(new Vector3f(2,2,-20));
-        cam.lookAt(new Vector3f(0,0,10), new Vector3f(0,1,0));
+        //cam.setLocation(new Vector3f(2,2,-20));
+        //cam.lookAt(new Vector3f(0,0,10), new Vector3f(0,1,0));
+        cam.setLocation(new Vector3f(-0.52476215f, 4.1058984f, -12.747635f));
+        cam.setRotation(new Quaternion(0.03318608f, -0.03325959f, 0.0011049765f, 0.99889505f));
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
@@ -464,7 +467,7 @@ public class Main extends SimpleApplication {
                 if(name.equals("recalibrateX") && keyPressed){
                     if(calibratingX){
                         float lastX = cubePath.getLastX() - cubePath.getFirstX();
-                        float realLastX = 8.0f;
+                        float realLastX = 8.0f*scaleFactorX;
                         scaleFactorX = realLastX/lastX;
                         scaleXtext.setText("Virtual X to real X scale factor "
                                 + "(Press X to recalibrate): "
@@ -483,10 +486,10 @@ public class Main extends SimpleApplication {
                 if(name.equals("recalibrateY") && keyPressed){
                     if(calibratingY){
                         float lastY = cubePath.getLastY()- cubePath.getFirstY();
-                        float realLastY = 8.0f;
+                        float realLastY = 8.0f*scaleFactorY;
                         scaleFactorY = realLastY/lastY;
-                        scaleYtext.setText("Virtual X to real X scale factor "
-                                + "(Press X to recalibrate): "
+                        scaleYtext.setText("Virtual Y to real Y scale factor "
+                                + "(Press Y to recalibrate): "
                                 + scaleFactorY);
                     }else{
                         scaleYtext.setText("Now calibrating. Press Y has been moved 8 units up ");
