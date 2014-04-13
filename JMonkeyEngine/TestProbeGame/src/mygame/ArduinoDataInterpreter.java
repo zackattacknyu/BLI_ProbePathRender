@@ -5,6 +5,7 @@
 package mygame;
 
 import com.jme3.math.FastMath;
+import java.util.logging.Logger;
 
 /**
  *The Data Interpretation will go through 5 stages:
@@ -41,6 +42,8 @@ public class ArduinoDataInterpreter {
     float lastRoll = 0;
     float lastYaw = 0;
     private float currentYaw=0,currentPitch=0,currentRoll=0;
+    private float firstYaw=0,firstPitch=0,firstRoll=0;
+    private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
     
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
@@ -166,6 +169,10 @@ public class ArduinoDataInterpreter {
         currentRoll = lastRoll;
         currentYaw = lastYaw;
         
+        firstPitch = lastPitch;
+        firstRoll = lastRoll;
+        firstYaw = lastYaw;
+        
         meanErrorPitch = initPitchData.getMeanError();
         meanErrorRoll = initRollData.getMeanError();
         meanErrorYaw = initYawData.getMeanError();
@@ -214,42 +221,41 @@ public class ArduinoDataInterpreter {
 
         if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch){
             currentPitch = pitch;
+            outputPitchRadians = getEulerAngle(pitch-firstPitch);
         }
         if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll){
             currentRoll = roll;
+            outputRollRadians = getEulerAngle(roll-firstRoll);
         }
         
         if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw){
+            outputYawRadians = getEulerAngle(yaw-firstYaw);
             currentYaw = yaw;
         }
     }
+
+    public boolean isCalibrated() {
+        return calibrated;
+    }
+    
+    
     
     //converts degrees, which the data is in, to radians, which is used
     //  by JMonkeyEngine for the rotation
     private float getEulerAngle(float degrees){
         return degrees*FastMath.DEG_TO_RAD;
     }
-    
-    /*public float getCurrentYaw(){
-    if(calibrated){
-    return getEulerAngle(currentArdData.getYaw()-initYawData.getMean());
-    }else if(!doCalibrationFirst){
-    return getEulerAngle(currentArdData.getYaw());
-    }else{
-    return 0;
-    }
-        
-    }*/
-    public float getCurrentYaw() {
-        return getEulerAngle(currentYaw);
+
+    public float getOutputYawRadians() {
+        return outputYawRadians;
     }
 
-    public float getCurrentPitch() {
-        return getEulerAngle(currentPitch);
+    public float getOutputPitchRadians() {
+        return outputPitchRadians;
     }
 
-    public float getCurrentRoll() {
-        return getEulerAngle(currentRoll);
+    public float getOutputRollRadians() {
+        return outputRollRadians;
     }
     
     

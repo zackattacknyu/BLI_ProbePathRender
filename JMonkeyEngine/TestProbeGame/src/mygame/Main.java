@@ -147,7 +147,12 @@ public class Main extends SimpleApplication {
         dataInterpreter.updateData();
         
         //use this style for displaying the rotation
-        currentYaw = dataInterpreter.getCurrentYaw() + baselineYaw;
+        if(dataInterpreter.isCalibrated()){
+            currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw;
+        }else{
+            currentYaw = baselineYaw;
+        }
+        
         littleObject.setLocalRotation(LineHelper.getRotationMatrix(currentYaw));
         
         
