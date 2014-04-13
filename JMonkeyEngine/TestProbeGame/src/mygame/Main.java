@@ -147,7 +147,7 @@ public class Main extends SimpleApplication {
         dataInterpreter.updateData();
         
         //use this style for displaying the rotation
-        if(dataInterpreter.isCalibrated()){
+        if(dataInterpreter.isCalibrated() && readMode > 0){
             currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw;
         }else{
             currentYaw = baselineYaw;
@@ -295,6 +295,7 @@ public class Main extends SimpleApplication {
                 readModeText.setText("Probe Output Reading "
                         + "(Press V to change): "
                         + "Raw Output Mode");
+                dataInterpreter.setRawSwitch(0);
                 break;
 
             case 2:
@@ -307,6 +308,7 @@ public class Main extends SimpleApplication {
                 readModeText.setText("Probe Output Reading "
                         + "(Press V to change): "
                         + "Mean Error as Threshold Mode");
+                dataInterpreter.setRawSwitch(1);
                 break;
         }
         

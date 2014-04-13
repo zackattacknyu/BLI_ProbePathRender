@@ -5,7 +5,6 @@
 package mygame;
 
 import com.jme3.math.FastMath;
-import java.util.logging.Logger;
 
 /**
  *The Data Interpretation will go through 5 stages:
@@ -70,6 +69,10 @@ public class ArduinoDataInterpreter {
     private float meanErrorYaw = 0;
     private float meanErrorRoll = 0;
     
+    //set to 1 to use threshold factor
+    //set to 0 to not use threshold factor
+    private float rawSwitch = 1;
+    
     /*
      * When callibrating the data,
      *  the data will be from start time to end
@@ -122,6 +125,10 @@ public class ArduinoDataInterpreter {
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!: " + e);
         }
+    }
+
+    public void setRawSwitch(float rawSwitch) {
+        this.rawSwitch = rawSwitch;
     }
     
     private void processArdData(){
@@ -219,16 +226,16 @@ public class ArduinoDataInterpreter {
         deltaRoll = roll - lastRoll;
         deltaYaw = yaw - lastYaw;
 
-        if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch){
+        if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch*rawSwitch){
             currentPitch = pitch;
             outputPitchRadians = getEulerAngle(pitch-firstPitch);
         }
-        if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll){
+        if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll*rawSwitch){
             currentRoll = roll;
             outputRollRadians = getEulerAngle(roll-firstRoll);
         }
         
-        if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw){
+        if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw*rawSwitch){
             outputYawRadians = getEulerAngle(yaw-firstYaw);
             currentYaw = yaw;
         }
