@@ -61,7 +61,7 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
-    private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
+    private float scaleFactorX = 0.002f,scaleFactorY = 0.002f;
     
     private boolean calibratingX = false, calibratingY = false;
     

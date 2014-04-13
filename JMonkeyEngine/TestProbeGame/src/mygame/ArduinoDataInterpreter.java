@@ -40,6 +40,7 @@ public class ArduinoDataInterpreter {
     float lastPitch = 0;
     float lastRoll = 0;
     float lastYaw = 0;
+    private float currentYaw=0,currentPitch=0,currentRoll=0;
     
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
@@ -59,6 +60,12 @@ public class ArduinoDataInterpreter {
     private boolean rotationReadOnce = false;
     
     private boolean calibrating = false;
+    private boolean doCalibrationFirst = true;
+    private boolean calibrated = false;
+    
+    private float meanErrorPitch = 0;
+    private float meanErrorYaw = 0;
+    private float meanErrorRoll = 0;
     
     /*
      * When callibrating the data,
@@ -82,7 +89,6 @@ public class ArduinoDataInterpreter {
     private DataSet initYData;
     
     //factor to multiply mean error by before processing the change
-    //private float thresholdFactor = 5.0f;
     private float thresholdFactor = 3.0f;
 
     public ArduinoDataInterpreter() {
@@ -93,11 +99,7 @@ public class ArduinoDataInterpreter {
         
         numberElements = (int) ((calibEndTimeMs-calibStartTimeMs)/estTimeBetweenReads);
         
-        initYawData = new DataSet(numberElements);
-        initPitchData = new DataSet(numberElements);
-        initRollData = new DataSet(numberElements);
-        initXData = new DataSet(numberElements);
-        initYData = new DataSet(numberElements);
+        
         
     }
     
@@ -123,53 +125,10 @@ public class ArduinoDataInterpreter {
         
         if(updateExists){
             
-            if(doCalibration){
-                switch(currentStage){
-
-                    case 1:
-                        showInitMessage();
-                        showOutput = false;
-                        currentStage = 2;
-                        break;
-                    case 2:
-
-                        //reset was pressed
-                        if(previousArdData.getTimestamp() > currentArdData.getTimestamp()){
-                            showResetMessage();
-                            currentStage = 3;
-                        }
-
-                        break;
-
-                    case 3:
-
-                        processCurrentCalibrationPoint();
-
-                        if(currentArdData.getTimestamp() >= calibStartTimeMs){
-                            showCalibMessage();
-                            if(currentArdData.getTimestamp() <= calibEndTimeMs){
-                                processCurrentCalibrationPoint();
-                            }else{
-                                processCalibration();
-                                displayCalibrationResults();
-                                currentStage = 4;
-                            }
-                        }else{
-                            showPreCalibMessage();
-                        }
-
-                        break;
-                    case 4:
-                        showStage4Message();
-                        processObjectUpdate();
-                        //showOutput = true;
-                        break;
-                }
-            }else{
-                if(currentArdData.getTimestamp() >= rawProcessingStartTime){
-                    processObjectUpdate();
-                }
-                
+            if(calibrating){
+                processCurrentCalibrationPoint();
+            }else if(calibrated){
+                processObjectUpdate();
             }
             
             
@@ -179,14 +138,6 @@ public class ArduinoDataInterpreter {
         
         
         
-    }
-    
-    private void showStage4Message(){
-        if(!stage4initMessageShown){
-            System.out.println();
-            System.out.println("Now Processing Probe Data");
-            stage4initMessageShown = true;
-        }
     }
     
     private void processCurrentCalibrationPoint(){
@@ -210,6 +161,14 @@ public class ArduinoDataInterpreter {
         lastPitch = currentArdData.getPitch();
         lastRoll = currentArdData.getRoll();
         lastYaw = currentArdData.getYaw();
+        
+        currentPitch = lastPitch;
+        currentRoll = lastRoll;
+        currentYaw = lastYaw;
+        
+        meanErrorPitch = initPitchData.getMeanError();
+        meanErrorRoll = initRollData.getMeanError();
+        meanErrorYaw = initYawData.getMeanError();
         
 
     }
@@ -245,34 +204,23 @@ public class ArduinoDataInterpreter {
     
     private void processYawPitchRoll(){
         
-        deltaPitch = currentArdData.getPitch() - lastPitch;
-        deltaRoll = currentArdData.getRoll() - lastRoll;
-        deltaYaw = currentArdData.getYaw() - lastYaw;
+        float pitch = currentArdData.getPitch();
+        float roll = currentArdData.getRoll();
+        float yaw = currentArdData.getYaw();
+        
+        deltaPitch = pitch - lastPitch;
+        deltaRoll = roll - lastRoll;
+        deltaYaw = yaw - lastYaw;
 
-        if(doCalibration && Math.abs(deltaPitch) <= thresholdFactor*initPitchData.getMeanError()){
-            deltaXangle = 0;
-        }else{
-            deltaXangle = getEulerAngle(deltaPitch);
-            //System.out.println("Delta X angle:" + deltaXangle);
-            lastPitch = currentArdData.getPitch();
+        if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch){
+            currentPitch = pitch;
+        }
+        if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll){
+            currentRoll = roll;
         }
         
-        if(doCalibration && Math.abs(deltaRoll) <= thresholdFactor*initRollData.getMeanError()){
-            deltaYangle = 0;
-        }else{
-            deltaYangle = getEulerAngle(deltaRoll);
-            //System.out.println("Delta Y angle:" + deltaYangle);
-            lastRoll = currentArdData.getRoll();
-        }
-        
-        if(doCalibration && Math.abs(deltaYaw) <= thresholdFactor*initYawData.getMeanError()){
-            deltaZangle = 0;
-        }else{
-            deltaZangle = getEulerAngle(deltaYaw);
-//            System.out.println("deltaYaw:" + deltaYaw);
-//            System.out.println("MeanYawError:" + initYawData.getMeanError());
-//            System.out.println("Delta Z angle:" + deltaZangle);
-            lastYaw = currentArdData.getYaw();
+        if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw){
+            currentYaw = yaw;
         }
     }
     
@@ -282,16 +230,28 @@ public class ArduinoDataInterpreter {
         return degrees*FastMath.DEG_TO_RAD;
     }
     
-    public float getCurrentYaw(){
-        if(currentStage > 3){
-            return getEulerAngle(currentArdData.getYaw()-initYawData.getMean());
-        }else if(!doCalibration){
-            return getEulerAngle(currentArdData.getYaw());
-        }else{
-            return 0;
-        }
-        
+    /*public float getCurrentYaw(){
+    if(calibrated){
+    return getEulerAngle(currentArdData.getYaw()-initYawData.getMean());
+    }else if(!doCalibrationFirst){
+    return getEulerAngle(currentArdData.getYaw());
+    }else{
+    return 0;
     }
+        
+    }*/
+    public float getCurrentYaw() {
+        return getEulerAngle(currentYaw);
+    }
+
+    public float getCurrentPitch() {
+        return getEulerAngle(currentPitch);
+    }
+
+    public float getCurrentRoll() {
+        return getEulerAngle(currentRoll);
+    }
+    
     
     public void startStopCalibration(){
         
@@ -300,48 +260,22 @@ public class ArduinoDataInterpreter {
         if(calibrating){
             
             //start the calibration code
+            initYawData = new DataSet(numberElements);
+            initPitchData = new DataSet(numberElements);
+            initRollData = new DataSet(numberElements);
+            initXData = new DataSet(numberElements);
+            initYData = new DataSet(numberElements);
             
         }else{
             
             //end the calibration
-            
+            calibrated = true;
+            processCalibration();
+            displayCalibrationResults();
         }
         
     }
     
-    
-    
-    private void showInitMessage(){
-
-        System.out.println("Data is being received");
-        System.out.println();
-        System.out.println("Now hit the Reset Button");
-    }
-    
-    private void showCalibMessage(){
-        
-        if(!stage3calibMessageShown){
-                            
-            System.out.println();
-            System.out.println("Now calibrating the probe");
-            System.out.println("Do not move the probe");
-            stage3calibMessageShown = true;
-
-        }
-        
-    }
-    
-    private void showPreCalibMessage(){
-        if(!stage3preCalibMessageShown){
-            System.out.println("Waiting to calibrate the probe");
-            stage3preCalibMessageShown = true;
-        }
-        
-    }
-    private void showResetMessage(){
-        System.out.println();
-        System.out.println("Resetting the stream");
-    }
     
     private void displayCalibrationResults(){
         System.out.println("Init Data Established");
