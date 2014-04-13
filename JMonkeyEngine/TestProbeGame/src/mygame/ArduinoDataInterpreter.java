@@ -44,6 +44,8 @@ public class ArduinoDataInterpreter {
     private float firstYaw=0,firstPitch=0,firstRoll=0;
     private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
     
+    private boolean useLowPassFilterData = false;
+    
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
     //flag for only showing output and not processing it
@@ -94,6 +96,8 @@ public class ArduinoDataInterpreter {
     private DataSet initXData;
     private DataSet initYData;
     
+    private LowPassFilterData yawData;
+    
     //factor to multiply mean error by before processing the change
     private float thresholdFactor = 3.0f;
 
@@ -130,6 +134,10 @@ public class ArduinoDataInterpreter {
     public void setRawSwitch(float rawSwitch) {
         this.rawSwitch = rawSwitch;
     }
+
+    public void setUseLowPassFilterData(boolean useLowPassFilterData) {
+        this.useLowPassFilterData = useLowPassFilterData;
+    }
     
     private void processArdData(){
         
@@ -157,6 +165,7 @@ public class ArduinoDataInterpreter {
         initRollData.addToDataSet(currentArdData.getRoll());
         initXData.addToDataSet(currentArdData.getX());
         initYData.addToDataSet(currentArdData.getY());
+        yawData.addToData(currentArdData.getYaw());
         
     }
     
@@ -222,6 +231,8 @@ public class ArduinoDataInterpreter {
         float roll = currentArdData.getRoll();
         float yaw = currentArdData.getYaw();
         
+        yawData.addToData(yaw);
+        
         deltaPitch = pitch - lastPitch;
         deltaRoll = roll - lastRoll;
         deltaYaw = yaw - lastYaw;
@@ -236,7 +247,15 @@ public class ArduinoDataInterpreter {
         }
         
         if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw*rawSwitch){
-            outputYawRadians = getEulerAngle(yaw-firstYaw);
+            
+            if(useLowPassFilterData){
+                outputYawRadians = getEulerAngle(yawData.getAverage()-firstYaw);
+            }else{
+                outputYawRadians = getEulerAngle(yaw-firstYaw);
+            }
+            
+            
+            
             currentYaw = yaw;
         }
     }
@@ -278,6 +297,7 @@ public class ArduinoDataInterpreter {
             initRollData = new DataSet(numberElements);
             initXData = new DataSet(numberElements);
             initYData = new DataSet(numberElements);
+            yawData = new LowPassFilterData(3);
             
         }else{
             

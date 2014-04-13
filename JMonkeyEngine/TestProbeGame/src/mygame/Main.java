@@ -302,12 +302,15 @@ public class Main extends SimpleApplication {
                 readModeText.setText("Probe Output Reading "
                         + "(Press V to change): "
                         + "Low-Pass Filter Mode");
+                dataInterpreter.setUseLowPassFilterData(true);
+                dataInterpreter.setRawSwitch(0);
                 break;
 
             case 3:
                 readModeText.setText("Probe Output Reading "
                         + "(Press V to change): "
                         + "Mean Error as Threshold Mode");
+                dataInterpreter.setUseLowPassFilterData(false);
                 dataInterpreter.setRawSwitch(1);
                 break;
         }
