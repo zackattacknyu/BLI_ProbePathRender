@@ -268,7 +268,7 @@ public class Main extends SimpleApplication {
         readModeText.setLocalTranslation(
                 (cam.getWidth() - readModeText.getLineWidth()), 
                 (readModeText.getLineHeight()), 0);
-        readModeText.setText("Probe Output Reading (Press V to change): Only Show Output");
+        readModeText.setText("Probe B to start calibrating the probe");
         
         
         
@@ -280,6 +280,36 @@ public class Main extends SimpleApplication {
         newText.setSize(guiFont.getCharSet().getRenderedSize());
         guiNode.attachChild(newText);
         return newText;
+        
+    }
+    
+    private void displayReadMode(){
+        
+        switch(readMode){
+            case 0:
+                readModeText.setText("Probe Output Reading "
+                        + "(Press V to change): "
+                        + "Only Show Output");
+                break;
+            case 1:
+                readModeText.setText("Probe Output Reading "
+                        + "(Press V to change): "
+                        + "Raw Output Mode");
+                break;
+
+            case 2:
+                readModeText.setText("Probe Output Reading "
+                        + "(Press V to change): "
+                        + "Low-Pass Filter Mode");
+                break;
+
+            case 3:
+                readModeText.setText("Probe Output Reading "
+                        + "(Press V to change): "
+                        + "Mean Error as Threshold Mode");
+                break;
+        }
+        
         
     }
 
@@ -467,30 +497,7 @@ public class Main extends SimpleApplication {
                     readMode++;
                     readMode = (short) (readMode%4);
                     
-                    switch(readMode){
-                        case 0:
-                            readModeText.setText("Probe Output Reading "
-                                    + "(Press V to change): "
-                                    + "Only Show Output");
-                            break;
-                        case 1:
-                            readModeText.setText("Probe Output Reading "
-                                    + "(Press V to change): "
-                                    + "Raw Output Mode");
-                            break;
-                            
-                        case 2:
-                            readModeText.setText("Probe Output Reading "
-                                    + "(Press V to change): "
-                                    + "Low-Pass Filter Mode");
-                            break;
-                            
-                        case 3:
-                            readModeText.setText("Probe Output Reading "
-                                    + "(Press V to change): "
-                                    + "Mean Error as Threshold Mode (Press B to recalculate)");
-                            break;
-                    }
+                    displayReadMode();
                     
                     
                     
@@ -498,21 +505,15 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("recalibrateProbe") && keyPressed){
                     
-                    if(readMode == 3){
-                        
-                        if(dataInterpreter.isCalibrating()){
-                        
-                            readModeText.setText("Probe Output Reading "
-                                        + "(Press V to change): "
-                                        + "Mean Error as Threshold Mode (Press B to recalculate)");
-                            
-                            dataInterpreter.startStopCalibration();
+                    if(dataInterpreter.isCalibrating()){
 
-                        }else{
-                            readModeText.setText("Now Recalibrating. Press B again to stop.");
-                            dataInterpreter.startStopCalibration();
-                        }
-                        
+                        displayReadMode();
+
+                        dataInterpreter.startStopCalibration();
+
+                    }else{
+                        readModeText.setText("Now Recalibrating. Press B again to stop.");
+                        dataInterpreter.startStopCalibration();
                     }
                     
                 }
