@@ -5,6 +5,7 @@
 package mygame;
 
 import com.jme3.math.FastMath;
+import java.util.HashMap;
 
 /**
  *The Data Interpretation will go through 5 stages:
@@ -98,11 +99,13 @@ public class ArduinoDataInterpreter {
     
     private LowPassFilterData yawData;
     
+    private static HashMap<String,Integer> dataLocations;
+    
     //factor to multiply mean error by before processing the change
     private float thresholdFactor = 3.0f;
 
     public ArduinoDataInterpreter() {
-        
+        makeDataLocationsMap();
         serial = new SerialReader();
         serial.beginExecution();
         System.out.println("Waiting to receive input...");
@@ -113,10 +116,22 @@ public class ArduinoDataInterpreter {
         
     }
     
+    private void makeDataLocationsMap(){
+            dataLocations = new HashMap<String,Integer>(10);
+            dataLocations.put("timestamp", 0);
+            dataLocations.put("x", 1);
+            dataLocations.put("y", 2);
+            dataLocations.put("yaw", 3);
+            dataLocations.put("pitch", 4);
+            dataLocations.put("roll", 5);
+        }
+    
     private void readSerialData(){
         updateExists = false;
         try{
-            currentArdData = serial.getCurrentData();
+            currentArdData = new ArduinoDataPoint(
+                    serial.getCurrentArdOutput(),
+                    dataLocations);
             if(currentArdData != null){
                 if(!currentArdData.equals(previousArdData)){
                     

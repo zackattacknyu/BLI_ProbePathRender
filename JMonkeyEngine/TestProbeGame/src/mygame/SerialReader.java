@@ -12,7 +12,6 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
-import java.util.HashMap;
 
 /*
  * 
@@ -22,6 +21,9 @@ import java.util.HashMap;
  * 
  * The RXTX library was found here
  * http://mfizz.com/oss/rxtx-for-java
+ * 
+ * This is to be used solely for reading from the serial device.
+ *      Any interpretation of the reading should be done in other classes. 
  * 
  */
 
@@ -46,18 +48,11 @@ public class SerialReader implements SerialPortEventListener {
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;
 	/** Default bits per second for COM port. */
-	private static final int DATA_RATE = 57600;
-
-        private ArduinoDataPoint currentData;
-
-    public ArduinoDataPoint getCurrentData() {
-        return currentData;
-    }
+	private static final int DATA_RATE = 57600; 
         
-        private static HashMap<String,Integer> dataLocations;
+        private String currentArdOutput;
 
 	public void initialize() {
-            makeDataLocationsMap();
             CommPortIdentifier portId = null;
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -114,15 +109,7 @@ public class SerialReader implements SerialPortEventListener {
             }
 	}
         
-        private void makeDataLocationsMap(){
-            dataLocations = new HashMap<String,Integer>(10);
-            dataLocations.put("timestamp", 0);
-            dataLocations.put("x", 1);
-            dataLocations.put("y", 2);
-            dataLocations.put("yaw", 3);
-            dataLocations.put("pitch", 4);
-            dataLocations.put("roll", 5);
-        }
+        
         
 
 	/**
@@ -131,18 +118,13 @@ public class SerialReader implements SerialPortEventListener {
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
-                    String inputLine=input.readLine();
-                    currentData = new ArduinoDataPoint(inputLine,dataLocations);
+                    currentArdOutput = input.readLine();
                 } catch (Exception e) {
                     System.err.println(e.toString());
                 }
             }
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
-        
-        public String getCurrentOutput(){
-            return String.valueOf(currentData);
-        }
 
         public static void executeMain(){
             SerialReader main = new SerialReader();
@@ -164,4 +146,10 @@ public class SerialReader implements SerialPortEventListener {
             t.start();
             System.out.println("Started");
         }
+
+    public String getCurrentArdOutput() {
+        return currentArdOutput;
+    }
+        
+        
 }
