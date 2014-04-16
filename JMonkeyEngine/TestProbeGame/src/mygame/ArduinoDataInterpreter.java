@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.math.FastMath;
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  *The Data Interpretation will go through 5 stages:
@@ -50,22 +51,13 @@ public class ArduinoDataInterpreter {
     public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
     //flag for only showing output and not processing it
-    private boolean onlyDoOutput = false;
-
-    //flag for determining if calibration will be done first
-    //only relevant if onlyDoOutput is set to false
-    private boolean doCalibration = true;
+    private boolean onlyDoOutput;
     
     
     private boolean updateExists = false;
     private boolean showOutput = true;
-    private boolean stage3preCalibMessageShown = false;
-    private boolean stage3calibMessageShown = false;
-    private boolean stage4initMessageShown = false;
-    private boolean rotationReadOnce = false;
     
     private boolean calibrating = false;
-    private boolean doCalibrationFirst = true;
     private boolean calibrated = false;
     
     private float meanErrorPitch = 0;
@@ -76,20 +68,7 @@ public class ArduinoDataInterpreter {
     //set to 0 to not use threshold factor
     private float rawSwitch = 1;
     
-    /*
-     * When callibrating the data,
-     *  the data will be from start time to end
-     *  time. The estimated time between reads
-     *  is used to help initialize the data set
-     *  used to process the raw data.
-     */
-    private float calibStartTimeMs = 1000;
-    private float calibEndTimeMs = 6000;
-    private float estTimeBetweenReads = 20;
     private int numberElements;
-    
-    //when it should process raw object updates if no calibration is done
-    private float rawProcessingStartTime = 3000;
     
     private DataSet initYawData;
     private DataSet initPitchData;
@@ -100,30 +79,54 @@ public class ArduinoDataInterpreter {
     private LowPassFilterData yawData;
     
     private static HashMap<String,Integer> dataLocations;
+    private Properties trackerProps;
     
     //factor to multiply mean error by before processing the change
     private float thresholdFactor = 3.0f;
 
     public ArduinoDataInterpreter() {
+        trackerProps = PropertiesHelper.getProperties();
+        
         makeDataLocationsMap();
         serial = new SerialReader();
         serial.beginExecution();
         System.out.println("Waiting to receive input...");
         
-        numberElements = (int) ((calibEndTimeMs-calibStartTimeMs)/estTimeBetweenReads);
+        
+        numberElements = Integer.parseInt(
+                trackerProps.getProperty(
+                "arduinoData.defaultNumberElements"));
+        
+        onlyDoOutput = Boolean.parseBoolean(
+                trackerProps.getProperty(
+                "arduinoData.onlyDoOutput"));
         
         
         
     }
     
     private void makeDataLocationsMap(){
+        
+            int timestampLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.timestamp"));
+            int xLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.x"));
+            int yLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.y"));
+            int yawLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.yaw"));
+            int pitchLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.pitch"));
+            int rollLoc = Integer.parseInt(trackerProps.
+                    getProperty("dataLocation.roll"));
+        
             dataLocations = new HashMap<String,Integer>(10);
-            dataLocations.put("timestamp", 0);
-            dataLocations.put("x", 1);
-            dataLocations.put("y", 2);
-            dataLocations.put("yaw", 3);
-            dataLocations.put("pitch", 4);
-            dataLocations.put("roll", 5);
+            dataLocations.put("timestamp", timestampLoc);
+            dataLocations.put("x", xLoc);
+            dataLocations.put("y", yLoc);
+            dataLocations.put("yaw", yawLoc);
+            dataLocations.put("pitch", pitchLoc);
+            dataLocations.put("roll", rollLoc);
         }
     
     private void readSerialData(){
