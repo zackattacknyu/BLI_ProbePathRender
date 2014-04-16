@@ -12,6 +12,7 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
+import java.util.Properties;
 
 /*
  * 
@@ -36,7 +37,7 @@ public class SerialReader implements SerialPortEventListener {
                     "/dev/ttyUSB0", // Linux
                     "COM3", // Windows
 	};*/
-        private static final String PORT_NAME = "COM6";
+        private static String PORT_NAME;
 	/**
 	* A BufferedReader which will be fed by a InputStreamReader 
 	* converting the bytes into characters 
@@ -46,13 +47,22 @@ public class SerialReader implements SerialPortEventListener {
 	/** The output stream to the port */
 	private OutputStream output;
 	/** Milliseconds to block while waiting for port open */
-	private static final int TIME_OUT = 2000;
+	private static int TIME_OUT;
 	/** Default bits per second for COM port. */
-	private static final int DATA_RATE = 57600; 
+	private static int DATA_RATE;
         
         private String currentArdOutput;
+        
+        private Properties serialProperties;
 
 	public void initialize() {
+            
+            serialProperties = PropertiesHelper.getProperties();
+            
+            TIME_OUT = Integer.parseInt(serialProperties.getProperty("serial.time_out"));
+            DATA_RATE = Integer.parseInt(serialProperties.getProperty("serial.data_rate"));
+            PORT_NAME = serialProperties.getProperty("serial.port_name");
+            
             CommPortIdentifier portId = null;
             Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
