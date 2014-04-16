@@ -154,7 +154,7 @@ public class Main extends SimpleApplication {
             currentYaw = baselineYaw;
         }
         
-        littleObject.setLocalRotation(LineHelper.getRotationMatrix(currentYaw));
+        littleObject.setLocalRotation(LineHelper.getQuarternion(currentYaw));
         
         
         //currentX = currentX + dataInterpreter.getDeltaX();

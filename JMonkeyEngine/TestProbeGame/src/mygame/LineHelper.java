@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
@@ -63,6 +64,13 @@ public class LineHelper {
         
         return new Matrix3f(cosTheta,-sinTheta,0,sinTheta,cosTheta,0,0,0,1);
         
+    }
+    
+    public static Quaternion getQuarternion(float yawInRadians){
+        
+        Quaternion output = new Quaternion();
+        output.fromAngleAxis(yawInRadians, new Vector3f(0,0,1));
+        return output;
     }
     
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material ballMat){
