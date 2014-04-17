@@ -2,39 +2,21 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.cinematic.MotionPath;
-import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.font.BitmapText;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.shape.Line;
-import com.jme3.util.BufferUtils;
-import java.io.IOException;
-import java.nio.FloatBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * test
@@ -47,28 +29,12 @@ public class Main extends SimpleApplication {
     private Spatial endBox;
     private boolean active = false;
     private boolean playing = false;
-    private boolean pathDisplayed = false;
-    private boolean recordingPath = false;
-    private ArrayList<Vector3f> pathVertices;
     private MotionPath path;
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
     private Material ballMat,probeMat;
-    //private ArduinoDataInterpreter dataInterpreter;
-    private float currentX = 0, currentY = 0, baselineYaw = 0, currentYaw = 0;
-    private float currentManualDeltaX = 0, currentManualDeltaY = 0;
-    private float currentDeltaX = 0, currentDeltaY = 0;
     
     private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
-    
-    private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
-    //private float scaleFactorX = 1.0f,scaleFactorY = 1.0f;
-    
-    private boolean calibratingX = false, calibratingY = false;
-    
-    private short readMode = 0;
-    
-    private PathRecorder cubePath;
     
     private ProbeTracker probeTracker;
     
@@ -111,17 +77,17 @@ public class Main extends SimpleApplication {
         setDefaultCamera();
         enableFlyCam();
         initPathInputs();
-        initDebugText();
         
         probeTracker = new ProbeTracker();
+        
+        initDebugText();
+        
+        
     }
     
     
     
     private void initLittleBox(Material material){
-        //Box b = new Box(0.5f, 0.5f, 0.5f);
-        cubePath = new PathRecorder(0,0);
-        //littleObject = new Geometry("Box", b);
         littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
         littleObject.setName("Probe");
         littleObject.setLocalScale(1.0f/50.0f);
@@ -199,7 +165,7 @@ public class Main extends SimpleApplication {
                 (cam.getWidth() - scaleXtext.getLineWidth()), 
                 (scaleXtext.getLineHeight()*3), 0);
         scaleXtext.setText("Virtual X to real X scale factor "
-                + "(Press X to recalibrate): " + scaleFactorX);
+                + "(Press X to recalibrate): " + probeTracker.getScaleFactorX());
         
         recordingText = initializeNewText();
         recordingText.setText("Press N to record a new path");
@@ -221,7 +187,7 @@ public class Main extends SimpleApplication {
                 (cam.getWidth() - scaleYtext.getLineWidth()), 
                 (scaleYtext.getLineHeight()*2), 0);
         scaleYtext.setText("Virtual Y to real Y scale factor "
-                + "(Press Y to recalibrate): " + scaleFactorY);
+                + "(Press Y to recalibrate): " + probeTracker.getScaleFactorY());
         
         readModeText = initializeNewText();
         readModeText.setText("Probe Output Reading (Press V to change): "
@@ -304,6 +270,9 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("pitchLeft", new KeyTrigger(KeyInput.KEY_NUMPAD7));
         inputManager.addMapping("pitchRight", new KeyTrigger(KeyInput.KEY_NUMPAD9));
         
+        inputManager.addMapping("rollForward", new KeyTrigger(KeyInput.KEY_NUMPAD5));
+        inputManager.addMapping("rollBackward", new KeyTrigger(KeyInput.KEY_NUMPAD0));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -340,6 +309,14 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("pitchRight") && keyPressed){
                     probeTracker.pitchRight();
+                }
+                
+                if(name.equals("rollForward") && keyPressed){
+                    probeTracker.rollForward();
+                }
+                
+                if(name.equals("rollBackward") && keyPressed){
+                    probeTracker.rollBackward();
                 }
                 
                 if(name.equals("moveLeft") && keyPressed){
@@ -443,7 +420,9 @@ public class Main extends SimpleApplication {
                 "resetProbe",
                 "recalibrateProbe",
                 "pitchRight",
-                "pitchLeft");
+                "pitchLeft",
+                "rollBackward",
+                "rollForward");
 
     }
 }
