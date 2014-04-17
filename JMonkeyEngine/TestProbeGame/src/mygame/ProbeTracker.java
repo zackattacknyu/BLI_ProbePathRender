@@ -22,7 +22,7 @@ import java.util.Properties;
  */
 public class ProbeTracker {
     
-    private float currentX,currentY;
+    private float currentX,currentY,currentZ;
     
     private float currentManualDeltaX,currentManualDeltaY;
     
@@ -78,11 +78,11 @@ public class ProbeTracker {
         
         currentPitch = baselinePitch;
         currentRoll = baselineRoll;
-        localRotation = LineHelper.getQuarternion(
+        localRotation = TrackingHelper.getQuarternion(
                 currentYaw,currentPitch,currentRoll);
         
         
-        Vector2f currentDisp = new Vector2f(0,0);
+        Vector3f currentDisp = new Vector3f(0,0,0);
         
         float currentDeltaX = -dataInterpreter.getDeltaX() + currentManualDeltaX;
         float currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
@@ -90,12 +90,12 @@ public class ProbeTracker {
             
                 //only use X,Y
             case 0:
-                currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
+                currentDisp = new Vector3f(currentDeltaX,currentDeltaY,0.0f);
             break;
 
                 // use X,Y and Yaw
             case 1:
-                currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
+                currentDisp = TrackingHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
             break;
 
                 //use X,Y and Yaw, Pitch, Roll
@@ -107,23 +107,19 @@ public class ProbeTracker {
         
         }
         
-        currentDisp = LineHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
+        currentDisp = TrackingHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
         
         currentManualDeltaX = 0;
         currentManualDeltaY = 0;
         
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();
+        currentZ = currentZ + currentDisp.getZ();
         
-        localTranslation = new Vector3f(currentX,currentY,0.0f);
-        
-        //littleObject.setLocalTranslation(currentX, currentY, 0.0f);
-        
-        /*
-         * Around here is where we will want to record the xy path
-         */
+        localTranslation = new Vector3f(currentX,currentY,currentZ);
+
+        //here we record the xyz path
         if(recordingPath || calibratingX || calibratingY){
-            //cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
             cubePath.addToPath(currentDisp);
         }
         
