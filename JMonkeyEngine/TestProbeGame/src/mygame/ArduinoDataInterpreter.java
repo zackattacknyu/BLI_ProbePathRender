@@ -9,16 +9,6 @@ import java.util.HashMap;
 import java.util.Properties;
 
 /**
- *The Data Interpretation will go through 5 stages:
- * 
- * Stage 1: Wait for Input Data to come in
- *          - Passed the stage once the non-null check on Arduino data passes
- * Stage 2: Wait for Reset to be pressed
- *          - Passed the stage once timestamp has decreased
- * Stage 3: Establish the baseline
- *          - The data between timestampe 1000 and 3000 will be used for this
- * Stage 4: Read any changes
- *          - if the data comes in is greater than allowed thresholds
  * 
  * @author BLI
  */
@@ -381,13 +371,5 @@ public class ArduinoDataInterpreter {
     public float getDeltaY() {
         return deltaY;
     }
-    
-    public float getCurrentTimestamp(){
-        if(currentArdData == null){
-            return 0;
-        }else{
-            return currentArdData.getTimestamp();
-        }
-        
-    }
+   
 }

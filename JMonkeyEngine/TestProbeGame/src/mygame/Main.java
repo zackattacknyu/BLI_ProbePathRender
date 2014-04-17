@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
     private MotionEvent motionControl;
     private BitmapText wayPointsText;
     private Material ballMat,probeMat;
-    private ArduinoDataInterpreter dataInterpreter;
+    //private ArduinoDataInterpreter dataInterpreter;
     private float currentX = 0, currentY = 0, baselineYaw = 0, currentYaw = 0;
     private float currentManualDeltaX = 0, currentManualDeltaY = 0;
     private float currentDeltaX = 0, currentDeltaY = 0;
@@ -69,6 +69,8 @@ public class Main extends SimpleApplication {
     private short readMode = 0;
     
     private PathRecorder cubePath;
+    
+    private ProbeTracker probeTracker;
     
 
     public static void main(String[] args) {
@@ -111,7 +113,7 @@ public class Main extends SimpleApplication {
         initPathInputs();
         initDebugText();
         
-        dataInterpreter = new ArduinoDataInterpreter();
+        probeTracker = new ProbeTracker();
     }
     
     
@@ -142,58 +144,15 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        //keep this if we just want to test the serial output
-        //dataInterpreter.setOnlyDoOutput(true);
+        probeTracker.updateValues();
         
-        dataInterpreter.updateData();
+        littleObject.setLocalRotation(probeTracker.getLocalRotation());
         
-        //use this style for displaying the rotation
-        if(dataInterpreter.isCalibrated() && readMode > 0){
-            currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw;
-        }else{
-            currentYaw = baselineYaw;
-        }
-        
-        littleObject.setLocalRotation(LineHelper.getQuarternion(currentYaw));
-        
-        
-        //currentX = currentX + dataInterpreter.getDeltaX();
-        //currentY = currentY - dataInterpreter.getDeltaY();
-        
-        boolean useYaw = true;
-        
-        Vector2f currentDisp;
-        
-        currentDeltaX = -dataInterpreter.getDeltaX() + currentManualDeltaX;
-        currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
-        
-        if(useYaw){
-            currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
-        }else{
-            currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
-        }
-        
-        currentDisp = LineHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
-        
-        currentManualDeltaX = 0;
-        currentManualDeltaY = 0;
-        
-        currentX = currentX + currentDisp.getX();
-        currentY = currentY + currentDisp.getY();
-        
-        littleObject.setLocalTranslation(currentX, currentY, 0.0f);
-        
-        /*
-         * Around here is where we will want to record the xy path
-         */
-        if(recordingPath || calibratingX || calibratingY){
-            //cubePath.addToPath(dataInterpreter.getDeltaX(), -dataInterpreter.getDeltaY());
-            cubePath.addToPath(currentDisp);
-        }
-        
-        xText.setText("current X = " + currentX);
-        yText.setText("current Y = " + currentY);
-        yawText.setText("current Yaw = " + currentYaw*FastMath.RAD_TO_DEG);
+        littleObject.setLocalTranslation(probeTracker.getLocalTranslation());
+
+        xText.setText("current X = " + probeTracker.getCurrentX());
+        yText.setText("current Y = " + probeTracker.getCurrentY());
+        yawText.setText("current Yaw = " + probeTracker.getCurrentYaw()*FastMath.RAD_TO_DEG);
     }
 
     @Override
@@ -288,35 +247,7 @@ public class Main extends SimpleApplication {
     
     private void displayReadMode(){
         
-        switch(readMode){
-            case 0:
-                readModeText.setText("Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Only Show Output");
-                break;
-            case 1:
-                readModeText.setText("Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Raw Output Mode");
-                dataInterpreter.setRawSwitch(0);
-                break;
-
-            case 2:
-                readModeText.setText("Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Low-Pass Filter Mode");
-                dataInterpreter.setUseLowPassFilterData(true);
-                dataInterpreter.setRawSwitch(0);
-                break;
-
-            case 3:
-                readModeText.setText("Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Mean Error as Threshold Mode");
-                dataInterpreter.setUseLowPassFilterData(false);
-                dataInterpreter.setRawSwitch(1);
-                break;
-        }
+        readModeText.setText(probeTracker.getReadModeText());
         
         
     }
@@ -382,49 +313,44 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("rotateClockwise") && keyPressed){
-                    baselineYaw = baselineYaw - 1.0f/20.0f;
+                    probeTracker.rotateClockwise();
                 }
                 if(name.equals("rotateCounterClockwise") && keyPressed){
-                    baselineYaw = baselineYaw + 1.0f/20.0f;
+                    probeTracker.rotateCounterClockwise();
                 }
                 
                 if(name.equals("resetProbe") && keyPressed){
-                    currentX = 0;
-                    currentY = 0;
+                    probeTracker.resetProbe();
                 }
                 
                 if(name.equals("moveUp") && keyPressed){
-                    currentManualDeltaY = 1.0f/20.0f;
+                    probeTracker.moveUp();
                 }
                 
                 if(name.equals("moveDown") && keyPressed){
-                    currentManualDeltaY = -1.0f/20.0f;
+                    probeTracker.moveDown();
                 }
                 
                 if(name.equals("moveLeft") && keyPressed){
-                    currentManualDeltaX = 1.0f/20.0f;
+                    probeTracker.moveLeft();
                 }
                 
                 if(name.equals("moveRight") && keyPressed){
-                    currentManualDeltaX = -1.0f/20.0f;
+                    probeTracker.moveRight();
                 }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
-                    if(recordingPath){
-                        System.out.println("Recording New Path Stopped");
-                        pathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
-                        Spatial currentLine = LineHelper.createLineFromVertices(pathVertices, ballMat);
-                        
-                        recordingText.setText("Press N to record a new path");
+                    
+                    probeTracker.updatePathRecording();
+                    recordingText.setText(probeTracker.getRecordingText());
+                    if(probeTracker.isNewPathExists()){
+                        Spatial currentLine = 
+                                LineHelper.createLineFromVertices(
+                                probeTracker.getCurrentPathVertices(), 
+                                ballMat);
                         rootNode.attachChild(currentLine);
-                        recordingPath = false;
-                    }else{
-                        
-                        recordingText.setText("Now recording new path (Press N to stop recording)");
-                        cubePath = new PathRecorder(currentX,currentY);
-                        System.out.println("Now Recording new path");
-                        recordingPath = true;
                     }
+                    
                 }
                 
                 if (name.equals("display_hidePath") && keyPressed) {
@@ -465,68 +391,24 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("recalibrateX") && keyPressed){
-                    if(calibratingX){
-                        float lastX = cubePath.getLastX() - cubePath.getFirstX();
-                        float realLastX = 8.0f*scaleFactorX;
-                        scaleFactorX = realLastX/lastX;
-                        scaleXtext.setText("Virtual X to real X scale factor "
-                                + "(Press X to recalibrate): "
-                                + scaleFactorX);
-                    }else{
-                        scaleXtext.setText("Now calibrating. Press X has been moved 8 units right ");
-                        cubePath = new PathRecorder(currentX,currentY);
-                    }
-                    
-                    calibratingX = !calibratingX;
-                    
-                    
-                    
+                    probeTracker.updateXcalibration();
+                    scaleXtext.setText(probeTracker.getScaleXtext());
                 }
                 
                 if(name.equals("recalibrateY") && keyPressed){
-                    if(calibratingY){
-                        float lastY = cubePath.getLastY()- cubePath.getFirstY();
-                        float realLastY = 8.0f*scaleFactorY;
-                        scaleFactorY = realLastY/lastY;
-                        scaleYtext.setText("Virtual Y to real Y scale factor "
-                                + "(Press Y to recalibrate): "
-                                + scaleFactorY);
-                    }else{
-                        scaleYtext.setText("Now calibrating. Press Y has been moved 8 units up ");
-                        cubePath = new PathRecorder(currentX,currentY);
-                    }
-                    
-                    calibratingY = !calibratingY;
-                    
+                    probeTracker.updateYcalibration();
+                    scaleYtext.setText(probeTracker.getScaleYtext());
                 }
                 
                 if(name.equals("readModeChange") && keyPressed){
-                    
-                    readMode++;
-                    readMode = (short) (readMode%4);
-                    
+                    probeTracker.incrementReadMode();
                     displayReadMode();
-                    
-                    
-                    
                 }
                 
                 if(name.equals("recalibrateProbe") && keyPressed){
-                    
-                    if(dataInterpreter.isCalibrating()){
-
-                        displayReadMode();
-
-                        dataInterpreter.startStopCalibration();
-
-                    }else{
-                        readModeText.setText("Now Recalibrating. Press B again to stop.");
-                        dataInterpreter.startStopCalibration();
-                    }
-                    
+                    probeTracker.updateProbeCalibration();
+                    displayReadMode();
                 }
-
-
             }
         };
 

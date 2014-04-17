@@ -69,7 +69,7 @@ public class LineHelper {
     public static Quaternion getQuarternion(float yawInRadians){
         
         Quaternion output = new Quaternion();
-        output.fromAngleAxis(yawInRadians, new Vector3f(0,0,1));
+        output.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
         return output;
     }
     
