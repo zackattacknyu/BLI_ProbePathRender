@@ -39,14 +39,22 @@ public class LineHelper {
     
     public static Vector2f getXYDisplacement(float deltaX, float deltaY, float yawInRadians){
         
-        float cosTheta = (float) Math.cos(yawInRadians);
-        float sinTheta = (float) Math.sin(yawInRadians);
+        Vector3f mouseDisp = new Vector3f(deltaX,deltaY,0);
+        Matrix3f rotMatrix = getQuarternion(yawInRadians).toRotationMatrix();
         
-        float newDeltaX = deltaX*cosTheta-deltaY*sinTheta;
-        float newDeltaY = deltaX*sinTheta+deltaY*cosTheta;
+        Vector3f totalDisp = rotMatrix.mult(mouseDisp);
         
-        return new Vector2f(newDeltaX,newDeltaY);
+        return new Vector2f(totalDisp.getX(),totalDisp.getY());
         
+        
+    }
+    
+    public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Quaternion localRotation){
+        
+        Vector3f mouseDisp = new Vector3f(deltaX,deltaY,0);
+        Matrix3f rotMatrix = localRotation.toRotationMatrix();
+        
+        return rotMatrix.mult(mouseDisp);
         
     }
     
@@ -59,10 +67,8 @@ public class LineHelper {
     
     public static Matrix3f getRotationMatrix(float yawInRadians){
         
-        float cosTheta = (float) Math.cos(yawInRadians);
-        float sinTheta = (float) Math.sin(yawInRadians);
+        return getQuarternion(yawInRadians).toRotationMatrix();
         
-        return new Matrix3f(cosTheta,-sinTheta,0,sinTheta,cosTheta,0,0,0,1);
         
     }
     

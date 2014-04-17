@@ -9,6 +9,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  *
@@ -47,9 +48,20 @@ public class ProbeTracker {
     
     ArrayList<Vector3f> currentPathVertices;
     
+    private short displacementMode = 2;
+    
     public ProbeTracker(){
         
         dataInterpreter = new ArduinoDataInterpreter();
+        
+        Properties trackerProps = PropertiesHelper.getProperties();
+        displacementMode = Short.parseShort(
+                trackerProps.getProperty("trackDisplacementMode"));
+        
+        //ensures 0,1, or 2 will be the value set
+        if(displacementMode < 0 || displacementMode > 2){
+            displacementMode = 2;
+        }
         
     }
     
@@ -69,19 +81,30 @@ public class ProbeTracker {
         localRotation = LineHelper.getQuarternion(
                 currentYaw,currentPitch,currentRoll);
         
-        //littleObject.setLocalRotation(LineHelper.getQuarternion(currentYaw));
         
-        boolean useYaw = true;
-        
-        Vector2f currentDisp;
+        Vector2f currentDisp = new Vector2f(0,0);
         
         float currentDeltaX = -dataInterpreter.getDeltaX() + currentManualDeltaX;
         float currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
+        switch(displacementMode){
+            
+                //only use X,Y
+            case 0:
+                currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
+            break;
+
+                // use X,Y and Yaw
+            case 1:
+                currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
+            break;
+
+                //use X,Y and Yaw, Pitch, Roll
+            case 2:
+                /*TODO: 
+                 * FILL THIS IN ONCE THE CAPABILITY HAS BEEN ADDED TO HANDLE Z COORDINATES
+                 */
+            break;
         
-        if(useYaw){
-            currentDisp = LineHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
-        }else{
-            currentDisp = new Vector2f(currentDeltaX,currentDeltaY);
         }
         
         currentDisp = LineHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
