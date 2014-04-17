@@ -73,6 +73,23 @@ public class LineHelper {
         return output;
     }
     
+    public static Quaternion getQuarternion(float yawInRadians, 
+            float pitchInRadians, float rollInRadians){
+        
+        Quaternion yaw = new Quaternion();
+        yaw.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
+        
+        Quaternion pitch = new Quaternion();
+        pitch.fromAngleAxis(pitchInRadians, Vector3f.UNIT_X);
+        
+        Quaternion roll = new Quaternion();
+        roll.fromAngleAxis(rollInRadians, Vector3f.UNIT_Y);
+        
+        Quaternion yawPitch = yaw.mult(pitch);
+        
+        return yawPitch.mult(roll);
+    }
+    
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material ballMat){
         
         short[] indices = new short[lineVertices.size()*2];

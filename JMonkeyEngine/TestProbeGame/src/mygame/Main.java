@@ -301,6 +301,9 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
         
+        inputManager.addMapping("pitchLeft", new KeyTrigger(KeyInput.KEY_NUMPAD7));
+        inputManager.addMapping("pitchRight", new KeyTrigger(KeyInput.KEY_NUMPAD9));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -329,6 +332,14 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("moveDown") && keyPressed){
                     probeTracker.moveDown();
+                }
+                
+                if(name.equals("pitchLeft") && keyPressed){
+                    probeTracker.pitchLeft();
+                }
+                
+                if(name.equals("pitchRight") && keyPressed){
+                    probeTracker.pitchRight();
                 }
                 
                 if(name.equals("moveLeft") && keyPressed){
@@ -430,7 +441,9 @@ public class Main extends SimpleApplication {
                 "rotateClockwise",
                 "rotateCounterClockwise",
                 "resetProbe",
-                "recalibrateProbe");
+                "recalibrateProbe",
+                "pitchRight",
+                "pitchLeft");
 
     }
 }

@@ -29,7 +29,7 @@ public class ProbeTracker {
     
     private ArduinoDataInterpreter dataInterpreter;
     
-    private float baselineYaw,currentYaw,baselinePitch,currentPitch;
+    private float baselineYaw,currentYaw,baselinePitch = 0,currentPitch = 0;
     
     private short readMode = 0;
     
@@ -62,7 +62,8 @@ public class ProbeTracker {
             currentYaw = baselineYaw;
         }
         
-        localRotation = LineHelper.getQuarternion(currentYaw);
+        currentPitch = baselinePitch;
+        localRotation = LineHelper.getQuarternion(currentYaw,currentPitch,0);
         
         //littleObject.setLocalRotation(LineHelper.getQuarternion(currentYaw));
         
@@ -188,6 +189,16 @@ public class ProbeTracker {
     public void rotateCounterClockwise(){
         
         baselineYaw = baselineYaw + 1.0f/20.0f;
+    }
+    
+    public void pitchLeft(){
+        
+        baselinePitch = baselinePitch - 1.0f/20.0f;
+    }
+    
+    public void pitchRight(){
+        
+        baselinePitch = baselinePitch + 1.0f/20.0f;
     }
     
     public String getRecordingText() {
