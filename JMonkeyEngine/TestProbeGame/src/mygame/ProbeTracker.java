@@ -134,7 +134,7 @@ public class ProbeTracker {
                     + scaleFactorY;
         }else{
             scaleYtext= "Now calibrating. Press Y has been moved 8 units up ";
-            cubePath = new PathRecorder(currentX,currentY);
+            cubePath = new PathRecorder(currentX,currentY,currentZ);
         }
 
         calibratingY = !calibratingY;
@@ -152,7 +152,7 @@ public class ProbeTracker {
                     + scaleFactorX;
         }else{
             scaleXtext="Now calibrating. Press X has been moved 8 units right ";
-            cubePath = new PathRecorder(currentX,currentY);
+            cubePath = new PathRecorder(currentX,currentY,currentZ);
         }
 
         calibratingX = !calibratingX;
@@ -171,7 +171,7 @@ public class ProbeTracker {
         }else{
             newPathExists = false;
             recordingText = "Now recording new path (Press N to stop recording)";
-            cubePath = new PathRecorder(currentX,currentY);
+            cubePath = new PathRecorder(currentX,currentY,currentZ);
             System.out.println("Now Recording new path");
             recordingPath = true;
         }

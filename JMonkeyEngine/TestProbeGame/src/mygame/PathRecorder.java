@@ -89,6 +89,10 @@ public class PathRecorder {
     public float getLastY() {
         return lastY;
     }
+
+    public ArrayList<Float> getzCoords() {
+        return zCoords;
+    }
     
     
     

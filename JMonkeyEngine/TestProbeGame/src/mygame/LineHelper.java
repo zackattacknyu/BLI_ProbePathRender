@@ -28,10 +28,11 @@ public class LineHelper {
     public static ArrayList<Vector3f> convertPathRecordingToLineVertices(PathRecorder path){
         ArrayList<Float> xVals = path.getxCoords();
         ArrayList<Float> yVals = path.getyCoords();
+        ArrayList<Float> zVals = path.getzCoords();
         ArrayList<Vector3f> pathVertices = new ArrayList<Vector3f>(xVals.size());
         Vector3f currentVertex;
         for(int index = 0; index < xVals.size(); index++){         
-            currentVertex = new Vector3f(xVals.get(index),yVals.get(index),0);
+            currentVertex = new Vector3f(xVals.get(index),yVals.get(index),zVals.get(index));
             pathVertices.add(currentVertex);
         }
         return pathVertices;
