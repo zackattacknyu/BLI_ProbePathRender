@@ -100,9 +100,7 @@ public class ProbeTracker {
 
                 //use X,Y and Yaw, Pitch, Roll
             case 2:
-                /*TODO: 
-                 * FILL THIS IN ONCE THE CAPABILITY HAS BEEN ADDED TO HANDLE Z COORDINATES
-                 */
+                currentDisp = TrackingHelper.getXYZDisplacement(currentDeltaX, currentDeltaY, localRotation);
             break;
         
         }
@@ -195,6 +193,10 @@ public class ProbeTracker {
     public void moveDown(){
         currentManualDeltaY = -1.0f/2.0f;
     }
+
+    public float getCurrentZ() {
+        return currentZ;
+    }
     
     public void moveLeft(){
         currentManualDeltaX = 1.0f/2.0f;
@@ -217,6 +219,14 @@ public class ProbeTracker {
     public void pitchLeft(){
         
         baselinePitch = baselinePitch - 1.0f/20.0f;
+    }
+
+    public float getCurrentPitch() {
+        return currentPitch;
+    }
+
+    public float getCurrentRoll() {
+        return currentRoll;
     }
     
     public void pitchRight(){

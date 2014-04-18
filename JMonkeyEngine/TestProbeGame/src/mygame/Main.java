@@ -34,7 +34,7 @@ public class Main extends SimpleApplication {
     private BitmapText wayPointsText;
     private Material ballMat,probeMat;
     
-    private BitmapText yawText, xText, yText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
+    private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
     private ProbeTracker probeTracker;
     
@@ -116,9 +116,13 @@ public class Main extends SimpleApplication {
         
         littleObject.setLocalTranslation(probeTracker.getLocalTranslation());
 
-        xText.setText("current X = " + probeTracker.getCurrentX());
-        yText.setText("current Y = " + probeTracker.getCurrentY());
-        yawText.setText("current Yaw = " + probeTracker.getCurrentYaw()*FastMath.RAD_TO_DEG);
+        xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
+                + probeTracker.getCurrentY() + "," 
+                + probeTracker.getCurrentZ() + ")");
+        yawPitchRollText.setText("(Yaw,Pitch,Roll) = (" + 
+                probeTracker.getCurrentYaw()*FastMath.RAD_TO_DEG + "," + 
+                probeTracker.getCurrentPitch()*FastMath.RAD_TO_DEG + "," + 
+                probeTracker.getCurrentRoll()*FastMath.RAD_TO_DEG + ")");
     }
 
     @Override
@@ -141,21 +145,15 @@ public class Main extends SimpleApplication {
     
     private void initDebugText(){
         
-        yawText = initializeNewText();
-        yawText.setLocalTranslation(
-                (cam.getWidth() - yawText.getLineWidth()) / 2, 
+        yawPitchRollText = initializeNewText();
+        yawPitchRollText.setLocalTranslation(
+                (cam.getWidth()) / 2, 
                 cam.getHeight(), 0);       
         
-        xText = initializeNewText();
-        xText.setLocalTranslation(
-                (cam.getWidth() - xText.getLineWidth()) / 2, 
-                (cam.getHeight() - xText.getLineHeight()), 0);
-        
-        
-        yText = initializeNewText();
-        yText.setLocalTranslation(
-                (cam.getWidth() - yText.getLineWidth()) / 2, 
-                (cam.getHeight() - yText.getLineHeight()*2), 0);
+        xyzText = initializeNewText();
+        xyzText.setLocalTranslation(
+                (cam.getWidth()) / 2, 
+                (cam.getHeight() - xyzText.getLineHeight()), 0);
         
         scaleXtext = initializeNewText();
         scaleXtext.setText("Virtual X to real X scale factor "

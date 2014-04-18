@@ -36,8 +36,9 @@ public class TrackingHelper {
     public static Vector3f scaleDisplacement(Vector3f displacement, float xScale, float yScale){
         float xVal = displacement.getX();
         float yVal = displacement.getY();
+        float zVal = displacement.getZ();
         
-        return new Vector3f(xVal*xScale,yVal*yScale,0.0f);
+        return new Vector3f(xVal*xScale,yVal*yScale,zVal);
     }
     
     public static Vector3f scaleDisplacement(Vector3f displacement, float xScale, float yScale, float zScale){
