@@ -112,7 +112,7 @@ public class Main extends SimpleApplication {
         
         probeTracker.updateValues();
         
-        littleObject.setLocalRotation(probeTracker.getLocalRotation());
+        littleObject.setLocalRotation(probeTracker.getDisplayRotation());
         
         littleObject.setLocalTranslation(probeTracker.getLocalTranslation());
 

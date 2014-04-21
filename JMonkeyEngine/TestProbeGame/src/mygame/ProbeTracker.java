@@ -35,9 +35,12 @@ public class ProbeTracker {
             baselineRoll = (float)(Math.PI/2.0), 
             currentRoll = (float)(Math.PI/2.0);
     
+    private float firstYaw=0, firstPitch = 0, firstRoll = (float)(Math.PI/2.0);
+    
     private short readMode = 0;
     
     private Quaternion localRotation;
+    private Quaternion displayRotation;
     private Vector3f localTranslation;
     
     private boolean calibratingX = false, calibratingY = false, recordingPath = false;
@@ -72,15 +75,19 @@ public class ProbeTracker {
         
         //use this style for displaying the rotation
         if(dataInterpreter.isCalibrated() && readMode > 0){
-            currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw;
+            currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw - firstYaw;
         }else{
-            currentYaw = baselineYaw;
+            currentYaw = baselineYaw - firstYaw;
         }
         
-        currentPitch = baselinePitch;
-        currentRoll = baselineRoll;
+        currentPitch = baselinePitch - firstPitch;
+        currentRoll = baselineRoll - firstRoll;
         localRotation = TrackingHelper.getQuarternion(
                 currentYaw,currentPitch,currentRoll);
+        displayRotation = TrackingHelper.getQuarternion(
+                currentYaw+firstYaw, 
+                currentPitch+firstPitch, 
+                currentRoll+firstRoll);
         
         
         Vector3f currentDisp = new Vector3f(0,0,0);
@@ -335,6 +342,10 @@ public class ProbeTracker {
 
     public float getScaleFactorY() {
         return scaleFactorY;
+    }
+
+    public Quaternion getDisplayRotation() {
+        return displayRotation;
     }
 
     public float getCurrentYaw() {
