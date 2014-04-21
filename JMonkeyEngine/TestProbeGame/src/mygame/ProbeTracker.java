@@ -195,11 +195,11 @@ public class ProbeTracker {
     }
     
     public void moveUp(){
-        currentManualDeltaY = 1.0f/2.0f;
+        currentManualDeltaY = 4.0f;
     }
     
     public void moveDown(){
-        currentManualDeltaY = -1.0f/2.0f;
+        currentManualDeltaY = -4.0f;
     }
 
     public float getCurrentZ() {
@@ -207,11 +207,11 @@ public class ProbeTracker {
     }
     
     public void moveLeft(){
-        currentManualDeltaX = 1.0f/2.0f;
+        currentManualDeltaX = 4.0f;
     }
     
     public void moveRight(){
-        currentManualDeltaX = -1.0f/2.0f;
+        currentManualDeltaX = -4.0f;
     }
     
     public void rotateClockwise(){
