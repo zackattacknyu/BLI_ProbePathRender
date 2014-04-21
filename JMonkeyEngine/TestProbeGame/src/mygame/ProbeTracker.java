@@ -32,7 +32,8 @@ public class ProbeTracker {
     
     private float baselineYaw,currentYaw,
             baselinePitch = 0,currentPitch = 0,
-            baselineRoll = 0, currentRoll = 0;
+            baselineRoll = (float)(Math.PI/2.0), 
+            currentRoll = (float)(Math.PI/2.0);
     
     private short readMode = 0;
     
