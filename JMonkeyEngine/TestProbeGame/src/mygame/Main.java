@@ -131,10 +131,8 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        //cam.setLocation(new Vector3f(2,2,-20));
-        //cam.lookAt(new Vector3f(0,0,10), new Vector3f(0,1,0));
-        cam.setLocation(new Vector3f(-0.52476215f, 4.1058984f, -12.747635f));
-        cam.setRotation(new Quaternion(0.03318608f, -0.03325959f, 0.0011049765f, 0.99889505f));
+        cam.setLocation(new Vector3f(-10.831136f, 4.06632f, -9.481096f));
+        cam.setRotation(new Quaternion(0.065406695f, 0.23731168f, -0.01601674f, 0.9690968f));
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
