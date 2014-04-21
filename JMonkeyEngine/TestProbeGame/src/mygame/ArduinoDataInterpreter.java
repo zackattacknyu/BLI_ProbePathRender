@@ -35,7 +35,7 @@ public class ArduinoDataInterpreter {
     private float currentYaw=0,currentPitch=0,currentRoll=0;
     private float firstYaw=0,firstPitch=0,firstRoll=0;
     private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
-    private String currentArdOutput;
+    private String currentArdOutput, previousArdOutput;
     
     private boolean useLowPassFilterData = false;
     
@@ -44,6 +44,8 @@ public class ArduinoDataInterpreter {
     //flag for only showing output and not processing it
     private boolean onlyDoOutput;
     
+    //flag for not parsing output if onlyDoOutput = true
+    private boolean parseOutput;
     
     private boolean updateExists = false;
     private boolean showOutput = true;
@@ -92,6 +94,10 @@ public class ArduinoDataInterpreter {
                 trackerProps.getProperty(
                 "arduinoData.onlyDoOutput"));
         
+        parseOutput = Boolean.parseBoolean(
+                trackerProps.getProperty(
+                "arduinoData.parseOutput"));
+        
         
         
     }
@@ -134,6 +140,25 @@ public class ArduinoDataInterpreter {
                         }
                         updateExists = true;
                     }
+                }
+            }
+            
+        }catch(Throwable e){
+            System.out.println("READING SERIAL DATA FAILED!: " + e);
+        }
+    }
+    
+    private void readRawSerialData(){
+        updateExists = false;
+        try{
+            
+            currentArdOutput = serial.getCurrentArdOutput();
+            if(!String.valueOf(currentArdOutput).equals("null")){
+                if(!currentArdOutput.equals(previousArdOutput)){
+                    if(showOutput){
+                        System.out.println(currentArdOutput);
+                    }
+                    updateExists = true;
                 }
             }
             
@@ -211,7 +236,12 @@ public class ArduinoDataInterpreter {
     
     public void updateData(){
         
-        readSerialData();
+        if(onlyDoOutput && !parseOutput){
+            readRawSerialData();
+        }else{
+            readSerialData();
+        }
+        
         
         if(!onlyDoOutput){
             processArdData();
