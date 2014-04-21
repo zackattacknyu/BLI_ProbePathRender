@@ -35,6 +35,7 @@ public class ArduinoDataInterpreter {
     private float currentYaw=0,currentPitch=0,currentRoll=0;
     private float firstYaw=0,firstPitch=0,firstRoll=0;
     private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
+    private String currentArdOutput;
     
     private boolean useLowPassFilterData = false;
     
@@ -122,18 +123,20 @@ public class ArduinoDataInterpreter {
     private void readSerialData(){
         updateExists = false;
         try{
-            currentArdData = new ArduinoDataPoint(
-                    serial.getCurrentArdOutput(),
-                    dataLocations);
-            if(currentArdData != null){
-                if(!currentArdData.equals(previousArdData)){
-                    
-                    if(showOutput){
-                        System.out.println(currentArdData);
+            
+            currentArdOutput = serial.getCurrentArdOutput();
+            if(!String.valueOf(currentArdOutput).equals("null")){
+                currentArdData = new ArduinoDataPoint(currentArdOutput,dataLocations);
+                if(currentArdData != null){
+                    if(!currentArdData.equals(previousArdData)){
+                        if(showOutput){
+                            System.out.println(currentArdData);
+                        }
+                        updateExists = true;
                     }
-                    updateExists = true;
                 }
             }
+            
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!: " + e);
         }
