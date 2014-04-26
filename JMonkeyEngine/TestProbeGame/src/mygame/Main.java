@@ -1,8 +1,6 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.cinematic.MotionPath;
-import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -10,13 +8,11 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
-import java.util.ArrayList;
 
 /**
  * test
@@ -24,9 +20,7 @@ import java.util.ArrayList;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject;
-    private Spatial startBox;
-    private Spatial endBox;
+    private Spatial littleObject,startBox,endBox,surface;
     private Material ballMat,boxMat,probeMat;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
@@ -42,13 +36,20 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         String objFileLocation = "Models/textured_mesh.obj";
-        String sampleDataLocation = "textFiles/sampleData.txt";
         
         ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
         ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
-        rootNode.attachChild(ModelHelper.generateModel(
-                objFileLocation, ballMat, assetManager));
+        surface = ModelHelper.generateModel(
+                objFileLocation, ballMat, assetManager);
+        
+        //moves the front of the ball to the (0,0,0) location
+        surface.move(0, 0, -10f);
+        
+        //makes the scale better
+        surface.scale(0.5f);
+        
+        rootNode.attachChild(surface);
         
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -60,8 +61,8 @@ public class Main extends SimpleApplication {
         startBox = initSampleBox(boxMat, "startCube");
         endBox = initSampleBox(boxMat, "endCube");
         
-        rootNode.attachChild(startBox);
-        rootNode.attachChild(endBox);
+        //rootNode.attachChild(startBox);
+        //rootNode.attachChild(endBox);
         
         endBox.move(4.0f, 4.0f, 0.0f);
         
@@ -122,8 +123,8 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        cam.setLocation(new Vector3f(-10.831136f, 4.06632f, -9.481096f));
-        cam.setRotation(new Quaternion(0.065406695f, 0.23731168f, -0.01601674f, 0.9690968f));
+        cam.setLocation(new Vector3f(9.346902f, 4.945868f, -6.044667f));
+        cam.setRotation(new Quaternion(0.15240014f, -0.42721197f, 0.073302716f, 0.8881953f));
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
@@ -245,10 +246,10 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
                 if(name.equals("moveInward") && keyPressed){
-                    littleObject.move(0, 0, 1.0f/20.0f);
+                    //littleObject.move(0, 0, 1.0f/20.0f);
                 }
                 if(name.equals("moveOutward") && keyPressed){
-                    littleObject.move(0,0, -1.0f/20.0f);
+                    //littleObject.move(0,0, -1.0f/20.0f);
                 }
                 
                 if(name.equals("rotateClockwise") && keyPressed){
