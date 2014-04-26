@@ -27,7 +27,7 @@ public class Main extends SimpleApplication {
     private Spatial littleObject;
     private Spatial startBox;
     private Spatial endBox;
-    private Material ballMat,probeMat;
+    private Material ballMat,boxMat,probeMat;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
@@ -44,8 +44,9 @@ public class Main extends SimpleApplication {
         String objFileLocation = "Models/textured_mesh.obj";
         String sampleDataLocation = "textFiles/sampleData.txt";
         
-        ballMat = new Material(assetManager, 
-                "Common/MatDefs/Misc/ShowNormals.j3md");
+        ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
+        ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
         rootNode.attachChild(ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager));
         
@@ -56,8 +57,8 @@ public class Main extends SimpleApplication {
         
         rootNode.attachChild(littleObject);
         
-        startBox = initSampleBox(ballMat, "startCube");
-        endBox = initSampleBox(ballMat, "endCube");
+        startBox = initSampleBox(boxMat, "startCube");
+        endBox = initSampleBox(boxMat, "endCube");
         
         rootNode.attachChild(startBox);
         rootNode.attachChild(endBox);
