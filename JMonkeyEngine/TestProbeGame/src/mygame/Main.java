@@ -27,11 +27,6 @@ public class Main extends SimpleApplication {
     private Spatial littleObject;
     private Spatial startBox;
     private Spatial endBox;
-    private boolean active = false;
-    private boolean playing = false;
-    private MotionPath path;
-    private MotionEvent motionControl;
-    private BitmapText wayPointsText;
     private Material ballMat,probeMat;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
@@ -69,14 +64,9 @@ public class Main extends SimpleApplication {
         
         endBox.move(4.0f, 4.0f, 0.0f);
         
-        ArrayList<Vector3f> lineVertices = 
-                ProbeDataHelper.getVerticesFromFile(sampleDataLocation);
-        path = ProbeDataHelper.getMotionPathFromVertices(lineVertices);
-        //rootNode.attachChild(LineHelper.createLineFromVertices(lineVertices, ballMat));
-        
         setDefaultCamera();
         enableFlyCam();
-        initPathInputs();
+        initKeyboardInputs();
         
         probeTracker = new ProbeTracker();
         
@@ -214,31 +204,11 @@ public class Main extends SimpleApplication {
         
     }
 
-    private void initPathInputs() {
+    private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
         //chaser.registerWithInput(inputManager);
         
-        path.setPathSplineType(Spline.SplineType.Linear);
-
-        motionControl = new MotionEvent(littleObject,path);
-        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(10f);
-        motionControl.setSpeed(2f);       
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        wayPointsText = new BitmapText(guiFont, false);
-        wayPointsText.setSize(guiFont.getCharSet().getRenderedSize());
-        wayPointsText.setLocalTranslation(
-                (cam.getWidth() - wayPointsText.getLineWidth()) / 2, 
-                cam.getHeight(), 0);
-
-        guiNode.attachChild(wayPointsText);
-        
-        inputManager.addMapping("display_hidePath", new KeyTrigger(KeyInput.KEY_P));
-        inputManager.addMapping("play_stop", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("tensionUp", new KeyTrigger(KeyInput.KEY_U));
-        inputManager.addMapping("tensionDown", new KeyTrigger(KeyInput.KEY_J));
-        inputManager.addMapping("SwitchPathInterpolation", new KeyTrigger(KeyInput.KEY_I));
         
         inputManager.addMapping("moveInward", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping("moveOutward", new KeyTrigger(KeyInput.KEY_F));
@@ -323,56 +293,6 @@ public class Main extends SimpleApplication {
                     probeTracker.moveRight();
                 }
                 
-                if(name.equals("startStopNewPath") && keyPressed){
-                    
-                    probeTracker.updatePathRecording();
-                    recordingText.setText(probeTracker.getRecordingText());
-                    if(probeTracker.isNewPathExists()){
-                        Spatial currentLine = 
-                                LineHelper.createLineFromVertices(
-                                probeTracker.getCurrentPathVertices(), 
-                                ballMat);
-                        rootNode.attachChild(currentLine);
-                    }
-                    
-                }
-                
-                if (name.equals("display_hidePath") && keyPressed) {
-                    if (active) {
-                        active = false;
-                        path.disableDebugShape();
-                    } else {
-                        active = true;
-                        path.enableDebugShape(assetManager, rootNode);
-                    }
-                }
-                if (name.equals("play_stop") && keyPressed) {
-                    if (playing) {
-                        playing = false;
-                        motionControl.stop();
-                        wayPointsText.setText(String.valueOf(motionControl.getCurrentValue()));
-                    } else {
-                        playing = true;
-                        motionControl.play();
-                    }
-                }
-                
-                if (name.equals("SwitchPathInterpolation") && keyPressed) {
-                    if (path.getPathSplineType() == Spline.SplineType.CatmullRom){
-                        path.setPathSplineType(Spline.SplineType.Linear);
-                    } else {
-                        path.setPathSplineType(Spline.SplineType.CatmullRom);
-                    }
-                }
-
-                if (name.equals("tensionUp") && keyPressed) {
-                    path.setCurveTension(path.getCurveTension() + 0.1f);
-                    System.err.println("Tension : " + path.getCurveTension());
-                }
-                if (name.equals("tensionDown") && keyPressed) {
-                    path.setCurveTension(path.getCurveTension() - 0.1f);
-                    System.err.println("Tension : " + path.getCurveTension());
-                }
                 
                 if(name.equals("recalibrateX") && keyPressed){
                     probeTracker.updateXcalibration();
@@ -396,11 +316,7 @@ public class Main extends SimpleApplication {
             }
         };
 
-        inputManager.addListener(acl, "display_hidePath", 
-                "play_stop", 
-                "SwitchPathInterpolation", 
-                "tensionUp", 
-                "tensionDown",
+        inputManager.addListener(acl, 
                 "moveInward",
                 "moveOutward",
                 "startStopNewPath",
