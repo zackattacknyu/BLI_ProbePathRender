@@ -15,6 +15,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.LightControl;
 
 /**
  * test
@@ -52,7 +53,7 @@ public class Main extends SimpleApplication {
         surface.scale(0.75f);
         
         rootNode.attachChild(surface);
-        addLighting();
+        
         
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -60,6 +61,8 @@ public class Main extends SimpleApplication {
         initLittleBox(probeMat);
         
         rootNode.attachChild(littleObject);
+        
+        addLighting();
         
         startBox = initSampleBox(boxMat, "startCube");
         endBox = initSampleBox(boxMat, "endCube");
@@ -81,11 +84,20 @@ public class Main extends SimpleApplication {
     }
     
     private void addLighting(){
-        PointLight lamp_light = new PointLight();
-        lamp_light.setColor(ColorRGBA.White);
-        lamp_light.setRadius(50f);
-        lamp_light.setPosition(new Vector3f(0,0,-3f));
-        rootNode.addLight(lamp_light);
+        PointLight ballLight = new PointLight();
+        ballLight.setColor(ColorRGBA.White);
+        ballLight.setRadius(100f);
+        ballLight.setPosition(new Vector3f(0,0,-5f));
+        
+        PointLight probeLight = new PointLight();
+        probeLight.setColor(ColorRGBA.White);
+        probeLight.setRadius(20f);
+        probeLight.setPosition(littleObject.getLocalTranslation());
+        LightControl ballLightPos = new LightControl(probeLight);
+        littleObject.addControl(ballLightPos);
+        
+        rootNode.addLight(ballLight);
+        rootNode.addLight(probeLight);
     }
     
     private void initLittleBox(Material material){
