@@ -39,9 +39,9 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         String objFileLocation = "Models/textured_mesh.obj";
         
-        ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
-        ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+        ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
         surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         
@@ -82,9 +82,9 @@ public class Main extends SimpleApplication {
     
     private void addLighting(){
         PointLight lamp_light = new PointLight();
-        lamp_light.setColor(ColorRGBA.Yellow);
-        lamp_light.setRadius(5f);
-        lamp_light.setPosition(new Vector3f(0,0,-0.5f));
+        lamp_light.setColor(ColorRGBA.White);
+        lamp_light.setRadius(50f);
+        lamp_light.setPosition(new Vector3f(0,0,-3f));
         rootNode.addLight(lamp_light);
     }
     

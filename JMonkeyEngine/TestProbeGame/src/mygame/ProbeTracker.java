@@ -191,6 +191,7 @@ public class ProbeTracker {
         
         currentX = 0;
         currentY = 0;
+        currentZ = 0;
         
     }
     
