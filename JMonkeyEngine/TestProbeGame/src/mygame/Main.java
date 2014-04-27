@@ -5,6 +5,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -16,6 +17,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
+import java.util.Properties;
 
 /**
  * test
@@ -30,6 +32,9 @@ public class Main extends SimpleApplication {
     
     private ProbeTracker probeTracker;
     
+    private Properties trackerProps;
+    private boolean lightVisible;
+    
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -40,9 +45,20 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         String objFileLocation = "Models/textured_mesh.obj";
         
-        ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+        trackerProps = PropertiesHelper.getProperties();
+        lightVisible = Boolean.parseBoolean(
+                trackerProps.getProperty("lighting.visible"));
+        
+        if(lightVisible){
+            ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+            ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+        }else{
+            ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+            ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+        }
+        
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
-        ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+        
         surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         
@@ -62,7 +78,9 @@ public class Main extends SimpleApplication {
         
         rootNode.attachChild(littleObject);
         
-        addLighting();
+        
+        
+        if(lightVisible) addLighting();
         
         startBox = initSampleBox(boxMat, "startCube");
         endBox = initSampleBox(boxMat, "endCube");
@@ -95,6 +113,11 @@ public class Main extends SimpleApplication {
         probeLight.setPosition(littleObject.getLocalTranslation());
         LightControl ballLightPos = new LightControl(probeLight);
         littleObject.addControl(ballLightPos);
+        
+        AmbientLight al = new AmbientLight();
+        al.setColor(ColorRGBA.White.mult(2.0f));
+        
+        rootNode.addLight(al);
         
         rootNode.addLight(ballLight);
         rootNode.addLight(probeLight);
