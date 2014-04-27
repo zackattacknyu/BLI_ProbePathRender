@@ -5,7 +5,9 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -44,12 +46,13 @@ public class Main extends SimpleApplication {
                 objFileLocation, ballMat, assetManager);
         
         //moves the front of the ball to the (0,0,0) location
-        surface.move(0, 0, -10f);
+        surface.move(0, 0, -16.5f);
         
         //makes the scale better
-        surface.scale(0.5f);
+        surface.scale(0.75f);
         
         rootNode.attachChild(surface);
+        addLighting();
         
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -77,12 +80,18 @@ public class Main extends SimpleApplication {
         
     }
     
-    
+    private void addLighting(){
+        PointLight lamp_light = new PointLight();
+        lamp_light.setColor(ColorRGBA.Yellow);
+        lamp_light.setRadius(5f);
+        lamp_light.setPosition(new Vector3f(0,0,-0.5f));
+        rootNode.addLight(lamp_light);
+    }
     
     private void initLittleBox(Material material){
         littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
         littleObject.setName("Probe");
-        littleObject.setLocalScale(1.0f/50.0f);
+        littleObject.setLocalScale(1.0f/40.0f);
         littleObject.setLocalTranslation(0.0f, 0.0f, 0.0f);
         littleObject.setMaterial(material);
     }
@@ -123,8 +132,8 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        cam.setLocation(new Vector3f(9.346902f, 4.945868f, -6.044667f));
-        cam.setRotation(new Quaternion(0.15240014f, -0.42721197f, 0.073302716f, 0.8881953f));
+        cam.setLocation(new Vector3f(1.9081001f, 6.6795464f, -16.626781f));
+        cam.setRotation(new Quaternion(0.17346787f, -0.07118106f, 0.012571785f, 0.98218334f));
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
