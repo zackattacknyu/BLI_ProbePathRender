@@ -80,8 +80,18 @@ public class ProbeTracker {
             currentYaw = baselineYaw - firstYaw;
         }
         
-        currentPitch = baselinePitch - firstPitch;
-        currentRoll = baselineRoll - firstRoll;
+        if(dataInterpreter.isCalibrated() && readMode > 0){
+            currentPitch = dataInterpreter.getOutputYawRadians() + baselinePitch - firstPitch;
+        }else{
+            currentPitch = baselinePitch - firstPitch;
+        }
+        
+        if(dataInterpreter.isCalibrated() && readMode > 0){
+            currentRoll = dataInterpreter.getOutputYawRadians() + baselineRoll - firstRoll;
+        }else{
+            currentRoll = baselineRoll - firstRoll;
+        }
+        
         localRotation = TrackingHelper.getQuarternion(
                 currentYaw,currentPitch,currentRoll);
         displayRotation = TrackingHelper.getQuarternion(
@@ -121,6 +131,10 @@ public class ProbeTracker {
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();
         currentZ = currentZ + currentDisp.getZ();
+        
+        if(currentDisp.getZ() > 0){
+            System.out.println("Not 0!!");
+        }
         
         localTranslation = new Vector3f(currentX,currentY,currentZ);
 
@@ -276,6 +290,7 @@ public class ProbeTracker {
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Only Show Output";
+                dataInterpreter.setRawSwitch(1);
                 break;
             case 1:
                 readModeText = "Probe Output Reading "
