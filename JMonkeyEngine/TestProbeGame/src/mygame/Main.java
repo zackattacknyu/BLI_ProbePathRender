@@ -131,7 +131,7 @@ public class Main extends SimpleApplication {
     private void initLittleBox(Material material){
         littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
         littleObject.setName("Probe");
-        littleObject.setLocalScale(1.0f/40.0f);
+        littleObject.setLocalScale(1.0f/25.0f);
         littleObject.setLocalTranslation(0.0f, 0.0f, 0.0f);
         littleObject.setMaterial(material);
     }
