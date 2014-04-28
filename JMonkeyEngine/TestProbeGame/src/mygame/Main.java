@@ -26,7 +26,7 @@ import java.util.Properties;
 public class Main extends SimpleApplication {
     
     private Spatial littleObject,startBox,endBox,surface;
-    private Material ballMat,boxMat,probeMat;
+    private Material ballMat,boxMat,probeMat,lineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
@@ -74,6 +74,11 @@ public class Main extends SimpleApplication {
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
         probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
+        
+        lineMaterial = new Material(assetManager, 
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        lineMaterial.setColor("Color", ColorRGBA.Red);
+        
         initLittleBox(probeMat);
         
         rootNode.attachChild(littleObject);
@@ -285,9 +290,26 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("rollForward", new KeyTrigger(KeyInput.KEY_NUMPAD5));
         inputManager.addMapping("rollBackward", new KeyTrigger(KeyInput.KEY_NUMPAD0));
         
+        inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("startStopNewPath") && keyPressed){
+                     
+                     probeTracker.updatePathRecording();
+                     recordingText.setText(probeTracker.getRecordingText());
+                     if(probeTracker.isNewPathExists()){
+                         Spatial currentLine = 
+                                 LineHelper.createLineFromVertices(
+                                 probeTracker.getCurrentPathVertices(), 
+                                 ballMat);
+                         currentLine.setMaterial(lineMaterial);
+                         rootNode.attachChild(currentLine);
+                     }
+                     
+                 }
                 
                 if(name.equals("moveInward") && keyPressed){
                     //littleObject.move(0, 0, 1.0f/20.0f);
