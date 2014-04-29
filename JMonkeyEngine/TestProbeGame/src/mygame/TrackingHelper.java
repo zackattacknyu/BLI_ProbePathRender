@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
 /**
@@ -32,22 +33,10 @@ public class TrackingHelper {
         
     }
     
-    public static Vector3f scaleDisplacement(Vector3f displacement, float xScale, float yScale){
+    public static Vector2f scaleXYDisplacement(Vector2f displacement, float xScale, float yScale){
         float xVal = displacement.getX();
         float yVal = displacement.getY();
-        float zVal = displacement.getZ();
-        
-        float zScale = 0.02f;
-        
-        return new Vector3f(xVal*xScale,yVal*yScale,zVal*zScale);
-    }
-    
-    public static Vector3f scaleDisplacement(Vector3f displacement, float xScale, float yScale, float zScale){
-        float xVal = displacement.getX();
-        float yVal = displacement.getY();
-        float zVal = displacement.getZ();
-        
-        return new Vector3f(xVal*xScale,yVal*yScale,zVal*zScale);
+        return new Vector2f(xVal*xScale,yVal*yScale);
     }
     
     public static Matrix3f getRotationMatrix(float yawInRadians){

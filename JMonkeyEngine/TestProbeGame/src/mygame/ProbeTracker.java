@@ -99,31 +99,39 @@ public class ProbeTracker {
                 currentPitch+firstPitch, 
                 currentRoll+firstRoll);
         
-        
+        Vector2f currentXYDisp = new Vector2f(
+                -dataInterpreter.getDeltaX() + currentManualDeltaX,
+                -dataInterpreter.getDeltaY() + currentManualDeltaY);
         Vector3f currentDisp = new Vector3f(0,0,0);
         
-        float currentDeltaX = -dataInterpreter.getDeltaX() + currentManualDeltaX;
-        float currentDeltaY = -dataInterpreter.getDeltaY() + currentManualDeltaY;
+        currentXYDisp = TrackingHelper.scaleXYDisplacement(
+                currentXYDisp, scaleFactorX, scaleFactorY);
+        
         switch(displacementMode){
             
                 //only use X,Y
             case 0:
-                currentDisp = new Vector3f(currentDeltaX,currentDeltaY,0.0f);
+                currentDisp = new Vector3f(currentXYDisp.getX(),
+                        currentXYDisp.getY(),0.0f);
             break;
 
                 // use X,Y and Yaw
             case 1:
-                currentDisp = TrackingHelper.getXYDisplacement(currentDeltaX,currentDeltaY,currentYaw);
+                currentDisp = TrackingHelper.getXYDisplacement(
+                        currentXYDisp.getX(),
+                        currentXYDisp.getY(),
+                        currentYaw);
             break;
 
                 //use X,Y and Yaw, Pitch, Roll
             case 2:
-                currentDisp = TrackingHelper.getXYZDisplacement(currentDeltaX, currentDeltaY, localRotation);
+                currentDisp = TrackingHelper.getXYZDisplacement(
+                        currentXYDisp.getX(),
+                        currentXYDisp.getY(), 
+                        localRotation);
             break;
         
         }
-        
-        currentDisp = TrackingHelper.scaleDisplacement(currentDisp, scaleFactorX, scaleFactorY);
         
         currentManualDeltaX = 0;
         currentManualDeltaY = 0;
