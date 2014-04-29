@@ -140,10 +140,6 @@ public class ProbeTracker {
         currentY = currentY + currentDisp.getY();
         currentZ = currentZ + currentDisp.getZ();
         
-        if(currentDisp.getZ() > 0){
-            System.out.println("Not 0!!");
-        }
-        
         localTranslation = new Vector3f(currentX,currentY,currentZ);
 
         //here we record the xyz path
