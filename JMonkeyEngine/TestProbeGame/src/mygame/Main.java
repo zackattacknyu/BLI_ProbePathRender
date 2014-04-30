@@ -43,7 +43,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        String objFileLocation = "Models/textured_mesh.obj";
+        String objFileLocation = "Models/textured_mesh2.obj";
         
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
