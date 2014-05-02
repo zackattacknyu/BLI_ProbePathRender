@@ -17,6 +17,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
+import com.jme3.scene.shape.Quad;
+import com.jme3.system.AppSettings;
 import java.util.Properties;
 
 /**
@@ -25,7 +27,7 @@ import java.util.Properties;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject,startBox,endBox,surface;
+    private Spatial littleObject,background,surface;
     private Material ballMat,boxMat,probeMat,lineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
@@ -37,14 +39,42 @@ public class Main extends SimpleApplication {
     
 
     public static void main(String[] args) {
+        
+        /*
+         * Refer to these two web pages to find out about start settings:
+         *      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:appsettings
+         * 
+         *      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:simpleapplication
+         * 
+         * 
+         */
+        Properties appProps = PropertiesHelper.getProperties();
+        AppSettings settings = new AppSettings(true);
+        
+        //adjusts title shown on window
+        settings.setTitle(appProps.getProperty("settings.title"));
+        
+        //adjusts resolution
+        int xRes = Integer.parseInt(appProps.getProperty("settings.xResolution"));
+        int yRes = Integer.parseInt(appProps.getProperty("settings.yResolution"));
+        settings.setResolution(xRes, yRes);
+        
         Main app = new Main();
+        app.setSettings(settings); //disables the setting screen at start-up
+        app.setShowSettings(false); //shows the above settings
+        app.setDisplayFps(false); //makes sure the fps text is not displayed
+        app.setDisplayStatView(false); //makes sure the stat view is not displayed
         app.start();
+        
     }
 
     @Override
     public void simpleInitApp() {
-        String objFileLocation = "Models/textured_mesh2.obj";
         
+        
+        
+        String objFileLocation = "Models/textured_mesh3.obj";
+        viewPort.setBackgroundColor(ColorRGBA.White);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
                 trackerProps.getProperty("lighting.visible"));
@@ -87,13 +117,9 @@ public class Main extends SimpleApplication {
         
         if(lightVisible) addLighting();
         
-        startBox = initSampleBox(boxMat, "startCube");
-        endBox = initSampleBox(boxMat, "endCube");
+        background = initBackgroundBox(boxMat, "background");
         
-        //rootNode.attachChild(startBox);
-        //rootNode.attachChild(endBox);
-        
-        endBox.move(4.0f, 4.0f, 0.0f);
+        rootNode.attachChild(background);
         
         setDefaultCamera();
         enableFlyCam();
@@ -136,12 +162,15 @@ public class Main extends SimpleApplication {
         littleObject.setMaterial(material);
     }
     
-    private Spatial initSampleBox(Material ballMat, String name){
-        Box b = new Box(0.5f, 0.5f, 0.5f);
-        Spatial sampleBox = new Geometry("Box", b);
+    private Spatial initBackgroundBox(Material ballMat, String name){
+        Box b = new Box(10f, 10f, 10f);
+        Quad q = new Quad(10f,10f);
+        Spatial sampleBox = new Geometry("Background", q);
+        sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
         sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
         return sampleBox;
     }
 
@@ -184,65 +213,44 @@ public class Main extends SimpleApplication {
     
     private void initDebugText(){
         
-        yawPitchRollText = initializeNewText();
-        yawPitchRollText.setLocalTranslation(
-                (cam.getWidth()) / 2, 
-                cam.getHeight(), 0);       
+        float currentStartY = 0.0f;
         
-        xyzText = initializeNewText();
-        xyzText.setLocalTranslation(
-                (cam.getWidth()) / 2, 
-                (cam.getHeight() - xyzText.getLineHeight()), 0);
-        
-        scaleXtext = initializeNewText();
-        scaleXtext.setText("Virtual X to real X scale factor "
-                + "(Press X to recalibrate):"
-                + "------------------------- ");
-        scaleXtext.setLocalTranslation(
-                (cam.getWidth() - scaleXtext.getLineWidth()), 
-                (scaleXtext.getLineHeight()*3), 0);
-        scaleXtext.setText("Virtual X to real X scale factor "
-                + "(Press X to recalibrate): " + probeTracker.getScaleFactorX());
-        
-        recordingText = initializeNewText();
+        recordingText = initializeNewText(currentStartY);
         recordingText.setText("Press N to record a new path");
-        recordingText.setLocalTranslation(
-                (cam.getWidth() - recordingText.getLineWidth()) / 2, 
-                (cam.getHeight() - recordingText.getLineHeight()*3), 0);
+        currentStartY = currentStartY + recordingText.getLineHeight();
         
-        resetProbeText = initializeNewText();
+        resetProbeText = initializeNewText(currentStartY);
         resetProbeText.setText("Press H to reset probe to (0,0)");
-        resetProbeText.setLocalTranslation(
-                (cam.getWidth() - resetProbeText.getLineWidth()) / 2, 
-                (cam.getHeight() - resetProbeText.getLineHeight()*4), 0);
+        currentStartY = currentStartY + resetProbeText.getLineHeight();
         
-        scaleYtext = initializeNewText();
-        scaleYtext.setText("Virtual Y to real Y scale factor "
-                + "(Press Y to recalibrate):"
-                + "------------------------- ");
-        scaleYtext.setLocalTranslation(
-                (cam.getWidth() - scaleYtext.getLineWidth()), 
-                (scaleYtext.getLineHeight()*2), 0);
+        readModeText = initializeNewText(currentStartY);
+        currentStartY = currentStartY + readModeText.getLineHeight();
+        readModeText.setText("Probe B to start calibrating the probe");
+        
+        scaleYtext = initializeNewText(currentStartY);
+        currentStartY = currentStartY + scaleYtext.getLineHeight();
         scaleYtext.setText("Virtual Y to real Y scale factor "
                 + "(Press Y to recalibrate): " + probeTracker.getScaleFactorY());
         
-        readModeText = initializeNewText();
-        readModeText.setText("Probe Output Reading (Press V to change): "
-                + "---------------------------------------"
-                + "------------------------------------------------");
-        readModeText.setLocalTranslation(
-                (cam.getWidth() - readModeText.getLineWidth()), 
-                (readModeText.getLineHeight()), 0);
-        readModeText.setText("Probe B to start calibrating the probe");
+        scaleXtext = initializeNewText(currentStartY);
+        currentStartY = currentStartY + scaleXtext.getLineHeight();
+        scaleXtext.setText("Virtual X to real X scale factor "
+                + "(Press X to recalibrate): " + probeTracker.getScaleFactorX());
         
+        yawPitchRollText = initializeNewText(currentStartY);
+        currentStartY = currentStartY + yawPitchRollText.getLineHeight();
         
+        xyzText = initializeNewText(currentStartY);
+        //currentStartY = currentStartY + xyzText.getLineHeight();
         
     }
     
-    private BitmapText initializeNewText(){
+    private BitmapText initializeNewText(float currentStartY){
         
         BitmapText newText = new BitmapText(guiFont,false);
+        newText.setColor(ColorRGBA.Red);
         newText.setSize(guiFont.getCharSet().getRenderedSize());
+        newText.setLocalTranslation(0,currentStartY, 0);
         guiNode.attachChild(newText);
         return newText;
         
