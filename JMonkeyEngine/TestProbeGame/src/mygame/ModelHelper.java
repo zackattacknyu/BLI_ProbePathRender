@@ -17,7 +17,6 @@ public class ModelHelper {
     public static Spatial generateModel(String objFileLocation, Material ballMat, AssetManager assetManager){
         Spatial sampleMesh = assetManager.loadModel(objFileLocation);
         sampleMesh.setMaterial(ballMat); 
-        sampleMesh.scale(40f);
         return sampleMesh;
     }
 }

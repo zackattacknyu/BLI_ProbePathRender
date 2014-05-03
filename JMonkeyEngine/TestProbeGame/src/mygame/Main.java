@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioNode;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -65,15 +66,18 @@ public class Main extends SimpleApplication {
         app.setDisplayFps(false); //makes sure the fps text is not displayed
         app.setDisplayStatView(false); //makes sure the stat view is not displayed
         app.start();
-        
     }
 
     @Override
     public void simpleInitApp() {
         
+        //makes it silent
+        AudioNode silent = new AudioNode(assetManager,"Sounds/ocean.wav");
+        silent.setVolume(0);
+        silent.setLooping(true);
+        silent.play();
         
-        
-        String objFileLocation = "Models/textured_mesh3.obj";
+        String objFileLocation = "Models/lola_mesh.obj";
         viewPort.setBackgroundColor(ColorRGBA.White);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
@@ -81,10 +85,10 @@ public class Main extends SimpleApplication {
         
         if(lightVisible){
             ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
-            ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+            ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/lola_texture.png"));
         }else{
             ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-            ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture_2.png"));
+            ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
         }
         
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
@@ -92,11 +96,18 @@ public class Main extends SimpleApplication {
         surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         
+        Quaternion yaw = new Quaternion();
+        yaw.fromAngleAxis(83*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
+        Quaternion pitch = new Quaternion();
+        pitch.fromAngleAxis(60*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
+        surface.setLocalRotation(yaw.mult(pitch));
+        surface.scale(15f);
+        
         //moves the front of the ball to the (0,0,0) location
-        surface.move(0, 0, -16.5f);
+        //surface.move(0, 0, -16.5f);
         
         //makes the scale better
-        surface.scale(0.75f);
+       // surface.scale(10f);
         
         rootNode.attachChild(surface);
         
@@ -109,12 +120,11 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/Unshaded.j3md");
         lineMaterial.setColor("Color", ColorRGBA.Red);
         
-        initLittleBox(probeMat);
-        
+        littleObject = initLittleBox(probeMat);
         rootNode.attachChild(littleObject);
-        
-        
-        
+        //littleObject = surface;
+        //rootNode.attachChild(initLittleBox(probeMat));
+
         if(lightVisible) addLighting();
         
         background = initBackgroundBox(boxMat, "background");
@@ -154,12 +164,13 @@ public class Main extends SimpleApplication {
         rootNode.addLight(probeLight);
     }
     
-    private void initLittleBox(Material material){
-        littleObject = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
-        littleObject.setName("Probe");
-        littleObject.setLocalScale(1.0f/25.0f);
-        littleObject.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        littleObject.setMaterial(material);
+    private Spatial initLittleBox(Material material){
+        Spatial outputObj = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
+        outputObj.setName("Probe");
+        outputObj.setLocalScale(1.0f/25.0f);
+        outputObj.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        outputObj.setMaterial(material);
+        return outputObj;
     }
     
     private Spatial initBackgroundBox(Material ballMat, String name){
