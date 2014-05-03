@@ -97,9 +97,9 @@ public class Main extends SimpleApplication {
                 objFileLocation, ballMat, assetManager);
         
         Quaternion yaw = new Quaternion();
-        yaw.fromAngleAxis(83*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
+        yaw.fromAngleAxis(185*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
         Quaternion pitch = new Quaternion();
-        pitch.fromAngleAxis(60*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
+        pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
         surface.setLocalRotation(yaw.mult(pitch));
         surface.scale(15f);
         
