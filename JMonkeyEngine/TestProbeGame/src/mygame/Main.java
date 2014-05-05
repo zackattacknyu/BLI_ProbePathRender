@@ -209,7 +209,7 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initXBox(Material ballMat, String name){
-        Box b = new Box(3f, 0.2f, 0.2f);
+        Box b = new Box(0.2f, 0.2f, 3f);
         Spatial sampleBox = new Geometry("Background", b);
         sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
