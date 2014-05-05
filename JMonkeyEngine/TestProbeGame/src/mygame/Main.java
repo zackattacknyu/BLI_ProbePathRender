@@ -28,8 +28,8 @@ import java.util.Properties;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject,background,surface;
-    private Material ballMat,boxMat,probeMat,lineMaterial;
+    private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox;
+    private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
@@ -91,17 +91,24 @@ public class Main extends SimpleApplication {
             ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
         }
         
-        boxMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
+        boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        boxMat.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
+        
+        xMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        xMat.setColor("Color", ColorRGBA.Red);
+        yMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        yMat.setColor("Color", ColorRGBA.Orange);
         
         surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         
         Quaternion yaw = new Quaternion();
-        yaw.fromAngleAxis(185*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
+        yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
         Quaternion pitch = new Quaternion();
         pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
         surface.setLocalRotation(yaw.mult(pitch));
-        surface.scale(15f);
+        surface.scale(80f);
+        surface.move(0, 22, -53);
         
         //moves the front of the ball to the (0,0,0) location
         //surface.move(0, 0, -16.5f);
@@ -109,6 +116,19 @@ public class Main extends SimpleApplication {
         //makes the scale better
        // surface.scale(10f);
         
+        Quaternion surfaceRotation = TrackingHelper.getQuarternion(
+                0, 
+                189*FastMath.DEG_TO_RAD, 
+                92*FastMath.DEG_TO_RAD);
+        //surface.setLocalRotation(surfaceRotation);
+        
+        //surface.setLocalTranslation(0, 22, -53);
+        
+        xAxisBox = initXBox(xMat,"xAxis");
+        yAxisBox = initYBox(yMat,"yAxis");
+        
+        rootNode.attachChild(xAxisBox);
+        rootNode.attachChild(yAxisBox);
         rootNode.attachChild(surface);
         
         
@@ -124,6 +144,9 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(littleObject);
         //littleObject = surface;
         //rootNode.attachChild(initLittleBox(probeMat));
+        
+        
+        moveableObject = littleObject;
 
         if(lightVisible) addLighting();
         
@@ -138,6 +161,7 @@ public class Main extends SimpleApplication {
         probeTracker = new ProbeTracker();
         
         initDebugText();
+        
         
         
     }
@@ -174,9 +198,30 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initBackgroundBox(Material ballMat, String name){
-        Box b = new Box(10f, 10f, 10f);
-        Quad q = new Quad(10f,10f);
-        Spatial sampleBox = new Geometry("Background", q);
+        Box b = new Box(10f, 20f, 2f);
+        Spatial sampleBox = new Geometry("Background", b);
+        sampleBox.setCullHint(Spatial.CullHint.Never);
+        sampleBox.setName(name);
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        return sampleBox;
+    }
+    
+    private Spatial initXBox(Material ballMat, String name){
+        Box b = new Box(3f, 0.2f, 0.2f);
+        Spatial sampleBox = new Geometry("Background", b);
+        sampleBox.setCullHint(Spatial.CullHint.Never);
+        sampleBox.setName(name);
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        return sampleBox;
+    }
+    
+    private Spatial initYBox(Material ballMat, String name){
+        Box b = new Box(0.2f, 3f, 0.2f);
+        Spatial sampleBox = new Geometry("Background", b);
         sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
@@ -193,9 +238,13 @@ public class Main extends SimpleApplication {
         
         probeTracker.updateValues();
         
-        littleObject.setLocalRotation(probeTracker.getDisplayRotation());
+        moveableObject.setLocalRotation(probeTracker.getDisplayRotation());
+        xAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
+        yAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
         
-        littleObject.setLocalTranslation(probeTracker.getLocalTranslation());
+        moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
+        xAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
+        yAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
 
         xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
                 + probeTracker.getCurrentY() + "," 
@@ -212,8 +261,8 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        cam.setLocation(new Vector3f(1.9081001f, 6.6795464f, -16.626781f));
-        cam.setRotation(new Quaternion(0.17346787f, -0.07118106f, 0.012571785f, 0.98218334f));
+        cam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
+        cam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
