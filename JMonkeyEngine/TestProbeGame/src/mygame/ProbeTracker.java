@@ -22,7 +22,7 @@ import java.util.Properties;
  */
 public class ProbeTracker {
     
-    private float currentX,currentY,currentZ;
+    private float currentX=-0.4f,currentY=-0.97f,currentZ=-15.35f;
     
     private float currentManualDeltaX,currentManualDeltaY;
     
