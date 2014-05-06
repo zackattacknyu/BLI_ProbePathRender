@@ -362,7 +362,6 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("rotateClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD1));
         inputManager.addMapping("rotateCounterClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD3));
-        
         inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
         
         inputManager.addMapping("pitchLeft", new KeyTrigger(KeyInput.KEY_NUMPAD7));
@@ -375,9 +374,27 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         
+        inputManager.addMapping("rotCameraLeft", new KeyTrigger(KeyInput.KEY_LEFT));
+        inputManager.addMapping("rotCameraRight", new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addMapping("rotCameraUp", new KeyTrigger(KeyInput.KEY_UP));
+        inputManager.addMapping("rotCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("rotCameraLeft") && keyPressed){
+                    rootNode.rotate(0, -1.0f/20.0f, 0);
+                }
+                if(name.equals("rotCameraRight") && keyPressed){
+                    rootNode.rotate(0, 1.0f/20.0f, 0);
+                }
+                if(name.equals("rotCameraUp") && keyPressed){
+                    rootNode.rotate(1.0f/20.0f, 0, 0);
+                }
+                if(name.equals("rotCameraDown") && keyPressed){
+                    rootNode.rotate(-1.0f/20.0f, 0, 0);
+                }
                 
                 if(name.equals("pickControlPoint") && keyPressed){
                     Vector2f mousePoint = inputManager.getCursorPosition();
@@ -475,6 +492,10 @@ public class Main extends SimpleApplication {
         };
 
         inputManager.addListener(acl,
+                "rotCameraLeft",
+                "rotCameraRight",
+                "rotCameraUp",
+                "rotCameraDown",
                 "pickControlPoint",
                 "moveInward",
                 "moveOutward",
