@@ -28,8 +28,8 @@ import java.util.Properties;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox;
-    private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat;
+    private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox,zAxisBox;
+    private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
     
@@ -98,6 +98,8 @@ public class Main extends SimpleApplication {
         xMat.setColor("Color", ColorRGBA.Red);
         yMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         yMat.setColor("Color", ColorRGBA.Orange);
+        zMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        zMat.setColor("Color", ColorRGBA.Green);
         
         surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
@@ -126,10 +128,12 @@ public class Main extends SimpleApplication {
         
         xAxisBox = initXBox(xMat,"xAxis");
         yAxisBox = initYBox(yMat,"yAxis");
-        
+        zAxisBox = initZBox(zMat,"zAxis");
+        rootNode.attachChild(surface);
         rootNode.attachChild(xAxisBox);
         rootNode.attachChild(yAxisBox);
-        rootNode.attachChild(surface);
+        rootNode.attachChild(zAxisBox);
+        
         
         
         probeMat = new Material(assetManager, 
@@ -141,7 +145,7 @@ public class Main extends SimpleApplication {
         lineMaterial.setColor("Color", ColorRGBA.Red);
         
         littleObject = initLittleBox(probeMat);
-        rootNode.attachChild(littleObject);
+        //rootNode.attachChild(littleObject);
         //littleObject = surface;
         //rootNode.attachChild(initLittleBox(probeMat));
         
@@ -229,6 +233,17 @@ public class Main extends SimpleApplication {
         sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
         return sampleBox;
     }
+    
+    private Spatial initZBox(Material ballMat, String name){
+        Box b = new Box(3f, 0.2f, 0.2f);
+        Spatial sampleBox = new Geometry("Background", b);
+        sampleBox.setCullHint(Spatial.CullHint.Never);
+        sampleBox.setName(name);
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        return sampleBox;
+    }
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -241,11 +256,13 @@ public class Main extends SimpleApplication {
         moveableObject.setLocalRotation(probeTracker.getDisplayRotation());
         xAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
         yAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
+        zAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
         
         moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
         xAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
         yAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
-
+        zAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
+        
         xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
                 + probeTracker.getCurrentY() + "," 
                 + probeTracker.getCurrentZ() + ")");
