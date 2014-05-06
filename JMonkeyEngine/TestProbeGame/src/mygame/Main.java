@@ -45,7 +45,7 @@ public class Main extends SimpleApplication {
     
     private Properties trackerProps;
     private boolean lightVisible;
-    
+    private Vector3f zAxisBoxInitLocation;
     private Node shootables;
     
 
@@ -140,11 +140,12 @@ public class Main extends SimpleApplication {
         yAxisBox = initYBox(yMat,"yAxis");
         zAxisBox = initZBox(zMat,"zAxis");
         //rootNode.attachChild(surface);
+        
         rootNode.attachChild(xAxisBox);
         rootNode.attachChild(yAxisBox);
         rootNode.attachChild(zAxisBox);
         
-        
+        zAxisBoxInitLocation = new Vector3f(0,0,1);
         
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -245,7 +246,7 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initZBox(Material ballMat, String name){
-        Box b = new Box(3f, 0.2f, 0.2f);
+        Box b = new Box(2f, 0.2f, 0.2f);
         return initBox(b,ballMat,name);
     }
 
@@ -265,7 +266,7 @@ public class Main extends SimpleApplication {
         moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
         xAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
         yAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
-        zAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
+        zAxisBox.setLocalTranslation(probeTracker.getLocalTranslation().add(zAxisBoxInitLocation));
         
         xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
                 + probeTracker.getCurrentY() + "," 
