@@ -17,6 +17,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -411,9 +412,7 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("pickControlPoint") && keyPressed){
                     Vector2f click2d = inputManager.getCursorPosition();
-                    System.out.println("Mouse Point (X,Y): (" + 
-                            click2d.getX() + "," + 
-                            click2d.getY() + ")");
+                    System.out.println("Mouse Point:" + click2d);
                     
                     CollisionResults results = new CollisionResults();
                     Vector3f click3d = cam.getWorldCoordinates(
@@ -425,12 +424,21 @@ public class Main extends SimpleApplication {
                     
                     for (int i = 0; i < results.size(); i++) {
                         // For each hit, we know distance, impact point, name of geometry.
-                        float dist = results.getCollision(i).getDistance();
                         Vector3f pt = results.getCollision(i).getContactPoint();
-                        String hit = results.getCollision(i).getGeometry().getName();
-                        System.out.println("* Collision #" + i);
-                        System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+                        Triangle tri = new Triangle();
+                        tri = results.getCollision(i).getTriangle(tri);
+                        System.out.println("Collision Point:" + pt);
+                        System.out.println("Collision Triangle Vertices:");
+                        System.out.println("    " + tri.get1());
+                        System.out.println("    " + tri.get2());
+                        System.out.println("    " + tri.get3());
                     }
+                    System.out.println();
+                    
+                    /*
+                     * TODO: Use the vertex and triangle information to draw
+                     *      the tangent plane on the surface
+                     */
                     
                 }
                 
