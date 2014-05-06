@@ -3,15 +3,19 @@ package mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioNode;
 import com.jme3.font.BitmapText;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -212,37 +216,29 @@ public class Main extends SimpleApplication {
         return sampleBox;
     }
     
-    private Spatial initXBox(Material ballMat, String name){
-        Box b = new Box(0.2f, 0.2f, 3f);
+    private Spatial initBox(Box b,Material ballMat,String name){
         Spatial sampleBox = new Geometry("Background", b);
-        sampleBox.setCullHint(Spatial.CullHint.Never);
+        //sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
         sampleBox.setMaterial(ballMat);
         sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
         return sampleBox;
+    }
+    
+    private Spatial initXBox(Material ballMat, String name){
+        Box b = new Box(0.2f, 0.2f, 3f);
+        return initBox(b,ballMat,name);
     }
     
     private Spatial initYBox(Material ballMat, String name){
         Box b = new Box(0.2f, 3f, 0.2f);
-        Spatial sampleBox = new Geometry("Background", b);
-        sampleBox.setCullHint(Spatial.CullHint.Never);
-        sampleBox.setName(name);
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        return sampleBox;
+        return initBox(b,ballMat,name);
     }
     
     private Spatial initZBox(Material ballMat, String name){
         Box b = new Box(3f, 0.2f, 0.2f);
-        Spatial sampleBox = new Geometry("Background", b);
-        sampleBox.setCullHint(Spatial.CullHint.Never);
-        sampleBox.setName(name);
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        return sampleBox;
+        return initBox(b,ballMat,name);
     }
 
     @Override
@@ -377,9 +373,18 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
+        inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("pickControlPoint") && keyPressed){
+                    Vector2f mousePoint = inputManager.getCursorPosition();
+                    System.out.println("Mouse Point (X,Y): (" + 
+                            mousePoint.getX() + "," + 
+                            mousePoint.getY() + ")");
+                }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
                      
@@ -469,7 +474,8 @@ public class Main extends SimpleApplication {
             }
         };
 
-        inputManager.addListener(acl, 
+        inputManager.addListener(acl,
+                "pickControlPoint",
                 "moveInward",
                 "moveOutward",
                 "startStopNewPath",
