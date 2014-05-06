@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioNode;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
@@ -15,10 +16,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
@@ -41,6 +44,8 @@ public class Main extends SimpleApplication {
     
     private Properties trackerProps;
     private boolean lightVisible;
+    
+    private Node shootables;
     
 
     public static void main(String[] args) {
@@ -133,7 +138,7 @@ public class Main extends SimpleApplication {
         xAxisBox = initXBox(xMat,"xAxis");
         yAxisBox = initYBox(yMat,"yAxis");
         zAxisBox = initZBox(zMat,"zAxis");
-        rootNode.attachChild(surface);
+        //rootNode.attachChild(surface);
         rootNode.attachChild(xAxisBox);
         rootNode.attachChild(yAxisBox);
         rootNode.attachChild(zAxisBox);
@@ -170,7 +175,9 @@ public class Main extends SimpleApplication {
         
         initDebugText();
         
-        
+        shootables = new Node("shootables");
+        shootables.attachChild(surface);
+        rootNode.attachChild(shootables);
         
     }
     
@@ -385,6 +392,12 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("rotCameraLeft") && keyPressed){
                     rootNode.rotate(0, -1.0f/20.0f, 0);
+                    /*To be used to change how rotation is implemented if desired:
+                     * Quaternion rotation = new Quaternion();
+                    rotation.fromAngleAxis(-1.0f/20.0f, Vector3f.UNIT_Y);
+                    Vector3f newLocation = rotation.toRotationMatrix().mult(cam.getLocation());
+                    cam.setLocation(newLocation);
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);*/
                 }
                 if(name.equals("rotCameraRight") && keyPressed){
                     rootNode.rotate(0, 1.0f/20.0f, 0);
@@ -397,10 +410,28 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("pickControlPoint") && keyPressed){
-                    Vector2f mousePoint = inputManager.getCursorPosition();
+                    Vector2f click2d = inputManager.getCursorPosition();
                     System.out.println("Mouse Point (X,Y): (" + 
-                            mousePoint.getX() + "," + 
-                            mousePoint.getY() + ")");
+                            click2d.getX() + "," + 
+                            click2d.getY() + ")");
+                    
+                    CollisionResults results = new CollisionResults();
+                    Vector3f click3d = cam.getWorldCoordinates(
+                        new Vector2f(click2d.x, click2d.y), 0f).clone();
+                    Vector3f dir = cam.getWorldCoordinates(
+                        new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+                    Ray ray = new Ray(click3d, dir);
+                    shootables.collideWith(ray, results);
+                    
+                    for (int i = 0; i < results.size(); i++) {
+                        // For each hit, we know distance, impact point, name of geometry.
+                        float dist = results.getCollision(i).getDistance();
+                        Vector3f pt = results.getCollision(i).getContactPoint();
+                        String hit = results.getCollision(i).getGeometry().getName();
+                        System.out.println("* Collision #" + i);
+                        System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+                    }
+                    
                 }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
