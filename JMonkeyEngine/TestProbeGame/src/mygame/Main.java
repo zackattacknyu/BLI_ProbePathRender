@@ -441,7 +441,26 @@ public class Main extends SimpleApplication {
                     /*
                      * TODO: Use the vertex and triangle information to draw
                      *      the tangent plane on the surface
+                     * 
+                     * This will be accomplished by noting the following:
+                     *  For normal (x,y,z), x=cos(theta), y=cos(phi), z=sin(theta)
+                     *  The tangent plane is accomplished with the following:
+                     *      rotate x by phi
+                     *      rotate z by theta
                      */
+                    
+                    Box b = new Box(2f,0.2f,2f);
+                    Spatial currentPlane = initBox(b,lineMaterial,"tangeant");
+                    Vector3f normal = results.getCollision(0).getContactNormal();
+                    float phi = (float) Math.acos(normal.getY());
+                    float theta = (float) Math.acos(normal.getX());
+                    Quaternion phiRot = new Quaternion();
+                    Quaternion thetaRot = new Quaternion();
+                    phiRot.fromAngleAxis(phi, Vector3f.UNIT_X);
+                    thetaRot.fromAngleAxis(theta, Vector3f.UNIT_Z);
+                    currentPlane.rotate(phi, 0, theta);
+                    currentPlane.setLocalTranslation(results.getCollision(0).getContactPoint());
+                    rootNode.attachChild(currentPlane);
                     
                 }
                 
