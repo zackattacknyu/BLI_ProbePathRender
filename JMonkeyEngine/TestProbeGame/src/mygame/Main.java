@@ -46,7 +46,7 @@ public class Main extends SimpleApplication {
     private Properties trackerProps;
     private boolean lightVisible;
     private Vector3f zAxisBoxInitLocation;
-    private Node shootables;
+    private Node shootables,moveable;
     
 
     public static void main(String[] args) {
@@ -139,11 +139,12 @@ public class Main extends SimpleApplication {
         xAxisBox = initXBox(xMat,"xAxis");
         yAxisBox = initYBox(yMat,"yAxis");
         zAxisBox = initZBox(zMat,"zAxis");
-        //rootNode.attachChild(surface);
         
-        rootNode.attachChild(xAxisBox);
-        rootNode.attachChild(yAxisBox);
-        rootNode.attachChild(zAxisBox);
+        moveable = new Node("moveable");
+        moveable.attachChild(xAxisBox);
+        moveable.attachChild(yAxisBox);
+        moveable.attachChild(zAxisBox);
+        rootNode.attachChild(moveable);
         
         zAxisBoxInitLocation = new Vector3f(0,0,1);
         
@@ -179,6 +180,7 @@ public class Main extends SimpleApplication {
         
         shootables = new Node("shootables");
         shootables.attachChild(surface);
+        
         rootNode.attachChild(shootables);
         
     }
@@ -258,15 +260,10 @@ public class Main extends SimpleApplication {
         
         probeTracker.updateValues();
         
-        moveableObject.setLocalRotation(probeTracker.getDisplayRotation());
-        xAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
-        yAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
-        zAxisBox.setLocalRotation(probeTracker.getDisplayRotation());
+        moveable.setLocalRotation(probeTracker.getDisplayRotation());
         
-        moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
-        xAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
-        yAxisBox.setLocalTranslation(probeTracker.getLocalTranslation());
-        zAxisBox.setLocalTranslation(probeTracker.getLocalTranslation().add(zAxisBoxInitLocation));
+        moveable.setLocalTranslation(probeTracker.getLocalTranslation());
+        //zAxisBox.move(zAxisBoxInitLocation);
         
         xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
                 + probeTracker.getCurrentY() + "," 
