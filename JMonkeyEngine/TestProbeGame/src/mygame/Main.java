@@ -89,7 +89,12 @@ public class Main extends SimpleApplication {
         silent.play();
         
         String objFileLocation = "Models/lola_mesh.obj";
-        viewPort.setBackgroundColor(ColorRGBA.White);
+        ColorRGBA backgroundColor = new ColorRGBA(
+                205.0f/256.0f,
+                204.0f/256.0f,
+                207.0f/256.0f,
+                1.0f);
+        viewPort.setBackgroundColor(backgroundColor);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
                 trackerProps.getProperty("lighting.visible"));
@@ -218,13 +223,13 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initBackgroundBox(Material ballMat, String name){
-        Box b = new Box(10f, 20f, 2f);
+        Box b = new Box(30f, 30f, 2f);
         Spatial sampleBox = new Geometry("Background", b);
         sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
         sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        sampleBox.setLocalTranslation(10.0f, -10.0f, 0.0f);
         return sampleBox;
     }
     
@@ -418,9 +423,13 @@ public class Main extends SimpleApplication {
                     Ray ray = new Ray(click3d, dir);
                     shootables.collideWith(ray, results);
                     
-                    CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                    moveable.rotate(point.getRotation());
-                    moveable.setLocalTranslation(point.getContactPoint());
+                    if(results.size() == 1){
+                        CollisionPoint point = new CollisionPoint(results.getCollision(0));
+                        moveable.rotate(point.getRotation());
+                        moveable.setLocalTranslation(point.getContactPoint());
+                    }
+                    
+                    
                     
                 }
                 
