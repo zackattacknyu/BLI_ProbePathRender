@@ -420,27 +420,9 @@ public class Main extends SimpleApplication {
                     Ray ray = new Ray(click3d, dir);
                     shootables.collideWith(ray, results);
                     
-                    for (int i = 0; i < results.size(); i++) {
-                        // For each hit, we know distance, impact point, name of geometry.
-                        Vector3f pt = results.getCollision(i).getContactPoint();
-                        Vector3f normal = results.getCollision(i).getContactNormal();
-                        Triangle tri = new Triangle();
-                        tri = results.getCollision(i).getTriangle(tri);
-                        System.out.println("Collision Point:" + pt);
-                        System.out.println("Collision Normal: " + normal);
-                        System.out.println("Collision Triangle Vertices:");
-                        System.out.println("    " + tri.get1());
-                        System.out.println("    " + tri.get2());
-                        System.out.println("    " + tri.get3());
-                    }
-                    System.out.println();
-                    
-                    Box b = new Box(2f,0.2f,2f);
-                    Spatial currentPlane = initBox(b,lineMaterial,"tangeant");
                     CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                    currentPlane.rotate(point.getRotation());
-                    currentPlane.setLocalTranslation(point.getContactPoint());
-                    rootNode.attachChild(currentPlane);
+                    moveable.rotate(point.getRotation());
+                    moveable.setLocalTranslation(point.getContactPoint());
                     
                 }
                 
