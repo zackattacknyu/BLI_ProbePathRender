@@ -435,23 +435,11 @@ public class Main extends SimpleApplication {
                     }
                     System.out.println();
                     
-                    /*
-                     * This draws the tangeant plane at a given point.
-                     * 
-                     * The idea is from this post on Stack Overflow:
-                     * http://stackoverflow.com/questions/13199126/find-opengl-rotation-matrix-for-a-plane-given-the-normal-vector-after-the-rotat
-                     * 
-                     */
-                    
                     Box b = new Box(2f,0.2f,2f);
                     Spatial currentPlane = initBox(b,lineMaterial,"tangeant");
-                    Vector3f baselineNormal = new Vector3f(0,1,0);
-                    Vector3f normal = results.getCollision(0).getContactNormal();
-                    float rotAngle = (float) Math.acos(baselineNormal.dot(normal));
-                    Vector3f rotAxis = baselineNormal.cross(normal);
-                    Quaternion rotation = new Quaternion();
-                    currentPlane.rotate(rotation.fromAngleAxis(rotAngle, rotAxis));
-                    currentPlane.setLocalTranslation(results.getCollision(0).getContactPoint());
+                    CollisionPoint point = new CollisionPoint(results.getCollision(0));
+                    currentPlane.rotate(point.getRotation());
+                    currentPlane.setLocalTranslation(point.getContactPoint());
                     rootNode.attachChild(currentPlane);
                     
                 }
