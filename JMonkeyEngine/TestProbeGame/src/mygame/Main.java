@@ -426,7 +426,7 @@ public class Main extends SimpleApplication {
                     if(results.size() == 1){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
                         moveable.rotate(point.getRotation());
-                        moveable.setLocalTranslation(point.getContactPoint());
+                        probeTracker.setCurrentPosition(point.getContactPoint());
                     }
                     
                     

@@ -23,6 +23,7 @@ import java.util.Properties;
 public class ProbeTracker {
     
     private float currentX=-0.4f,currentY=-0.97f,currentZ=-15.35f;
+    private final Vector3f startingPosition = new Vector3f(currentX,currentY,currentZ);
     
     private float currentManualDeltaX,currentManualDeltaY;
     
@@ -207,12 +208,14 @@ public class ProbeTracker {
 
     public void resetProbe(){
         
-        currentX = 0;
-        currentY = 0;
-        currentZ = 0;
+        setCurrentPosition(startingPosition);
         
     }
-    
+    public void setCurrentPosition(Vector3f position){
+        currentX = position.getX();
+        currentY = position.getY();
+        currentZ = position.getZ();
+    }
     public void moveUp(){
         currentManualDeltaY = 4.0f;
     }
