@@ -28,6 +28,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -136,9 +137,9 @@ public class Main extends SimpleApplication {
         
         //surface.setLocalTranslation(0, 22, -53);
         
-        xAxisBox = initXBox(xMat,"xAxis");
-        yAxisBox = initYBox(yMat,"yAxis");
-        zAxisBox = initZBox(zMat,"zAxis");
+        xAxisBox = initXLine(xMat);
+        yAxisBox = initYLine(yMat);
+        zAxisBox = initZLine(zMat);
         
         moveable = new Node("moveable");
         moveable.attachChild(xAxisBox);
@@ -227,29 +228,26 @@ public class Main extends SimpleApplication {
         return sampleBox;
     }
     
-    private Spatial initBox(Box b,Material ballMat,String name){
-        Spatial sampleBox = new Geometry("Background", b);
-        //sampleBox.setCullHint(Spatial.CullHint.Never);
-        sampleBox.setName(name);
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        return sampleBox;
+    private Spatial initXLine(Material ballMat){
+        ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
+        xLineVertices.add(new Vector3f(0,0,4f));
+        xLineVertices.add(new Vector3f(0,0,-4f));
+        return LineHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
-    private Spatial initXBox(Material ballMat, String name){
-        Box b = new Box(0.2f, 0.2f, 3f);
-        return initBox(b,ballMat,name);
-    }
-    
-    private Spatial initYBox(Material ballMat, String name){
+    private Spatial initYLine(Material ballMat){
         Box b = new Box(0.2f, 3f, 0.2f);
-        return initBox(b,ballMat,name);
+        ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
+        yLineVertices.add(new Vector3f(0,4f,0));
+        yLineVertices.add(new Vector3f(0,-4f,0));
+        return LineHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
-    private Spatial initZBox(Material ballMat, String name){
-        Box b = new Box(2f, 0.2f, 0.2f);
-        return initBox(b,ballMat,name);
+    private Spatial initZLine(Material ballMat){
+        ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
+        zLineVertices.add(new Vector3f(-3f,0,0));
+        zLineVertices.add(new Vector3f(0.2f,0,0));
+        return LineHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
     @Override
