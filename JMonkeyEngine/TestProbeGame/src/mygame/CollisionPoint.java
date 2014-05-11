@@ -29,7 +29,7 @@ public class CollisionPoint {
     
     private void calculateRotation(){
         
-        Vector3f baselineNormal = new Vector3f(0,1,0);
+        Vector3f baselineNormal = new Vector3f(1,0,0);
         float rotAngle = (float) Math.acos(baselineNormal.dot(normal));
         Vector3f rotAxis = baselineNormal.cross(normal);
         rotation = new Quaternion();
