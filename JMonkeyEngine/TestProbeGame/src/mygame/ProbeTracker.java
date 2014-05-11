@@ -209,13 +209,28 @@ public class ProbeTracker {
     public void resetProbe(){
         
         setCurrentPosition(startingPosition);
+        setBaselineRotation(firstYaw,firstPitch,firstRoll);
         
     }
     public void setCurrentPosition(Vector3f position){
         currentX = position.getX();
         currentY = position.getY();
         currentZ = position.getZ();
+        
     }
+    
+    public void setBaselineRotation(float yaw, float pitch, float roll){
+        baselineYaw = yaw;
+        baselinePitch = pitch;
+        baselineRoll = roll;
+    }
+    
+    public void setBaselineRotation(Quaternion rotation){
+        setBaselineRotation(TrackingHelper.getYaw(rotation),
+                TrackingHelper.getPitch(rotation),
+                TrackingHelper.getRoll(rotation));        
+    }
+    
     public void moveUp(){
         currentManualDeltaY = 4.0f;
     }

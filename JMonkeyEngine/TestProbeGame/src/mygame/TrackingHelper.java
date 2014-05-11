@@ -70,4 +70,14 @@ public class TrackingHelper {
         return yawPitch.mult(roll);
     }
     
+    public static float getYaw(Quaternion rotation){
+        return rotation.toAngleAxis(Vector3f.UNIT_Z);
+    }
+    public static float getPitch(Quaternion rotation){
+        return rotation.toAngleAxis(Vector3f.UNIT_X);
+    }
+    public static float getRoll(Quaternion rotation){
+        return rotation.toAngleAxis(Vector3f.UNIT_Y);
+    }
+    
 }

@@ -40,12 +40,14 @@ public class Main extends SimpleApplication {
     private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox,zAxisBox;
     private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
     
-    private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, readModeText, recordingText, resetProbeText;
+    private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, 
+            readModeText, recordingText, resetProbeText, probeMoveModeText;
     
     private ProbeTracker probeTracker;
     
     private Properties trackerProps;
     private boolean lightVisible;
+    private boolean moveProbe = false;
     private Vector3f zAxisBoxInitLocation;
     private Node shootables,moveable;
     
@@ -250,8 +252,8 @@ public class Main extends SimpleApplication {
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
-        zLineVertices.add(new Vector3f(-3f,0,0));
-        zLineVertices.add(new Vector3f(0.2f,0,0));
+        zLineVertices.add(new Vector3f(-4f,0,0));
+        zLineVertices.add(new Vector3f(2f,0,0));
         return LineHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
@@ -323,7 +325,10 @@ public class Main extends SimpleApplication {
         currentStartY = currentStartY + yawPitchRollText.getLineHeight();
         
         xyzText = initializeNewText(currentStartY);
-        //currentStartY = currentStartY + xyzText.getLineHeight();
+        currentStartY = currentStartY + xyzText.getLineHeight();
+        
+        probeMoveModeText = initializeNewText(currentStartY);
+        probeMoveModeText.setText("Press J to Enable Clicking Probe Movement");
         
     }
     
@@ -388,9 +393,20 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("rotCameraUp", new KeyTrigger(KeyInput.KEY_UP));
         inputManager.addMapping("rotCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
         
+        inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("changeProbeMoveMode") && keyPressed){
+                    moveProbe = !moveProbe;
+                    if(moveProbe){
+                        probeMoveModeText.setText("Press J to Disable Clicking Probe Movement");
+                    }else{
+                        probeMoveModeText.setText("Press J to Enable Clicking Probe Movement");
+                    }
+                }
                 
                 if(name.equals("rotCameraLeft") && keyPressed){
                     rootNode.rotate(0, -1.0f/20.0f, 0);
@@ -423,9 +439,10 @@ public class Main extends SimpleApplication {
                     Ray ray = new Ray(click3d, dir);
                     shootables.collideWith(ray, results);
                     
-                    if(results.size() == 1){
+                    if(results.size() == 1 && moveProbe){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                        moveable.rotate(point.getRotation());
+                        //moveable.rotate(point.getRotation());
+                        probeTracker.setBaselineRotation(point.getRotation());
                         probeTracker.setCurrentPosition(point.getContactPoint());
                     }
                     
@@ -544,7 +561,8 @@ public class Main extends SimpleApplication {
                 "pitchRight",
                 "pitchLeft",
                 "rollBackward",
-                "rollForward");
+                "rollForward",
+                "changeProbeMoveMode");
 
     }
 }
