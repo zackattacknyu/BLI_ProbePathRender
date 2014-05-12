@@ -447,7 +447,7 @@ public class Main extends SimpleApplication {
                      probeTracker.updatePathRecording();
                      recordingText.setText(probeTracker.getRecordingText());
                      if(probeTracker.isNewPathExists()){
-                         currentLine = 
+                         Spatial currentLine = 
                                  LineHelper.createLineFromVertices(
                                  probeTracker.getCurrentPathVertices(), 
                                  ballMat);
