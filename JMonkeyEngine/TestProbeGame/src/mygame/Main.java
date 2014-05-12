@@ -4,7 +4,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -17,7 +16,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -26,7 +24,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
-import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -48,8 +45,9 @@ public class Main extends SimpleApplication {
     private Properties trackerProps;
     private boolean lightVisible;
     private boolean moveProbe = false;
-    private Vector3f zAxisBoxInitLocation;
-    private Node shootables,moveable;
+    private boolean moveableObjectIsProbe = true;
+    private Node shootables,probeRep,currentLineNode;
+    private Spatial currentLine;
     
 
     public static void main(String[] args) {
@@ -130,31 +128,16 @@ public class Main extends SimpleApplication {
         surface.scale(80f);
         surface.move(0, 22, -53);
         
-        //moves the front of the ball to the (0,0,0) location
-        //surface.move(0, 0, -16.5f);
-        
-        //makes the scale better
-       // surface.scale(10f);
-        
-        Quaternion surfaceRotation = TrackingHelper.getQuarternion(
-                0, 
-                189*FastMath.DEG_TO_RAD, 
-                92*FastMath.DEG_TO_RAD);
-        //surface.setLocalRotation(surfaceRotation);
-        
-        //surface.setLocalTranslation(0, 22, -53);
-        
         xAxisBox = initXLine(xMat);
         yAxisBox = initYLine(yMat);
         zAxisBox = initZLine(zMat);
         
-        moveable = new Node("moveable");
-        moveable.attachChild(xAxisBox);
-        moveable.attachChild(yAxisBox);
-        moveable.attachChild(zAxisBox);
-        rootNode.attachChild(moveable);
-        
-        zAxisBoxInitLocation = new Vector3f(0,0,1);
+        probeRep = new Node("probeRep");
+        probeRep.attachChild(xAxisBox);
+        probeRep.attachChild(yAxisBox);
+        probeRep.attachChild(zAxisBox);
+        rootNode.attachChild(probeRep);
+        moveableObject = probeRep;
         
         probeMat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
@@ -164,13 +147,10 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/Unshaded.j3md");
         lineMaterial.setColor("Color", ColorRGBA.Red);
         
-        littleObject = initLittleBox(probeMat);
+        //littleObject = initLittleBox(probeMat);
         //rootNode.attachChild(littleObject);
         //littleObject = surface;
         //rootNode.attachChild(initLittleBox(probeMat));
-        
-        
-        moveableObject = littleObject;
 
         if(lightVisible) addLighting();
         
@@ -265,9 +245,9 @@ public class Main extends SimpleApplication {
         
         probeTracker.updateValues();
         
-        moveable.setLocalRotation(probeTracker.getDisplayRotation());
+        moveableObject.setLocalRotation(probeTracker.getDisplayRotation());
         
-        moveable.setLocalTranslation(probeTracker.getLocalTranslation());
+        moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
         //zAxisBox.move(zAxisBoxInitLocation);
         
         xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
@@ -393,11 +373,23 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("rotCameraUp", new KeyTrigger(KeyInput.KEY_UP));
         inputManager.addMapping("rotCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
         
+        inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
+        
         inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
         
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("changeMoveableObject") && keyPressed){
+                    moveableObjectIsProbe = !moveableObjectIsProbe;
+                    if(moveableObjectIsProbe){
+                        moveableObject = probeRep;
+                    }else{
+                        //moveableObject = currentLineNode;
+                        moveableObject = currentLine;
+                    }
+                }
                 
                 if(name.equals("changeProbeMoveMode") && keyPressed){
                     moveProbe = !moveProbe;
@@ -455,12 +447,16 @@ public class Main extends SimpleApplication {
                      probeTracker.updatePathRecording();
                      recordingText.setText(probeTracker.getRecordingText());
                      if(probeTracker.isNewPathExists()){
-                         Spatial currentLine = 
+                         currentLine = 
                                  LineHelper.createLineFromVertices(
                                  probeTracker.getCurrentPathVertices(), 
                                  ballMat);
                          currentLine.setMaterial(lineMaterial);
+                         currentLineNode = new Node("currentLine");
+                         currentLineNode.setLocalTranslation(probeTracker.getFirstPathVertex());
+                         currentLineNode.attachChild(currentLine);
                          rootNode.attachChild(currentLine);
+                         //rootNode.attachChild(currentLineNode);
                      }
                      
                  }
@@ -562,7 +558,8 @@ public class Main extends SimpleApplication {
                 "pitchLeft",
                 "rollBackward",
                 "rollForward",
-                "changeProbeMoveMode");
+                "changeProbeMoveMode",
+                "changeMoveableObject");
 
     }
 }
