@@ -195,7 +195,7 @@ public class Main extends SimpleApplication {
         rootNode.addLight(probeLight);
     }
     
-    private Spatial initBox(Box b,Material ballMat,String name){
+    /*private Spatial initBox(Box b,Material ballMat,String name){
         Spatial sampleBox = new Geometry("Plane", b);
         //sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
@@ -212,7 +212,7 @@ public class Main extends SimpleApplication {
         outputObj.setLocalTranslation(0.0f, 0.0f, 0.0f);
         outputObj.setMaterial(material);
         return outputObj;
-    }
+    }*/
     
     private Spatial initBackgroundBox(Material ballMat, String name){
         Box b = new Box(30f, 30f, 2f);
