@@ -195,6 +195,16 @@ public class Main extends SimpleApplication {
         rootNode.addLight(probeLight);
     }
     
+    private Spatial initBox(Box b,Material ballMat,String name){
+        Spatial sampleBox = new Geometry("Background", b);
+        //sampleBox.setCullHint(Spatial.CullHint.Never);
+        sampleBox.setName(name);
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
+        return sampleBox;
+    }
+    
     private Spatial initLittleBox(Material material){
         Spatial outputObj = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
         outputObj.setName("Probe");
@@ -433,7 +443,13 @@ public class Main extends SimpleApplication {
                     
                     if(results.size() == 1 && moveProbe){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                        //moveable.rotate(point.getRotation());
+                        System.out.println(point.getContactPoint());
+                        /*moveable.rotate(point.getRotation());
+                        Box b = new Box(2f,0.2f,2f);
+                        Spatial currentPlane = initBox(b,lineMaterial,"tangeant");
+                        currentPlane.rotate(point.getRotation());
+                        currentPlane.setLocalTranslation(point.getContactPoint());
+                        rootNode.attachChild(currentPlane);*/
                         probeTracker.setBaselineRotation(point.getRotation());
                         probeTracker.setCurrentPosition(point.getContactPoint());
                     }
