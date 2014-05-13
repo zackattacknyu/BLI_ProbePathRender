@@ -353,6 +353,10 @@ public class ProbeTracker {
         return currentPathVertices.get(0);
     }
     
+    public Vector3f getLastPathVertex(){
+        return currentPathVertices.get(currentPathVertices.size()-1);
+    }
+    
     public void incrementReadMode(){
         
         readMode++;

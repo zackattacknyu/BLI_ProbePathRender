@@ -14,6 +14,7 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -42,11 +43,14 @@ public class Main extends SimpleApplication {
     
     private ProbeTracker probeTracker;
     
+    private Spatial lastLine;
+    
     private Properties trackerProps;
     private boolean lightVisible;
     private boolean moveProbe = false;
     private boolean moveableObjectIsProbe = true;
-    private Node shootables,probeRep,currentLineNode;
+    private boolean moveLine = false;
+    private Node shootables,probeRep;
     private Spatial currentLine;
     
 
@@ -145,7 +149,7 @@ public class Main extends SimpleApplication {
         
         lineMaterial = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        lineMaterial.setColor("Color", ColorRGBA.Red);
+        lineMaterial.setColor("Color", ColorRGBA.Black);
         
         //littleObject = initLittleBox(probeMat);
         //rootNode.attachChild(littleObject);
@@ -336,17 +340,7 @@ public class Main extends SimpleApplication {
     private void displayReadMode(){
         
         readModeText.setText(probeTracker.getReadModeText());
-        
-        
-    }
-    
-    private void displayChildren(){
-        
-        System.out.println("Current Root Node Children are:");
-        for(Spatial s: rootNode.getChildren()){
-            System.out.println(s.getName());
-        }
-        System.out.println();
+                
     }
 
     private void initKeyboardInputs() {
@@ -395,6 +389,8 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
         
         inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
+        
+        inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
         ActionListener acl = new ActionListener() {
 
@@ -450,24 +446,44 @@ public class Main extends SimpleApplication {
                     Ray ray = new Ray(click3d, dir);
                     shootables.collideWith(ray, results);
                     
-                    if(results.size() == 1 && moveProbe){
+                    if(results.size() == 1){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
                         System.out.println(point.getContactPoint());
-                        //moveable.rotate(point.getRotation());
-                        ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
-                        normalVertices.add(point.getContactPoint());
-                        normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
-                        Spatial controlPointNormal = 
-                                LineHelper.createLineFromVertices(
-                                normalVertices, lineMaterial);
-                        rootNode.attachChild(controlPointNormal);
-                        //displayChildren();
-                        probeTracker.setBaselineRotation(point.getRotation());
-                        probeTracker.setCurrentPosition(point.getContactPoint());
+                        
+                        if(moveLine){
+                            LineTransformation lineMove = new LineTransformation(
+                                    probeTracker.getFirstPathVertex(),
+                                    point.getContactPoint(),
+                                    probeTracker.getLastPathVertex());
+                            lastLine.rotate(lineMove.getOutputRotation());
+                            lastLine.move(lineMove.getOutputTranslation());
+                        }else if(moveProbe){
+                            ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
+                            normalVertices.add(point.getContactPoint());
+                            normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
+                            Spatial controlPointNormal = 
+                                    LineHelper.createLineFromVertices(
+                                    normalVertices, lineMaterial);
+                            rootNode.attachChild(controlPointNormal);
+                            probeTracker.setBaselineRotation(point.getRotation());
+                            probeTracker.setCurrentPosition(point.getContactPoint());
+                        }
+                        
                     }
                     
                     
                     
+                }
+                
+                if(name.equals("changeLineMoveMode") && keyPressed){
+                    if(!moveLine){
+                        System.out.println("Last Line will be moved "
+                            + "to next point clicked");
+                        moveLine = true;
+                    }else{
+                        System.out.println("Line Moving Cancelled");
+                        moveLine = false;
+                    }
                 }
                 
                 if(name.equals("startStopNewPath") && keyPressed){
@@ -480,10 +496,8 @@ public class Main extends SimpleApplication {
                                  probeTracker.getCurrentPathVertices(), 
                                  ballMat);
                          currentLine.setMaterial(lineMaterial);
-                         currentLineNode = new Node("currentLine");
-                         currentLineNode.setLocalTranslation(probeTracker.getFirstPathVertex());
-                         currentLineNode.attachChild(currentLine);
                          rootNode.attachChild(currentLine);
+                         lastLine = currentLine;
                          //rootNode.attachChild(currentLineNode);
                      }
                      
@@ -587,7 +601,8 @@ public class Main extends SimpleApplication {
                 "rollBackward",
                 "rollForward",
                 "changeProbeMoveMode",
-                "changeMoveableObject");
+                "changeMoveableObject",
+                "changeLineMoveMode");
 
     }
 }
