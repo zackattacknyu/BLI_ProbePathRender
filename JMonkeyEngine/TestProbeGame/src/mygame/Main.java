@@ -196,7 +196,7 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initBox(Box b,Material ballMat,String name){
-        Spatial sampleBox = new Geometry("Background", b);
+        Spatial sampleBox = new Geometry("Plane", b);
         //sampleBox.setCullHint(Spatial.CullHint.Never);
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
@@ -339,6 +339,15 @@ public class Main extends SimpleApplication {
         
         
     }
+    
+    private void displayChildren(){
+        
+        System.out.println("Current Root Node Children are:");
+        for(Spatial s: rootNode.getChildren()){
+            System.out.println(s.getName());
+        }
+        System.out.println();
+    }
 
     private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -444,12 +453,15 @@ public class Main extends SimpleApplication {
                     if(results.size() == 1 && moveProbe){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
                         System.out.println(point.getContactPoint());
-                        /*moveable.rotate(point.getRotation());
-                        Box b = new Box(2f,0.2f,2f);
-                        Spatial currentPlane = initBox(b,lineMaterial,"tangeant");
-                        currentPlane.rotate(point.getRotation());
-                        currentPlane.setLocalTranslation(point.getContactPoint());
-                        rootNode.attachChild(currentPlane);*/
+                        //moveable.rotate(point.getRotation());
+                        ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
+                        normalVertices.add(point.getContactPoint());
+                        normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
+                        Spatial controlPointNormal = 
+                                LineHelper.createLineFromVertices(
+                                normalVertices, lineMaterial);
+                        rootNode.attachChild(controlPointNormal);
+                        //displayChildren();
                         probeTracker.setBaselineRotation(point.getRotation());
                         probeTracker.setCurrentPosition(point.getContactPoint());
                     }

@@ -44,6 +44,10 @@ public class CollisionPoint {
     public Quaternion getRotation() {
         return rotation;
     }
+
+    public Vector3f getNormal() {
+        return normal;
+    }
     
     
     
