@@ -31,14 +31,6 @@ public class ProbeDataHelper {
         return lineVertices;
     }
     
-    public static MotionPath getMotionPathFromVertices(ArrayList<Vector3f> lineVertices){
-        MotionPath path = new MotionPath();
-        for(Vector3f vertex: lineVertices){
-            path.addWayPoint(vertex);
-        }
-        return path;
-    }
-    
     public static ArrayList<String> getLinesFromFile(String fileName){
         Path sampleDataFile = Paths.get("textFiles/sampleData.txt");
         ArrayList<String> lines = new ArrayList<String>();

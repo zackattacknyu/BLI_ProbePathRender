@@ -26,8 +26,13 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
 import com.jme3.system.AppSettings;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * test
@@ -51,8 +56,6 @@ public class Main extends SimpleApplication {
     private boolean moveableObjectIsProbe = true;
     private boolean moveLine = false;
     private Node shootables,probeRep;
-    //private Spatial currentLine;
-    
 
     public static void main(String[] args) {
         
@@ -174,6 +177,14 @@ public class Main extends SimpleApplication {
         shootables.attachChild(surface);
         
         rootNode.attachChild(shootables);
+        try {
+            ProbeDataWriter writer = new ProbeDataWriter("textFiles/logs/sample");
+            writer.writeLine("line1");
+            writer.writeLine("line2");
+            writer.closeWriter();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
