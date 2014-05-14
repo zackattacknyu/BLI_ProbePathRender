@@ -72,6 +72,8 @@ public class LineTransformation {
     
     private void makeRotationQuat(){
         rotQuaternion = new Quaternion();
+        
+        //the -1 is necessary to ensure the actual vector rotates to the expected vector
         rotQuaternion.fromAngleAxis(-1*rotAngle, rotAxis);
     }
     
