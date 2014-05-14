@@ -36,10 +36,6 @@ public class LineTransformation {
         this.expectedEndPt = expectedEndPt;
         this.actualEndPt = actualEndPt;
         
-        System.out.println("Starting Point: " + startingPt);
-        System.out.println("Expected End Point: " + expectedEndPt);
-        System.out.println("Actual End Point: " + actualEndPt);
-        
         makeDirectionVectors();
         makeRotationParameters();
         makeRotationQuat();
@@ -59,8 +55,8 @@ public class LineTransformation {
     
     
     private void makeDirectionVectors(){
-        expectedDir = expectedEndPt.subtract(startingPt);
-        actualDir = actualEndPt.subtract(startingPt);
+        expectedDir = expectedEndPt.clone().subtract(startingPt);
+        actualDir = actualEndPt.clone().subtract(startingPt);
         
         expectedDir = expectedDir.normalize();
         actualDir = actualDir.normalize();
@@ -76,7 +72,7 @@ public class LineTransformation {
     
     private void makeRotationQuat(){
         rotQuaternion = new Quaternion();
-        rotQuaternion.fromAngleAxis(rotAngle, rotAxis);
+        rotQuaternion.fromAngleAxis(-1*rotAngle, rotAxis);
     }
     
     private void makeTranslationMatrices(){
