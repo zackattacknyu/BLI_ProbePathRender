@@ -8,6 +8,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 
 /**
  *
@@ -34,6 +35,10 @@ public class LineTransformation {
         this.startingPt = startingPt;
         this.expectedEndPt = expectedEndPt;
         this.actualEndPt = actualEndPt;
+        
+        System.out.println("Starting Point: " + startingPt);
+        System.out.println("Expected End Point: " + expectedEndPt);
+        System.out.println("Actual End Point: " + actualEndPt);
         
         makeDirectionVectors();
         makeRotationParameters();
@@ -75,15 +80,16 @@ public class LineTransformation {
     }
     
     private void makeTranslationMatrices(){
-        firstTranslation = Matrix4f.IDENTITY;
-        lastTranslation = Matrix4f.IDENTITY;
+        firstTranslation = new Matrix4f();
+        lastTranslation = new Matrix4f();
         
-        firstTranslation.setTranslation(startingPt.mult(-1));
-        lastTranslation.setTranslation(startingPt);
+        firstTranslation.setTranslation(startingPt);
+        Vector3f startingPtNeg = startingPt.clone().negate();
+        lastTranslation.setTranslation(startingPtNeg);
     }
     
     private void makeWholeTransformation(){
-        Matrix4f rotTransform = Matrix4f.IDENTITY;
+        Matrix4f rotTransform = new Matrix4f();
         rotTransform.setRotationQuaternion(rotQuaternion);
         wholeTransformation = (firstTranslation.mult(rotTransform)).mult(lastTranslation);
     }
@@ -91,6 +97,16 @@ public class LineTransformation {
     private void makeOutput(){
         outputRotation = wholeTransformation.toRotationQuat();
         outputTranslation = wholeTransformation.toTranslationVector();
+        
+        
+    }
+    
+    public ArrayList<Vector3f> transformVertices(ArrayList<Vector3f> inputVertices){
+        ArrayList<Vector3f> outputVertices = new ArrayList<Vector3f>(inputVertices.size());
+        for(Vector3f vertex:inputVertices){
+            outputVertices.add(wholeTransformation.mult(vertex));
+        }
+        return outputVertices;
     }
     
 }

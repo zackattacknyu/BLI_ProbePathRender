@@ -43,7 +43,7 @@ public class Main extends SimpleApplication {
     
     private ProbeTracker probeTracker;
     
-    private Spatial lastLine;
+    //private Spatial lastLine;
     
     private Properties trackerProps;
     private boolean lightVisible;
@@ -51,7 +51,7 @@ public class Main extends SimpleApplication {
     private boolean moveableObjectIsProbe = true;
     private boolean moveLine = false;
     private Node shootables,probeRep;
-    private Spatial currentLine;
+    //private Spatial currentLine;
     
 
     public static void main(String[] args) {
@@ -342,6 +342,12 @@ public class Main extends SimpleApplication {
         readModeText.setText(probeTracker.getReadModeText());
                 
     }
+    
+    private void createNewLine(ArrayList<Vector3f> vertices){
+        Spatial currentLine = LineHelper.createLineFromVertices(vertices, ballMat);
+        currentLine.setMaterial(lineMaterial);
+        rootNode.attachChild(currentLine);
+    }
 
     private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -402,7 +408,7 @@ public class Main extends SimpleApplication {
                         moveableObject = probeRep;
                     }else{
                         //moveableObject = currentLineNode;
-                        moveableObject = currentLine;
+                        //moveableObject = currentLine;
                     }
                 }
                 
@@ -448,15 +454,17 @@ public class Main extends SimpleApplication {
                     
                     if(results.size() == 1){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                        System.out.println(point.getContactPoint());
+                        System.out.println("Contact Point:" + point.getContactPoint());
+                        System.out.println();
                         
                         if(moveLine){
                             LineTransformation lineMove = new LineTransformation(
                                     probeTracker.getFirstPathVertex(),
                                     point.getContactPoint(),
                                     probeTracker.getLastPathVertex());
-                            lastLine.rotate(lineMove.getOutputRotation());
-                            lastLine.move(lineMove.getOutputTranslation());
+                            ArrayList<Vector3f> newVertices = lineMove.transformVertices(probeTracker.getCurrentPathVertices());
+                            createNewLine(newVertices);
+                            moveLine = false;
                         }else if(moveProbe){
                             ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
                             normalVertices.add(point.getContactPoint());
@@ -491,14 +499,7 @@ public class Main extends SimpleApplication {
                      probeTracker.updatePathRecording();
                      recordingText.setText(probeTracker.getRecordingText());
                      if(probeTracker.isNewPathExists()){
-                         Spatial currentLine = 
-                                 LineHelper.createLineFromVertices(
-                                 probeTracker.getCurrentPathVertices(), 
-                                 ballMat);
-                         currentLine.setMaterial(lineMaterial);
-                         rootNode.attachChild(currentLine);
-                         lastLine = currentLine;
-                         //rootNode.attachChild(currentLineNode);
+                         createNewLine(probeTracker.getCurrentPathVertices());
                      }
                      
                  }
