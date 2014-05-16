@@ -95,20 +95,8 @@ public class Main extends SimpleApplication {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
         
-        
-        //makes it silent
-        AudioNode silent = new AudioNode(assetManager,"Sounds/ocean.wav");
-        silent.setVolume(0);
-        silent.setLooping(true);
-        silent.play();
-        
         String objFileLocation = "Models/lola_mesh.obj";
-        ColorRGBA backgroundColor = new ColorRGBA(
-                205.0f/256.0f,
-                204.0f/256.0f,
-                207.0f/256.0f,
-                1.0f);
-        viewPort.setBackgroundColor(backgroundColor);
+        viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
                 trackerProps.getProperty("lighting.visible"));

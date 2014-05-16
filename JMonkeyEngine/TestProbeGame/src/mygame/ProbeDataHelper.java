@@ -27,8 +27,12 @@ public class ProbeDataHelper {
     public static ArrayList<Vector3f> getVerticesFromFile(File dataFile){
         ArrayList<String> lines = getLinesFromFile(dataFile);
         ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
+        String previousLine = "";
         for(String line: lines){
-            lineVertices.add(getVertexFromLine(line));
+            if(!line.equals(previousLine)){
+                lineVertices.add(getVertexFromLine(line));
+            }
+            line = previousLine;
         }
         
         return lineVertices;

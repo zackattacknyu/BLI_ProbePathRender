@@ -48,7 +48,7 @@ public class LineHelper {
         
         Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lineVertices.size()]);
         
-        ColorRGBA lineColor = ColorRGBA.Black;
+        ColorRGBA lineColor = Constants.LINE_COLOR;
         Vector4f[] lineColors = new Vector4f[lineVertices.size()];
         for(int j=0; j < lineColors.length; j++){
             lineColors[j] = new Vector4f(lineColor.getRed(),lineColor.getGreen(),
@@ -60,7 +60,7 @@ public class LineHelper {
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
         mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
         mesh.setBuffer(VertexBuffer.Type.Color, 4, BufferUtils.createFloatBuffer(lineColors));
-        mesh.setLineWidth(10f);
+        mesh.setLineWidth(Constants.PATH_LINE_WIDTH);
         Spatial probePathLine = new Geometry("Line",mesh);
         probePathLine.setName("probeLine");
         probePathLine.setLocalScale(1);
