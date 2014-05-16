@@ -335,8 +335,7 @@ public class Main extends SimpleApplication {
                 
     }
     
-    private void createNewLine(ArrayList<Vector3f> vertices){
-        probePathSet.addPath(vertices);
+    private void displayCurrentPath(){
         rootNode.attachChild(probePathSet.getCurrentPathSpatial());
     }
 
@@ -396,12 +395,8 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
                 if(name.equals("importLine") && keyPressed){
-                    JFileChooser selector = new JFileChooser(initialImportDirectory);
-                    int chosenOption = selector.showOpenDialog(null);
-                    if(chosenOption == JFileChooser.APPROVE_OPTION){
-                        File selectedFile = selector.getSelectedFile();
-                        System.out.println("File chosen was " + selectedFile.getName());
-                    }
+                    probePathSet.importPathUsingFileSelector(initialImportDirectory);
+                    displayCurrentPath();
                 }
                 
                 if(name.equals("changeMoveableObject") && keyPressed){
@@ -460,12 +455,8 @@ public class Main extends SimpleApplication {
                         System.out.println();
                         
                         if(moveLine){
-                            LineTransformation lineMove = new LineTransformation(
-                                    probeTracker.getFirstPathVertex(),
-                                    point.getContactPoint(),
-                                    probeTracker.getLastPathVertex());
-                            ArrayList<Vector3f> newVertices = lineMove.transformVertices(probeTracker.getCurrentPathVertices());
-                            createNewLine(newVertices);
+                            probePathSet.transformCurrentPathEndpoint(point.getContactPoint());
+                            displayCurrentPath();
                             moveLine = false;
                         }else if(moveProbe){
                             ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
@@ -501,7 +492,8 @@ public class Main extends SimpleApplication {
                      probeTracker.updatePathRecording();
                      recordingText.setText(probeTracker.getRecordingText());
                      if(probeTracker.isNewPathExists()){
-                         createNewLine(probeTracker.getCurrentPathVertices());
+                         probePathSet.addPath(probeTracker.getCurrentPathVertices());
+                         displayCurrentPath();
                      }
                      
                  }

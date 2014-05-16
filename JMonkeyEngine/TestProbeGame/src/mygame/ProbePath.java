@@ -17,9 +17,11 @@ public class ProbePath {
 
     private ArrayList<Vector3f> vertices;
     private Spatial probePath;
+    private Material lineMaterial;
     
     public ProbePath(ArrayList<Vector3f> vertices, Material lineMaterial){
         this.vertices = vertices;
+        this.lineMaterial = lineMaterial;
         probePath = LineHelper.createLineFromVertices(vertices, lineMaterial);
     }
 
@@ -31,6 +33,13 @@ public class ProbePath {
         return probePath;
     }
     
-    
+    public ArrayList<Vector3f> transformEndpoint(Vector3f newEndpoint){
+        Vector3f startPoint = vertices.get(0);
+        Vector3f oldEndpoint = vertices.get(vertices.size()-1);
+        LineTransformation lineMove = new LineTransformation(
+                startPoint,newEndpoint,oldEndpoint);
+        return lineMove.transformVertices(vertices);
+        
+    }
     
 }
