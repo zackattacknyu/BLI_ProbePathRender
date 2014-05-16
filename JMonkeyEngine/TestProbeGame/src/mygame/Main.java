@@ -462,27 +462,25 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("pickControlPoint") && keyPressed){
-                    CollisionResults results = getCollisionResults();
                     
-                    if(results.size() == 1){
-                        CollisionPoint point = new CollisionPoint(results.getCollision(0));
-                        System.out.println("Contact Point:" + point.getContactPoint());
-                        System.out.println();
-                        
-                        if(moveLine){
-                            probePathSet.transformCurrentPathEndpoint(point.getContactPoint());
-                            displayCurrentPath();
-                            moveLine = false;
-                        }else if(moveProbe){
-                            addLineForNormal(point);
-                            probeTracker.setBaselineRotation(point.getRotation());
-                            probeTracker.setCurrentPosition(point.getContactPoint());
+                    if(moveLine || moveProbe){
+                        CollisionResults results = getCollisionResults();
+                        if(results.size() == 1){
+                            CollisionPoint point = new CollisionPoint(results.getCollision(0));
+                            System.out.println("Contact Point:" + point.getContactPoint());
+                            System.out.println();
+
+                            if(moveLine){
+                                probePathSet.transformCurrentPathEndpoint(point.getContactPoint());
+                                displayCurrentPath();
+                                moveLine = false;
+                            }else if(moveProbe){
+                                addLineForNormal(point);
+                                probeTracker.setBaselineRotation(point.getRotation());
+                                probeTracker.setCurrentPosition(point.getContactPoint());
+                            }
                         }
-                        
                     }
-                    
-                    
-                    
                 }
                 
                 if(name.equals("changeLineMoveMode") && keyPressed){
