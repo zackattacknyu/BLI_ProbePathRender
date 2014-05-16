@@ -29,10 +29,12 @@ import com.jme3.system.AppSettings;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  * test
@@ -56,6 +58,7 @@ public class Main extends SimpleApplication {
     private boolean moveableObjectIsProbe = true;
     private boolean moveLine = false;
     private Node shootables,probeRep;
+    private File initialImportDirectory;
 
     public static void main(String[] args) {
         
@@ -88,6 +91,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
+        initialImportDirectory = Paths.get("textFiles").toFile();
         
         //makes it silent
         AudioNode silent = new AudioNode(assetManager,"Sounds/ocean.wav");
@@ -201,25 +206,6 @@ public class Main extends SimpleApplication {
         rootNode.addLight(ballLight);
         rootNode.addLight(probeLight);
     }
-    
-    /*private Spatial initBox(Box b,Material ballMat,String name){
-        Spatial sampleBox = new Geometry("Plane", b);
-        //sampleBox.setCullHint(Spatial.CullHint.Never);
-        sampleBox.setName(name);
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        return sampleBox;
-    }
-    
-    private Spatial initLittleBox(Material material){
-        Spatial outputObj = ModelHelper.generateModel("Models/ultrasoundProbe2.obj", material, assetManager);
-        outputObj.setName("Probe");
-        outputObj.setLocalScale(1.0f/25.0f);
-        outputObj.setLocalTranslation(0.0f, 0.0f, 0.0f);
-        outputObj.setMaterial(material);
-        return outputObj;
-    }*/
     
     private Spatial initBackgroundBox(Material ballMat, String name){
         Box b = new Box(30f, 30f, 2f);
@@ -401,9 +387,20 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
+        inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
+        
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("importLine") && keyPressed){
+                    JFileChooser selector = new JFileChooser(initialImportDirectory);
+                    int chosenOption = selector.showOpenDialog(null);
+                    if(chosenOption == JFileChooser.APPROVE_OPTION){
+                        File selectedFile = selector.getSelectedFile();
+                        System.out.println("File chosen was " + selectedFile.getName());
+                    }
+                }
                 
                 if(name.equals("changeMoveableObject") && keyPressed){
                     moveableObjectIsProbe = !moveableObjectIsProbe;
@@ -606,7 +603,8 @@ public class Main extends SimpleApplication {
                 "rollForward",
                 "changeProbeMoveMode",
                 "changeMoveableObject",
-                "changeLineMoveMode");
+                "changeLineMoveMode",
+                "importLine");
 
     }
 }
