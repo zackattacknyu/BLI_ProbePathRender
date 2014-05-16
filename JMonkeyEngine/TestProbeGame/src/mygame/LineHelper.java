@@ -38,7 +38,7 @@ public class LineHelper {
         return pathVertices;
     }
     
-    public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material ballMat){
+    public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material material){
         
         short[] indices = new short[lineVertices.size()*2];
         for(int index=0; index<lineVertices.size()-1; index++){
@@ -64,7 +64,7 @@ public class LineHelper {
         Spatial probePathLine = new Geometry("Line",mesh);
         probePathLine.setName("probeLine");
         probePathLine.setLocalScale(1);
-        probePathLine.setMaterial(ballMat);
+        probePathLine.setMaterial(material);
         
         
         return probePathLine;

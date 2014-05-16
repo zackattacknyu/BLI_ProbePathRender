@@ -6,6 +6,7 @@ package mygame;
 
 import com.jme3.cinematic.MotionPath;
 import com.jme3.math.Vector3f;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,39 +23,34 @@ import java.util.logging.Logger;
  * @author Zach
  */
 public class ProbeDataHelper {
-    
-    public static ArrayList<Vector3f> getVerticesFromFile(String fileName){
-        ArrayList<String> lines = getLinesFromFile(fileName);
+
+    public static ArrayList<Vector3f> getVerticesFromFile(File dataFile){
+        ArrayList<String> lines = getLinesFromFile(dataFile);
         ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
         for(String line: lines){
-            lineVertices.add(lineToWayPoint(line));
+            lineVertices.add(getVertexFromLine(line));
         }
         
         return lineVertices;
     }
     
-    public static ArrayList<String> getLinesFromFile(String fileName){
-        Path sampleDataFile = Paths.get("textFiles/sampleData.txt");
+    public static ArrayList<String> getLinesFromFile(File dataFile){
         ArrayList<String> lines = new ArrayList<String>();
         try {
-            lines = (ArrayList<String>) Files.readAllLines(sampleDataFile, 
-                    StandardCharsets.UTF_8);
+            lines = (ArrayList<String>) 
+                    Files.readAllLines(dataFile.toPath(),StandardCharsets.UTF_8);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
         }
         return lines;
     }
     
-    /**
-     * This converts the line of probe data into a way point
-     * @param line
-     * @return 
-     */
-    public static Vector3f lineToWayPoint(String line){
+    public static Vector3f getVertexFromLine(String line){
         String[] parts = line.split(",");
-        Float xPart = Float.valueOf(parts[5]);
-        Float yPart = Float.valueOf(parts[6]);
-        return new Vector3f(xPart,yPart,22.8080f);
+        Float xPart = Float.valueOf(parts[0]);
+        Float yPart = Float.valueOf(parts[1]);
+        Float zPart = Float.valueOf(parts[2]);
+        return new Vector3f(xPart,yPart,zPart);
     }
 
     public static String getTimestampSuffix() {
