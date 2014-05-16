@@ -174,6 +174,10 @@ public class ArduinoDataInterpreter {
     public void setUseLowPassFilterData(boolean useLowPassFilterData) {
         this.useLowPassFilterData = useLowPassFilterData;
     }
+
+    public String getCurrentArdOutput() {
+        return currentArdOutput;
+    }
     
     private void processArdData(){
         

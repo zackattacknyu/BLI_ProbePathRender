@@ -11,7 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,5 +55,11 @@ public class ProbeDataHelper {
         Float xPart = Float.valueOf(parts[5]);
         Float yPart = Float.valueOf(parts[6]);
         return new Vector3f(xPart,yPart,22.8080f);
+    }
+
+    public static String getTimestampSuffix() {
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy_MM_dd__kk_mm_ss");
+        Calendar rightNow = Calendar.getInstance();
+        return myFormat.format(rightNow.getTime());
     }
 }

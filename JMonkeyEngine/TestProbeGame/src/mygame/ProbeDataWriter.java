@@ -8,6 +8,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -24,19 +26,16 @@ public class ProbeDataWriter {
     private FileWriter outputFileWriter;
     private BufferedWriter outputWriter;
     
-    public ProbeDataWriter(String fileName) throws IOException{
-        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy_MM_dd__kk_mm_ss");
-        Calendar rightNow = Calendar.getInstance();
-        String fileNameSuffix = myFormat.format(rightNow.getTime());
-        this.fileName = fileName + "_" + fileNameSuffix + ".txt";
-        initializeFile();
-    }
-    
-    private void initializeFile() throws IOException{
-        outputFile = new File(fileName);
+    public ProbeDataWriter(Path folderPath, String fileNamePrefix, String timestampSuffix) throws IOException{
+        this.fileName = fileNamePrefix + "_" + timestampSuffix + ".txt";
+        if(!Files.exists(folderPath)){
+            Files.createDirectories(folderPath);
+        }
+        outputFile = folderPath.resolve(fileName).toFile();
         outputFileWriter = new FileWriter(outputFile);
         outputWriter = new BufferedWriter(outputFileWriter);
     }
+    
     
     public void writeLine(String line) throws IOException{
         outputWriter.write(line);

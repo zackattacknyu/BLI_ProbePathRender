@@ -8,8 +8,14 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,6 +61,10 @@ public class ProbeTracker {
     
     private short displacementMode = 2;
     
+    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter;
+    
+    private Path logFileParentPath,pathRecordingFilePath;
+    
     public ProbeTracker(){
         
         dataInterpreter = new ArduinoDataInterpreter();
@@ -67,6 +77,9 @@ public class ProbeTracker {
         if(displacementMode < 0 || displacementMode > 2){
             displacementMode = 2;
         }
+        
+        logFileParentPath = Paths.get("textFiles").resolve("logs");
+        pathRecordingFilePath = logFileParentPath.resolve("paths");
         
     }
     
@@ -148,6 +161,20 @@ public class ProbeTracker {
             cubePath.addToPath(currentDisp);
         }
         
+        if(recordingPath){
+            try {
+                
+                if(dataInterpreter.getCurrentArdOutput() != null){
+                    currentPathOutputWriter.writeLine(dataInterpreter.getCurrentArdOutput());
+                }
+                currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
+                                                  cubePath.getLastY() + "," + 
+                                                  cubePath.getLastZ());
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
+        
     }
     
     public void updateYcalibration(){
@@ -188,6 +215,25 @@ public class ProbeTracker {
     }
     
     public void updatePathRecording(){
+        try {
+            if(recordingPath){
+                currentPathOutputWriter.closeWriter();
+                currentPathVertexWriter.closeWriter();
+                currentPathOutputWriter = null;
+                currentPathVertexWriter = null;
+                
+                
+            }else{   
+                String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
+                currentPathOutputWriter = new ProbeDataWriter(
+                        pathRecordingFilePath,"pathOutput",currentTimestamp);
+                currentPathVertexWriter = new ProbeDataWriter(
+                        pathRecordingFilePath,"pathVertices",currentTimestamp);
+                
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
         
         if(recordingPath){
             System.out.println("Recording New Path Stopped");

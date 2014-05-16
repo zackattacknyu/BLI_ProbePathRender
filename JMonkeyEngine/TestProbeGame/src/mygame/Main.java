@@ -177,14 +177,6 @@ public class Main extends SimpleApplication {
         shootables.attachChild(surface);
         
         rootNode.attachChild(shootables);
-        try {
-            ProbeDataWriter writer = new ProbeDataWriter("textFiles/logs/sample");
-            writer.writeLine("line1");
-            writer.writeLine("line2");
-            writer.closeWriter();
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
     }
     
