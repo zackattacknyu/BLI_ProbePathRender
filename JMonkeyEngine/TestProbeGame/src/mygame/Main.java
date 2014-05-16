@@ -338,6 +338,30 @@ public class Main extends SimpleApplication {
     private void displayCurrentPath(){
         rootNode.attachChild(probePathSet.getCurrentPathSpatial());
     }
+    
+    private CollisionResults getCollisionResults(){
+        Vector2f click2d = inputManager.getCursorPosition();
+        System.out.println("Mouse Point:" + click2d);
+
+        CollisionResults results = new CollisionResults();
+        Vector3f click3d = cam.getWorldCoordinates(
+            new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = cam.getWorldCoordinates(
+            new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+        Ray ray = new Ray(click3d, dir);
+        shootables.collideWith(ray, results);
+        return results;
+    }
+    
+    private void addLineForNormal(CollisionPoint point){
+        ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
+        normalVertices.add(point.getContactPoint());
+        normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
+        Spatial controlPointNormal = 
+                LineHelper.createLineFromVertices(
+                normalVertices, lineMaterial);
+        rootNode.attachChild(controlPointNormal);
+    }
 
     private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -438,16 +462,7 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("pickControlPoint") && keyPressed){
-                    Vector2f click2d = inputManager.getCursorPosition();
-                    System.out.println("Mouse Point:" + click2d);
-                    
-                    CollisionResults results = new CollisionResults();
-                    Vector3f click3d = cam.getWorldCoordinates(
-                        new Vector2f(click2d.x, click2d.y), 0f).clone();
-                    Vector3f dir = cam.getWorldCoordinates(
-                        new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-                    Ray ray = new Ray(click3d, dir);
-                    shootables.collideWith(ray, results);
+                    CollisionResults results = getCollisionResults();
                     
                     if(results.size() == 1){
                         CollisionPoint point = new CollisionPoint(results.getCollision(0));
@@ -459,13 +474,7 @@ public class Main extends SimpleApplication {
                             displayCurrentPath();
                             moveLine = false;
                         }else if(moveProbe){
-                            ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
-                            normalVertices.add(point.getContactPoint());
-                            normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
-                            Spatial controlPointNormal = 
-                                    LineHelper.createLineFromVertices(
-                                    normalVertices, lineMaterial);
-                            rootNode.attachChild(controlPointNormal);
+                            addLineForNormal(point);
                             probeTracker.setBaselineRotation(point.getRotation());
                             probeTracker.setCurrentPosition(point.getContactPoint());
                         }
