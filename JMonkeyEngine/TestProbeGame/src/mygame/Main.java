@@ -59,6 +59,7 @@ public class Main extends SimpleApplication {
     private boolean moveLine = false;
     private Node shootables,probeRep;
     private File initialImportDirectory;
+    private ProbePathSet probePathSet;
 
     public static void main(String[] args) {
         
@@ -93,6 +94,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
+        
         
         //makes it silent
         AudioNode silent = new AudioNode(assetManager,"Sounds/ocean.wav");
@@ -182,6 +184,7 @@ public class Main extends SimpleApplication {
         shootables.attachChild(surface);
         
         rootNode.attachChild(shootables);
+        probePathSet = new ProbePathSet(lineMaterial);
         
     }
     
@@ -333,9 +336,8 @@ public class Main extends SimpleApplication {
     }
     
     private void createNewLine(ArrayList<Vector3f> vertices){
-        Spatial currentLine = LineHelper.createLineFromVertices(vertices, ballMat);
-        currentLine.setMaterial(lineMaterial);
-        rootNode.attachChild(currentLine);
+        probePathSet.addPath(vertices);
+        rootNode.attachChild(probePathSet.getCurrentPathSpatial());
     }
 
     private void initKeyboardInputs() {
