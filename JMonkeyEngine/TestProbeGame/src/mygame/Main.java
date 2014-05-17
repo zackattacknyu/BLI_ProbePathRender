@@ -401,6 +401,9 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
         inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
+        inputManager.addMapping("exportLine", new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
+        inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
         ActionListener acl = new ActionListener() {
 
@@ -409,6 +412,18 @@ public class Main extends SimpleApplication {
                 if(name.equals("importLine") && keyPressed){
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
                     if(chosen) displayCurrentPath();
+                }
+                
+                if(name.equals("exportLine") && keyPressed){
+                    System.out.println("Export Line Chosen");
+                }
+                
+                if(name.equals("deleteLine") && keyPressed){
+                    System.out.println("Delete Line Chosen");
+                }
+                
+                if(name.equals("selectLine") && keyPressed){
+                    System.out.println("Select Line Chosen");
                 }
                 
                 if(name.equals("changeMoveableObject") && keyPressed){
@@ -593,7 +608,10 @@ public class Main extends SimpleApplication {
                 "changeProbeMoveMode",
                 "changeMoveableObject",
                 "changeLineMoveMode",
-                "importLine");
+                "importLine",
+                "exportLine",
+                "deleteLine",
+                "selectLine");
 
     }
 }
