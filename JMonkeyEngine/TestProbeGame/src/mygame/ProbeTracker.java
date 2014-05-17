@@ -4,6 +4,7 @@
  */
 package mygame;
 
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -385,6 +386,16 @@ public class ProbeTracker {
         }
         
         
+    }
+    
+    public String getXYZtext(){
+        return "(X,Y,Z) = (" + currentX + "," + currentY + "," + currentZ + ")";
+    }
+    
+    public String getYawPitchRollText(){
+        return "(Yaw,Pitch,Roll) = (" + currentYaw*FastMath.RAD_TO_DEG + "," + 
+                currentPitch*FastMath.RAD_TO_DEG + "," + 
+                currentRoll*FastMath.RAD_TO_DEG + ")";
     }
 
     public boolean isNewPathExists() {

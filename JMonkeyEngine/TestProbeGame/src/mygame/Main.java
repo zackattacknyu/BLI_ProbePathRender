@@ -244,13 +244,8 @@ public class Main extends SimpleApplication {
         moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
         //zAxisBox.move(zAxisBoxInitLocation);
         
-        xyzText.setText("(X,Y,Z) = (" + probeTracker.getCurrentX() + ","
-                + probeTracker.getCurrentY() + "," 
-                + probeTracker.getCurrentZ() + ")");
-        yawPitchRollText.setText("(Yaw,Pitch,Roll) = (" + 
-                probeTracker.getCurrentYaw()*FastMath.RAD_TO_DEG + "," + 
-                probeTracker.getCurrentPitch()*FastMath.RAD_TO_DEG + "," + 
-                probeTracker.getCurrentRoll()*FastMath.RAD_TO_DEG + ")");
+        xyzText.setText(probeTracker.getXYZtext());
+        yawPitchRollText.setText(probeTracker.getYawPitchRollText());
     }
 
     @Override
