@@ -42,4 +42,28 @@ public class ProbePath {
         
     }
     
+    /*
+     * Here will be the code for following the surface. 
+     * 
+     * Pseudo-code:
+     * The line is an array Vertex where 
+     *      Vertex[i] is the i-th vertex in the sequence
+     * Copy the array Vertex[i] into currentVertices
+     * Initialize array finalVertices that will hold the final results
+     * initialize currentNormal to be the normal at the contact point
+     * initialize currentPoint to be the contact point
+     * let finalVertices[0] be equal to currentPoint
+     * for i from 0 to end-1:
+     *      transform all of currentVertices so that the following occurs:
+     *          currentVertices[0] matches currentPoint
+     *      Shoot a ray with the following properties:
+     *          origin is currentVertices[1]
+     *          direction is currentNormal and negative of currentNormal
+     *      When a proper decision result is found:
+     *          make currentPoint equal to collision point
+     *          make currentNormal equal to collision normal
+     *      finalVertices[i] gets set to currentPoint
+     *      Delete first element from currentVertices
+     */
+    
 }
