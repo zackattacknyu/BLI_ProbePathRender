@@ -407,8 +407,8 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
                 if(name.equals("importLine") && keyPressed){
-                    probePathSet.importPathUsingFileSelector(initialImportDirectory);
-                    displayCurrentPath();
+                    boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
+                    if(chosen) displayCurrentPath();
                 }
                 
                 if(name.equals("changeMoveableObject") && keyPressed){

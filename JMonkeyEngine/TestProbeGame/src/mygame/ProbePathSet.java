@@ -49,12 +49,15 @@ public class ProbePathSet {
         addPath(currentPath.transformEndpoint(newEndpoint));
     }
     
-    public void importPathUsingFileSelector(File initialImportDirectory){
+    public boolean importPathUsingFileSelector(File initialImportDirectory){
         JFileChooser selector = new JFileChooser(initialImportDirectory);
         int chosenOption = selector.showOpenDialog(null);
+        boolean optionChosen = false;
         if(chosenOption == JFileChooser.APPROVE_OPTION){
+            optionChosen = true;
             File selectedFile = selector.getSelectedFile();
             addPath(ProbeDataHelper.getVerticesFromFile(selectedFile));
         }
+        return optionChosen;
     }
 }
