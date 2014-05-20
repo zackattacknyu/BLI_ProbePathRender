@@ -7,7 +7,9 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
@@ -26,6 +28,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
 import com.jme3.system.AppSettings;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +38,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+
 
 /**
  * test
@@ -60,6 +64,7 @@ public class Main extends SimpleApplication {
     private Node shootables,probeRep;
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
+    private boolean mousePressedDown = false;
 
     public static void main(String[] args) {
         
@@ -261,7 +266,7 @@ public class Main extends SimpleApplication {
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(true);
         flyCam.setMoveSpeed(10f);
-        flyCam.setRotationSpeed(10f);
+        flyCam.setRotationSpeed(0f);
     }
     
     private void initDebugText(){
@@ -384,11 +389,11 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         
-        inputManager.addMapping("rotCameraLeft", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("rotCameraRight", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("rotCameraUp", new KeyTrigger(KeyInput.KEY_UP));
-        inputManager.addMapping("rotCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
-        
+        inputManager.addMapping("rotCameraLeft", new MouseAxisTrigger(MouseInput.AXIS_X,false));
+        inputManager.addMapping("rotCameraRight", new MouseAxisTrigger(MouseInput.AXIS_X,true));
+        inputManager.addMapping("rotCameraUp", new MouseAxisTrigger(MouseInput.AXIS_Y,false));
+        inputManager.addMapping("rotCameraDown", new MouseAxisTrigger(MouseInput.AXIS_Y,true));
+
         inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
         
         inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
@@ -399,6 +404,30 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("exportLine", new KeyTrigger(KeyInput.KEY_E));
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
+        
+        AnalogListener anl = new AnalogListener(){
+
+            public void onAnalog(String name, float value, float tpf) {
+                if(name.equals("rotCameraLeft") && mousePressedDown){
+                    rootNode.rotate(0, -1.0f/20.0f, 0);
+                    /*To be used to change how rotation is implemented if desired:
+                     * Quaternion rotation = new Quaternion();
+                    rotation.fromAngleAxis(-1.0f/20.0f, Vector3f.UNIT_Y);
+                    Vector3f newLocation = rotation.toRotationMatrix().mult(cam.getLocation());
+                    cam.setLocation(newLocation);
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);*/
+                }
+                if(name.equals("rotCameraRight") && mousePressedDown){
+                    rootNode.rotate(0, 1.0f/20.0f, 0);
+                }
+                if(name.equals("rotCameraUp") && mousePressedDown){
+                    rootNode.rotate(1.0f/20.0f, 0, 0);
+                }
+                if(name.equals("rotCameraDown") && mousePressedDown){
+                    rootNode.rotate(-1.0f/20.0f, 0, 0);
+                }
+            }
+        };        
         
         ActionListener acl = new ActionListener() {
 
@@ -440,26 +469,13 @@ public class Main extends SimpleApplication {
                     }
                 }
                 
-                if(name.equals("rotCameraLeft") && keyPressed){
-                    rootNode.rotate(0, -1.0f/20.0f, 0);
-                    /*To be used to change how rotation is implemented if desired:
-                     * Quaternion rotation = new Quaternion();
-                    rotation.fromAngleAxis(-1.0f/20.0f, Vector3f.UNIT_Y);
-                    Vector3f newLocation = rotation.toRotationMatrix().mult(cam.getLocation());
-                    cam.setLocation(newLocation);
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);*/
-                }
-                if(name.equals("rotCameraRight") && keyPressed){
-                    rootNode.rotate(0, 1.0f/20.0f, 0);
-                }
-                if(name.equals("rotCameraUp") && keyPressed){
-                    rootNode.rotate(1.0f/20.0f, 0, 0);
-                }
-                if(name.equals("rotCameraDown") && keyPressed){
-                    rootNode.rotate(-1.0f/20.0f, 0, 0);
-                }
                 
-                if(name.equals("pickControlPoint") && keyPressed){
+                
+                if(name.equals("pickControlPoint")){
+                    
+                    //IMPORTANT: 
+                    // used when I want to register dragging above
+                    mousePressedDown = !mousePressedDown;
                     
                     if(moveLine || moveProbe){
                         CollisionResults results = getCollisionResults();
@@ -575,7 +591,12 @@ public class Main extends SimpleApplication {
                 }
             }
         };
-
+        
+        inputManager.addListener(anl, 
+                "rotCameraLeft",
+                "rotCameraRight",
+                "rotCameraUp",
+                "rotCameraDown");
         inputManager.addListener(acl,
                 "rotCameraLeft",
                 "rotCameraRight",
