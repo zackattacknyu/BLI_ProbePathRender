@@ -16,6 +16,7 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -405,26 +406,33 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
+        final Matrix3f rotLeftMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
+        final Matrix3f rotRightMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
+        final Matrix3f rotUpMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
+        final Matrix3f rotDownMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
+        
         AnalogListener anl = new AnalogListener(){
 
             public void onAnalog(String name, float value, float tpf) {
                 if(name.equals("rotCameraLeft") && mousePressedDown){
-                    rootNode.rotate(0, -1.0f/20.0f, 0);
-                    /*To be used to change how rotation is implemented if desired:
-                     * Quaternion rotation = new Quaternion();
-                    rotation.fromAngleAxis(-1.0f/20.0f, Vector3f.UNIT_Y);
-                    Vector3f newLocation = rotation.toRotationMatrix().mult(cam.getLocation());
-                    cam.setLocation(newLocation);
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);*/
+                    //rootNode.rotate(0, -1.0f/20.0f, 0);
+                    cam.setLocation(rotLeftMatrix.mult(cam.getLocation()));
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
                 }
                 if(name.equals("rotCameraRight") && mousePressedDown){
-                    rootNode.rotate(0, 1.0f/20.0f, 0);
+                    cam.setLocation(rotRightMatrix.mult(cam.getLocation()));
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    //rootNode.rotate(0, 1.0f/20.0f, 0);
                 }
                 if(name.equals("rotCameraUp") && mousePressedDown){
-                    rootNode.rotate(1.0f/20.0f, 0, 0);
+                    cam.setLocation(rotUpMatrix.mult(cam.getLocation()));
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    //rootNode.rotate(1.0f/20.0f, 0, 0);
                 }
                 if(name.equals("rotCameraDown") && mousePressedDown){
-                    rootNode.rotate(-1.0f/20.0f, 0, 0);
+                    cam.setLocation(rotDownMatrix.mult(cam.getLocation()));
+                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    //rootNode.rotate(-1.0f/20.0f, 0, 0);
                 }
             }
         };        
