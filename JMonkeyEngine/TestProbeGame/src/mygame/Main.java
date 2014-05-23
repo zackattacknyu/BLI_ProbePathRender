@@ -489,7 +489,7 @@ public class Main extends SimpleApplication {
                                 displayCurrentPath();
                                 moveLine = false;
                             }else if(moveProbe){
-                                addLineForNormal(point);
+                                //addLineForNormal(point);
                                 probeTracker.setBaselineRotation(point.getRotation());
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                             }
