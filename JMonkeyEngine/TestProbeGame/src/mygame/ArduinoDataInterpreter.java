@@ -81,8 +81,14 @@ public class ArduinoDataInterpreter {
         trackerProps = PropertiesHelper.getProperties();
         
         makeDataLocationsMap();
-        serial = new SerialReader();
-        serial.beginExecution();
+        try{
+            serial = new SerialReader();
+            serial.beginExecution();
+        }catch(Throwable t){
+            System.out.println("CANNOT USE SERIAL DEVICE. INSTALL RXTX.");
+            System.out.println(t);
+        }
+        
         System.out.println("Waiting to receive input...");
         
         
