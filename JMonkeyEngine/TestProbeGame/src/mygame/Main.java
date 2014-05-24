@@ -1,7 +1,6 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
@@ -17,7 +16,6 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
-import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -29,16 +27,10 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
 import com.jme3.system.AppSettings;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 
 
 /**
