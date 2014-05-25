@@ -22,6 +22,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
@@ -58,6 +59,11 @@ public class Main extends SimpleApplication {
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
     private boolean mousePressedDown = false;
+    private Mesh surfaceMesh;
+    
+    private Quaternion surfaceRotation;
+    private float surfaceScale;
+    private Vector3f surfaceLoc;
 
     public static void main(String[] args) {
         
@@ -124,9 +130,12 @@ public class Main extends SimpleApplication {
         yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
         Quaternion pitch = new Quaternion();
         pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
-        surface.setLocalRotation(yaw.mult(pitch));
-        surface.scale(80f);
-        surface.move(0, 22, -53);
+        surfaceRotation = yaw.mult(pitch);
+        surfaceScale = 80f;
+        surfaceLoc = new Vector3f(0,22,-53);
+        surface.setLocalRotation(surfaceRotation);
+        surface.scale(surfaceScale);
+        surface.move(surfaceLoc);
         
         xAxisBox = initXLine(xMat);
         yAxisBox = initYLine(yMat);
@@ -171,6 +180,18 @@ public class Main extends SimpleApplication {
         
         rootNode.attachChild(shootables);
         probePathSet = new ProbePathSet(lineMaterial);
+        
+        displaySurfaceTriangles();
+        
+    }
+    
+    private void displaySurfaceTriangles(){
+        
+        Node surfaceNode = (Node)surface;
+        Geometry surfaceGeom = (Geometry)surfaceNode.getChild(0);
+        surfaceMesh = surfaceGeom.getMesh();
+        System.out.println("Surface has " + surfaceMesh.getTriangleCount() 
+                + " triangles");
         
     }
     
@@ -482,6 +503,7 @@ public class Main extends SimpleApplication {
                         if(results.size() == 1){
                             CollisionPoint point = new CollisionPoint(results.getCollision(0));
                             System.out.println("Contact Point:" + point.getContactPoint());
+                            System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println();
 
                             if(moveLine){

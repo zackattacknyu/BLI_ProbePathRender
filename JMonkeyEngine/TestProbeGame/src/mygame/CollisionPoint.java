@@ -6,7 +6,9 @@ package mygame;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Mesh;
 
 /**
  *
@@ -17,14 +19,25 @@ public class CollisionPoint {
     private Vector3f normal;
     private Vector3f contactPoint;
     private Quaternion rotation;
-
+    private Triangle triangle;
+    
     public CollisionPoint(CollisionResult point) {
         
         normal = point.getContactNormal();
         contactPoint = point.getContactPoint();
-        
+        triangle = point.getTriangle(triangle);
         calculateRotation();
         
+    }
+    
+    public Triangle getTriangle(){
+        return triangle;
+    }
+    
+    public String getTriangleInfo(){
+        return triangle.get(0).toString() + "," 
+                + triangle.get(1).toString() + 
+                "," + triangle.get(2).toString();
     }
     
     private void calculateRotation(){
