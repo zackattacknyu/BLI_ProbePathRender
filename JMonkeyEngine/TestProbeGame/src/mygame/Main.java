@@ -16,6 +16,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -64,6 +65,7 @@ public class Main extends SimpleApplication {
     private Quaternion surfaceRotation;
     private float surfaceScale;
     private Vector3f surfaceLoc;
+    private Matrix4f surfaceTransform;
 
     public static void main(String[] args) {
         
@@ -130,9 +132,20 @@ public class Main extends SimpleApplication {
         yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
         Quaternion pitch = new Quaternion();
         pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
+        
         surfaceRotation = yaw.mult(pitch);
         surfaceScale = 80f;
         surfaceLoc = new Vector3f(0,22,-53);
+        
+        Matrix4f surfaceRot = new Matrix4f();
+        Matrix4f scaleMat = new Matrix4f();
+        Matrix4f moveMatrix = new Matrix4f();
+        
+        scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
+        surfaceRotation.toRotationMatrix(surfaceRot);
+        moveMatrix.setTranslation(surfaceLoc);
+        surfaceTransform = moveMatrix.mult(scaleMat).mult(surfaceRot);
+        
         surface.setLocalRotation(surfaceRotation);
         surface.scale(surfaceScale);
         surface.move(surfaceLoc);
@@ -504,7 +517,9 @@ public class Main extends SimpleApplication {
                             CollisionPoint point = new CollisionPoint(results.getCollision(0));
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
-                            System.out.println();
+                            Vector3f vertex1 = point.getVertex1();
+                            vertex1 = surfaceTransform.mult(vertex1);
+                            System.out.println("Vertex1: " + vertex1);
 
                             if(moveLine){
                                 probePathSet.transformCurrentPathEndpoint(point.getContactPoint());

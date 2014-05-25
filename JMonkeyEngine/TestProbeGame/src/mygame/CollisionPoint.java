@@ -21,14 +21,33 @@ public class CollisionPoint {
     private Quaternion rotation;
     private Triangle triangle;
     
+    private Vector3f vertex1,vertex2,vertex3;
+    
     public CollisionPoint(CollisionResult point) {
         
         normal = point.getContactNormal();
         contactPoint = point.getContactPoint();
         triangle = point.getTriangle(triangle);
+        vertex1 = triangle.get1(); 
+        vertex2 = triangle.get2();
+        vertex3 = triangle.get3();
         calculateRotation();
         
     }
+
+    public Vector3f getVertex1() {
+        return vertex1;
+    }
+
+    public Vector3f getVertex2() {
+        return vertex2;
+    }
+
+    public Vector3f getVertex3() {
+        return vertex3;
+    }
+
+    
     
     public Triangle getTriangle(){
         return triangle;
