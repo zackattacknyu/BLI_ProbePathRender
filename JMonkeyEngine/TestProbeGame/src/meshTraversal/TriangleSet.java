@@ -34,8 +34,22 @@ public class TriangleSet {
            currentTri = triangles[index];
            for(int otherInd = 0; otherInd < triangles.length; otherInd++){
                currentPotentialNeighbor = triangles[otherInd];
-               
-               //TODO: test to see if it is a neighbor
+
+               if(currentTri.getSide12().equals(currentPotentialNeighbor.getSide12())
+                       || currentTri.getSide12().equals(currentPotentialNeighbor.getSide23()) ||
+                       currentTri.getSide12().equals(currentPotentialNeighbor.getSide13())){
+                   currentTri.setV12Triangle(currentPotentialNeighbor);
+               }
+               if(currentTri.getSide13().equals(currentPotentialNeighbor.getSide12())
+                       || currentTri.getSide13().equals(currentPotentialNeighbor.getSide23()) ||
+                       currentTri.getSide13().equals(currentPotentialNeighbor.getSide13())){
+                   currentTri.setV13Triangle(currentPotentialNeighbor);
+               }
+               if(currentTri.getSide23().equals(currentPotentialNeighbor.getSide12())
+                       || currentTri.getSide23().equals(currentPotentialNeighbor.getSide23()) ||
+                       currentTri.getSide23().equals(currentPotentialNeighbor.getSide13())){
+                   currentTri.setV23Triangle(currentPotentialNeighbor);
+               }
            }
        }
    }

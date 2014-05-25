@@ -43,6 +43,18 @@ public class MeshTriangle {
     public void setV13Triangle(MeshTriangle v13Triangle) {
         this.v13Triangle = v13Triangle;
     }
+
+    public TriangleSide getSide12() {
+        return side12;
+    }
+
+    public TriangleSide getSide13() {
+        return side13;
+    }
+
+    public TriangleSide getSide23() {
+        return side23;
+    }
     
     
 }
