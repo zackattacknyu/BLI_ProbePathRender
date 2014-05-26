@@ -94,9 +94,7 @@ public class MeshTriangle {
 
     @Override
     public String toString() {
-        return triangleData.get(0).toString() + "," 
-                + triangleData.get(1).toString() + 
-                "," + triangleData.get(2).toString();
+        return MeshHelper.getTriangleInfo(triangleData);
     }
     
     
