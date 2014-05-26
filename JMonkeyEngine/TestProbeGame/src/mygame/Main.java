@@ -33,6 +33,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import meshTraversal.TriangleSet;
 
 
 /**
@@ -66,6 +67,7 @@ public class Main extends SimpleApplication {
     private float surfaceScale;
     private Vector3f surfaceLoc;
     private Matrix4f surfaceTransform;
+    private TriangleSet meshInfo;
 
     public static void main(String[] args) {
         
@@ -203,8 +205,7 @@ public class Main extends SimpleApplication {
         Node surfaceNode = (Node)surface;
         Geometry surfaceGeom = (Geometry)surfaceNode.getChild(0);
         surfaceMesh = surfaceGeom.getMesh();
-        System.out.println("Surface has " + surfaceMesh.getTriangleCount() 
-                + " triangles");
+        meshInfo = new TriangleSet(surfaceMesh);
         
     }
     
@@ -517,6 +518,7 @@ public class Main extends SimpleApplication {
                             CollisionPoint point = new CollisionPoint(results.getCollision(0));
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
+                            //meshInfo.displayNeighbors(point.getTriangle());
                             Vector3f vertex1 = point.getVertex1();
                             vertex1 = surfaceTransform.mult(vertex1);
                             System.out.println("Vertex1: " + vertex1);

@@ -5,6 +5,7 @@
 package meshTraversal;
 
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 
 /**
  *
@@ -12,20 +13,28 @@ import com.jme3.math.Vector3f;
  */
 public class MeshEdge {
     
-    private Vector3f vertex1;
-    private Vector3f vertex2;
+    private MeshVertex vertex1;
+    private MeshVertex vertex2;
+    private ArrayList<MeshVertex> vertices;
     
     public MeshEdge(Vector3f vertex1, Vector3f vertex2){
-        this.vertex1 = vertex1;
-        this.vertex2 = vertex2;
+        this.vertex1 = new MeshVertex(vertex1);
+        this.vertex2 = new MeshVertex(vertex2);
+        vertices = new ArrayList<MeshVertex>(2);
+        vertices.add(this.vertex1);
+        vertices.add(this.vertex2);
     }
 
-    public Vector3f getVertex1() {
+    public MeshVertex getVertex1() {
         return vertex1;
     }
 
-    public Vector3f getVertex2() {
+    public MeshVertex getVertex2() {
         return vertex2;
+    }
+
+    public ArrayList<MeshVertex> getVertices() {
+        return vertices;
     }
 
     @Override
@@ -42,15 +51,8 @@ public class MeshEdge {
             return false;
         }
         final MeshEdge other = (MeshEdge) obj;
-        if(this.vertex1.equals(other.getVertex2()) && 
-                this.vertex2.equals(other.getVertex1())){
-            return true;
-        }else if(this.vertex1.equals(other.getVertex1()) && 
-                this.vertex2.equals(other.getVertex2())){
-            return true;
-        }else{
-            return false;
-        }
+        
+        return vertices.containsAll(other.getVertices());
     }
     
 }

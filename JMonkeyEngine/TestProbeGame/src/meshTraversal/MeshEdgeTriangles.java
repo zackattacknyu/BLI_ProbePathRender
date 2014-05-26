@@ -27,7 +27,7 @@ public class MeshEdgeTriangles {
     }
     
     public MeshTriangle getOtherTriangle(MeshTriangle currentTriangle){
-        if(currentTriangle.getTriangleIndex() == triangle1.getTriangleIndex()){
+        if(currentTriangle.equals(triangle1)){
             return triangle2;
         }else{
             return triangle1;
