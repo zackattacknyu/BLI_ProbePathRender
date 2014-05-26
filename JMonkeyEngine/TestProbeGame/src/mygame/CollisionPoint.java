@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
+import meshTraversal.MeshHelper;
 
 /**
  *
@@ -54,9 +55,7 @@ public class CollisionPoint {
     }
     
     public String getTriangleInfo(){
-        return triangle.get(0).toString() + "," 
-                + triangle.get(1).toString() + 
-                "," + triangle.get(2).toString();
+        return MeshHelper.getTriangleInfo(triangle);
     }
     
     private void calculateRotation(){
