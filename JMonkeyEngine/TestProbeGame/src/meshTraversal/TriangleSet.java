@@ -13,13 +13,14 @@ import java.util.HashMap;
  * @author Zach
  */
 public class TriangleSet {
-
-    Mesh mesh;
     
     private HashMap<MeshEdge,MeshEdgeTriangles> triangles;
     
-   public TriangleSet(Mesh mesh){
-       triangles = new HashMap<MeshEdge,MeshEdgeTriangles>(mesh.getTriangleCount());
+   public TriangleSet(){
+       triangles = new HashMap<MeshEdge,MeshEdgeTriangles>(30000);
+   }
+   
+   public void addMesh(Mesh mesh){
        Triangle currentTri = new Triangle();
        MeshTriangle newTri;
        MeshEdge edge12, edge23, edge13;

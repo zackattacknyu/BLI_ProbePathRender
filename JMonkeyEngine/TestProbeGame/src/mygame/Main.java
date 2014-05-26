@@ -61,7 +61,6 @@ public class Main extends SimpleApplication {
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
     private boolean mousePressedDown = false;
-    private Mesh surfaceMesh;
     
     private Quaternion surfaceRotation;
     private float surfaceScale;
@@ -203,9 +202,12 @@ public class Main extends SimpleApplication {
     private void displaySurfaceTriangles(){
         
         Node surfaceNode = (Node)surface;
-        Geometry surfaceGeom = (Geometry)surfaceNode.getChild(0);
-        surfaceMesh = surfaceGeom.getMesh();
-        meshInfo = new TriangleSet(surfaceMesh);
+        meshInfo = new TriangleSet();
+        for(Spatial child: surfaceNode.getChildren()){
+            Geometry surfaceGeom = (Geometry)child;
+            meshInfo.addMesh(surfaceGeom.getMesh());
+        }
+        
         
     }
     
