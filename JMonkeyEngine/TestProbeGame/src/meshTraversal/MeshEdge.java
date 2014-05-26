@@ -10,13 +10,12 @@ import com.jme3.math.Vector3f;
  *
  * @author Zach
  */
-public class TriangleSide {
-
+public class MeshEdge {
     
     private Vector3f vertex1;
     private Vector3f vertex2;
     
-    public TriangleSide(Vector3f vertex1, Vector3f vertex2){
+    public MeshEdge(Vector3f vertex1, Vector3f vertex2){
         this.vertex1 = vertex1;
         this.vertex2 = vertex2;
     }
@@ -31,8 +30,7 @@ public class TriangleSide {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        return hash;
+        return vertex1.hashCode() + vertex2.hashCode();
     }
 
     @Override
@@ -43,15 +41,16 @@ public class TriangleSide {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final TriangleSide other = (TriangleSide) obj;
-        if(this.vertex1 == other.vertex2 && this.vertex2 == other.vertex2){
+        final MeshEdge other = (MeshEdge) obj;
+        if(this.vertex1.equals(other.getVertex2()) && 
+                this.vertex2.equals(other.getVertex1())){
             return true;
-        }else if(this.vertex1 == other.vertex1 && this.vertex2 == other.vertex2){
+        }else if(this.vertex1.equals(other.getVertex1()) && 
+                this.vertex2.equals(other.getVertex2())){
             return true;
         }else{
             return false;
         }
     }
-    
     
 }

@@ -6,6 +6,7 @@ package meshTraversal;
 
 import com.jme3.math.Triangle;
 import com.jme3.scene.Mesh;
+import java.util.HashMap;
 
 /**
  *
@@ -15,42 +16,39 @@ public class TriangleSet {
 
     Mesh mesh;
     
-    private MeshTriangle[] triangles;
+    private HashMap<MeshEdge,MeshEdgeTriangles> triangles;
+    private MeshTriangle[] meshTriangles;
     
    public TriangleSet(Mesh mesh){
-       triangles = new MeshTriangle[mesh.getTriangleCount()];
-       Triangle newTri = new Triangle();
-       MeshTriangle currentTri;
-       MeshTriangle currentPotentialNeighbor;
+       triangles = new HashMap<MeshEdge,MeshEdgeTriangles>(mesh.getTriangleCount());
+       meshTriangles = new MeshTriangle[mesh.getTriangleCount()];
+       Triangle currentTri = new Triangle();
+       MeshTriangle newTri;
+       MeshEdge edge12, edge23, edge13;
        
-       //put all triangles into an array
-       for(int index = 0; index < triangles.length; index++){
-           mesh.getTriangle(index, newTri);
-           triangles[index] = new MeshTriangle(newTri);
+       //put all triangles into a hash map
+       for(int index = 0; index < mesh.getTriangleCount(); index++){
+           mesh.getTriangle(index, currentTri);
+           newTri = new MeshTriangle(currentTri);
+           meshTriangles[index] = newTri;
+           edge12 = newTri.getSide12();
+           edge13 = newTri.getSide13();
+           edge23 = newTri.getSide23();
+           
+           addEdgeToTriangleMap(edge12,newTri);
+           addEdgeToTriangleMap(edge13,newTri);
+           addEdgeToTriangleMap(edge23,newTri);
+           
        }
-       
-       //find all the neighbors
-       for(int index = 0; index < triangles.length; index++){
-           currentTri = triangles[index];
-           for(int otherInd = 0; otherInd < triangles.length; otherInd++){
-               currentPotentialNeighbor = triangles[otherInd];
-
-               if(currentTri.getSide12().equals(currentPotentialNeighbor.getSide12())
-                       || currentTri.getSide12().equals(currentPotentialNeighbor.getSide23()) ||
-                       currentTri.getSide12().equals(currentPotentialNeighbor.getSide13())){
-                   currentTri.setV12Triangle(currentPotentialNeighbor);
-               }
-               if(currentTri.getSide13().equals(currentPotentialNeighbor.getSide12())
-                       || currentTri.getSide13().equals(currentPotentialNeighbor.getSide23()) ||
-                       currentTri.getSide13().equals(currentPotentialNeighbor.getSide13())){
-                   currentTri.setV13Triangle(currentPotentialNeighbor);
-               }
-               if(currentTri.getSide23().equals(currentPotentialNeighbor.getSide12())
-                       || currentTri.getSide23().equals(currentPotentialNeighbor.getSide23()) ||
-                       currentTri.getSide23().equals(currentPotentialNeighbor.getSide13())){
-                   currentTri.setV23Triangle(currentPotentialNeighbor);
-               }
-           }
+   }
+   
+   private void addEdgeToTriangleMap(MeshEdge edge, MeshTriangle triangle){
+       if(triangles.containsKey(edge)){
+           triangles.get(edge).addTriangle(triangle);
+       }else{
+           MeshEdgeTriangles edgeTriangles = new MeshEdgeTriangles();
+           edgeTriangles.addTriangle(triangle);
+           triangles.put(edge, edgeTriangles);
        }
    }
     

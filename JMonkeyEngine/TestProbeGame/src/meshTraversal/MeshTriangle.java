@@ -13,46 +13,33 @@ import com.jme3.math.Triangle;
 public class MeshTriangle {
     
     
-    private Triangle triangleData;
+    private MeshEdge side12;
+    private MeshEdge side13;
+    private MeshEdge side23;
     
-    //stores pointers to neighboring triangles
-    private MeshTriangle v12Triangle;
-    private MeshTriangle v23Triangle;
-    private MeshTriangle v13Triangle;
-    
-    private TriangleSide side12;
-    private TriangleSide side13;
-    private TriangleSide side23;
+    private int triangleIndex;
     
     public MeshTriangle(Triangle triangle){
-        triangleData = triangle;
+        triangleIndex = triangle.getIndex();
         
-        side12 = new TriangleSide(triangle.get1(),triangle.get2());
-        side13 = new TriangleSide(triangle.get2(),triangle.get3());
-        side23 = new TriangleSide(triangle.get2(),triangle.get3());
+        side12 = new MeshEdge(triangle.get1(),triangle.get2());
+        side13 = new MeshEdge(triangle.get1(),triangle.get3());
+        side23 = new MeshEdge(triangle.get2(),triangle.get3());
     }
 
-    public void setV12Triangle(MeshTriangle v12Triangle) {
-        this.v12Triangle = v12Triangle;
+    public int getTriangleIndex() {
+        return triangleIndex;
     }
 
-    public void setV23Triangle(MeshTriangle v23Triangle) {
-        this.v23Triangle = v23Triangle;
-    }
-
-    public void setV13Triangle(MeshTriangle v13Triangle) {
-        this.v13Triangle = v13Triangle;
-    }
-
-    public TriangleSide getSide12() {
+    public MeshEdge getSide12() {
         return side12;
     }
 
-    public TriangleSide getSide13() {
+    public MeshEdge getSide13() {
         return side13;
     }
 
-    public TriangleSide getSide23() {
+    public MeshEdge getSide23() {
         return side23;
     }
     
