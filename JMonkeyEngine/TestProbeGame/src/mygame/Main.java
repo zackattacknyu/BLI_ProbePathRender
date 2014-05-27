@@ -203,11 +203,11 @@ public class Main extends SimpleApplication {
         
         Node surfaceNode = (Node)surface;
         meshInfo = new TriangleSet();
+        meshInfo.setTransform(surfaceTransform);
         for(Spatial child: surfaceNode.getChildren()){
             Geometry surfaceGeom = (Geometry)child;
             meshInfo.addMesh(surfaceGeom.getMesh());
         }
-        
         
     }
     
@@ -522,9 +522,6 @@ public class Main extends SimpleApplication {
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             meshInfo.displayEdgeNeighbors(point.getTriangle());
                             meshInfo.displayVertexNeighbors(point.getTriangle());
-                            Vector3f vertex1 = point.getVertex1();
-                            vertex1 = surfaceTransform.mult(vertex1);
-                            System.out.println("Vertex1: " + vertex1);
 
                             if(moveLine){
                                 probePathSet.transformCurrentPathEndpoint(point.getContactPoint());

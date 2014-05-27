@@ -4,6 +4,7 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.scene.Mesh;
 import java.util.ArrayList;
@@ -18,10 +19,18 @@ public class TriangleSet {
     private HashMap<MeshEdge,MeshEdgeTriangles> trianglesByEdge;
     private HashMap<MeshVertex,ArrayList<MeshTriangle>> trianglesByVert;
     
+    private Matrix4f transform;
+    
    public TriangleSet(){
        trianglesByEdge = new HashMap<MeshEdge,MeshEdgeTriangles>(30000);
        trianglesByVert = new HashMap<MeshVertex,ArrayList<MeshTriangle>>(30000);
+       
+       transform = new Matrix4f();
    }
+
+    public void setTransform(Matrix4f transform) {
+        this.transform = transform;
+    }
    
    public void addMesh(Mesh mesh){
        Triangle currentTri;
@@ -33,7 +42,7 @@ public class TriangleSet {
        for(int index = 0; index < mesh.getTriangleCount(); index++){
            currentTri = new Triangle();
            mesh.getTriangle(index, currentTri);
-           newTri = new MeshTriangle(currentTri);
+           newTri = new MeshTriangle(currentTri,transform);
            edge12 = newTri.getSide12();
            edge13 = newTri.getSide13();
            edge23 = newTri.getSide23();
@@ -92,7 +101,7 @@ public class TriangleSet {
    }
    
    public void displayVertexNeighbors(Triangle triangle){
-       MeshTriangle currentTri = new MeshTriangle(triangle);
+       MeshTriangle currentTri = new MeshTriangle(triangle,transform);
        
        displayVertexTris(1,currentTri.getVertex1(),currentTri);
        displayVertexTris(2,currentTri.getVertex2(),currentTri);
@@ -112,7 +121,7 @@ public class TriangleSet {
    }
    
    public void displayEdgeNeighbors(Triangle triangle){
-       MeshTriangle currentTri = new MeshTriangle(triangle);
+       MeshTriangle currentTri = new MeshTriangle(triangle,transform);
        System.out.println("12 Tris: " + getEdgeNeighbor(currentTri.getSide12(),currentTri));
        System.out.println("13 Tris: " + getEdgeNeighbor(currentTri.getSide13(),currentTri));
        System.out.println("23 Tris: " + getEdgeNeighbor(currentTri.getSide23(),currentTri));

@@ -4,10 +4,10 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  *
@@ -26,18 +26,27 @@ public class MeshTriangle {
     
     private ArrayList<MeshVertex> vertices;
     
-    public MeshTriangle(Triangle triangle){
-        triangleData = triangle;
+    public MeshTriangle(Triangle triangle, Matrix4f transform){
         vertices = new ArrayList<MeshVertex>(3);
         
-        side12 = new MeshEdge(triangle.get1(),triangle.get2());
-        side13 = new MeshEdge(triangle.get1(),triangle.get3());
-        side23 = new MeshEdge(triangle.get2(),triangle.get3());
+        Vector3f vert1 = triangle.get1();
+        Vector3f vert2 = triangle.get2();
+        Vector3f vert3 = triangle.get3();
         
-        vertex1 = new MeshVertex(triangleData.get1());
-        vertex2 = new MeshVertex(triangleData.get2());
-        vertex3 = new MeshVertex(triangleData.get3());
+        Vector3f vert1Trans = transform.mult(vert1);
+        Vector3f vert2Trans = transform.mult(vert2);
+        Vector3f vert3Trans = transform.mult(vert3);
         
+        vertex1 = new MeshVertex(vert1Trans);
+        vertex2 = new MeshVertex(vert2Trans);
+        vertex3 = new MeshVertex(vert3Trans);
+        
+        triangleData = new Triangle(vertex1.getVertex(),vertex2.getVertex(),vertex3.getVertex());
+        
+        side12 = new MeshEdge(vertex1,vertex2);
+        side13 = new MeshEdge(vertex1,vertex3);
+        side23 = new MeshEdge(vertex2,vertex3);
+
         vertices.add(vertex1);
         vertices.add(vertex2);
         vertices.add(vertex3);
