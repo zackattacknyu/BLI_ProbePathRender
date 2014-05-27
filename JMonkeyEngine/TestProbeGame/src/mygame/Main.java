@@ -446,21 +446,21 @@ public class Main extends SimpleApplication {
                 if(name.equals("rotCameraLeft") && mousePressedDown){
                     //rootNode.rotate(0, -1.0f/20.0f, 0);
                     cam.setLocation(rotLeftMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    cam.lookAt(Vector3f.ZERO, cam.getUp());
                 }
                 if(name.equals("rotCameraRight") && mousePressedDown){
                     cam.setLocation(rotRightMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    cam.lookAt(Vector3f.ZERO, cam.getUp());
                     //rootNode.rotate(0, 1.0f/20.0f, 0);
                 }
                 if(name.equals("rotCameraUp") && mousePressedDown){
                     cam.setLocation(rotUpMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    cam.lookAt(Vector3f.ZERO, cam.getUp());
                     //rootNode.rotate(1.0f/20.0f, 0, 0);
                 }
                 if(name.equals("rotCameraDown") && mousePressedDown){
                     cam.setLocation(rotDownMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+                    cam.lookAt(Vector3f.ZERO, cam.getUp());
                     //rootNode.rotate(-1.0f/20.0f, 0, 0);
                 }
             }
