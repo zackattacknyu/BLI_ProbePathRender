@@ -520,7 +520,8 @@ public class Main extends SimpleApplication {
                             CollisionPoint point = new CollisionPoint(results.getCollision(0));
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
-                            meshInfo.displayNeighbors(point.getTriangle());
+                            meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            meshInfo.displayVertexNeighbors(point.getTriangle());
                             Vector3f vertex1 = point.getVertex1();
                             vertex1 = surfaceTransform.mult(vertex1);
                             System.out.println("Vertex1: " + vertex1);
