@@ -31,8 +31,9 @@ public class MeshVertex {
 
     @Override
     public int hashCode() {
-        double initHash = (vertex.getX() + vertex.getY() + vertex.getZ())*hashMultiplier;
-        return (int)(Math.round(initHash));
+        //double initHash = (vertex.getX() + vertex.getY() + vertex.getZ())*hashMultiplier;
+        return vertex.hashCode();
+        //return (int)(Math.round(initHash));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class MeshVertex {
         }
         final MeshVertex other = (MeshVertex) obj;
         
-        float xDiff = Math.abs(other.getVertex().getX() - vertex.getX());
+        /*float xDiff = Math.abs(other.getVertex().getX() - vertex.getX());
         float yDiff = Math.abs(other.getVertex().getY() - vertex.getY());
         float zDiff = Math.abs(other.getVertex().getZ() - vertex.getZ());
         
@@ -53,8 +54,9 @@ public class MeshVertex {
             return true;
         }else{
             return false;
-        }
-        //return other.getVertex().equals(vertex);
+        }*/
+        //return other.getVertex().toString().equals(vertex.toString());
+        return other.getVertex().equals(vertex);
         
         
     }
