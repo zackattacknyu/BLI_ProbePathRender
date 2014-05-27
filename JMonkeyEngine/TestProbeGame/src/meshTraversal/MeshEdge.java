@@ -16,6 +16,7 @@ public class MeshEdge {
     private MeshVertex vertex1;
     private MeshVertex vertex2;
     private ArrayList<MeshVertex> vertices;
+    private int hashC;
     
     public MeshEdge(Vector3f vertex1, Vector3f vertex2){
         this.vertex1 = new MeshVertex(vertex1);
@@ -23,6 +24,7 @@ public class MeshEdge {
         vertices = new ArrayList<MeshVertex>(2);
         vertices.add(this.vertex1);
         vertices.add(this.vertex2);
+        hashC = hashCode();
     }
 
     public MeshVertex getVertex1() {
@@ -53,6 +55,11 @@ public class MeshEdge {
         final MeshEdge other = (MeshEdge) obj;
         
         return vertices.containsAll(other.getVertices());
+    }
+
+    @Override
+    public String toString() {
+        return "MeshEdge{" + "vertex1=" + vertex1 + ", vertex2=" + vertex2 + '}';
     }
     
 }

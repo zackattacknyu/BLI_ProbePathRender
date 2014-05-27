@@ -14,7 +14,12 @@ public class MeshVertex {
 
     private Vector3f vertex;
     
-    private static final float errorThreshold = (float) Math.pow(10, -4);
+    private static final int thresholdPower = -5;
+    
+    private static final float errorThreshold = (float) Math.pow(10, thresholdPower);
+    private static final double hashMultiplier = Math.pow(10, 6);
+    
+    
     
     public MeshVertex(Vector3f vertex){
         this.vertex = vertex;
@@ -26,9 +31,8 @@ public class MeshVertex {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + (this.vertex != null ? this.vertex.hashCode() : 0);
-        return hash;
+        double initHash = (vertex.getX() + vertex.getY() + vertex.getZ())*hashMultiplier;
+        return (int)(Math.round(initHash));
     }
 
     @Override
@@ -50,8 +54,14 @@ public class MeshVertex {
         }else{
             return false;
         }
+        //return other.getVertex().equals(vertex);
         
         
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(vertex);
     }
     
     

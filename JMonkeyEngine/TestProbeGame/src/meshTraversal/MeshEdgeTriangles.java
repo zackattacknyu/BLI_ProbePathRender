@@ -21,7 +21,7 @@ public class MeshEdgeTriangles {
     public void addTriangle(MeshTriangle triangle){
         if(triangle1 == null){
             triangle1 = triangle;
-        }else if(triangle2 == null){
+        }else if(triangle2 == null && !triangle.equals(triangle1)){
             triangle2 = triangle;
         }
     }
@@ -32,6 +32,11 @@ public class MeshEdgeTriangles {
         }else{
             return triangle1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MeshEdgeTriangles{" + "triangle1=" + triangle1 + ", triangle2=" + triangle2 + '}';
     }
     
 }
