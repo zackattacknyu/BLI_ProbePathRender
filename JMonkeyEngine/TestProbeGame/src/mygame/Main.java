@@ -67,6 +67,7 @@ public class Main extends SimpleApplication {
     private Vector3f surfaceLoc;
     private Matrix4f surfaceTransform;
     private TriangleSet meshInfo;
+    private Vector3f lookAtCenter = Vector3f.ZERO;
 
     public static void main(String[] args) {
         
@@ -380,6 +381,18 @@ public class Main extends SimpleApplication {
                 normalVertices, lineMaterial);
         rootNode.attachChild(controlPointNormal);
     }
+    
+    private void moveCamera(boolean inward){
+        float moveAmount = 1.0f/5.0f;
+        if(inward){
+            moveAmount = -1*moveAmount;
+        }
+        Vector3f currentLoc = cam.getLocation();
+        Vector3f direction = currentLoc.subtract(lookAtCenter);
+        direction.normalizeLocal();
+        Vector3f moveVector = direction.mult(moveAmount);
+        cam.setLocation(currentLoc.add(moveVector));
+    }
 
     private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -444,24 +457,20 @@ public class Main extends SimpleApplication {
 
             public void onAnalog(String name, float value, float tpf) {
                 if(name.equals("rotCameraLeft") && mousePressedDown){
-                    //rootNode.rotate(0, -1.0f/20.0f, 0);
                     cam.setLocation(rotLeftMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, cam.getUp());
+                    cam.lookAt(lookAtCenter, cam.getUp());
                 }
                 if(name.equals("rotCameraRight") && mousePressedDown){
                     cam.setLocation(rotRightMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, cam.getUp());
-                    //rootNode.rotate(0, 1.0f/20.0f, 0);
+                    cam.lookAt(lookAtCenter, cam.getUp());
                 }
                 if(name.equals("rotCameraUp") && mousePressedDown){
                     cam.setLocation(rotUpMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, cam.getUp());
-                    //rootNode.rotate(1.0f/20.0f, 0, 0);
+                    cam.lookAt(lookAtCenter, cam.getUp());
                 }
                 if(name.equals("rotCameraDown") && mousePressedDown){
                     cam.setLocation(rotDownMatrix.mult(cam.getLocation()));
-                    cam.lookAt(Vector3f.ZERO, cam.getUp());
-                    //rootNode.rotate(-1.0f/20.0f, 0, 0);
+                    cam.lookAt(lookAtCenter, cam.getUp());
                 }
             }
         };        
@@ -557,14 +566,14 @@ public class Main extends SimpleApplication {
                      }
                      
                  }
-                
-                if(name.equals("moveInward") && keyPressed){
-                    //littleObject.move(0, 0, 1.0f/20.0f);
+ 
+                if(name.equals("moveInward")){
+                    moveCamera(true);
                 }
-                if(name.equals("moveOutward") && keyPressed){
-                    //littleObject.move(0,0, -1.0f/20.0f);
+                if(name.equals("moveOutward")){
+                    moveCamera(false);
                 }
-                
+ 
                 if(name.equals("rotateClockwise") && keyPressed){
                     probeTracker.rotateClockwise();
                 }
