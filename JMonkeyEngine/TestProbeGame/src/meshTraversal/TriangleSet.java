@@ -75,6 +75,22 @@ public class TriangleSet {
        }
    }
    
+   public MeshTriangle getEdgeNeighbor(MeshEdge edge,MeshTriangle triangle){
+       MeshEdgeTriangles tris = trianglesByEdge.get(edge);
+       return tris.getOtherTriangle(triangle);
+   }
+   
+   public ArrayList<MeshTriangle> getVertexNeighbors(MeshVertex vertex, MeshTriangle triangle){
+       ArrayList<MeshTriangle> vTriangles = trianglesByVert.get(vertex);
+       ArrayList<MeshTriangle> vertexNeighbors = new ArrayList<MeshTriangle>(vTriangles.size()-1);
+       for(MeshTriangle neighbor: vTriangles){
+           if(!neighbor.equals(triangle)){
+               vertexNeighbors.add(neighbor);
+           }
+       }
+       return vertexNeighbors;
+   }
+   
    public void displayVertexNeighbors(Triangle triangle){
        MeshTriangle currentTri = new MeshTriangle(triangle);
        
@@ -84,12 +100,12 @@ public class TriangleSet {
    }
    
    private void displayVertexTris(int vertexNum,MeshVertex vertex,MeshTriangle currentTri){
-       ArrayList<MeshTriangle> vTriangles = trianglesByVert.get(vertex);
+       ArrayList<MeshTriangle> vTriangles = getVertexNeighbors(vertex,currentTri);
        System.out.println("Vertex " + vertexNum + ": " + vertex);
        System.out.println("Vertex " + vertexNum + " Tris: ");
        if(vTriangles != null){
            for(MeshTriangle tri: vTriangles){
-               if(!tri.equals(currentTri)) System.out.println(tri);
+               System.out.println(tri);
             }
        }
        System.out.println("-------------------");
@@ -97,14 +113,9 @@ public class TriangleSet {
    
    public void displayEdgeNeighbors(Triangle triangle){
        MeshTriangle currentTri = new MeshTriangle(triangle);
-       displayOtherTri("12 Tris: ", currentTri.getSide12(),currentTri);
-       displayOtherTri("23 Tris: ", currentTri.getSide23(),currentTri);
-       displayOtherTri("13 Tris: ", currentTri.getSide13(),currentTri);
-   }
-   
-   private void displayOtherTri(String prefix,MeshEdge edge, MeshTriangle currentTri){
-       MeshEdgeTriangles tris = trianglesByEdge.get(edge);
-       System.out.println(prefix + tris.getOtherTriangle(currentTri));
+       System.out.println("12 Tris: " + getEdgeNeighbor(currentTri.getSide12(),currentTri));
+       System.out.println("13 Tris: " + getEdgeNeighbor(currentTri.getSide13(),currentTri));
+       System.out.println("23 Tris: " + getEdgeNeighbor(currentTri.getSide23(),currentTri));
    }
     
 }
