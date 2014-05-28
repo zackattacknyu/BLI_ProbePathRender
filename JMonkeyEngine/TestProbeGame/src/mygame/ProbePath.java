@@ -43,7 +43,53 @@ public class ProbePath {
     }
     
     /*
-     * Here will be the code for following the surface. 
+     * Here will be the code for following the surface using Triangles:
+     * 
+     * At each triangle, we will have a normal and a line segment. 
+     * We are allowed to rotate around the plane that the two vectors make
+     *      but not in any other way because then we will be changing yaw
+     * The tangeant vector will be one of the vectors perpendicular to the
+     *      normal vector. We want to move our vector so that it is aligned
+     *      with the tangenat vector. 
+     * We will thus move our vector toward either tangeant vectors in order
+     *      to align it with the surface.
+     * 
+     * Psuedo-code:
+     * 
+     * getRotation(Normal vector N, our Vector v):
+     *      Vector rotationAxis = crossProduct(N,v);
+     *      tangeant1 = rotate N by Pi/2 using rotationAxis;
+     *      tangeant2 = rotate N by -Pi/2 using rotationAxis;
+     *      if( angle between tangeant1 and v is less than pi/2):
+     *          target = tangeant1;
+     *      else
+     *          target = tangeant2
+     *      angle = arccos( dot product between target and v);
+     *      return rotation angle about rotationAxis
+     * 
+     * list L of to be processed segments, consisting of the path
+     * initialize empty list L' of processed segments
+     * initialize triangle T to be the triangle at the first point
+     * 
+     * while L is not empty:
+     *      let s equal first segment in L
+     *      let p equal first point in L
+     *      find normal N to the triangle T
+     *      Let R be result of getRotation(N,s)
+     *      rotate all of L by R using p as center of rotation
+     *      reset s and p to still be the first point and segment
+     *      if( s is entirely inside triangle):
+     *          remove s and p from L
+     *      else:
+     *          break up s into s_1 and s_2;
+     *          s_1 is entirely inside the triangle at p
+     *          s_2 is the rest of the segment
+     *          remove s from L and insert s_2
+     *          insert s_1 into L'
+     */
+    
+    /*
+     * Here will be the code for following the surface using Collisions:
      * 
      * Pseudo-code:
      * The line is an array Vertex where 
