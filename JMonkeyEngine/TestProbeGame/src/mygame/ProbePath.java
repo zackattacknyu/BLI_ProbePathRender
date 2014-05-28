@@ -82,6 +82,7 @@ public class ProbePath {
      *          remove s and p from L
      *      else:
      *          break up s into s_1 and s_2;
+     *          let T be neighboring triangle at the edge
      *          s_1 is entirely inside the triangle at p
      *          s_2 is the rest of the segment
      *          remove s from L and insert s_2
