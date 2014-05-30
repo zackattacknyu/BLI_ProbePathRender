@@ -4,6 +4,7 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
@@ -49,6 +50,25 @@ public class MeshHelper {
     public static Vector3f getDirectionVector(Vector3f originPoint, Vector3f endPoint){
         Vector3f direction = endPoint.clone().subtract(originPoint);
         return direction.normalize();
+    }
+    
+    /**
+     * This gets the matrix transformation for a rotation around an origin point
+     * @param originPoint
+     * @param rotation
+     * @return 
+     */
+    public static Matrix4f getRotationAroundPoint(Vector3f originPoint, Quaternion rotation){
+        Matrix4f firstTranslation = new Matrix4f();
+        Matrix4f lastTranslation = new Matrix4f();
+        
+        firstTranslation.setTranslation(originPoint);
+        Vector3f startingPtNeg = originPoint.clone().negate();
+        lastTranslation.setTranslation(startingPtNeg);
+        
+        Matrix4f rotTransform = new Matrix4f();
+        rotTransform.setRotationQuaternion(rotation);
+        return (firstTranslation.mult(rotTransform)).mult(lastTranslation);
     }
     
 }

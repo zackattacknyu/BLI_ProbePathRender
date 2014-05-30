@@ -36,7 +36,6 @@ public class LineTransformation {
         
         makeDirectionVectors();
         makeRotationQuat();
-        makeTranslationMatrices();
         makeWholeTransformation();
         makeOutput();
     }
@@ -60,19 +59,8 @@ public class LineTransformation {
         rotQuaternion = MeshHelper.getRotationFromVectors(actualDir, expectedDir);
     }
     
-    private void makeTranslationMatrices(){
-        firstTranslation = new Matrix4f();
-        lastTranslation = new Matrix4f();
-        
-        firstTranslation.setTranslation(startingPt);
-        Vector3f startingPtNeg = startingPt.clone().negate();
-        lastTranslation.setTranslation(startingPtNeg);
-    }
-    
     private void makeWholeTransformation(){
-        Matrix4f rotTransform = new Matrix4f();
-        rotTransform.setRotationQuaternion(rotQuaternion);
-        wholeTransformation = (firstTranslation.mult(rotTransform)).mult(lastTranslation);
+        wholeTransformation = MeshHelper.getRotationAroundPoint(startingPt, rotQuaternion);
     }
     
     private void makeOutput(){
