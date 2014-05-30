@@ -46,4 +46,9 @@ public class MeshHelper {
         
     }
     
+    public static Vector3f getDirectionVector(Vector3f originPoint, Vector3f endPoint){
+        Vector3f direction = endPoint.clone().subtract(originPoint);
+        return direction.normalize();
+    }
+    
 }

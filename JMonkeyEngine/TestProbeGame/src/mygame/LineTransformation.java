@@ -52,11 +52,8 @@ public class LineTransformation {
     
     
     private void makeDirectionVectors(){
-        expectedDir = expectedEndPt.clone().subtract(startingPt);
-        actualDir = actualEndPt.clone().subtract(startingPt);
-        
-        expectedDir = expectedDir.normalize();
-        actualDir = actualDir.normalize();
+        expectedDir = MeshHelper.getDirectionVector(startingPt, expectedEndPt);
+        actualDir = MeshHelper.getDirectionVector(startingPt, actualEndPt);
     }
     
     private void makeRotationQuat(){
