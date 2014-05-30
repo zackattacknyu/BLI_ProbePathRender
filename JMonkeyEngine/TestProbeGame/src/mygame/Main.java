@@ -529,12 +529,19 @@ public class Main extends SimpleApplication {
                             CollisionPoint point = new CollisionPoint(results.getCollision(0));
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
-                            meshInfo.displayEdgeNeighbors(point.getTriangle());
-                            meshInfo.displayVertexNeighbors(point.getTriangle());
+                            System.out.println("Contact Normal: " + point.getNormal());
+                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            //meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){
                                 probePathSet.transformCurrentPathEndpoint(point.getContactPoint());
+                                //displayCurrentPath();
+                                
+                                ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
+                                ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh(oldPath);
+                                probePathSet.addPath(newPath);
                                 displayCurrentPath();
+                                
                                 moveLine = false;
                             }else if(moveProbe){
                                 //addLineForNormal(point);

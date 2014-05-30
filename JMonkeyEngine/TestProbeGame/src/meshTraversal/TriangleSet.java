@@ -6,6 +6,7 @@ package meshTraversal;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +74,18 @@ public class TriangleSet {
        
  
   }
+   
+   public ArrayList<Vector3f> makePathFollowMesh(ArrayList<Vector3f> path){
+       Vector3f initPoint = path.get(0);
+       Vector3f initEndPoint = path.get(1);
+       
+       //TODO: Change this later
+       Vector3f normal = new Vector3f(-0.12195457f, 0.7023645f, -0.7012925f);
+       
+       Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
+       
+       return MeshHelper.getTransformedVertices(path, currentTransform);
+   }
    
    private void addEdgeToTriangleMap(MeshEdge edge, MeshTriangle triangle){
        if(trianglesByEdge.containsKey(edge)){

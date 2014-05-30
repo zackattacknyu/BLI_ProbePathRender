@@ -101,4 +101,46 @@ public class MeshHelper {
         return outputVertices;
     }
     
+    /**
+     * This gets us the whole transformation for moving a point onto a plane
+     *      using the projection of the vector
+     * @param normal        normal to the plane
+     * @param originPoint   origin to rotate around
+     * @param actualEndPt   end point to move onto plane
+     * @return 
+     */
+    public static Matrix4f getRotationOntoPlane(Vector3f normal, Vector3f originPoint, Vector3f actualEndPt){
+        Vector3f actualDir = getDirectionVector(originPoint,actualEndPt);
+        Quaternion rotation = getRotationOntoPlane(normal,actualDir);
+        return getRotationAroundPoint(originPoint,rotation);
+    }
+    
+    /**
+     * Gets the rotation quaternion for rotating a vector
+     *      so that it is on the plane described by the normal vector
+     * @param normal        the normal to the plane
+     * @param actualDir     the vector to rotate to be on the normal
+     * @return 
+     */
+    public static Quaternion getRotationOntoPlane(Vector3f normal, Vector3f actualDir){
+        Vector3f targetDir = getVectorProjOnPlane(normal, actualDir);
+        return getRotationFromVectors(actualDir,targetDir);
+    }
+    
+    /**
+     * This gets the target vector that is the projection of the startVector
+     *      onto the plane
+     * @param normal            the normal vector
+     * @param startVector       the vector to get the projection for
+     * @return 
+     */
+    public static Vector3f getVectorProjOnPlane(Vector3f normal, Vector3f startVector){
+        Vector3f newNorm = normal.normalize();
+        Vector3f newStartVec = startVector.normalize();
+        float dotProd = newNorm.dot(newStartVec);
+        Vector3f diffVector = newNorm.mult(dotProd);
+        return newStartVec.subtract(diffVector);
+        
+    }
+    
 }
