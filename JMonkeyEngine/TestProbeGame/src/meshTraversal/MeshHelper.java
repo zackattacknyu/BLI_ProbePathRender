@@ -8,6 +8,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 
 /**
  *
@@ -69,6 +70,35 @@ public class MeshHelper {
         Matrix4f rotTransform = new Matrix4f();
         rotTransform.setRotationQuaternion(rotation);
         return (firstTranslation.mult(rotTransform)).mult(lastTranslation);
+    }
+    
+    /**
+     * Gets the transformation for a rotation to go from actual end point to expected end point
+     * @param originPoint       point to rotate around
+     * @param expectedEndPt     desired end point
+     * @param actualEndPt       actual end point
+     * @return 
+     */
+    public static Matrix4f getRotationAroundPoint(Vector3f originPoint, Vector3f expectedEndPt, Vector3f actualEndPt){
+        Vector3f expectedDir = getDirectionVector(originPoint, expectedEndPt);
+        Vector3f actualDir = getDirectionVector(originPoint, actualEndPt);
+        Quaternion rotQuaternion = getRotationFromVectors(actualDir, expectedDir);
+        return MeshHelper.getRotationAroundPoint(originPoint, rotQuaternion);
+    }
+    
+    /**
+     * Gets a new array list consisting of the current vertices transformed
+     *  using the matrix in transform
+     * @param vertices  original vertices
+     * @param transform matrix to use to transform the vertices
+     * @return 
+     */
+    public static ArrayList<Vector3f> getTransformedVertices(ArrayList<Vector3f> vertices, Matrix4f transform){
+        ArrayList<Vector3f> outputVertices = new ArrayList<Vector3f>(vertices.size());
+        for(Vector3f vertex:vertices){
+            outputVertices.add(transform.mult(vertex));
+        }
+        return outputVertices;
     }
     
 }

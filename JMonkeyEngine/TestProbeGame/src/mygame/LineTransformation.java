@@ -33,9 +33,7 @@ public class LineTransformation {
         this.startingPt = startingPt;
         this.expectedEndPt = expectedEndPt;
         this.actualEndPt = actualEndPt;
-        
-        makeDirectionVectors();
-        makeRotationQuat();
+
         makeWholeTransformation();
         makeOutput();
     }
@@ -48,19 +46,8 @@ public class LineTransformation {
         return outputTranslation;
     }
     
-    
-    
-    private void makeDirectionVectors(){
-        expectedDir = MeshHelper.getDirectionVector(startingPt, expectedEndPt);
-        actualDir = MeshHelper.getDirectionVector(startingPt, actualEndPt);
-    }
-    
-    private void makeRotationQuat(){
-        rotQuaternion = MeshHelper.getRotationFromVectors(actualDir, expectedDir);
-    }
-    
     private void makeWholeTransformation(){
-        wholeTransformation = MeshHelper.getRotationAroundPoint(startingPt, rotQuaternion);
+        wholeTransformation = MeshHelper.getRotationAroundPoint(startingPt, expectedEndPt, actualEndPt);
     }
     
     private void makeOutput(){
@@ -71,11 +58,7 @@ public class LineTransformation {
     }
     
     public ArrayList<Vector3f> transformVertices(ArrayList<Vector3f> inputVertices){
-        ArrayList<Vector3f> outputVertices = new ArrayList<Vector3f>(inputVertices.size());
-        for(Vector3f vertex:inputVertices){
-            outputVertices.add(wholeTransformation.mult(vertex));
-        }
-        return outputVertices;
+        return MeshHelper.getTransformedVertices(inputVertices, wholeTransformation);
     }
     
 }
