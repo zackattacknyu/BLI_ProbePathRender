@@ -58,14 +58,10 @@ public class ProbePath {
      * 
      * getRotation(Normal vector N, our Vector v):
      *      Vector rotationAxis = crossProduct(N,v);
-     *      tangeant1 = rotate N by Pi/2 using rotationAxis;
-     *      tangeant2 = rotate N by -Pi/2 using rotationAxis;
-     *      if( angle between tangeant1 and v is less than pi/2):
-     *          target = tangeant1;
-     *      else
-     *          target = tangeant2
-     *      angle = arccos( dot product between target and v);
-     *      return rotation angle about rotationAxis
+     *      Projection T of vector v onto the plane is given by:
+     *          T = v - N*( dot(N,v) )
+     *      theta = arccos( dot(E,T) )
+     *      return rotation by theta about rotationAxis
      * 
      * list L of to be processed segments, consisting of the path
      * initialize empty list L' of processed segments
@@ -90,27 +86,16 @@ public class ProbePath {
      */
     
     /*
-     * Here will be the code for following the surface using Collisions:
+     * In the end Psuedo code will be the following:
      * 
-     * Pseudo-code:
-     * The line is an array Vertex where 
-     *      Vertex[i] is the i-th vertex in the sequence
-     * Copy the array Vertex[i] into currentVertices
-     * Initialize array finalVertices that will hold the final results
-     * initialize currentNormal to be the normal at the contact point
-     * initialize currentPoint to be the contact point
-     * let finalVertices[0] be equal to currentPoint
-     * for i from 0 to end-1:
-     *      transform all of currentVertices so that the following occurs:
-     *          currentVertices[0] matches currentPoint
-     *      Shoot a ray with the following properties:
-     *          origin is currentVertices[1]
-     *          direction is currentNormal and negative of currentNormal
-     *      When a proper decision result is found:
-     *          make currentPoint equal to collision point
-     *          make currentNormal equal to collision normal
-     *      finalVertices[i] gets set to currentPoint
-     *      Delete first element from currentVertices
+     * Set startPoint to start point of path
+     * Set actualEndPoint to end point of recorded path
+     * Set desiredEndPoint to desired calibration point
+     * while dist(actualEndPoint,desiredEndPoint)>epsilon:
+     *      Make initial guess theta based on startPoint, actualEndPoint, desiredEndPoint
+     *      Rotate the curve using theta
+     *      Project the curve onto the surface
+     *      After projection, change actualEndPoint to the end point of the projected curve
      */
     
 }

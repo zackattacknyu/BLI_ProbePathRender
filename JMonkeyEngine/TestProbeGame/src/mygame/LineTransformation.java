@@ -9,6 +9,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import meshTraversal.MeshHelper;
 
 /**
  *
@@ -20,9 +21,6 @@ public class LineTransformation {
     private Vector3f startingPt, expectedEndPt, actualEndPt;
     
     private Vector3f expectedDir,actualDir;
-    
-    private float rotAngle;
-    private Vector3f rotAxis;
     
     private Quaternion rotQuaternion;
     private Matrix4f firstTranslation,lastTranslation;
@@ -37,7 +35,6 @@ public class LineTransformation {
         this.actualEndPt = actualEndPt;
         
         makeDirectionVectors();
-        makeRotationParameters();
         makeRotationQuat();
         makeTranslationMatrices();
         makeWholeTransformation();
@@ -62,19 +59,8 @@ public class LineTransformation {
         actualDir = actualDir.normalize();
     }
     
-    private void makeRotationParameters(){
-        float cosTheta = expectedDir.dot(actualDir);
-        rotAngle = (float)Math.acos(cosTheta);
-        
-        rotAxis = expectedDir.cross(actualDir);
-        rotAxis = rotAxis.normalize();
-    }
-    
     private void makeRotationQuat(){
-        rotQuaternion = new Quaternion();
-        
-        //the -1 is necessary to ensure the actual vector rotates to the expected vector
-        rotQuaternion.fromAngleAxis(-1*rotAngle, rotAxis);
+        rotQuaternion = MeshHelper.getRotationFromVectors(actualDir, expectedDir);
     }
     
     private void makeTranslationMatrices(){
