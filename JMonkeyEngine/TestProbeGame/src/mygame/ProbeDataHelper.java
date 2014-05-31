@@ -32,7 +32,7 @@ public class ProbeDataHelper {
             if(!line.equals(previousLine)){
                 lineVertices.add(getVertexFromLine(line));
             }
-            line = previousLine;
+            previousLine = line;
         }
         
         return lineVertices;
