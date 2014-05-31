@@ -136,6 +136,28 @@ public class TriangleSet {
        //TODO: Change this later
        Vector3f normal = new Vector3f(-0.12195457f, 0.7023645f, -0.7012925f);
        
+       //TODO: Change this later
+       /*
+        * First contact triangle for testing is as follows:
+        * (0.003906, 0.11953, 0.54956),(0.003906, 0.11797, 0.55033),(0.002344, 0.11953, 0.54938)
+        */
+       Vector3f vertex1 = new Vector3f(0.003906f, 0.11953f, 0.54956f);
+       Vector3f vertex2 = new Vector3f(0.003906f, 0.11797f, 0.55033f);
+       Vector3f vertex3 = new Vector3f(0.002344f, 0.11953f, 0.54938f);
+       Vector3f vertex1Use = transform.mult(vertex1);
+       Vector3f vertex2Use = transform.mult(vertex2);
+       Vector3f vertex3Use = transform.mult(vertex3);
+       
+       System.out.println("12 Intersection is at Magnitude: " + 
+               MeshHelper.getLineSegmentIntersection(initPoint, 
+               initEndPoint, vertex1Use, vertex2Use));
+       System.out.println("23 Intersection is at Magnitude: " + 
+               MeshHelper.getLineSegmentIntersection(initPoint, 
+               initEndPoint, vertex2Use, vertex3Use));
+       System.out.println("13 Intersection is at Magnitude: " + 
+               MeshHelper.getLineSegmentIntersection(initPoint, 
+               initEndPoint, vertex1Use, vertex3Use));
+       
        Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
        
        return MeshHelper.getTransformedVertices(path, currentTransform);

@@ -7,6 +7,7 @@ package meshTraversal;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 
@@ -16,11 +17,151 @@ import java.util.ArrayList;
  */
 public class MeshHelper {
     
-    
+    public static float epsilon = (float) Math.pow(10, -8);
     public static String getTriangleInfo(Triangle triangle){
         return triangle.get(0).toString() + "," 
                 + triangle.get(1).toString() + 
                 "," + triangle.get(2).toString();
+    }
+    
+    /**
+     * This takes the vector starting at primarySegStart and going in the directino
+     *      of primarySegEnd and figures out the scalar magnitude that is required
+     *      to make it intersect the line from regSegStart to regSegEnd.
+     * 
+     * The line segments will be coplanar, but due to numerical error, it might
+     *      not be detected as such. Thus, we will figure out the answer for the x-y
+     *      coordiantes, x-z coordinates, and y-z coordinates and average the answer
+     *      together. 
+     * 
+     * @param primarySegStart segment start point that we care about
+     * @param primarySegEnd     segment end point that we care about
+     * @param refSegStart       reference segment start point for segment to intersect with
+     * @param regSegEnd         reference segment end point for segment to intersect with
+     * @return 
+     */
+    public static float getLineSegmentIntersection(Vector3f primarySegStart,Vector3f primarySegEnd, Vector3f refSegStart, Vector3f refSegEnd){
+        
+        Vector3f primarySegVector = primarySegEnd.subtract(primarySegStart);
+        Vector3f refSegVector = refSegStart.subtract(refSegEnd);
+        
+        Vector3f primarySegDir = primarySegVector.normalize();
+        Vector3f refSegDir = refSegVector.normalize();
+        
+        //they are parallel
+        if(primarySegDir.equals(refSegDir)){
+            return Float.MAX_VALUE;
+        }
+        
+        float primaryStartX = primarySegStart.getX();
+        float primaryStartY = primarySegStart.getY();
+        float primaryStartZ = primarySegStart.getZ();
+        
+        float primaryVecX = primarySegVector.getX();
+        float primaryVecY = primarySegVector.getY();
+        float primaryVecZ = primarySegVector.getZ();
+        
+        Vector2f primaryStartXY = new Vector2f(primaryStartX,primaryStartY);
+        Vector2f primaryStartXZ = new Vector2f(primaryStartX,primaryStartZ);
+        Vector2f primaryStartYZ = new Vector2f(primaryStartY,primaryStartZ);
+        
+        Vector2f primaryVecXY = new Vector2f(primaryVecX,primaryVecY);
+        Vector2f primaryVecXZ = new Vector2f(primaryVecX,primaryVecZ);
+        Vector2f primaryVecYZ = new Vector2f(primaryVecY,primaryVecZ);
+        
+        float refStartX = refSegStart.getX();
+        float refStartY = refSegStart.getY();
+        float refStartZ = refSegStart.getZ();
+        
+        float refVecX = refSegVector.getX();
+        float refVecY = refSegVector.getY();
+        float refVecZ = refSegVector.getZ();
+        
+        Vector2f refStartXY = new Vector2f(refStartX,refStartY);
+        Vector2f refStartXZ = new Vector2f(refStartX,refStartZ);
+        Vector2f refStartYZ = new Vector2f(refStartY,refStartZ);
+        
+        Vector2f refVecXY = new Vector2f(refVecX,refVecY);
+        Vector2f refVecXZ = new Vector2f(refVecX,refVecZ);
+        Vector2f refVecYZ = new Vector2f(refVecY,refVecZ);
+        
+        float xyResult = getLineSegmentIntersection(primaryStartXY,
+                primaryVecXY,refStartXY,refVecXY);
+        float xzResult = getLineSegmentIntersection(primaryStartXZ,
+                primaryVecXZ,refStartXZ,refVecXZ);
+        float yzResult = getLineSegmentIntersection(primaryStartYZ,
+                primaryVecYZ,refStartYZ,refVecYZ);
+        
+        float xyzResult = 0;
+        float numResults = 0;
+        
+        if(xyResult < Float.MAX_VALUE){
+            numResults++;
+            xyzResult += xyResult; 
+        }
+        if(yzResult < Float.MAX_VALUE){
+            numResults++;
+            xyzResult += yzResult; 
+        }
+        if(xzResult < Float.MAX_VALUE){
+            numResults++;
+            xyzResult += xzResult; 
+        }
+        
+        if(numResults < 1){
+            return Float.MAX_VALUE;
+        }else{
+            return xyzResult/numResults;
+        }
+        
+    }
+    
+    /**
+     * This gets the vector magnitude at the intersection when
+     *      the vectors are on a 2D plane
+     * @param primaryStartPt
+     * @param primarySegVector
+     * @param refSegStartPt
+     * @param refSegVector
+     * @return 
+     */
+    public static float getLineSegmentIntersection(Vector2f primaryStartPt, 
+            Vector2f primarySegVector, Vector2f refSegStartPt, 
+            Vector2f refSegVector){
+        float a = primarySegVector.getX();
+        float b = -1*refSegVector.getX();
+        float e = refSegStartPt.getX()-primaryStartPt.getX();
+        
+        float c = primarySegVector.getY();
+        float d = -1*refSegVector.getY();
+        float f = refSegStartPt.getY()-primaryStartPt.getY();
+        
+        Vector2f result = solveMatrixEqu(a,b,c,d,e,f);
+        if(result==null) return Float.MAX_VALUE;
+        return result.getX();
+    }
+    
+    /**
+     * This solves the following matrix equation:
+     *      [ a b ][s]  = [e]
+     *      [ c d ][t]    [f]
+     * 
+     * It will return a vector in the form (s,t)
+     *  and it takes in a,b,c,d,e,f
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     * @param f
+     * @return 
+     */
+    private static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
+        float det = a*d-b*c;
+        if(det < epsilon) return null;
+        float s = (d*e-b*f)/det;
+        float t = (a*f-e*c)/det;
+        return new Vector2f(s,t);
     }
     
     /**

@@ -530,7 +530,7 @@ public class Main extends SimpleApplication {
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println("Contact Normal: " + point.getNormal());
-                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            meshInfo.displayEdgeNeighbors(point.getTriangle());
                             //meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){
