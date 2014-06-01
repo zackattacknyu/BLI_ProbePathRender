@@ -146,10 +146,25 @@ public class TriangleSet {
         * (0.003906, 0.11953, 0.54956),(0.003906, 0.11797, 0.55033),(0.002344, 0.11953, 0.54938)
         */
        Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
-       Vector3f vertex1Use = new Vector3f(-0.18751788f, -2.2151814f, -15.160053f);
-       Vector3f vertex2Use = new Vector3f(-0.18743786f, -2.2886353f, -15.230972f);
-       Vector3f vertex3Use = new Vector3f(-0.3751179f, -2.223957f, -15.135239f);
-       System.out.println("23 Intersection is at Magnitude: " + 
+       Vector3f vertex1 = new Vector3f(-0.18751788f, -2.2151814f, -15.160053f);
+       Vector3f vertex2 = new Vector3f(-0.18743786f, -2.2886353f, -15.230972f);
+       Vector3f vertex3 = new Vector3f(-0.3751179f, -2.223957f, -15.135239f);
+       
+       Matrix4f originVertex1 = new Matrix4f();
+       originVertex1.setTranslation(vertex1.mult(-1));
+       Vector3f vertex1Use = originVertex1.mult(vertex1);
+       Vector3f vertex2Use = originVertex1.mult(vertex2);
+       Vector3f vertex3Use = originVertex1.mult(vertex3);
+       Vector3f initPointUse = originVertex1.mult(initPoint);
+       Vector3f initEndPointModUse = originVertex1.mult(initEndPointMod);
+       
+       System.out.println("Vertex 1: " + vertex1Use);
+       System.out.println("Vertex 2: " + vertex2Use);
+       System.out.println("Vertex 3: " + vertex3Use);
+       System.out.println("Start Point: " + initPointUse);
+       System.out.println("End Point: " + initEndPointModUse);
+       
+       /*System.out.println("23 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
                initEndPointMod, vertex2Use, vertex3Use));
        System.out.println("13 Intersection is at Magnitude: " + 
@@ -157,7 +172,7 @@ public class TriangleSet {
                initEndPointMod, vertex1Use, vertex3Use));
        System.out.println("12 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPointMod, vertex1Use, vertex2Use));
+               initEndPointMod, vertex1Use, vertex2Use));*/
        
        
        return MeshHelper.getTransformedVertices(path, currentTransform);
