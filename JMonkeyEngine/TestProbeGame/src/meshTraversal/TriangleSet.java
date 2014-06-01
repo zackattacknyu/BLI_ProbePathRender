@@ -133,32 +133,32 @@ public class TriangleSet {
        Vector3f initPoint = path.get(0);
        Vector3f initEndPoint = path.get(1);
        
+       
        //TODO: Change this later
        Vector3f normal = new Vector3f(-0.12195457f, 0.7023645f, -0.7012925f);
+       
+       
+       Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
        
        //TODO: Change this later
        /*
         * First contact triangle for testing is as follows:
         * (0.003906, 0.11953, 0.54956),(0.003906, 0.11797, 0.55033),(0.002344, 0.11953, 0.54938)
         */
-       Vector3f vertex1 = new Vector3f(0.003906f, 0.11953f, 0.54956f);
-       Vector3f vertex2 = new Vector3f(0.003906f, 0.11797f, 0.55033f);
-       Vector3f vertex3 = new Vector3f(0.002344f, 0.11953f, 0.54938f);
-       Vector3f vertex1Use = transform.mult(vertex1);
-       Vector3f vertex2Use = transform.mult(vertex2);
-       Vector3f vertex3Use = transform.mult(vertex3);
-       
-       System.out.println("12 Intersection is at Magnitude: " + 
-               MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPoint, vertex1Use, vertex2Use));
+       Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
+       Vector3f vertex1Use = new Vector3f(-0.18751788f, -2.2151814f, -15.160053f);
+       Vector3f vertex2Use = new Vector3f(-0.18743786f, -2.2886353f, -15.230972f);
+       Vector3f vertex3Use = new Vector3f(-0.3751179f, -2.223957f, -15.135239f);
        System.out.println("23 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPoint, vertex2Use, vertex3Use));
+               initEndPointMod, vertex2Use, vertex3Use));
        System.out.println("13 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPoint, vertex1Use, vertex3Use));
+               initEndPointMod, vertex1Use, vertex3Use));
+       System.out.println("12 Intersection is at Magnitude: " + 
+               MeshHelper.getLineSegmentIntersection(initPoint, 
+               initEndPointMod, vertex1Use, vertex2Use));
        
-       Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
        
        return MeshHelper.getTransformedVertices(path, currentTransform);
    }
