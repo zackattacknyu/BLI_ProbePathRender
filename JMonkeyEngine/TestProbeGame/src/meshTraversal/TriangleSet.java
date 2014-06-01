@@ -4,6 +4,7 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
@@ -152,17 +153,38 @@ public class TriangleSet {
        
        Matrix4f originVertex1 = new Matrix4f();
        originVertex1.setTranslation(vertex1.mult(-1));
-       Vector3f vertex1Use = originVertex1.mult(vertex1);
-       Vector3f vertex2Use = originVertex1.mult(vertex2);
-       Vector3f vertex3Use = originVertex1.mult(vertex3);
+       Vector3f vertex2Vec = originVertex1.mult(vertex2);
+       Vector3f vertex3Vec = originVertex1.mult(vertex3);
        Vector3f initPointUse = originVertex1.mult(initPoint);
        Vector3f initEndPointModUse = originVertex1.mult(initEndPointMod);
+
+       vertex2Vec.multLocal(10000);
+       vertex3Vec.multLocal(10000);
+       initPointUse.multLocal(10000);
+       initEndPointModUse.multLocal(10000);
        
-       System.out.println("Vertex 1: " + vertex1Use);
-       System.out.println("Vertex 2: " + vertex2Use);
-       System.out.println("Vertex 3: " + vertex3Use);
+       System.out.println("Vertex 2: " + vertex2Vec);
+       System.out.println("Vertex 3: " + vertex3Vec);
        System.out.println("Start Point: " + initPointUse);
        System.out.println("End Point: " + initEndPointModUse);
+       
+       Vector3f newZVector = vertex2Vec.cross(vertex3Vec);
+       System.out.println("New Z Vector: " + newZVector);
+       
+       //TODO: START DEBUGGING FROM HERE
+       Matrix3f coordMatrix = new Matrix3f();
+       float[][] coords = new float[3][3];
+       for(int j = 0; j < 2; j++){
+            coords[j][0] = vertex2Vec.get(j);
+            coords[j][1] = vertex3Vec.get(j);
+            coords[j][2] = newZVector.get(j);
+        }
+       coordMatrix.set(coords);
+       coordMatrix.invertLocal();
+
+       System.out.println("CoordMatrix: " + coordMatrix);
+       System.out.println("Start Point New System: " + coordMatrix.mult(initPointUse));
+       System.out.println("End Point New System: " + coordMatrix.mult(initEndPointModUse));
        
        /*System.out.println("23 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
