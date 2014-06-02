@@ -130,16 +130,13 @@ public class TriangleSet {
      *      Project the curve onto the surface
      *      After projection, change actualEndPoint to the end point of the projected curve
      */
-   public ArrayList<Vector3f> makePathFollowMesh(ArrayList<Vector3f> path){
+   public ArrayList<Vector3f> makePathFollowMesh(ArrayList<Vector3f> path,Triangle initTriangle, Vector3f initNormal){
        Vector3f initPoint = path.get(0);
        Vector3f initEndPoint = path.get(1);
+             
        
-       
-       //TODO: Change this later
-       Vector3f normal = new Vector3f(-0.12195457f, 0.7023645f, -0.7012925f);
-       
-       
-       Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
+       Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(initNormal, initPoint, initEndPoint);
+       MeshTriangle startTriangle = new MeshTriangle(initTriangle,transform);
        
        //TODO: Change this later
        /*
@@ -147,9 +144,9 @@ public class TriangleSet {
         * (0.003906, 0.11953, 0.54956),(0.003906, 0.11797, 0.55033),(0.002344, 0.11953, 0.54938)
         */
        Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
-       Vector3f vertex1 = new Vector3f(-0.18751788f, -2.2151814f, -15.160053f);
-       Vector3f vertex2 = new Vector3f(-0.18743786f, -2.2886353f, -15.230972f);
-       Vector3f vertex3 = new Vector3f(-0.3751179f, -2.223957f, -15.135239f);
+       Vector3f vertex1 = startTriangle.getVertex1().getVertex();
+       Vector3f vertex2 = startTriangle.getVertex2().getVertex();
+       Vector3f vertex3 = startTriangle.getVertex3().getVertex();
        
        Matrix4f originVertex1 = new Matrix4f();
        originVertex1.setTranslation(vertex1.mult(-1));
@@ -158,28 +155,24 @@ public class TriangleSet {
        Vector3f initPointUse = originVertex1.mult(initPoint);
        Vector3f initEndPointModUse = originVertex1.mult(initEndPointMod);
 
-       vertex2Vec.multLocal(10000);
-       vertex3Vec.multLocal(10000);
-       initPointUse.multLocal(10000);
-       initEndPointModUse.multLocal(10000);
-       
        System.out.println("Vertex 2: " + vertex2Vec);
        System.out.println("Vertex 3: " + vertex3Vec);
        System.out.println("Start Point: " + initPointUse);
        System.out.println("End Point: " + initEndPointModUse);
        
-       Vector3f newZVector = vertex2Vec.cross(vertex3Vec);
+       Vector3f newZVector = vertex2Vec.clone().cross(vertex3Vec.clone());
        System.out.println("New Z Vector: " + newZVector);
        
        //TODO: START DEBUGGING FROM HERE
        Matrix3f coordMatrix = new Matrix3f();
        float[][] coords = new float[3][3];
-       for(int j = 0; j < 2; j++){
+       for(int j = 0; j < 3; j++){
             coords[j][0] = vertex2Vec.get(j);
             coords[j][1] = vertex3Vec.get(j);
             coords[j][2] = newZVector.get(j);
         }
        coordMatrix.set(coords);
+       System.out.println("Coord Matrix: " + coordMatrix);
        coordMatrix.invertLocal();
 
        System.out.println("CoordMatrix: " + coordMatrix);

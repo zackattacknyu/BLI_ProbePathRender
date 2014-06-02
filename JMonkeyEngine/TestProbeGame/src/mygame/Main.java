@@ -19,11 +19,11 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
@@ -33,6 +33,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import meshTraversal.MeshHelper;
 import meshTraversal.TriangleSet;
 
 
@@ -47,6 +48,7 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, 
             readModeText, recordingText, resetProbeText, probeMoveModeText;
+    private boolean onStartPoint = true;
     
     private ProbeTracker probeTracker;
     
@@ -68,6 +70,9 @@ public class Main extends SimpleApplication {
     private Matrix4f surfaceTransform;
     private TriangleSet meshInfo;
     private Vector3f lookAtCenter = Vector3f.ZERO;
+    private Vector3f lastPointClicked;
+    private Triangle startingTriangle;
+    private Vector3f startingNormal;
 
     public static void main(String[] args) {
         
@@ -534,15 +539,46 @@ public class Main extends SimpleApplication {
                             //meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){
-                                probePathSet.transformCurrentPathEndpoint(point.getContactPoint());
-                                //displayCurrentPath();
                                 
-                                ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh(oldPath);
-                                probePathSet.addPath(newPath);
-                                displayCurrentPath();
+                                if(onStartPoint){
+                                    
+                                    Vector3f endPoint = point.getContactPoint().clone();
+                                    if(!endPoint.equals(lastPointClicked)){
+                                        lastPointClicked = endPoint;
+                                        System.out.println("line will start here");
+                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
+                                        startingTriangle = point.getTriangle();
+                                        Vector3f startPoint = oldPath.get(0);
+                                        Vector3f moveVector = startPoint.subtract(endPoint);
+                                        startingNormal = point.getNormal();
+                                        Matrix4f moveTransform = new Matrix4f();
+                                        moveTransform.setTranslation(moveVector);
+                                        ArrayList<Vector3f> newPath = MeshHelper.getTransformedVertices(oldPath, moveTransform);
+                                        probePathSet.addPath(newPath);
+                                        displayCurrentPath();
+                                        onStartPoint = false;
+                                    }
+
+                                }else{
+                                    
+                                    Vector3f endPoint = point.getContactPoint().clone();
+                                    if(!endPoint.equals(lastPointClicked)){
+                                        lastPointClicked = endPoint;
+                                        probePathSet.transformCurrentPathEndpoint(endPoint);
+                                        //displayCurrentPath();
+
+                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
+                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh(oldPath,startingTriangle,startingNormal);
+                                        probePathSet.addPath(newPath);
+                                        displayCurrentPath();
+
+                                        moveLine = false;
+                                        onStartPoint = true;
+                                    }
+                                    
+                                }
                                 
-                                moveLine = false;
+                                
                             }else if(moveProbe){
                                 //addLineForNormal(point);
                                 probeTracker.setBaselineRotation(point.getRotation());
@@ -555,7 +591,7 @@ public class Main extends SimpleApplication {
                 if(name.equals("changeLineMoveMode") && keyPressed){
                     if(!moveLine){
                         System.out.println("Last Line will be moved "
-                            + "to next point clicked");
+                            + "to next 2 points clicked");
                         moveLine = true;
                     }else{
                         System.out.println("Line Moving Cancelled");
