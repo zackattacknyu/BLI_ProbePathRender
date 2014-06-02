@@ -156,7 +156,7 @@ public class MeshHelper {
      * @param f
      * @return 
      */
-    private static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
+    public static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
         float det = a*d-b*c;
         if(det < epsilon) return null;
         float s = (d*e-b*f)/det;

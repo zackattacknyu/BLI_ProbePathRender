@@ -7,6 +7,7 @@ package meshTraversal;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 import java.util.ArrayList;
@@ -186,8 +187,22 @@ public class TriangleSet {
        coordMatrix.invertLocal();
 
        System.out.println("CoordMatrix: " + coordMatrix);
-       System.out.println("Start Point New System: " + coordMatrix.mult(initPointUse));
-       System.out.println("End Point New System: " + coordMatrix.mult(initEndPointModUse));
+       Vector3f newStart = coordMatrix.mult(initPointUse);
+       Vector3f newEnd = coordMatrix.mult(initEndPointModUse);
+       System.out.println("Start Point New System: " + newStart);
+       System.out.println("End Point New System: " + newEnd);
+       Vector3f newDir = newEnd.clone().subtract(newStart);
+       float intersect12 = -1*newStart.getY()/newDir.getY();
+       float intersect13 = -1*newStart.getX()/newDir.getX();
+       System.out.println("12 Intersect: " + intersect12);
+       System.out.println("13 Intersect: " + intersect13);
+       
+       Vector2f intersect23Points = MeshHelper.solveMatrixEqu(
+               newDir.getX(), -1, 
+               newDir.getY(), 1, 
+               -1*newStart.getX(), 1-newStart.getY());
+       float intersect23 = intersect23Points.getX();
+       System.out.println("23 Intersect: " + intersect23);
        
        /*System.out.println("23 Intersection is at Magnitude: " + 
                MeshHelper.getLineSegmentIntersection(initPoint, 
