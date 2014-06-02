@@ -165,7 +165,7 @@ public class Main extends SimpleApplication {
         probeRep.attachChild(xAxisBox);
         probeRep.attachChild(yAxisBox);
         probeRep.attachChild(zAxisBox);
-        rootNode.attachChild(probeRep);
+        //rootNode.attachChild(probeRep);
         moveableObject = probeRep;
         
         probeMat = new Material(assetManager, 
@@ -545,11 +545,11 @@ public class Main extends SimpleApplication {
                                     Vector3f endPoint = point.getContactPoint().clone();
                                     if(!endPoint.equals(lastPointClicked)){
                                         lastPointClicked = endPoint;
-                                        System.out.println("line will start here");
+                                        System.out.println("---------------Above here is line start data------------");
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
                                         startingTriangle = point.getTriangle();
                                         Vector3f startPoint = oldPath.get(0);
-                                        Vector3f moveVector = startPoint.subtract(endPoint);
+                                        Vector3f moveVector = endPoint.subtract(startPoint);
                                         startingNormal = point.getNormal();
                                         Matrix4f moveTransform = new Matrix4f();
                                         moveTransform.setTranslation(moveVector);

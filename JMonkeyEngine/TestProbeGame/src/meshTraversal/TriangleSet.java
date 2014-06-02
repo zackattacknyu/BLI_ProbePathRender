@@ -139,14 +139,13 @@ public class TriangleSet {
        MeshTriangle startTriangle = new MeshTriangle(initTriangle,transform);
        
        //TODO: Change this later
-       /*
-        * First contact triangle for testing is as follows:
-        * (0.003906, 0.11953, 0.54956),(0.003906, 0.11797, 0.55033),(0.002344, 0.11953, 0.54938)
-        */
        Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
        Vector3f vertex1 = startTriangle.getVertex1().getVertex();
        Vector3f vertex2 = startTriangle.getVertex2().getVertex();
        Vector3f vertex3 = startTriangle.getVertex3().getVertex();
+       
+       System.out.println("Start Triangle: " + startTriangle);
+       System.out.println("Contact Point: " + initPoint);
        
        Matrix4f originVertex1 = new Matrix4f();
        originVertex1.setTranslation(vertex1.mult(-1));
@@ -154,6 +153,17 @@ public class TriangleSet {
        Vector3f vertex3Vec = originVertex1.mult(vertex3);
        Vector3f initPointUse = originVertex1.mult(initPoint);
        Vector3f initEndPointModUse = originVertex1.mult(initEndPointMod);
+       
+       /*
+        * This part is necessary due to rounding errors skewing
+        *       our results. By multplying, we are ensuring
+        *       that rounding errors won't affect the final result.
+        */
+       float localMultiplier = (float)Math.pow(10, 5);
+       vertex2Vec.multLocal(localMultiplier);
+       vertex3Vec.multLocal(localMultiplier);
+       initPointUse.multLocal(localMultiplier);
+       initEndPointModUse.multLocal(localMultiplier);
 
        System.out.println("Vertex 2: " + vertex2Vec);
        System.out.println("Vertex 3: " + vertex3Vec);
