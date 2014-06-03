@@ -453,6 +453,11 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
+        inputManager.addMapping("moveCameraUp", new KeyTrigger(KeyInput.KEY_UP));
+        inputManager.addMapping("moveCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
+        inputManager.addMapping("moveCameraLeft", new KeyTrigger(KeyInput.KEY_LEFT));
+        inputManager.addMapping("moveCameraRight", new KeyTrigger(KeyInput.KEY_RIGHT));
+        
         final Matrix3f rotLeftMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
         final Matrix3f rotRightMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
         final Matrix3f rotUpMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
@@ -483,6 +488,19 @@ public class Main extends SimpleApplication {
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("moveCameraRight") && keyPressed){
+                    System.out.println("Move Camera Right");
+                }
+                if(name.equals("moveCameraLeft") && keyPressed){
+                    System.out.println("Move Camera Left");
+                }
+                if(name.equals("moveCameraUp") && keyPressed){
+                    System.out.println("Move Camera Up");
+                }
+                if(name.equals("moveCameraDown") && keyPressed){
+                    System.out.println("Move Camera Down");
+                }
                 
                 if(name.equals("importLine") && keyPressed){
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
@@ -718,7 +736,11 @@ public class Main extends SimpleApplication {
                 "importLine",
                 "exportLine",
                 "deleteLine",
-                "selectLine");
+                "selectLine",
+                "moveCameraRight",
+                "moveCameraLeft",
+                "moveCameraUp",
+                "moveCameraDown");
 
     }
 }
