@@ -51,6 +51,11 @@ public class MeshTriangle {
         vertices.add(vertex2);
         vertices.add(vertex3);
     }
+    
+    public Vector3f getNormal(){
+        triangleData.calculateNormal();
+        return triangleData.getNormal();
+    }
 
     public MeshEdge getSide12() {
         return side12;

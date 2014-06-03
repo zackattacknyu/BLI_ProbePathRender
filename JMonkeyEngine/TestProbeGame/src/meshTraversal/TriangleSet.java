@@ -151,6 +151,54 @@ public class TriangleSet {
        return MeshHelper.getTransformedVertices(path, currentTransform);
    }
    
+   /*
+     * In the end Psuedo code will be the following:
+     * 
+     * Set startPoint to start point of path
+     * Set actualEndPoint to end point of recorded path
+     * Set desiredEndPoint to desired calibration point
+     * while dist(actualEndPoint,desiredEndPoint)>epsilon:
+     *      Make initial guess theta based on startPoint, actualEndPoint, desiredEndPoint
+     *      Rotate the curve using theta
+     *      Project the curve onto the surface
+     *      After projection, change actualEndPoint to the end point of the projected curve
+     */
+   public ArrayList<Vector3f> makePathFollowMesh2(ArrayList<Vector3f> path,Triangle initTriangle){
+       ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
+       ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
+       Vector3f initPoint,initEndPoint,initEndPointMod,currentNormal;
+       Matrix4f currentTransform;
+       MeshTriangle currentTriangle = new MeshTriangle(initTriangle,transform);
+       TriangleLineSegmentIntersection intersection;
+       MeshEdge intersectingEdge = null;
+       Vector3f newPoint;
+       
+       while(!remainingPath.isEmpty()){
+           
+           initPoint = remainingPath.get(0);
+           initEndPoint = remainingPath.get(1);
+           finalPath.add(initPoint);
+           currentNormal = currentTriangle.getNormal();
+           currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
+           remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
+           initEndPointMod = remainingPath.get(1);
+           
+           intersection = new TriangleLineSegmentIntersection(
+               currentTriangle,initPoint,initEndPointMod);
+           
+           intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
+           if(intersectingEdge != null){
+               currentTriangle = getEdgeNeighbor(intersectingEdge,currentTriangle);
+               newPoint = intersection.getBreakpoint();
+               remainingPath.add(1, newPoint);
+           }
+           
+           remainingPath.remove(0);
+       }
+       
+       return finalPath;
+   }
+   
    private void addEdgeToTriangleMap(MeshEdge edge, MeshTriangle triangle){
        if(trianglesByEdge.containsKey(edge)){
            trianglesByEdge.get(edge).addTriangle(triangle);

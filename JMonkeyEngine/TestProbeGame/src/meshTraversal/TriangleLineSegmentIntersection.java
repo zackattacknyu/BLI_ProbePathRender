@@ -26,13 +26,26 @@ public class TriangleLineSegmentIntersection {
      */
     private float intersectEdge12,intersectEdge23,intersectEdge13;
     
-    public TriangleLineSegmentIntersection(MeshTriangle startTriangle, 
+    private MeshEdge ignoreEdge;
+    
+    private Vector3f lineStart,lineEnd;
+    
+    private float breakpointMag;
+    
+    private MeshTriangle currentTriangle;
+    
+    public TriangleLineSegmentIntersection(MeshTriangle currentTri, 
             Vector3f lineSegmentStart, Vector3f lineSegmentEnd){
+        
+        lineStart = lineSegmentStart;
+        lineEnd = lineSegmentEnd;
+        
+        this.currentTriangle = currentTri;
 
         //retrieves the vertices to use
-       Vector3f vertex1 = startTriangle.getVertex1().getVertex();
-       Vector3f vertex2 = startTriangle.getVertex2().getVertex();
-       Vector3f vertex3 = startTriangle.getVertex3().getVertex();
+       Vector3f vertex1 = currentTri.getVertex1().getVertex();
+       Vector3f vertex2 = currentTri.getVertex2().getVertex();
+       Vector3f vertex3 = currentTri.getVertex3().getVertex();
        
        /*
         * Translates all the points so that
@@ -90,6 +103,44 @@ public class TriangleLineSegmentIntersection {
        intersectEdge23 = Float.MAX_VALUE;
        if(intersect23Points != null) intersectEdge23 = intersect23Points.getX();
         
+    }
+    
+    public MeshEdge getIntersectionEdge(MeshEdge edgeToIgnore){
+        ignoreEdge = edgeToIgnore;
+        if(isGoodEdge(intersectEdge12,currentTriangle.getSide12())){
+            breakpointMag = intersectEdge12;
+            return currentTriangle.getSide12();
+        }
+        if(isGoodEdge(intersectEdge13,currentTriangle.getSide13())){
+            breakpointMag = intersectEdge13;
+            return currentTriangle.getSide13();
+        }
+        if(isGoodEdge(intersectEdge23,currentTriangle.getSide23())){
+            breakpointMag = intersectEdge23;
+            return currentTriangle.getSide23();
+        }
+        return null;
+    }
+    
+    public Vector3f getBreakpoint(){
+        return getBreakpoint(breakpointMag);
+    }
+    
+    public Vector3f getBreakpoint(float breakpoint){
+        Vector3f lineDir = lineEnd.subtract(lineStart);
+        Vector3f deltaVector = lineDir.mult(breakpoint);
+        return lineStart.add(deltaVector);
+    }
+    
+    private boolean isGoodEdge(float edgeIntersectScaler,MeshEdge originalEdge){
+        if(originalEdge.equals(ignoreEdge)){
+            return false;
+        }
+        if(edgeIntersectScaler >= 0 && edgeIntersectScaler <= 1){
+            return true;
+        }else{
+            return false;
+        }
     }
     
     /**
