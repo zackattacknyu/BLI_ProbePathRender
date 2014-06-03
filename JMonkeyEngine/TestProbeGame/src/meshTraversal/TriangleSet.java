@@ -164,6 +164,13 @@ public class TriangleSet {
      *      After projection, change actualEndPoint to the end point of the projected curve
      */
    public ArrayList<Vector3f> makePathFollowMesh2(ArrayList<Vector3f> path,Triangle initTriangle){
+       
+       /*
+        * IMPORTANT: 
+        * Make sure the first step it is doing is to move
+        *   the path to the desired end point
+        */
+       
        ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
        Vector3f initPoint,initEndPoint,initEndPointMod,currentNormal;
@@ -173,28 +180,48 @@ public class TriangleSet {
        MeshEdge intersectingEdge = null;
        Vector3f newPoint;
        
-       while(!remainingPath.isEmpty()){
+       while(remainingPath.size() > 1){
            
            initPoint = remainingPath.get(0);
            initEndPoint = remainingPath.get(1);
            finalPath.add(initPoint);
-           currentNormal = currentTriangle.getNormal();
-           currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
-           remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
-           initEndPointMod = remainingPath.get(1);
            
-           intersection = new TriangleLineSegmentIntersection(
-               currentTriangle,initPoint,initEndPointMod);
            
-           intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
-           if(intersectingEdge != null){
-               currentTriangle = getEdgeNeighbor(intersectingEdge,currentTriangle);
-               newPoint = intersection.getBreakpoint();
-               remainingPath.add(1, newPoint);
-           }
+           
            
            remainingPath.remove(0);
+           
+           currentNormal = currentTriangle.getNormal();
+            currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
+            if(!(currentTransform.get(1, 1) >= -1000000f && currentTransform.get(1, 1) <= 1000000f)){
+               //currentTransform = new Matrix4f();
+                break;
+            }
+            remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
+            initEndPointMod = remainingPath.get(0);
+
+            intersection = new TriangleLineSegmentIntersection(
+                currentTriangle,initPoint,initEndPointMod);
+
+            
+            intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
+            if(intersectingEdge != null){
+                currentTriangle = getEdgeNeighbor(intersectingEdge,currentTriangle);
+                newPoint = intersection.getBreakpoint();
+                remainingPath.add(0, newPoint);
+                
+                if(currentTriangle == null){
+                    break;
+                }
+                
+            }
+           
+           
+           
        }
+       
+       //adds the last points to the final path
+       finalPath.addAll(remainingPath);
        
        return finalPath;
    }

@@ -150,7 +150,12 @@ public class TriangleLineSegmentIntersection {
      * @return 
      */
     private static float getIntersection(float start, float dir){
-        return -1*start/dir;
+        if(dir<Constants.EPSILON){
+            return Float.MAX_VALUE;
+        }else{
+            return -1*start/dir;
+        }
+        
     }
 
     public float getIntersectEdge12() {

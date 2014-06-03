@@ -42,7 +42,7 @@ public class MeshHelper {
      */
     public static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
         float det = a*d-b*c;
-        //if(det < Constants.EPSILON) return null;
+        if(det < Constants.EPSILON) return null;
         float s = (d*e-b*f)/det;
         float t = (a*f-e*c)/det;
         return new Vector2f(s,t);
