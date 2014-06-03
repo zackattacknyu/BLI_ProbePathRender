@@ -204,16 +204,6 @@ public class TriangleSet {
        float intersect23 = intersect23Points.getX();
        System.out.println("23 Intersect: " + intersect23);
        
-       /*System.out.println("23 Intersection is at Magnitude: " + 
-               MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPointMod, vertex2Use, vertex3Use));
-       System.out.println("13 Intersection is at Magnitude: " + 
-               MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPointMod, vertex1Use, vertex3Use));
-       System.out.println("12 Intersection is at Magnitude: " + 
-               MeshHelper.getLineSegmentIntersection(initPoint, 
-               initEndPointMod, vertex1Use, vertex2Use));*/
-       
        
        return MeshHelper.getTransformedVertices(path, currentTransform);
    }
