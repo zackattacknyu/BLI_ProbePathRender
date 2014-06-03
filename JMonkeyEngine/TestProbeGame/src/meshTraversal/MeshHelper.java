@@ -25,6 +25,18 @@ public class MeshHelper {
                 "," + triangle.get(2).toString();
     }
     
+    public static boolean hasNaN(Matrix4f matrix){
+        
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                if(Float.isNaN(matrix.get(i, j))){
+                    return true;
+                }
+            }
+        }
+        return false;
+        
+    }
     /**
      * This solves the following matrix equation:
      *      [ a b ][s]  = [e]

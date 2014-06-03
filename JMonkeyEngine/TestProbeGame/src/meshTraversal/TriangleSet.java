@@ -193,15 +193,18 @@ public class TriangleSet {
            
            currentNormal = currentTriangle.getNormal();
             currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
-            if(!(currentTransform.get(1, 1) >= -1000000f && currentTransform.get(1, 1) <= 1000000f)){
-               //currentTransform = new Matrix4f();
-                break;
+            
+            /*
+             * This could happen if initPoint and initEndPoint are already perpendicular to the normal
+             *  TODO: Handle this case better
+             */
+            if(!MeshHelper.hasNaN(currentTransform)){
+                remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
+                initEndPoint = remainingPath.get(0);
             }
-            remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
-            initEndPointMod = remainingPath.get(0);
-
+          
             intersection = new TriangleLineSegmentIntersection(
-                currentTriangle,initPoint,initEndPointMod);
+                currentTriangle,initPoint,initEndPoint);
 
             
             intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
