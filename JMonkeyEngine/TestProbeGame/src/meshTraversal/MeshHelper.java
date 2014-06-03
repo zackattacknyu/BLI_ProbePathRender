@@ -4,12 +4,14 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import mygame.Constants;
 
 /**
  *
@@ -17,7 +19,6 @@ import java.util.ArrayList;
  */
 public class MeshHelper {
     
-    public static float epsilon = (float) Math.pow(10, -8);
     public static String getTriangleInfo(Triangle triangle){
         return triangle.get(0).toString() + "," 
                 + triangle.get(1).toString() + 
@@ -41,7 +42,7 @@ public class MeshHelper {
      */
     public static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
         float det = a*d-b*c;
-        if(det < epsilon) return null;
+        //if(det < Constants.EPSILON) return null;
         float s = (d*e-b*f)/det;
         float t = (a*f-e*c)/det;
         return new Vector2f(s,t);
@@ -165,6 +166,40 @@ public class MeshHelper {
         Vector3f diffVector = newNorm.mult(dotProd);
         return newStartVec.subtract(diffVector);
         
+    }
+    
+    /**
+     * This obtains the matrix transformation that translates
+     *      points so that the given point will be the new origin
+     *      point in the new coordinate system. 
+     * @param newOrigin
+     * @return 
+     */
+    public static Matrix4f makeNewOrigin(Vector3f newOrigin){
+        Matrix4f originVertex1 = new Matrix4f();
+        originVertex1.setTranslation(newOrigin.clone().negate());
+        return originVertex1;
+    }
+    
+    /**
+     * This finds the coordinate transformation from the standard basis
+     *      to these three vectors as the basis. 
+     * @param vector1
+     * @param vector2
+     * @param vector3
+     * @return 
+     */
+    public static Matrix3f getCoordinateTransformation(Vector3f vector1,Vector3f vector2, Vector3f vector3){
+        Matrix3f coordMatrix = new Matrix3f();
+       float[][] coords = new float[3][3];
+       for(int j = 0; j < 3; j++){
+            coords[j][0] = vector1.get(j);
+            coords[j][1] = vector2.get(j);
+            coords[j][2] = vector3.get(j);
+        }
+       coordMatrix.set(coords);
+       coordMatrix.invertLocal();
+       return coordMatrix;
     }
     
 }

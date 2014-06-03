@@ -134,75 +134,18 @@ public class TriangleSet {
    public ArrayList<Vector3f> makePathFollowMesh(ArrayList<Vector3f> path,Triangle initTriangle, Vector3f initNormal){
        Vector3f initPoint = path.get(0);
        Vector3f initEndPoint = path.get(1);
-             
        
        Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(initNormal, initPoint, initEndPoint);
        MeshTriangle startTriangle = new MeshTriangle(initTriangle,transform);
-       
-       //TODO: Change this later
        Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
-       Vector3f vertex1 = startTriangle.getVertex1().getVertex();
-       Vector3f vertex2 = startTriangle.getVertex2().getVertex();
-       Vector3f vertex3 = startTriangle.getVertex3().getVertex();
        
-       System.out.println("Start Triangle: " + startTriangle);
-       System.out.println("Contact Point: " + initPoint);
-       
-       Matrix4f originVertex1 = new Matrix4f();
-       originVertex1.setTranslation(vertex1.mult(-1));
-       Vector3f vertex2Vec = originVertex1.mult(vertex2);
-       Vector3f vertex3Vec = originVertex1.mult(vertex3);
-       Vector3f initPointUse = originVertex1.mult(initPoint);
-       Vector3f initEndPointModUse = originVertex1.mult(initEndPointMod);
-       
-       /*
-        * This part is necessary due to rounding errors skewing
-        *       our results. By multplying, we are ensuring
-        *       that rounding errors won't affect the final result.
-        */
-       float localMultiplier = (float)Math.pow(10, 5);
-       vertex2Vec.multLocal(localMultiplier);
-       vertex3Vec.multLocal(localMultiplier);
-       initPointUse.multLocal(localMultiplier);
-       initEndPointModUse.multLocal(localMultiplier);
+       TriangleLineSegmentIntersection intersection = new 
+               TriangleLineSegmentIntersection(
+               startTriangle,initPoint,initEndPointMod);
 
-       System.out.println("Vertex 2: " + vertex2Vec);
-       System.out.println("Vertex 3: " + vertex3Vec);
-       System.out.println("Start Point: " + initPointUse);
-       System.out.println("End Point: " + initEndPointModUse);
-       
-       Vector3f newZVector = vertex2Vec.clone().cross(vertex3Vec.clone());
-       System.out.println("New Z Vector: " + newZVector);
-       
-       //TODO: START DEBUGGING FROM HERE
-       Matrix3f coordMatrix = new Matrix3f();
-       float[][] coords = new float[3][3];
-       for(int j = 0; j < 3; j++){
-            coords[j][0] = vertex2Vec.get(j);
-            coords[j][1] = vertex3Vec.get(j);
-            coords[j][2] = newZVector.get(j);
-        }
-       coordMatrix.set(coords);
-       System.out.println("Coord Matrix: " + coordMatrix);
-       coordMatrix.invertLocal();
-
-       System.out.println("CoordMatrix: " + coordMatrix);
-       Vector3f newStart = coordMatrix.mult(initPointUse);
-       Vector3f newEnd = coordMatrix.mult(initEndPointModUse);
-       System.out.println("Start Point New System: " + newStart);
-       System.out.println("End Point New System: " + newEnd);
-       Vector3f newDir = newEnd.clone().subtract(newStart);
-       float intersect12 = -1*newStart.getY()/newDir.getY();
-       float intersect13 = -1*newStart.getX()/newDir.getX();
-       System.out.println("12 Intersect: " + intersect12);
-       System.out.println("13 Intersect: " + intersect13);
-       
-       Vector2f intersect23Points = MeshHelper.solveMatrixEqu(
-               newDir.getX(), -1, 
-               newDir.getY(), 1, 
-               -1*newStart.getX(), 1-newStart.getY());
-       float intersect23 = intersect23Points.getX();
-       System.out.println("23 Intersect: " + intersect23);
+       System.out.println("12 Intersect: " + intersection.getIntersectEdge12());
+       System.out.println("13 Intersect: " + intersection.getIntersectEdge13());
+       System.out.println("23 Intersect: " + intersection.getIntersectEdge23());
        
        
        return MeshHelper.getTransformedVertices(path, currentTransform);
