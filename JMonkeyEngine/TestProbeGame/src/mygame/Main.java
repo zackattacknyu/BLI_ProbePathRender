@@ -73,6 +73,10 @@ public class Main extends SimpleApplication {
     private Vector3f lastPointClicked;
     private Triangle startingTriangle;
     private Vector3f startingNormal;
+    
+    //this is if we are using the sphere for testing 
+    //      instead of lola
+    private boolean sphereOn = false;
 
     public static void main(String[] args) {
         
@@ -109,6 +113,7 @@ public class Main extends SimpleApplication {
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         String objFileLocation = "Models/lola_mesh.obj";
+        String sphereLocation = "Models/sphere.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
@@ -132,8 +137,14 @@ public class Main extends SimpleApplication {
         zMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         zMat.setColor("Color", ColorRGBA.Green);
         
-        surface = ModelHelper.generateModel(
+        Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+        if(sphereOn){
+            surface = ModelHelper.generateModel(sphereLocation, lightedSphere, assetManager);
+        }else{
+            surface = ModelHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
+        }
+        
         
         Quaternion yaw = new Quaternion();
         yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
@@ -153,9 +164,15 @@ public class Main extends SimpleApplication {
         moveMatrix.setTranslation(surfaceLoc);
         surfaceTransform = moveMatrix.mult(scaleMat).mult(surfaceRot);
         
-        surface.setLocalRotation(surfaceRotation);
-        surface.scale(surfaceScale);
-        surface.move(surfaceLoc);
+        if(sphereOn){
+            surface.setLocalTranslation(0, 0, 0);
+            surface.scale(20f);
+        }else{
+            surface.setLocalRotation(surfaceRotation);
+            surface.scale(surfaceScale);
+            surface.move(surfaceLoc);
+        }
+        
         
         xAxisBox = initXLine(xMat);
         yAxisBox = initYLine(yMat);
@@ -180,12 +197,13 @@ public class Main extends SimpleApplication {
         //rootNode.attachChild(littleObject);
         //littleObject = surface;
         //rootNode.attachChild(initLittleBox(probeMat));
-
-        if(lightVisible) addLighting();
         
         background = initBackgroundBox(boxMat, "background");
         
-        rootNode.attachChild(background);
+        if(!sphereOn){
+            rootNode.attachChild(background);
+        }
+        
         
         setDefaultCamera();
         enableFlyCam();
@@ -201,7 +219,12 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         probePathSet = new ProbePathSet(lineMaterial);
         
-        displaySurfaceTriangles();
+        if(sphereOn){
+            addSphereLights();
+        }else{
+            displaySurfaceTriangles();
+        }
+        
         
     }
     
@@ -217,18 +240,16 @@ public class Main extends SimpleApplication {
         
     }
     
-    private void addLighting(){
+    private void addSphereLights(){
         PointLight ballLight = new PointLight();
         ballLight.setColor(ColorRGBA.White);
         ballLight.setRadius(100f);
-        ballLight.setPosition(new Vector3f(0,0,-5f));
+        ballLight.setPosition(probeRep.getLocalTranslation());
         
         PointLight probeLight = new PointLight();
         probeLight.setColor(ColorRGBA.White);
-        probeLight.setRadius(20f);
-        probeLight.setPosition(littleObject.getLocalTranslation());
-        LightControl ballLightPos = new LightControl(probeLight);
-        littleObject.addControl(ballLightPos);
+        probeLight.setRadius(50f);
+        probeLight.setPosition(new Vector3f(-0.4f,-1f,-15.5f));
         
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(2.0f));
@@ -295,8 +316,16 @@ public class Main extends SimpleApplication {
     }
    
     private void setDefaultCamera(){
-        cam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
-        cam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
+        if(sphereOn){
+            //when viewing the sphere
+            cam.setLocation(new Vector3f(-0.7666268f, -50.559563f, 53.325962f));
+            cam.setRotation(new Quaternion(-0.5164526f, 0.77207285f, 0.30469587f, 0.210572f));
+        }else{
+            //settings for when viewing lola
+            cam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
+            cam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
+        }
+        
     }
     private void enableFlyCam(){
         flyCam.setEnabled(true);
