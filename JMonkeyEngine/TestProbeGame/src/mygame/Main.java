@@ -165,7 +165,7 @@ public class Main extends SimpleApplication {
         probeRep.attachChild(xAxisBox);
         probeRep.attachChild(yAxisBox);
         probeRep.attachChild(zAxisBox);
-        //rootNode.attachChild(probeRep);
+        rootNode.attachChild(probeRep);
         moveableObject = probeRep;
         
         probeMat = new Material(assetManager, 
