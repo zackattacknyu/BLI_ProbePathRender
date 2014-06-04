@@ -242,17 +242,17 @@ public class Main extends SimpleApplication {
     
     private void addSphereLights(){
         PointLight ballLight = new PointLight();
-        ballLight.setColor(ColorRGBA.White);
+        ballLight.setColor(ColorRGBA.Blue);
         ballLight.setRadius(100f);
         ballLight.setPosition(probeRep.getLocalTranslation());
         
         PointLight probeLight = new PointLight();
-        probeLight.setColor(ColorRGBA.White);
+        probeLight.setColor(ColorRGBA.Red);
         probeLight.setRadius(50f);
         probeLight.setPosition(new Vector3f(-0.4f,-1f,-15.5f));
         
         AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(2.0f));
+        al.setColor(ColorRGBA.Green.mult(2.0f));
         
         rootNode.addLight(al);
         
