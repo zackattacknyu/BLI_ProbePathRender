@@ -193,6 +193,13 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/Unshaded.j3md");
         lineMaterial.setColor("Color", ColorRGBA.Black);
         
+        /* This is a code block to illustrate
+         *      lines with varying color
+        probeMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+        probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/table_texture.jpg"));
+        addLineLights();
+        */
+        
         //littleObject = initLittleBox(probeMat);
         //rootNode.attachChild(littleObject);
         //littleObject = surface;
@@ -240,6 +247,25 @@ public class Main extends SimpleApplication {
         
     }
     
+    private void addLineLights(){
+        PointLight ballLight = new PointLight();
+        ballLight.setColor(ColorRGBA.Blue);
+        ballLight.setRadius(100f);
+        ballLight.setPosition(new Vector3f(-4f,-2.7f,-14f));
+        
+        PointLight probeLight = new PointLight();
+        probeLight.setColor(ColorRGBA.Red);
+        probeLight.setRadius(50f);
+        probeLight.setPosition(new Vector3f(-0.4f,-2f,-15f));
+        
+        AmbientLight al = new AmbientLight();
+        al.setColor(ColorRGBA.Green.mult(2.0f));
+        
+        rootNode.addLight(al);
+        
+        rootNode.addLight(ballLight);
+        rootNode.addLight(probeLight);
+    }
     private void addSphereLights(){
         PointLight ballLight = new PointLight();
         ballLight.setColor(ColorRGBA.Blue);
