@@ -67,7 +67,7 @@ public class Main extends SimpleApplication {
     private Quaternion surfaceRotation;
     private float surfaceScale;
     private Vector3f surfaceLoc;
-    private Matrix4f surfaceTransform;
+    private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
     private Vector3f lookAtCenter = Vector3f.ZERO;
     private Vector3f lastPointClicked;
@@ -113,7 +113,7 @@ public class Main extends SimpleApplication {
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         String objFileLocation = "Models/lola_mesh.obj";
-        String sphereLocation = "Models/sphere.obj";
+        String sphereLocation = "Models/sphere2.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
@@ -165,8 +165,10 @@ public class Main extends SimpleApplication {
         surfaceTransform = moveMatrix.mult(scaleMat).mult(surfaceRot);
         
         if(sphereOn){
-            surface.setLocalTranslation(0, 0, 0);
+            //surface.setLocalTranslation(0, 0, 0);
             surface.scale(20f);
+            sphereTransform = new Matrix4f();
+            sphereTransform.setScale(20f, 20f, 20f);
         }else{
             surface.setLocalRotation(surfaceRotation);
             surface.scale(surfaceScale);
@@ -228,11 +230,19 @@ public class Main extends SimpleApplication {
         
         if(sphereOn){
             addSphereLights();
+            getSphereTriangles();
         }else{
             displaySurfaceTriangles();
         }
         
         
+    }
+    
+    private void getSphereTriangles(){
+        meshInfo = new TriangleSet();
+        meshInfo.setTransform(sphereTransform);
+        Geometry surfaceGeom = (Geometry)surface;
+        meshInfo.addMesh(surfaceGeom.getMesh());
     }
     
     private void displaySurfaceTriangles(){
@@ -344,8 +354,8 @@ public class Main extends SimpleApplication {
     private void setDefaultCamera(){
         if(sphereOn){
             //when viewing the sphere
-            cam.setLocation(new Vector3f(-0.7666268f, -50.559563f, 53.325962f));
-            cam.setRotation(new Quaternion(-0.5164526f, 0.77207285f, 0.30469587f, 0.210572f));
+            cam.setLocation(new Vector3f(-22.649244f, -17.260416f, -67.74668f));
+            cam.setRotation(new Quaternion(0.17899777f, 0.0838113f, 0.95806247f, -0.20748913f));
         }else{
             //settings for when viewing lola
             cam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
@@ -603,8 +613,8 @@ public class Main extends SimpleApplication {
                     
                     if(moveLine || moveProbe){
                         CollisionResults results = getCollisionResults();
-                        if(results.size() == 1){
-                            CollisionPoint point = new CollisionPoint(results.getCollision(0));
+                        if(results.size() > 0){
+                            CollisionPoint point = new CollisionPoint(results.getClosestCollision());
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println("Contact Normal: " + point.getNormal());
@@ -641,7 +651,7 @@ public class Main extends SimpleApplication {
                                         //displayCurrentPath();
 
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh(oldPath,startingTriangle,startingNormal);
+                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(oldPath,startingTriangle);
                                         probePathSet.addPath(newPath);
                                         displayCurrentPath();
 
