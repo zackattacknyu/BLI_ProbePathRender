@@ -40,7 +40,11 @@ public class ProbePathSet {
     }
     
     public void addPath(ArrayList<Vector3f> vertices){
-        currentPath = new ProbePath(vertices,lineMaterial);
+        addPath(vertices,lineMaterial);
+    }
+    
+    public void addPath(ArrayList<Vector3f> vertices, Material mat){
+        currentPath = new ProbePath(vertices,mat);
         paths.add(currentPath);
         currentIndex++;
     }

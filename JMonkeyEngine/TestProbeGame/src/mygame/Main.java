@@ -45,6 +45,7 @@ public class Main extends SimpleApplication {
     
     private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox,zAxisBox;
     private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
+    private Material redLineMaterial,orangeLineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, 
             readModeText, recordingText, resetProbeText, probeMoveModeText;
@@ -76,7 +77,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
 
     public static void main(String[] args) {
         
@@ -195,6 +196,14 @@ public class Main extends SimpleApplication {
         lineMaterial = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
         lineMaterial.setColor("Color", ColorRGBA.Black);
+        
+        redLineMaterial = new Material(assetManager, 
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        redLineMaterial.setColor("Color", ColorRGBA.Red);
+        
+        orangeLineMaterial = new Material(assetManager, 
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        orangeLineMaterial.setColor("Color", ColorRGBA.Orange);
         
         /* This is a code block to illustrate
          *      lines with varying color
@@ -653,10 +662,10 @@ public class Main extends SimpleApplication {
 
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
                                         ArrayList<Vector3f> newerPath = meshInfo.makePathFollowMesh(oldPath, startingTriangle, startingNormal);
-                                        probePathSet.addPath(newerPath);
+                                        probePathSet.addPath(newerPath,redLineMaterial);
                                         displayCurrentPath();
                                         ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(newerPath,startingTriangle);
-                                        probePathSet.addPath(newPath);
+                                        probePathSet.addPath(newPath,orangeLineMaterial);
                                         displayCurrentPath();
 
                                         moveLine = false;
