@@ -76,7 +76,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
 
     public static void main(String[] args) {
         
@@ -113,7 +113,8 @@ public class Main extends SimpleApplication {
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         String objFileLocation = "Models/lola_mesh.obj";
-        String sphereLocation = "Models/sphere2.obj";
+        //String sphereLocation = "Models/sphere2.obj";
+        String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
