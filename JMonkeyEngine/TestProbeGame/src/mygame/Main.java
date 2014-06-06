@@ -651,7 +651,10 @@ public class Main extends SimpleApplication {
                                         //displayCurrentPath();
 
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(oldPath,startingTriangle);
+                                        ArrayList<Vector3f> newerPath = meshInfo.makePathFollowMesh(oldPath, startingTriangle, startingNormal);
+                                        probePathSet.addPath(newerPath);
+                                        displayCurrentPath();
+                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(newerPath,startingTriangle);
                                         probePathSet.addPath(newPath);
                                         displayCurrentPath();
 

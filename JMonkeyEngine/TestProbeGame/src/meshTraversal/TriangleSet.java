@@ -186,9 +186,6 @@ public class TriangleSet {
            initEndPoint = remainingPath.get(1);
            finalPath.add(initPoint);
            
-           
-           
-           
            remainingPath.remove(0);
            
            currentNormal = currentTriangle.getNormal();
@@ -214,6 +211,7 @@ public class TriangleSet {
                 remainingPath.add(0, newPoint);
                 
                 if(currentTriangle == null){
+                    System.out.println("CURRENT TRIANGLE WAS NULL");
                     break;
                 }
                 
