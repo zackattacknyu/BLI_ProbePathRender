@@ -179,6 +179,7 @@ public class TriangleSet {
        TriangleLineSegmentIntersection intersection;
        MeshEdge intersectingEdge = null;
        Vector3f newPoint;
+       Vector3f oldNormal = new Vector3f();
        
        while(remainingPath.size() > 1){
            
@@ -190,6 +191,20 @@ public class TriangleSet {
            
            currentNormal = currentTriangle.getNormal();
             currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
+            
+            /*
+             * If the mesh has an irregularity then this would occur. For now,
+             *      we just want smooth meshes so the differences in normals should be
+             *      such that their dot product is greater than zero.
+             * We need to figure out how to handle the case of an irregularity 
+             *      in the mesh. 
+             */
+            if(oldNormal.dot(currentNormal) < 0){
+                System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
+                break;
+            }
+            
+            oldNormal = currentNormal;
             
             /*
              * This could happen if initPoint and initEndPoint are already perpendicular to the normal
