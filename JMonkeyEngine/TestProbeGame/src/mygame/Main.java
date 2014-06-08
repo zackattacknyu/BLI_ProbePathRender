@@ -317,6 +317,21 @@ public class Main extends SimpleApplication {
         return sampleBox;
     }
     
+    private Spatial initBox(Material boxMat){
+        Box b = new Box(0.3f, 0.3f, 0.3f);
+        Spatial sampleBox = new Geometry("Box", b);
+        sampleBox.setName("locationBox");
+        sampleBox.setLocalScale(1);
+        sampleBox.setMaterial(boxMat);
+        return sampleBox;
+    }
+    
+    private void addBoxAtPoint(Vector3f point){
+        Spatial currentBox = initBox(redLineMaterial);
+        currentBox.setLocalTranslation(point);
+        rootNode.attachChild(currentBox);
+    }
+    
     private Spatial initXLine(Material ballMat){
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
         xLineVertices.add(new Vector3f(0,0,4f));
@@ -637,6 +652,9 @@ public class Main extends SimpleApplication {
                                     
                                     Vector3f endPoint = point.getContactPoint().clone();
                                     if(!endPoint.equals(lastPointClicked)){
+                                        
+                                        addBoxAtPoint(endPoint);
+                                        
                                         lastPointClicked = endPoint;
                                         System.out.println("---------------Above here is line start data------------");
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
@@ -656,6 +674,9 @@ public class Main extends SimpleApplication {
                                     
                                     Vector3f endPoint = point.getContactPoint().clone();
                                     if(!endPoint.equals(lastPointClicked)){
+                                        
+                                        addBoxAtPoint(endPoint);
+                                        
                                         lastPointClicked = endPoint;
                                         probePathSet.transformCurrentPathEndpoint(endPoint);
                                         //displayCurrentPath();
