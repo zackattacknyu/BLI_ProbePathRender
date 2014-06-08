@@ -102,6 +102,7 @@ public class TriangleLineSegmentIntersection {
                -1*newStart.getX(), 1-newStart.getY());
        intersectEdge23 = Float.MAX_VALUE;
        if(intersect23Points != null) intersectEdge23 = intersect23Points.getX();
+       else System.out.println("EDGE 23 WAS NULL!!!");
         
     }
     
@@ -150,7 +151,9 @@ public class TriangleLineSegmentIntersection {
      * @return 
      */
     private static float getIntersection(float start, float dir){
-        if(dir<Constants.EPSILON){
+        float absDir = (float)Math.abs(dir);
+        if(absDir<Constants.EPSILON){
+            System.out.println("DIR WAS NEAR ZERO!!!");
             return Float.MAX_VALUE;
         }else{
             return -1*start/dir;
