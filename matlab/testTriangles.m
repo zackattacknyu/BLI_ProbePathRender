@@ -1,13 +1,10 @@
-%Vertices of a Triangle
-vert1 = [-0.18751788, -2.2151814, -15.160053];
-vert2 = [-0.3124779, -2.0962791, -15.027809];
-vert3 = [-0.1875179, -2.1149406, -15.06823];
+newStart = [0.16555081 0.39918596];
+newDir = [-0.38820514 -0.31145015];
 
-%Point that is supposedly inside triangle. This needs to be tested.
-testPoint = [-0.20191753, -1.9489088, -15.11458];
+edge12 = -newStart(2)/newDir(2);
+edge13 = -newStart(1)/newDir(1);
 
-triangle = [vert1;vert2;vert3];
-hold on
-plot3(triangle(:,1),triangle(:,2),triangle(:,3));
-plot3(testPoint(1),testPoint(2),testPoint(3),'r.');
-hold off
+matrix = [newDir(1) -1;newDir(2) 1];
+vect = [-1*newStart(1) 0; 1-newStart(2) 0];
+answerVec = matrix\vect;
+edge23 = answerVec(1,1);
