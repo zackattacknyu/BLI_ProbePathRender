@@ -5,9 +5,11 @@
 package mygame;
 
 import com.jme3.material.Material;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import meshTraversal.MeshHelper;
 
 /**
  *
@@ -40,6 +42,16 @@ public class ProbePath {
                 startPoint,newEndpoint,oldEndpoint);
         return lineMove.transformVertices(vertices);
         
+    }
+    
+    public ArrayList<Vector3f> scaleForNewEndpoint(Vector3f newEndPoint){
+        Vector3f startPoint = vertices.get(0);
+        Vector3f oldEndpoint = vertices.get(vertices.size()-1);
+        float currentLength = oldEndpoint.subtract(startPoint).length();
+        float desiredLength = newEndPoint.subtract(startPoint).length();
+        float scaleFactor = desiredLength/currentLength;
+        Matrix4f transform = MeshHelper.getScaleAroundPoint(startPoint, scaleFactor);
+        return MeshHelper.getTransformedVertices(vertices, transform);
     }
     
     

@@ -111,6 +111,25 @@ public class MeshHelper {
     }
     
     /**
+     * This gets the matrix transformation for a scaling around an origin point
+     * @param originPoint
+     * @param rotation
+     * @return 
+     */
+    public static Matrix4f getScaleAroundPoint(Vector3f originPoint, float scaleFactor){
+        Matrix4f firstTranslation = new Matrix4f();
+        Matrix4f lastTranslation = new Matrix4f();
+        
+        firstTranslation.setTranslation(originPoint);
+        Vector3f startingPtNeg = originPoint.clone().negate();
+        lastTranslation.setTranslation(startingPtNeg);
+        
+        Matrix4f scaleTransform = new Matrix4f();
+        scaleTransform.setScale(scaleFactor, scaleFactor, scaleFactor);
+        return (firstTranslation.mult(scaleTransform)).mult(lastTranslation);
+    }
+    
+    /**
      * Gets the transformation for a rotation to go from actual end point to expected end point
      * @param originPoint       point to rotate around
      * @param expectedEndPt     desired end point
