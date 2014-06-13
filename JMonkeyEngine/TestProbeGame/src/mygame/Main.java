@@ -325,7 +325,7 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initBox(Material boxMat){
-        Box b = new Box(0.3f, 0.3f, 0.3f);
+        Box b = new Box(0.1f, 0.1f, 0.1f);
         Spatial sampleBox = new Geometry("Box", b);
         sampleBox.setName("locationBox");
         sampleBox.setLocalScale(1);
