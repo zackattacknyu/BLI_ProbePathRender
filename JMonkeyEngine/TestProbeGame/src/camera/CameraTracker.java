@@ -27,21 +27,13 @@ public class CameraTracker {
     
     public void addMovementListeners(InputManager manager){
         CameraMovement moveUp = new CameraMovement(manager,"moveCameraUp",
-                KeyInput.KEY_UP,
-                "Move Camera Up from current location of " + 
-                currentCam.getLocation().toString());
+                KeyInput.KEY_UP,currentCam);
         CameraMovement moveDown = new CameraMovement(manager,"moveCameraDown",
-                KeyInput.KEY_DOWN,
-                "Move Camera Down from current location of " + 
-                currentCam.getLocation().toString());
+                KeyInput.KEY_DOWN,currentCam);
         CameraMovement moveLeft = new CameraMovement(manager,"moveCameraLeft",
-                KeyInput.KEY_LEFT,
-                "Move Camera Left from current location of " + 
-                currentCam.getLocation().toString());
+                KeyInput.KEY_LEFT,currentCam);
         CameraMovement moveRight = new CameraMovement(manager,"moveCameraRight",
-                KeyInput.KEY_RIGHT,
-                "Move Camera Right from current location of " + 
-                currentCam.getLocation().toString());
+                KeyInput.KEY_RIGHT,currentCam);
     }
     
     public void setDefaultCamera(boolean sphereOn){

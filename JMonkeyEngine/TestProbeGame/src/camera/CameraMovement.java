@@ -5,6 +5,7 @@
 package camera;
 
 import com.jme3.input.InputManager;
+import com.jme3.renderer.Camera;
 import mouseKeyboard.GeneralActionMethod;
 
 /**
@@ -13,16 +14,18 @@ import mouseKeyboard.GeneralActionMethod;
  */
 public class CameraMovement extends GeneralActionMethod{
     
-    private String displayText;
+    private Camera camera;
+    private String name;
     
-    public CameraMovement(InputManager manager, String name, int keyCode, String displayText){
+    public CameraMovement(InputManager manager, String name, int keyCode, Camera camera){
         super(manager,name,keyCode);
-        this.displayText = displayText;
+        this.camera = camera;
+        this.name = name;
     }
 
     @Override
     public void actionMethod() {
-        System.out.println(displayText);
+        System.out.println(name + " from Location of " + camera.getLocation().toString());
     }
     
 }
