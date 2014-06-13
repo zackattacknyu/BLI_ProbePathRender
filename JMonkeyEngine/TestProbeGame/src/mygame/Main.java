@@ -1,5 +1,6 @@
 package mygame;
 
+import camera.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
@@ -225,8 +226,14 @@ public class Main extends SimpleApplication {
         }
         
         
-        setDefaultCamera();
-        enableFlyCam();
+        //setDefaultCamera();
+        //enableFlyCam();
+        
+        CameraTracker cameraTracker = new CameraTracker(cam,flyCam);
+        cameraTracker.addMovementListeners(inputManager);
+        cameraTracker.setDefaultCamera(sphereOn);
+        cameraTracker.enableFlyCam();
+        
         initKeyboardInputs();
         
         probeTracker = new ProbeTracker();
