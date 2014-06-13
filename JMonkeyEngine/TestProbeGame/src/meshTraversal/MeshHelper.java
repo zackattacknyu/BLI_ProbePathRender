@@ -186,7 +186,13 @@ public class MeshHelper {
     
     /**
      * This gets the target vector that is the projection of the startVector
-     *      onto the plane
+     *      onto the plane described by the normal.
+     * If N is the normal, S is the start vector (both unit vectors),
+     *      then the target T is obtained using this procedure:
+     * 1) Calculate dotProd as the dot product of N and S
+     * 2) Let D be the projection of vector S onto N. D = N*dotProd
+     * 3) We know that T is a projection of S onto the plane
+     *      thus T + D = S, hence T = S - D
      * @param normal            the normal vector
      * @param startVector       the vector to get the projection for
      * @return 
@@ -194,8 +200,14 @@ public class MeshHelper {
     public static Vector3f getVectorProjOnPlane(Vector3f normal, Vector3f startVector){
         Vector3f newNorm = normal.normalize();
         Vector3f newStartVec = startVector.normalize();
+        
+        //does step 1, calculating dot product
         float dotProd = newNorm.dot(newStartVec);
+        
+        //does step 2, calculating the projection
         Vector3f diffVector = newNorm.mult(dotProd);
+        
+        //does step 3, uses the projection onto Normal to get projection onto plane
         return newStartVec.subtract(diffVector);
         
     }

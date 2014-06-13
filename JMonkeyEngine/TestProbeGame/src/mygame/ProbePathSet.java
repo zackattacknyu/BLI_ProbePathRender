@@ -49,9 +49,9 @@ public class ProbePathSet {
         currentIndex++;
     }
     
-    public void transformCurrentPathEndpoint(Vector3f newEndpoint){
-        addPath(currentPath.transformEndpoint(newEndpoint));
-        addPath(currentPath.scaleForNewEndpoint(newEndpoint));
+    public void transformCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
+        addPath(currentPath.transformEndpoint(newEndpoint),mat);
+        addPath(currentPath.scaleForNewEndpoint(newEndpoint),mat);
     }
     
     public boolean importPathUsingFileSelector(File initialImportDirectory){

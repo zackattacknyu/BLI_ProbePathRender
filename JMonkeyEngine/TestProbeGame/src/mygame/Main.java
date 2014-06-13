@@ -125,6 +125,7 @@ public class Main extends SimpleApplication {
             ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
             ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/lola_texture.png"));
         }else{
+            //ballMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
             ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
             ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
         }
@@ -678,14 +679,14 @@ public class Main extends SimpleApplication {
                                         addBoxAtPoint(endPoint);
                                         
                                         lastPointClicked = endPoint;
-                                        probePathSet.transformCurrentPathEndpoint(endPoint);
-                                        //displayCurrentPath();
+                                        probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
+                                        displayCurrentPath();
 
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> newerPath = meshInfo.makePathFollowMesh(oldPath, startingTriangle, startingNormal);
-                                        probePathSet.addPath(newerPath,redLineMaterial);
+                                        //ArrayList<Vector3f> newerPath = meshInfo.makePathFollowMesh(oldPath, startingTriangle, startingNormal);
+                                        //probePathSet.addPath(newerPath,redLineMaterial);
                                         //displayCurrentPath();
-                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(newerPath,startingTriangle);
+                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(oldPath,startingTriangle);
                                         probePathSet.addPath(newPath,orangeLineMaterial);
                                         displayCurrentPath();
 
