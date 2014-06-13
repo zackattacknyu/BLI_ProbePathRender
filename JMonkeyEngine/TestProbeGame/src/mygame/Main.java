@@ -119,6 +119,7 @@ public class Main extends SimpleApplication {
         cameraTracker = new CameraTracker(cam,flyCam,inputManager);
         cameraTracker.setDefaultCamera(sphereOn);
         
+        //String objFileLocation = "Models/lola_mesh.obj";
         String objFileLocation = "Models/lola_mesh3.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
