@@ -54,6 +54,8 @@ public class Main extends SimpleApplication {
     
     private ProbeTracker probeTracker;
     
+    private CameraTracker cameraTracker;
+    
     //private Spatial lastLine;
     
     private Properties trackerProps;
@@ -113,6 +115,9 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
+        
+        cameraTracker = new CameraTracker(cam,flyCam,inputManager);
+        cameraTracker.setDefaultCamera(sphereOn);
         
         String objFileLocation = "Models/lola_mesh3.obj";
         String sphereLocation = "Models/sphere2.obj";
@@ -226,13 +231,7 @@ public class Main extends SimpleApplication {
         }
         
         
-        //setDefaultCamera();
-        //enableFlyCam();
         
-        CameraTracker cameraTracker = new CameraTracker(cam,flyCam);
-        cameraTracker.addMovementListeners(inputManager);
-        cameraTracker.setDefaultCamera(sphereOn);
-        cameraTracker.enableFlyCam();
         
         initKeyboardInputs();
         
@@ -383,25 +382,6 @@ public class Main extends SimpleApplication {
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
     }
-   
-    private void setDefaultCamera(){
-        if(sphereOn){
-            //when viewing the sphere
-            cam.setLocation(new Vector3f(-22.649244f, -17.260416f, -67.74668f));
-            cam.setRotation(new Quaternion(0.17899777f, 0.0838113f, 0.95806247f, -0.20748913f));
-        }else{
-            //settings for when viewing lola
-            cam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
-            cam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
-        }
-        
-    }
-    private void enableFlyCam(){
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(true);
-        flyCam.setMoveSpeed(10f);
-        flyCam.setRotationSpeed(0f);
-    }
     
     private void initDebugText(){
         
@@ -551,11 +531,6 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
-        inputManager.addMapping("moveCameraUp", new KeyTrigger(KeyInput.KEY_UP));
-        inputManager.addMapping("moveCameraDown", new KeyTrigger(KeyInput.KEY_DOWN));
-        inputManager.addMapping("moveCameraLeft", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("moveCameraRight", new KeyTrigger(KeyInput.KEY_RIGHT));
-        
         final Matrix3f rotLeftMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
         final Matrix3f rotRightMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
         final Matrix3f rotUpMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
@@ -587,18 +562,6 @@ public class Main extends SimpleApplication {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
-                if(name.equals("moveCameraRight") && keyPressed){
-                    System.out.println("Move Camera Right");
-                }
-                if(name.equals("moveCameraLeft") && keyPressed){
-                    System.out.println("Move Camera Left");
-                }
-                if(name.equals("moveCameraUp") && keyPressed){
-                    System.out.println("Move Camera Up");
-                }
-                if(name.equals("moveCameraDown") && keyPressed){
-                    System.out.println("Move Camera Down");
-                }
                 
                 if(name.equals("importLine") && keyPressed){
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
@@ -843,11 +806,7 @@ public class Main extends SimpleApplication {
                 "importLine",
                 "exportLine",
                 "deleteLine",
-                "selectLine",
-                "moveCameraRight",
-                "moveCameraLeft",
-                "moveCameraUp",
-                "moveCameraDown");
+                "selectLine");
 
     }
 }

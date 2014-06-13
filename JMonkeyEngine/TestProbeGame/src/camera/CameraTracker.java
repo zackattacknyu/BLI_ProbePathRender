@@ -20,12 +20,15 @@ public class CameraTracker {
     private Camera currentCam;
     private FlyByCamera currentFlyCam;
     
-    public CameraTracker(Camera currentCam, FlyByCamera currentFlyCam){
+    public CameraTracker(Camera currentCam, FlyByCamera currentFlyCam, InputManager manager){
         this.currentCam = currentCam;
         this.currentFlyCam = currentFlyCam;
+        addMovementListeners(manager);
+        setDefaultCamera();
+        enableFlyCam();
     }
     
-    public void addMovementListeners(InputManager manager){
+    private void addMovementListeners(InputManager manager){
         CameraMovement moveUp = new CameraMovement(manager,"moveCameraUp",
                 KeyInput.KEY_UP,currentCam);
         CameraMovement moveDown = new CameraMovement(manager,"moveCameraDown",
@@ -34,6 +37,10 @@ public class CameraTracker {
                 KeyInput.KEY_LEFT,currentCam);
         CameraMovement moveRight = new CameraMovement(manager,"moveCameraRight",
                 KeyInput.KEY_RIGHT,currentCam);
+    }
+    
+    private void setDefaultCamera(){
+        setDefaultCamera(false);        
     }
     
     public void setDefaultCamera(boolean sphereOn){
@@ -49,7 +56,7 @@ public class CameraTracker {
         
     }
     
-    public void enableFlyCam(){
+    private void enableFlyCam(){
         currentFlyCam.setEnabled(true);
         currentFlyCam.setDragToRotate(true);
         currentFlyCam.setMoveSpeed(10f);
