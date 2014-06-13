@@ -34,6 +34,10 @@ public class TriangleLineSegmentIntersection {
     
     private MeshTriangle currentTriangle;
     
+    private int numBadEdges = 0;
+    
+    private boolean segDegenerate = false;
+    
     public TriangleLineSegmentIntersection(MeshTriangle currentTri, 
             Vector3f lineSegmentStart, Vector3f lineSegmentEnd){
         
@@ -95,18 +99,30 @@ public class TriangleLineSegmentIntersection {
         *       to infinity. 
         */
        intersectEdge12 = getIntersection(newStart.getY(),newDir.getY());
+       if(Float.isInfinite(intersectEdge12)) numBadEdges++;
        intersectEdge13 = getIntersection(newStart.getX(),newDir.getX());
+       if(Float.isInfinite(intersectEdge13)) numBadEdges++;
        Vector2f intersect23Points = MeshHelper.solveMatrixEqu(
                newDir.getX(), -1, 
                newDir.getY(), 1, 
                -1*newStart.getX(), 1-newStart.getY());
-       intersectEdge23 = Float.MAX_VALUE;
+       intersectEdge23 = Float.POSITIVE_INFINITY;
        if(intersect23Points != null) intersectEdge23 = intersect23Points.getX();
-       else System.out.println("EDGE 23 WAS NULL!!!");
+       if(Float.isInfinite(intersectEdge23)) numBadEdges++;
+       //else System.out.println("EDGE 23 WAS NULL!!!");
+       if(numBadEdges>2){
+           System.out.println("THREE BAD EDGES. DEGENERATE SEGMENT!");
+           segDegenerate = true;
+       }
         
+    }
+
+    public boolean isSegDegenerate() {
+        return segDegenerate;
     }
     
     public MeshEdge getIntersectionEdge(MeshEdge edgeToIgnore){
+        if(segDegenerate) return null;
         ignoreEdge = edgeToIgnore;
         if(isGoodEdge(intersectEdge12,currentTriangle.getSide12())){
             breakpointMag = intersectEdge12;
@@ -153,8 +169,8 @@ public class TriangleLineSegmentIntersection {
     private static float getIntersection(float start, float dir){
         float absDir = (float)Math.abs(dir);
         if(absDir<Constants.EPSILON){
-            System.out.println("DIR WAS NEAR ZERO!!!");
-            return Float.MAX_VALUE;
+            //System.out.println("DIR WAS NEAR ZERO!!!");
+            return Float.POSITIVE_INFINITY;
         }else{
             return -1*start/dir;
         }

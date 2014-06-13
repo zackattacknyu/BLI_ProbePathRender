@@ -185,9 +185,7 @@ public class TriangleSet {
            
            initPoint = remainingPath.get(0);
            initEndPoint = remainingPath.get(1);
-           finalPath.add(initPoint);
            
-           remainingPath.remove(0);
            
            currentNormal = currentTriangle.getNormal();
             currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
@@ -212,12 +210,21 @@ public class TriangleSet {
              */
             if(!MeshHelper.hasNaN(currentTransform)){
                 remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
-                initEndPoint = remainingPath.get(0);
+                initEndPoint = remainingPath.get(1);
             }
           
             intersection = new TriangleLineSegmentIntersection(
                 currentTriangle,initPoint,initEndPoint);
 
+            if(intersection.isSegDegenerate()){
+                //removes the middle one so a larger segment will be made in
+                //      the next step
+                remainingPath.remove(1);
+                continue;
+            }else{
+                finalPath.add(initPoint);
+                remainingPath.remove(0);
+            }
             
             intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
             if(intersectingEdge != null){
