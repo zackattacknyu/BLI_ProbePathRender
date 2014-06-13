@@ -113,7 +113,7 @@ public class Main extends SimpleApplication {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
         
-        String objFileLocation = "Models/lola_mesh.obj";
+        String objFileLocation = "Models/lola_mesh3.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
