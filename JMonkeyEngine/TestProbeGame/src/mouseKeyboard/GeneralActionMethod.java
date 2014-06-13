@@ -20,7 +20,7 @@ public abstract class GeneralActionMethod {
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
-                    actionMethod();
+                if(keyPressed) actionMethod();
             } 
         };
         
