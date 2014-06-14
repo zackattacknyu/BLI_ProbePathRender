@@ -575,10 +575,6 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("pickControlPoint")){
                     
-                    //IMPORTANT: 
-                    // used when I want to register dragging above
-                    mousePressedDown = !mousePressedDown;
-                    
                     if(moveLine || moveProbe){
                         CollisionResults results = getCollisionResults();
                         if(results.size() > 0){
