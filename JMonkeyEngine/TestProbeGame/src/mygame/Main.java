@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import meshTraversal.MeshHelper;
 import meshTraversal.TriangleSet;
+import util.GeneralHelper;
 
 
 /**
@@ -532,10 +533,10 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
-        final Matrix3f rotLeftMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
-        final Matrix3f rotRightMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
-        final Matrix3f rotUpMatrix = TrackingHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
-        final Matrix3f rotDownMatrix = TrackingHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
+        final Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
+        final Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
+        final Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
+        final Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
         
         AnalogListener anl = new AnalogListener(){
 

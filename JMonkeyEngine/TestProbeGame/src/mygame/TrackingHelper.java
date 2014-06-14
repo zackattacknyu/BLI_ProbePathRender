@@ -46,12 +46,6 @@ public class TrackingHelper {
         
     }
     
-    public static Matrix3f getRotationMatrix(float angle, Vector3f axis){
-        Quaternion rotation = new Quaternion();
-        rotation.fromAngleAxis(angle, axis);
-        return rotation.toRotationMatrix();
-    }
-    
     public static Quaternion getQuarternion(float yawInRadians){
         
         Quaternion output = new Quaternion();
