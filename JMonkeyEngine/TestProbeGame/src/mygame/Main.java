@@ -744,10 +744,6 @@ public class Main extends SimpleApplication {
         };
 
         inputManager.addListener(acl,
-                "rotCameraLeft",
-                "rotCameraRight",
-                "rotCameraUp",
-                "rotCameraDown",
                 "pickControlPoint",
                 "moveInward",
                 "moveOutward",

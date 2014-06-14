@@ -14,9 +14,9 @@ import com.jme3.input.controls.MouseAxisTrigger;
  *
  * @author BLI
  */
-public abstract class GeneralAnalogMethod {
+public abstract class GeneralMouseAnalogMethod {
 
-    public GeneralAnalogMethod(InputManager manager, String name, int mouseAxisCode,boolean negative){
+    public GeneralMouseAnalogMethod(InputManager manager, String name, int mouseAxisCode,boolean negative){
         manager.addMapping(name, new MouseAxisTrigger(mouseAxisCode,negative));
         
         AnalogListener anl = new AnalogListener() {

@@ -6,13 +6,13 @@ package camera;
 
 import com.jme3.input.InputManager;
 import com.jme3.renderer.Camera;
-import mouseKeyboard.GeneralActionMethod;
+import mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
  *
  * @author BLI
  */
-public class CameraMovement extends GeneralActionMethod{
+public class CameraMovement extends GeneralKeyboardActionMethod{
     
     private Camera camera;
     private String name;

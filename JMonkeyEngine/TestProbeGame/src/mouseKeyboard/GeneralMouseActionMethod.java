@@ -6,21 +6,21 @@ package mouseKeyboard;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 
 /**
  *
  * @author BLI
  */
-public abstract class GeneralActionMethod {
+public abstract class GeneralMouseActionMethod {
 
-    public GeneralActionMethod(InputManager manager, String name, int keyCode){
-        manager.addMapping(name, new KeyTrigger(keyCode));
+    public GeneralMouseActionMethod(InputManager manager, String name, int keyCode){
+        manager.addMapping(name, new MouseButtonTrigger(keyCode));
         
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
-                if(keyPressed) actionMethod();
+                actionMethod();
             } 
         };
         

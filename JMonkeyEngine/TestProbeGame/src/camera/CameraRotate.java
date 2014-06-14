@@ -8,18 +8,18 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import mouseKeyboard.GeneralAnalogMethod;
+import mouseKeyboard.GeneralMouseAnalogMethod;
 
 /**
  *
  * @author BLI
  */
-public class CameraRotate extends GeneralAnalogMethod{
+public class CameraRotate extends GeneralMouseAnalogMethod{
     
     private Camera camera;
     private Matrix3f rotMatrix;
     private Vector3f lookAtCenter;
-    private boolean mousePressedDown = true;
+    private CameraMouseClick mouseClick;
     
     public CameraRotate(InputManager manager, String name, int mouseCode, boolean negative, 
             Camera camera, Matrix3f rotMatrix, Vector3f lookAtCenter){
@@ -27,18 +27,16 @@ public class CameraRotate extends GeneralAnalogMethod{
         this.camera = camera;
         this.rotMatrix = rotMatrix;
         this.lookAtCenter = lookAtCenter;
+        
+        mouseClick = new CameraMouseClick(manager);
     }
 
     @Override
     public void analogMethod() {
-        if(mousePressedDown){
+        if(mouseClick.isMouseDown()){
             camera.setLocation(rotMatrix.mult(camera.getLocation()));
                     camera.lookAt(lookAtCenter, camera.getUp());
         }
-    }
-
-    public void setMousePressedDown(boolean mousePressedDown) {
-        this.mousePressedDown = mousePressedDown;
     }
     
 }
