@@ -35,7 +35,7 @@ public class CameraRotate extends GeneralMouseAnalogMethod{
     public void analogMethod() {
         if(mouseClick.isMouseDown()){
             camera.setLocation(rotMatrix.mult(camera.getLocation()));
-                    camera.lookAt(lookAtCenter, camera.getUp());
+            camera.lookAt(lookAtCenter, camera.getUp());
         }
     }
     
