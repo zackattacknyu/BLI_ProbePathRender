@@ -7,9 +7,13 @@ package camera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import util.GeneralHelper;
 
 /**
  *
@@ -20,12 +24,32 @@ public class CameraTracker {
     private Camera currentCam;
     private FlyByCamera currentFlyCam;
     
+    private CameraRotate rotUp;
+    private CameraRotate rotDown;
+    private CameraRotate rotLeft;
+    private CameraRotate rotRight;
+    
+    private Vector3f lookAtCenter = Vector3f.ZERO;
+    
     public CameraTracker(Camera currentCam, FlyByCamera currentFlyCam, InputManager manager){
         this.currentCam = currentCam;
         this.currentFlyCam = currentFlyCam;
         addMovementListeners(manager);
+        addRotationListeners(manager);
         setDefaultCamera();
         enableFlyCam();
+    }
+    
+    private void addRotationListeners(InputManager manager){
+        Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
+        Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
+        Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
+        Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
+        
+        rotUp = new CameraRotate(manager,"rotCameraUp",MouseInput.AXIS_Y,false,currentCam,rotUpMatrix,lookAtCenter);
+        rotDown = new CameraRotate(manager,"rotCameraDown",MouseInput.AXIS_Y,true,currentCam,rotDownMatrix,lookAtCenter);
+        rotLeft = new CameraRotate(manager,"rotCameraLeft",MouseInput.AXIS_X,false,currentCam,rotLeftMatrix,lookAtCenter);
+        rotRight = new CameraRotate(manager,"rotCameraRight",MouseInput.AXIS_X,true,currentCam,rotRightMatrix,lookAtCenter);
     }
     
     private void addMovementListeners(InputManager manager){

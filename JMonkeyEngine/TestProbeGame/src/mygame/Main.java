@@ -516,11 +516,6 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
         inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        
-        inputManager.addMapping("rotCameraLeft", new MouseAxisTrigger(MouseInput.AXIS_X,false));
-        inputManager.addMapping("rotCameraRight", new MouseAxisTrigger(MouseInput.AXIS_X,true));
-        inputManager.addMapping("rotCameraUp", new MouseAxisTrigger(MouseInput.AXIS_Y,false));
-        inputManager.addMapping("rotCameraDown", new MouseAxisTrigger(MouseInput.AXIS_Y,true));
 
         inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
         
@@ -533,32 +528,7 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
-        final Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
-        final Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
-        final Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
-        final Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
-        
-        AnalogListener anl = new AnalogListener(){
-
-            public void onAnalog(String name, float value, float tpf) {
-                if(name.equals("rotCameraLeft") && mousePressedDown){
-                    cam.setLocation(rotLeftMatrix.mult(cam.getLocation()));
-                    cam.lookAt(lookAtCenter, cam.getUp());
-                }
-                if(name.equals("rotCameraRight") && mousePressedDown){
-                    cam.setLocation(rotRightMatrix.mult(cam.getLocation()));
-                    cam.lookAt(lookAtCenter, cam.getUp());
-                }
-                if(name.equals("rotCameraUp") && mousePressedDown){
-                    cam.setLocation(rotUpMatrix.mult(cam.getLocation()));
-                    cam.lookAt(lookAtCenter, cam.getUp());
-                }
-                if(name.equals("rotCameraDown") && mousePressedDown){
-                    cam.setLocation(rotDownMatrix.mult(cam.getLocation()));
-                    cam.lookAt(lookAtCenter, cam.getUp());
-                }
-            }
-        };        
+   
         
         ActionListener acl = new ActionListener() {
 
@@ -772,12 +742,7 @@ public class Main extends SimpleApplication {
                 }
             }
         };
-        
-        inputManager.addListener(anl, 
-                "rotCameraLeft",
-                "rotCameraRight",
-                "rotCameraUp",
-                "rotCameraDown");
+
         inputManager.addListener(acl,
                 "rotCameraLeft",
                 "rotCameraRight",
