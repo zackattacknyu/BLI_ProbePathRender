@@ -36,25 +36,40 @@ public class CameraTracker {
     private static Vector3f leftRightAxis = Vector3f.UNIT_Y;
     private static Vector3f upDownAxis = Vector3f.UNIT_X;
     
+    private InputManager inputMang;
+    
     public CameraTracker(Camera currentCam, FlyByCamera currentFlyCam, InputManager manager){
         this.currentCam = currentCam;
         this.currentFlyCam = currentFlyCam;
+        this.inputMang = manager;
         addMovementListeners(manager);
-        addRotationListeners(manager);
+        addRotationListeners();
         setDefaultCamera();
         enableFlyCam();
     }
     
-    private void addRotationListeners(InputManager manager){
-        Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(rotationAmountNeg, leftRightAxis);
-        Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(rotationAmount, leftRightAxis);
-        Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(rotationAmountNeg, upDownAxis);
-        Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(rotationAmount, upDownAxis);
-        
-        rotUp = new CameraRotate(manager,"rotCameraUp",MouseInput.AXIS_Y,false,currentCam,rotUpMatrix,lookAtCenter);
-        rotDown = new CameraRotate(manager,"rotCameraDown",MouseInput.AXIS_Y,true,currentCam,rotDownMatrix,lookAtCenter);
-        rotLeft = new CameraRotate(manager,"rotCameraLeft",MouseInput.AXIS_X,false,currentCam,rotLeftMatrix,lookAtCenter);
-        rotRight = new CameraRotate(manager,"rotCameraRight",MouseInput.AXIS_X,true,currentCam,rotRightMatrix,lookAtCenter);
+    private void addRotationListeners(){
+        rotateUp();
+        rotateDown();
+        rotateLeft();
+        rotateRight();
+    }
+    
+    private void addRotateListener(InputManager manager, String name, int mouseCode, boolean dir, float rotAmount,Vector3f rotAxis){
+        Matrix3f rotMatrix = GeneralHelper.getRotationMatrix(rotAmount, rotAxis);
+        new CameraRotate(manager,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
+    }
+    private void rotateUp(){
+        addRotateListener(inputMang,"rotCameraUp",MouseInput.AXIS_Y,false,rotationAmountNeg, upDownAxis);
+    }
+    private void rotateDown(){
+        addRotateListener(inputMang,"rotCameraDown",MouseInput.AXIS_Y,true,rotationAmount, upDownAxis);
+    }
+    private void rotateLeft(){
+        addRotateListener(inputMang,"rotCameraLeft",MouseInput.AXIS_X,false,rotationAmountNeg, leftRightAxis);
+    }
+    private void rotateRight(){
+        addRotateListener(inputMang,"rotCameraRight",MouseInput.AXIS_X,true,rotationAmount, leftRightAxis);
     }
     
     private void addMovementListeners(InputManager manager){
