@@ -42,7 +42,8 @@ public class CameraTracker {
         this.currentCam = currentCam;
         this.currentFlyCam = currentFlyCam;
         this.inputMang = manager;
-        addMovementListeners(manager);
+        addMovementListeners();
+        addRadialMovementListeners();
         addRotationListeners();
         setDefaultCamera();
         enableFlyCam();
@@ -55,37 +56,58 @@ public class CameraTracker {
         rotateRight();
     }
     
-    private void addRotateListener(InputManager manager, String name, int mouseCode, boolean dir, float rotAmount,Vector3f rotAxis){
+    private void addRotateListener(String name, int mouseCode, boolean dir, float rotAmount,Vector3f rotAxis){
         Matrix3f rotMatrix = GeneralHelper.getRotationMatrix(rotAmount, rotAxis);
-        new CameraRotate(manager,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
+        new CameraRotate(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     private void rotateUp(){
-        addRotateListener(inputMang,"rotCameraUp",MouseInput.AXIS_Y,false,rotationAmountNeg, upDownAxis);
+        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false,rotationAmountNeg, upDownAxis);
     }
     private void rotateDown(){
-        addRotateListener(inputMang,"rotCameraDown",MouseInput.AXIS_Y,true,rotationAmount, upDownAxis);
+        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true,rotationAmount, upDownAxis);
     }
     private void rotateLeft(){
-        addRotateListener(inputMang,"rotCameraLeft",MouseInput.AXIS_X,false,rotationAmountNeg, leftRightAxis);
+        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false,rotationAmountNeg, leftRightAxis);
     }
     private void rotateRight(){
-        addRotateListener(inputMang,"rotCameraRight",MouseInput.AXIS_X,true,rotationAmount, leftRightAxis);
+        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true,rotationAmount, leftRightAxis);
     }
     
-    private void addMovementListeners(InputManager manager){
-        CameraMovement moveUp = new CameraMovement(manager,"moveCameraUp",
-                KeyInput.KEY_UP,currentCam);
-        CameraMovement moveDown = new CameraMovement(manager,"moveCameraDown",
-                KeyInput.KEY_DOWN,currentCam);
-        CameraMovement moveLeft = new CameraMovement(manager,"moveCameraLeft",
-                KeyInput.KEY_LEFT,currentCam);
-        CameraMovement moveRight = new CameraMovement(manager,"moveCameraRight",
-                KeyInput.KEY_RIGHT,currentCam);
-       
-        CameraRadialMovement moveInward = new CameraRadialMovement(
-                manager,"moveInward",KeyInput.KEY_R,currentCam,lookAtCenter,true);
-        CameraRadialMovement moveOutward = new CameraRadialMovement(
-                manager,"moveOutward",KeyInput.KEY_F,currentCam,lookAtCenter,false);
+    private void addMovementListener(String name,int keyCode){
+        new CameraMovement(inputMang,name,keyCode,currentCam);
+    }
+    private void moveUp(){
+        addMovementListener("moveCameraUp",KeyInput.KEY_UP);
+    }
+    private void moveDown(){
+        addMovementListener("moveCameraDown",KeyInput.KEY_DOWN);
+    }
+    private void moveLeft(){
+        addMovementListener("moveCameraLeft",KeyInput.KEY_LEFT);
+    }
+    private void moveRight(){
+        addMovementListener("moveCameraRight",KeyInput.KEY_RIGHT);
+    }
+    
+    private void addMovementListeners(){
+        moveUp(); 
+        moveDown();
+        moveLeft();
+        moveRight();
+    }
+    
+    private void addRadialMovementListeners(){
+        moveInward();
+        moveOutward();
+    }
+    private void addRadialMovementListener(String name, int keyCode, boolean inward){
+        new CameraRadialMovement(inputMang,name,keyCode,currentCam,lookAtCenter,inward);
+    }
+    private void moveInward(){
+        addRadialMovementListener("moveInward",KeyInput.KEY_R,true);
+    }
+    private void moveOutward(){
+        addRadialMovementListener("moveOutward",KeyInput.KEY_F,false);
     }
     
     private void setDefaultCamera(){
