@@ -8,6 +8,7 @@ import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -61,6 +62,11 @@ public class CameraTracker {
                 KeyInput.KEY_LEFT,currentCam);
         CameraMovement moveRight = new CameraMovement(manager,"moveCameraRight",
                 KeyInput.KEY_RIGHT,currentCam);
+       
+        CameraRadialMovement moveInward = new CameraRadialMovement(
+                manager,"moveInward",KeyInput.KEY_R,currentCam,lookAtCenter,true);
+        CameraRadialMovement moveOutward = new CameraRadialMovement(
+                manager,"moveOutward",KeyInput.KEY_F,currentCam,lookAtCenter,false);
     }
     
     private void setDefaultCamera(){

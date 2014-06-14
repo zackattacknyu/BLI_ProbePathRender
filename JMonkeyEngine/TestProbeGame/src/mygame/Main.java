@@ -466,18 +466,6 @@ public class Main extends SimpleApplication {
                 normalVertices, lineMaterial);
         rootNode.attachChild(controlPointNormal);
     }
-    
-    private void moveCamera(boolean inward){
-        float moveAmount = 1.0f/5.0f;
-        if(inward){
-            moveAmount = -1*moveAmount;
-        }
-        Vector3f currentLoc = cam.getLocation();
-        Vector3f direction = currentLoc.subtract(lookAtCenter);
-        direction.normalizeLocal();
-        Vector3f moveVector = direction.mult(moveAmount);
-        cam.setLocation(currentLoc.add(moveVector));
-    }
 
     private void initKeyboardInputs() {
         //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
@@ -485,8 +473,6 @@ public class Main extends SimpleApplication {
         
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
-        inputManager.addMapping("moveInward", new KeyTrigger(KeyInput.KEY_R));
-        inputManager.addMapping("moveOutward", new KeyTrigger(KeyInput.KEY_F));
         
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
@@ -666,13 +652,6 @@ public class Main extends SimpleApplication {
                      
                  }
  
-                if(name.equals("moveInward")){
-                    moveCamera(true);
-                }
-                if(name.equals("moveOutward")){
-                    moveCamera(false);
-                }
- 
                 if(name.equals("rotateClockwise") && keyPressed){
                     probeTracker.rotateClockwise();
                 }
@@ -741,8 +720,6 @@ public class Main extends SimpleApplication {
 
         inputManager.addListener(acl,
                 "pickControlPoint",
-                "moveInward",
-                "moveOutward",
                 "startStopNewPath",
                 "recalibrateX",
                 "recalibrateY",
