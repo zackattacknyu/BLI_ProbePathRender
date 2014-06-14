@@ -30,6 +30,12 @@ public class CameraTracker {
     
     private Vector3f lookAtCenter = Vector3f.ZERO;
     
+    private static final float rotationAmount = 1.0f/20.0f;
+    private static final float rotationAmountNeg = -1*rotationAmount;
+    
+    private static Vector3f leftRightAxis = Vector3f.UNIT_Y;
+    private static Vector3f upDownAxis = Vector3f.UNIT_X;
+    
     public CameraTracker(Camera currentCam, FlyByCamera currentFlyCam, InputManager manager){
         this.currentCam = currentCam;
         this.currentFlyCam = currentFlyCam;
@@ -40,10 +46,10 @@ public class CameraTracker {
     }
     
     private void addRotationListeners(InputManager manager){
-        Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_Y);
-        Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_Y);
-        Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(-1.0f/20.0f, Vector3f.UNIT_X);
-        Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(1.0f/20.0f, Vector3f.UNIT_X);
+        Matrix3f rotLeftMatrix = GeneralHelper.getRotationMatrix(rotationAmountNeg, leftRightAxis);
+        Matrix3f rotRightMatrix = GeneralHelper.getRotationMatrix(rotationAmount, leftRightAxis);
+        Matrix3f rotUpMatrix = GeneralHelper.getRotationMatrix(rotationAmountNeg, upDownAxis);
+        Matrix3f rotDownMatrix = GeneralHelper.getRotationMatrix(rotationAmount, upDownAxis);
         
         rotUp = new CameraRotate(manager,"rotCameraUp",MouseInput.AXIS_Y,false,currentCam,rotUpMatrix,lookAtCenter);
         rotDown = new CameraRotate(manager,"rotCameraDown",MouseInput.AXIS_Y,true,currentCam,rotDownMatrix,lookAtCenter);
