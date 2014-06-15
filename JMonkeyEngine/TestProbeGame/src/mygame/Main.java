@@ -1,6 +1,7 @@
 package mygame;
 
 import camera.CameraTracker;
+import cameraImpl.CameraTrackerImpl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
@@ -117,7 +118,7 @@ public class Main extends SimpleApplication {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
         
-        cameraTracker = new CameraTracker(cam,flyCam,inputManager);
+        cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
         cameraTracker.setDefaultCamera(sphereOn);
         
         //String objFileLocation = "Models/lola_mesh.obj";
