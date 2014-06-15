@@ -14,21 +14,21 @@ import mouseKeyboard.GeneralMouseAnalogMethod;
  *
  * @author BLI
  */
-public class CameraRotate extends GeneralMouseAnalogMethod{
+public class CameraRotateImpl extends GeneralMouseAnalogMethod{
     
     private Camera camera;
     private Matrix3f rotMatrix;
     private Vector3f lookAtCenter;
-    private CameraMouseClick mouseClick;
+    private CameraMouseClickImpl mouseClick;
     
-    public CameraRotate(InputManager manager, String name, int mouseCode, boolean negative, 
+    public CameraRotateImpl(InputManager manager, String name, int mouseCode, boolean negative, 
             Camera camera, Matrix3f rotMatrix, Vector3f lookAtCenter){
         super(manager,name,mouseCode,negative);
         this.camera = camera;
         this.rotMatrix = rotMatrix;
         this.lookAtCenter = lookAtCenter;
         
-        mouseClick = new CameraMouseClick(manager);
+        mouseClick = new CameraMouseClickImpl(manager);
     }
 
     @Override

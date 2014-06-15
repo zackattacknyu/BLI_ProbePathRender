@@ -5,9 +5,9 @@
 package cameraImpl;
 
 import camera.CameraTracker;
-import cameraImpl.CameraMovement;
-import cameraImpl.CameraRadialMovement;
-import cameraImpl.CameraRotate;
+import cameraImpl.CameraMovementImpl;
+import cameraImpl.CameraRadialMovementImpl;
+import cameraImpl.CameraRotateImpl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -27,10 +27,10 @@ public class CameraTrackerImpl extends CameraTracker{
     private Camera currentCam;
     private FlyByCamera currentFlyCam;
     
-    private CameraRotate rotUp;
-    private CameraRotate rotDown;
-    private CameraRotate rotLeft;
-    private CameraRotate rotRight;
+    private CameraRotateImpl rotUp;
+    private CameraRotateImpl rotDown;
+    private CameraRotateImpl rotLeft;
+    private CameraRotateImpl rotRight;
     
     private Vector3f lookAtCenter = Vector3f.ZERO;
     
@@ -52,7 +52,7 @@ public class CameraTrackerImpl extends CameraTracker{
     
     private void addRotateListener(String name, int mouseCode, boolean dir, float rotAmount,Vector3f rotAxis){
         Matrix3f rotMatrix = GeneralHelper.getRotationMatrix(rotAmount, rotAxis);
-        new CameraRotate(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
+        new CameraRotateImpl(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     protected void rotateUp(){
         addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false,rotationAmountNeg, upDownAxis);
@@ -68,7 +68,7 @@ public class CameraTrackerImpl extends CameraTracker{
     }
     
     private void addMovementListener(String name,int keyCode){
-        new CameraMovement(inputMang,name,keyCode,currentCam);
+        new CameraMovementImpl(inputMang,name,keyCode,currentCam);
     }
     protected void moveUp(){
         addMovementListener("moveCameraUp",KeyInput.KEY_UP);
@@ -84,7 +84,7 @@ public class CameraTrackerImpl extends CameraTracker{
     }
     
     private void addRadialMovementListener(String name, int keyCode, boolean inward){
-        new CameraRadialMovement(inputMang,name,keyCode,currentCam,lookAtCenter,inward);
+        new CameraRadialMovementImpl(inputMang,name,keyCode,currentCam,lookAtCenter,inward);
     }
     protected void moveInward(){
         addRadialMovementListener("moveInward",KeyInput.KEY_R,true);

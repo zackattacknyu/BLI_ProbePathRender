@@ -12,11 +12,11 @@ import mouseKeyboard.GeneralMouseActionMethod;
  *
  * @author BLI
  */
-public class CameraMouseClick extends GeneralMouseActionMethod{
+public class CameraMouseClickImpl extends GeneralMouseActionMethod{
 
     private boolean mouseDown = false;
     
-    public CameraMouseClick(InputManager manager){
+    public CameraMouseClickImpl(InputManager manager){
         super(manager,"cameraMouseClick",MouseInput.BUTTON_LEFT);
     }
     

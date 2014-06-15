@@ -13,7 +13,7 @@ import mouseKeyboard.GeneralKeyboardActionMethod;
  *
  * @author BLI
  */
-public class CameraRadialMovement extends GeneralKeyboardActionMethod{
+public class CameraRadialMovementImpl extends GeneralKeyboardActionMethod{
     
     private Camera camera;
     private String name;
@@ -22,7 +22,7 @@ public class CameraRadialMovement extends GeneralKeyboardActionMethod{
     
     private float moveAmount = 1.0f/5.0f;
     
-    public CameraRadialMovement(InputManager manager, String name, int keyCode, Camera camera, Vector3f lookAtCenter, boolean inward){
+    public CameraRadialMovementImpl(InputManager manager, String name, int keyCode, Camera camera, Vector3f lookAtCenter, boolean inward){
         super(manager,name,keyCode);
         this.camera = camera;
         this.name = name;

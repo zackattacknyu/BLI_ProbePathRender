@@ -12,12 +12,12 @@ import mouseKeyboard.GeneralKeyboardActionMethod;
  *
  * @author BLI
  */
-public class CameraMovement extends GeneralKeyboardActionMethod{
+public class CameraMovementImpl extends GeneralKeyboardActionMethod{
     
     private Camera camera;
     private String name;
     
-    public CameraMovement(InputManager manager, String name, int keyCode, Camera camera){
+    public CameraMovementImpl(InputManager manager, String name, int keyCode, Camera camera){
         super(manager,name,keyCode);
         this.camera = camera;
         this.name = name;
