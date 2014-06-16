@@ -36,6 +36,14 @@ public class TriangleSet {
     public void setTransform(Matrix4f transform) {
         this.transform = transform;
     }
+
+    public HashMap<MeshEdge, MeshEdgeTriangles> getTrianglesByEdge() {
+        return trianglesByEdge;
+    }
+
+    public HashMap<MeshVertex, ArrayList<MeshTriangle>> getTrianglesByVert() {
+        return trianglesByVert;
+    }
    
    public void addMesh(Mesh mesh){
        Triangle currentTri;
@@ -65,6 +73,20 @@ public class TriangleSet {
            addVertexToTriangleMap(vertex3,newTri);
            
            triangleList.add(newTri);
+       }
+   }
+   
+   public void setBoundaryTriangles(){
+       MeshEdgeTriangles currentTriangles;
+       for(MeshEdge edge: trianglesByEdge.keySet()){
+           currentTriangles = trianglesByEdge.get(edge);
+           
+           //if boundary triangle, label it as such
+           if(currentTriangles.numTriangles() < 2){
+               
+               //labels triangle 1 as boundary triangle
+               currentTriangles.getTriangle1().setBoundaryTriangle(true);
+           }
        }
    }
 

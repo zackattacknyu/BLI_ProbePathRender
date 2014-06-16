@@ -26,6 +26,8 @@ public class MeshTriangle {
     
     private ArrayList<MeshVertex> vertices;
     
+    private boolean boundaryTriangle = false;
+    
     public MeshTriangle(Triangle triangle, Matrix4f transform){
         vertices = new ArrayList<MeshVertex>(3);
         
@@ -55,6 +57,14 @@ public class MeshTriangle {
     public Vector3f getNormal(){
         triangleData.calculateNormal();
         return triangleData.getNormal();
+    }
+
+    public boolean isBoundaryTriangle() {
+        return boundaryTriangle;
+    }
+
+    public void setBoundaryTriangle(boolean boundaryTriangle) {
+        this.boundaryTriangle = boundaryTriangle;
     }
 
     public MeshEdge getSide12() {

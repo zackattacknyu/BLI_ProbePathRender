@@ -33,6 +33,24 @@ public class MeshEdgeTriangles {
             return triangle1;
         }
     }
+    
+    public int numTriangles(){
+        if(triangle1==null){
+            return 0;
+        }else if(triangle2 == null){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+
+    public MeshTriangle getTriangle1() {
+        return triangle1;
+    }
+
+    public MeshTriangle getTriangle2() {
+        return triangle2;
+    }
 
     @Override
     public String toString() {

@@ -260,6 +260,7 @@ public class Main extends SimpleApplication {
         meshInfo.setTransform(sphereTransform);
         Geometry surfaceGeom = (Geometry)surface;
         meshInfo.addMesh(surfaceGeom.getMesh());
+        meshInfo.setBoundaryTriangles();
     }
     
     private void displaySurfaceTriangles(){
