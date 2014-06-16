@@ -57,7 +57,7 @@ public class ProbePath {
     public ArrayList<Vector3f> compressPath(){
         Vector3f lastPointAdded = vertices.get(0);
         ArrayList<Vector3f> newPath = new ArrayList<Vector3f>(vertices.size());
-        float minLength = 0.0001f;
+        float minLength = 0.001f;
         float currentLength;
         for(Vector3f vertex: vertices){
             currentLength = vertex.distance(lastPointAdded);

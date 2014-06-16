@@ -605,12 +605,10 @@ public class Main extends SimpleApplication {
                                         
                                         lastPointClicked = endPoint;
                                         probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
-                                        displayCurrentPath();
-
-                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        //ArrayList<Vector3f> newerPath = meshInfo.makePathFollowMesh(oldPath, startingTriangle, startingNormal);
-                                        //probePathSet.addPath(newerPath,redLineMaterial);
                                         //displayCurrentPath();
+                                        probePathSet.compressCurrentPath();
+                                        displayCurrentPath();
+                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
                                         ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(oldPath,startingTriangle);
                                         probePathSet.addPath(newPath,orangeLineMaterial);
                                         displayCurrentPath();

@@ -54,6 +54,10 @@ public class ProbePathSet {
         addPath(currentPath.scaleForNewEndpoint(newEndpoint),mat);
     }
     
+    public void compressCurrentPath(){
+        addPath(currentPath.compressPath());
+    }
+    
     public boolean importPathUsingFileSelector(File initialImportDirectory){
         JFileChooser selector = new JFileChooser(initialImportDirectory);
         int chosenOption = selector.showOpenDialog(null);
