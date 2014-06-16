@@ -32,11 +32,15 @@ public class ModelVerification {
             if(currentTriangles.numTriangles() < 1){
                 
                 //if lone edge, this is not a clean model
+                System.out.println("LONE EDGE!!");
                 return false;
             }else if(currentTriangles.numTriangles() < 2){
                 
                 //if edge has 1 triangle, this makes sure it was correctly labelled as such
-                return currentTriangles.getTriangle1().isBoundaryTriangle();
+                if(!currentTriangles.getTriangle1().isBoundaryTriangle()){
+                    System.out.println("UNLABELLED BOUNDARY TRIANGLE!!");
+                    return false;
+                }
             }
         }
         return true;
