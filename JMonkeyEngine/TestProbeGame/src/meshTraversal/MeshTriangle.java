@@ -68,6 +68,14 @@ public class MeshTriangle {
     public MeshEdge getSide23() {
         return side23;
     }
+    
+    /**
+     * This verifies that each of the edges were constructed
+     * @return whether or not any of the edges are null
+     */
+    public boolean hasGoodEdges(){
+        return (side12 != null) && (side23 != null) && (side13 != null);
+    }
 
     public MeshVertex getVertex1() {
         return vertex1;

@@ -21,12 +21,14 @@ public class TriangleSet {
     
     private HashMap<MeshEdge,MeshEdgeTriangles> trianglesByEdge;
     private HashMap<MeshVertex,ArrayList<MeshTriangle>> trianglesByVert;
+    private ArrayList<MeshTriangle> triangleList;
     
     private Matrix4f transform;
     
    public TriangleSet(){
        trianglesByEdge = new HashMap<MeshEdge,MeshEdgeTriangles>(30000);
        trianglesByVert = new HashMap<MeshVertex,ArrayList<MeshTriangle>>(30000);
+       triangleList = new ArrayList<MeshTriangle>(30000);
        
        transform = new Matrix4f();
    }
@@ -61,8 +63,14 @@ public class TriangleSet {
            addVertexToTriangleMap(vertex1,newTri);
            addVertexToTriangleMap(vertex2,newTri);
            addVertexToTriangleMap(vertex3,newTri);
+           
+           triangleList.add(newTri);
        }
    }
+
+    public ArrayList<MeshTriangle> getTriangleList() {
+        return triangleList;
+    }
    
    private void addVertexToTriangleMap(MeshVertex vertex, MeshTriangle triangle){
        if(trianglesByVert.containsKey(vertex)){
