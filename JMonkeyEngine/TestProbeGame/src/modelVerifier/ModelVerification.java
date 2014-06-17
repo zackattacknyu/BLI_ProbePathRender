@@ -174,6 +174,20 @@ public class ModelVerification {
     }
 
     private static boolean verifySmoothNormals(TriangleSet triangles) {
+        Vector3f baseNormal;
+        Vector3f currentNormal;
+        
+        for(MeshTriangle baseTriangle : triangles.getTriangleList()){
+            baseNormal = baseTriangle.getNormal();
+            for(MeshTriangle currentTriangle : triangles.getEdgeNeighbors(baseTriangle)){
+                currentNormal = currentTriangle.getNormal();
+                if(!verifyOutwardDir(currentNormal,baseNormal)){
+                    System.out.println("Bad Adjacent Normals: " + currentNormal + " and " + baseNormal);
+                    return false;
+                }
+            }
+        }
+        
         return true;
     }
 }
