@@ -168,6 +168,16 @@ public class TriangleSet {
         return vertexWithMaxZ;
     }
    
+    public Vector3f getNormalAtVertex(MeshVertex vertex){
+        ArrayList<MeshTriangle> triangles = trianglesByVert.get(vertex);
+        Vector3f normal = new Vector3f();
+        for(MeshTriangle triangle: triangles){
+            normal.addLocal(triangle.getNormal());
+        }
+        normal.divideLocal(triangles.size());
+        return normal;
+    }
+    
    private MeshVertex getMinVertex(MeshVertex currentMin, MeshVertex vertex, int coordNum){
        if(vertex.getVertex().get(coordNum) < currentMin.getVertex().get(coordNum)){
            return vertex;

@@ -20,12 +20,24 @@ import mygame.Constants;
  */
 public class ModelVerification {
     
+    private static final Vector3f maxXbase = Vector3f.UNIT_X;
+    private static final Vector3f maxYbase = Vector3f.UNIT_Y;
+    private static final Vector3f maxZbase = Vector3f.UNIT_Z;
+    
+    private static final Vector3f minXbase = maxXbase.negate();
+    private static final Vector3f minYbase = maxYbase.negate();
+    private static final Vector3f minZbase = maxZbase.negate();
+    
+    private static final Vector3f[] baseVertices = {
+        minXbase, maxXbase, minYbase, maxYbase, minZbase, maxZbase
+    };
+    
     public static void performModelVerification(TriangleSet triangles){
         boolean numEdgesPerTriangle = verifyNumEdgesPerTriangle(triangles);
         boolean numTrianglesPerEdge = verifyNumTrianglesPerEdge(triangles);
         boolean singleComponent = singleConnectedComponent(triangles);
         boolean noDegenTriangles = verifyNoDegenerateTriangles(triangles);
-        boolean goodNormals = verifyGoodNormals(triangles);
+        boolean boundingNormalsOutward = verifyOutwardBoundingNormals(triangles);
         
         System.out.println();
         System.out.println("Now Running Model Verification:");
@@ -33,7 +45,7 @@ public class ModelVerification {
         System.out.println("2 Triangles Per Edge unless boundary: " + numTrianglesPerEdge);
         System.out.println("Mesh is Single Connected Component: " + singleComponent);
         System.out.println("No Degenerate Triangles: " + noDegenTriangles);
-        System.out.println("Good Normals: " + goodNormals);
+        System.out.println("Bounding Vertex Normals Point Outward: " + boundingNormalsOutward);
     }
     
     /**
@@ -133,13 +145,26 @@ public class ModelVerification {
         return true;
     }
 
-    private static boolean verifyGoodNormals(TriangleSet triangles) {
-        System.out.println("Vertex At Min X: " + triangles.getVertexWithMinX());
-        System.out.println("Vertex At Max X: " + triangles.getVertexWithMaxX());
-        System.out.println("Vertex At Min Y: " + triangles.getVertexWithMinY());
-        System.out.println("Vertex At Max Y: " + triangles.getVertexWithMaxY());
-        System.out.println("Vertex At Min Z: " + triangles.getVertexWithMinZ());
-        System.out.println("Vertex At Max Z: " + triangles.getVertexWithMaxZ());
+    private static boolean verifyOutwardBoundingNormals(TriangleSet triangles) {
+        Vector3f[] verticesToCheck = {
+            triangles.getVertexWithMinX().getVertex(),
+            triangles.getVertexWithMaxX().getVertex(),
+            triangles.getVertexWithMinY().getVertex(),
+            triangles.getVertexWithMaxY().getVertex(),
+            triangles.getVertexWithMinZ().getVertex(),
+            triangles.getVertexWithMaxZ().getVertex()
+        };
+        
+        for(int index = 0; index < 6; index++){
+            if(!verifyOutwardVertex(verticesToCheck[index],baseVertices[index])){
+                return false;
+            }
+        }
+
         return true;
+    }
+    
+    private static boolean verifyOutwardVertex(Vector3f vertexToVerify, Vector3f baseVertex){
+        return vertexToVerify.normalize().dot(baseVertex.normalize()) > 0;
     }
 }
