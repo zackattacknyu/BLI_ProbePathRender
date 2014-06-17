@@ -38,36 +38,4 @@ public class LineHelper {
         return pathVertices;
     }
     
-    public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material material){
-        
-        short[] indices = new short[lineVertices.size()*2];
-        for(int index=0; index<lineVertices.size()-1; index++){
-            indices[2*index]=(short)index;
-            indices[2*index+1]=(short)(index+1);
-        }
-        
-        Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lineVertices.size()]);
-        
-        ColorRGBA lineColor = Constants.LINE_COLOR;
-        Vector4f[] lineColors = new Vector4f[lineVertices.size()];
-        for(int j=0; j < lineColors.length; j++){
-            lineColors[j] = new Vector4f(lineColor.getRed(),lineColor.getGreen(),
-                    lineColor.getBlue(),lineColor.getAlpha());
-        }
-        
-        Mesh mesh = new Mesh();
-        mesh.setMode(Mesh.Mode.Lines);
-        mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
-        mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
-        mesh.setBuffer(VertexBuffer.Type.Color, 4, BufferUtils.createFloatBuffer(lineColors));
-        mesh.setLineWidth(Constants.PATH_LINE_WIDTH);
-        Spatial probePathLine = new Geometry("Line",mesh);
-        probePathLine.setName("probeLine");
-        probePathLine.setLocalScale(1);
-        probePathLine.setMaterial(material);
-        
-        
-        return probePathLine;
-    }
-    
 }

@@ -34,6 +34,7 @@ import java.util.Properties;
 import meshTraversal.MeshHelper;
 import modelVerifier.ModelVerification;
 import meshTraversal.TriangleSet;
+import render.ObjectHelper;
 
 
 /**
@@ -118,7 +119,8 @@ public class Main extends SimpleApplication {
         cameraTracker.setDefaultCamera(sphereOn);
         
         //String objFileLocation = "Models/lola_mesh.obj";
-        String objFileLocation = "Models/lola_mesh_simplified.obj";
+        String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
+        //String objFileLocation = "Models/lola_mesh_simplified.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
@@ -344,7 +346,7 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
         xLineVertices.add(new Vector3f(0,0,4f));
         xLineVertices.add(new Vector3f(0,0,-4f));
-        return LineHelper.createLineFromVertices(xLineVertices,ballMat);
+        return ObjectHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
     private Spatial initYLine(Material ballMat){
@@ -352,14 +354,14 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
         yLineVertices.add(new Vector3f(0,4f,0));
         yLineVertices.add(new Vector3f(0,-4f,0));
-        return LineHelper.createLineFromVertices(yLineVertices,ballMat);
+        return ObjectHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
         zLineVertices.add(new Vector3f(-4f,0,0));
         zLineVertices.add(new Vector3f(2f,0,0));
-        return LineHelper.createLineFromVertices(zLineVertices,ballMat);
+        return ObjectHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
     @Override
@@ -461,7 +463,7 @@ public class Main extends SimpleApplication {
         normalVertices.add(point.getContactPoint());
         normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
         Spatial controlPointNormal = 
-                LineHelper.createLineFromVertices(
+                ObjectHelper.createLineFromVertices(
                 normalVertices, lineMaterial);
         rootNode.attachChild(controlPointNormal);
     }

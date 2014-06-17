@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import meshTraversal.MeshHelper;
+import render.ObjectHelper;
 
 /**
  *
@@ -24,7 +25,7 @@ public class ProbePath {
     public ProbePath(ArrayList<Vector3f> vertices, Material lineMaterial){
         this.vertices = vertices;
         this.lineMaterial = lineMaterial;
-        probePath = LineHelper.createLineFromVertices(vertices, lineMaterial);
+        probePath = ObjectHelper.createLineFromVertices(vertices, lineMaterial);
     }
 
     public ArrayList<Vector3f> getVertices() {
