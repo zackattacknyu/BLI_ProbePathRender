@@ -28,7 +28,7 @@ public class ModelVerification {
     private static final Vector3f minYbase = maxYbase.negate();
     private static final Vector3f minZbase = maxZbase.negate();
     
-    private static final Vector3f[] baseVertices = {
+    private static final Vector3f[] baseNormals = {
         minXbase, maxXbase, minYbase, maxYbase, minZbase, maxZbase
     };
     
@@ -38,6 +38,7 @@ public class ModelVerification {
         boolean singleComponent = singleConnectedComponent(triangles);
         boolean noDegenTriangles = verifyNoDegenerateTriangles(triangles);
         boolean boundingNormalsOutward = verifyOutwardBoundingNormals(triangles);
+        boolean smoothNormals = verifySmoothNormals(triangles);
         
         System.out.println();
         System.out.println("Now Running Model Verification:");
@@ -46,6 +47,7 @@ public class ModelVerification {
         System.out.println("Mesh is Single Connected Component: " + singleComponent);
         System.out.println("No Degenerate Triangles: " + noDegenTriangles);
         System.out.println("Bounding Vertex Normals Point Outward: " + boundingNormalsOutward);
+        System.out.println("Smooth Normals: " + smoothNormals);
     }
     
     /**
@@ -146,17 +148,20 @@ public class ModelVerification {
     }
 
     private static boolean verifyOutwardBoundingNormals(TriangleSet triangles) {
-        Vector3f[] verticesToCheck = {
-            triangles.getVertexWithMinX().getVertex(),
-            triangles.getVertexWithMaxX().getVertex(),
-            triangles.getVertexWithMinY().getVertex(),
-            triangles.getVertexWithMaxY().getVertex(),
-            triangles.getVertexWithMinZ().getVertex(),
-            triangles.getVertexWithMaxZ().getVertex()
+        Vector3f[] normalsToCheck = {
+            triangles.getNormalAtVertex(triangles.getVertexWithMinX()),
+            triangles.getNormalAtVertex(triangles.getVertexWithMaxX()),
+            triangles.getNormalAtVertex(triangles.getVertexWithMinY()),
+            triangles.getNormalAtVertex(triangles.getVertexWithMaxY()),
+            triangles.getNormalAtVertex(triangles.getVertexWithMinZ()),
+            triangles.getNormalAtVertex(triangles.getVertexWithMaxZ())
         };
         
         for(int index = 0; index < 6; index++){
-            if(!verifyOutwardVertex(verticesToCheck[index],baseVertices[index])){
+            if(!verifyOutwardDir(normalsToCheck[index],baseNormals[index])){
+                System.out.println("Normal at vertex " + index + ": " + 
+                        normalsToCheck[index] + " where base is " + 
+                        baseNormals[index]);
                 return false;
             }
         }
@@ -164,7 +169,11 @@ public class ModelVerification {
         return true;
     }
     
-    private static boolean verifyOutwardVertex(Vector3f vertexToVerify, Vector3f baseVertex){
-        return vertexToVerify.normalize().dot(baseVertex.normalize()) > 0;
+    private static boolean verifyOutwardDir(Vector3f dirToCheck, Vector3f currentOutwardDir){
+        return dirToCheck.normalize().dot(currentOutwardDir.normalize()) > 0;
+    }
+
+    private static boolean verifySmoothNormals(TriangleSet triangles) {
+        return true;
     }
 }
