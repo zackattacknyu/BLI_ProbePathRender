@@ -294,6 +294,20 @@ public class TriangleSet {
        return tris.getOtherTriangle(triangle);
    }
    
+   public ArrayList<MeshTriangle> getEdgeNeighbors(MeshTriangle triangle){
+       ArrayList<MeshTriangle> result = new ArrayList<MeshTriangle>(3);
+       
+       MeshTriangle edge12Neighbor = getEdgeNeighbor(triangle.getSide12(),triangle);
+       MeshTriangle edge13Neighbor = getEdgeNeighbor(triangle.getSide13(),triangle);
+       MeshTriangle edge23Neighbor = getEdgeNeighbor(triangle.getSide23(),triangle);
+       
+       if(edge12Neighbor != null) result.add(edge12Neighbor);
+       if(edge13Neighbor != null) result.add(edge13Neighbor);
+       if(edge23Neighbor != null) result.add(edge23Neighbor);
+       
+       return result;
+   }
+   
    public ArrayList<MeshTriangle> getVertexNeighbors(MeshVertex vertex, MeshTriangle triangle){
        ArrayList<MeshTriangle> vTriangles = trianglesByVert.get(vertex);
        ArrayList<MeshTriangle> vertexNeighbors = new ArrayList<MeshTriangle>(vTriangles.size()-1);

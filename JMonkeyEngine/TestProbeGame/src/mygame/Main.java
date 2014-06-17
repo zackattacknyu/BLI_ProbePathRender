@@ -32,7 +32,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import meshTraversal.MeshHelper;
-import meshTraversal.ModelVerification;
+import modelVerifier.ModelVerification;
 import meshTraversal.TriangleSet;
 
 
@@ -78,7 +78,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
 
     public static void main(String[] args) {
         

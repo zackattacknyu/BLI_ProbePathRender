@@ -2,7 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package meshTraversal;
+package modelVerifier;
+
+import java.util.HashSet;
+import java.util.Set;
+import meshTraversal.ConnectedComponent;
+import meshTraversal.MeshEdge;
+import meshTraversal.MeshEdgeTriangles;
+import meshTraversal.MeshTriangle;
+import meshTraversal.TriangleSet;
 
 /**
  *
@@ -13,12 +21,37 @@ public class ModelVerification {
     public static void performModelVerification(TriangleSet triangles){
         boolean numEdgesPerTriangle = verifyNumEdgesPerTriangle(triangles);
         boolean numTrianglesPerEdge = verifyNumTrianglesPerEdge(triangles);
+        boolean singleComponent = singleConnectedComponent(triangles);
         
         System.out.println();
         System.out.println("Now Running Model Verification:");
         System.out.println("3 Edges Exist for each triangle: " + numEdgesPerTriangle);
         System.out.println("2 Triangles Per Edge unless boundary: " + numTrianglesPerEdge);
+        System.out.println("Mesh is Single Connected Component: " + singleComponent);
     }
+    
+    /**
+     * This verifies that the triangles are a single connected component. It works
+     *      by recursively travelling through all the neighbors of a triangle
+     *      and verifying that the number of triangles added is the total number
+     *      of triangles that we have
+     * @param triangles
+     * @return 
+     */
+    public static boolean singleConnectedComponent(TriangleSet triangles){
+        
+        MeshTriangle startingTriangle = triangles.getTriangleList().get(0);
+        ConnectedComponent currentComp = new ConnectedComponent(triangles,startingTriangle);
+        
+        int numTrianglesComponent = currentComp.getComponentTriangles().size();
+        int numTrianglesMesh = triangles.getTriangleList().size();
+        
+        System.out.println("Component has " + numTrianglesComponent + " Triangles");
+        System.out.println("Mesh has " + numTrianglesMesh + " Triangles");
+        
+        return (numTrianglesComponent==numTrianglesMesh);
+    }
+    
     
     /**
      * This verifies that each edge has 2 triangles unless it's a boundary edge
