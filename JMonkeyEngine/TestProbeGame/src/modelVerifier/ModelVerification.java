@@ -4,6 +4,7 @@
  */
 package modelVerifier;
 
+import com.jme3.math.Vector3f;
 import java.util.HashSet;
 import java.util.Set;
 import meshTraversal.ConnectedComponent;
@@ -11,6 +12,7 @@ import meshTraversal.MeshEdge;
 import meshTraversal.MeshEdgeTriangles;
 import meshTraversal.MeshTriangle;
 import meshTraversal.TriangleSet;
+import mygame.Constants;
 
 /**
  *
@@ -22,12 +24,14 @@ public class ModelVerification {
         boolean numEdgesPerTriangle = verifyNumEdgesPerTriangle(triangles);
         boolean numTrianglesPerEdge = verifyNumTrianglesPerEdge(triangles);
         boolean singleComponent = singleConnectedComponent(triangles);
+        boolean noDegenTriangles = verifyNoDegenerateTriangles(triangles);
         
         System.out.println();
         System.out.println("Now Running Model Verification:");
         System.out.println("3 Edges Exist for each triangle: " + numEdgesPerTriangle);
         System.out.println("2 Triangles Per Edge unless boundary: " + numTrianglesPerEdge);
         System.out.println("Mesh is Single Connected Component: " + singleComponent);
+        System.out.println("No Degenerate Triangles: " + noDegenTriangles);
     }
     
     /**
@@ -87,6 +91,42 @@ public class ModelVerification {
     public static boolean verifyNumEdgesPerTriangle(TriangleSet triangles){
         for(MeshTriangle triangle:triangles.getTriangleList()){
             if(!triangle.hasGoodEdges()) return false;
+        }
+        return true;
+    }
+    
+    /**
+     * This runs the verification that every triangle is not degenerate:
+     *      - Two vertices cannot be the same
+     *      - Points cannot be collinear
+     * @param triangles
+     * @return whether or not each triangle has 3 distinct vertices
+     */
+    public static boolean verifyNoDegenerateTriangles(TriangleSet triangles){
+        Vector3f vector12,vector13;
+        float dotProd;
+        for(MeshTriangle triangle:triangles.getTriangleList()){
+            vector12 = triangle.getSide12().getVector();
+            vector13 = triangle.getSide13().getVector();
+            
+            //degenerate side
+            if( (vector12.length() < Constants.EPSILON) 
+                    || (vector13.length() < Constants.EPSILON) ){
+                System.out.println("Degen Triangle: " + triangle);
+                return false;
+            }
+            
+            //collinear
+            vector12.normalizeLocal();
+            vector13.normalizeLocal();
+            dotProd = vector12.dot(vector13);
+            if((Math.abs(dotProd-1) < Constants.EPSILON) || 
+                    (Math.abs(dotProd+1) < Constants.EPSILON)){
+                //if dot prod is near 1 or -1, then unit vectors are identical
+                System.out.println("Degen Triangle: " + triangle);
+                return false;
+            }
+            
         }
         return true;
     }

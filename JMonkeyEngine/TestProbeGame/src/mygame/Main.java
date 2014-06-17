@@ -78,7 +78,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
 
     public static void main(String[] args) {
         
@@ -118,7 +118,7 @@ public class Main extends SimpleApplication {
         cameraTracker.setDefaultCamera(sphereOn);
         
         //String objFileLocation = "Models/lola_mesh.obj";
-        String objFileLocation = "Models/lola_mesh3.obj";
+        String objFileLocation = "Models/lola_mesh_simplified.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);

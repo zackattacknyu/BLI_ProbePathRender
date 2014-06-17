@@ -36,6 +36,10 @@ public class MeshEdge {
     public MeshVertex getVertex2() {
         return vertex2;
     }
+    
+    public Vector3f getVector(){
+        return vertex2.getVertex().subtract(vertex1.getVertex());
+    }
 
     public ArrayList<MeshVertex> getVertices() {
         return vertices;

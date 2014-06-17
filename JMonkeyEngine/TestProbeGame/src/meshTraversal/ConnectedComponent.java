@@ -20,12 +20,35 @@ public class ConnectedComponent {
 
     private TriangleSet triangles;
     private Set<MeshTriangle> componentTriangles;
+    private Set<MeshTriangle> remainingTriangles;
     
     public ConnectedComponent(TriangleSet triangles, MeshTriangle seedTriangle){
         this.triangles = triangles;
         componentTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
+        
+        initRemainingTriangles();
+        
         constructComponentFromSeed(seedTriangle);
         
+        viewRemainingTriangles();
+    }
+    
+    private void initRemainingTriangles(){
+        /*
+         * In case they are not all in a connected component, this tells 
+         *      us the triangles that are left
+         */
+        remainingTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
+        for(MeshTriangle triangle: triangles.getTriangleList()){
+            remainingTriangles.add(triangle);
+        }
+    }
+    
+    private void viewRemainingTriangles(){
+        System.out.println("Triangles not in component: ");
+        for(MeshTriangle triangle: remainingTriangles){
+            System.out.println(triangle);
+        }
     }
     
     /**
@@ -50,7 +73,10 @@ public class ConnectedComponent {
             
             //in case a triangle was added to the stack twice
             if(!componentTriangles.contains(currentTriangle)){
+                
                 componentTriangles.add(currentTriangle);
+                remainingTriangles.remove(currentTriangle);
+                
                 for(MeshTriangle triangle: triangles.getEdgeNeighbors(currentTriangle)){
                     if(!componentTriangles.contains(triangle)){
                         trianglesToVisit.push(triangle);
