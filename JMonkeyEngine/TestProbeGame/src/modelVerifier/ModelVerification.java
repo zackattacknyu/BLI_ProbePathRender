@@ -25,6 +25,7 @@ public class ModelVerification {
         boolean numTrianglesPerEdge = verifyNumTrianglesPerEdge(triangles);
         boolean singleComponent = singleConnectedComponent(triangles);
         boolean noDegenTriangles = verifyNoDegenerateTriangles(triangles);
+        boolean goodNormals = verifyGoodNormals(triangles);
         
         System.out.println();
         System.out.println("Now Running Model Verification:");
@@ -32,6 +33,7 @@ public class ModelVerification {
         System.out.println("2 Triangles Per Edge unless boundary: " + numTrianglesPerEdge);
         System.out.println("Mesh is Single Connected Component: " + singleComponent);
         System.out.println("No Degenerate Triangles: " + noDegenTriangles);
+        System.out.println("Good Normals: " + goodNormals);
     }
     
     /**
@@ -128,6 +130,16 @@ public class ModelVerification {
             }
             
         }
+        return true;
+    }
+
+    private static boolean verifyGoodNormals(TriangleSet triangles) {
+        System.out.println("Vertex At Min X: " + triangles.getVertexWithMinX());
+        System.out.println("Vertex At Max X: " + triangles.getVertexWithMaxX());
+        System.out.println("Vertex At Min Y: " + triangles.getVertexWithMinY());
+        System.out.println("Vertex At Max Y: " + triangles.getVertexWithMaxY());
+        System.out.println("Vertex At Min Z: " + triangles.getVertexWithMinZ());
+        System.out.println("Vertex At Max Z: " + triangles.getVertexWithMaxZ());
         return true;
     }
 }
