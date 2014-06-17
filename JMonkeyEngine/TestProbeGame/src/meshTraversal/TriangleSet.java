@@ -10,6 +10,9 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.VertexBuffer.Type;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -77,12 +80,21 @@ public class TriangleSet {
        MeshVertex vertex1,vertex2,vertex3;
        
        initializeBoundingVertices();
+       VertexBuffer tc = mesh.getBuffer(Type.TexCoord);
+        FloatBuffer fb = (FloatBuffer) tc.getData();
+        fb.clear();
+        for (int i = 0; i < 20; i++){
+            float x = fb.get();
+            float y = fb.get();
+            System.out.println("Tex Coords: " + x + " , " + y);
+        }
        
        //put all triangles into a hash map
        for(int index = 0; index < mesh.getTriangleCount(); index++){
            currentTri = new Triangle();
            mesh.getTriangle(index, currentTri);
            newTri = new MeshTriangle(currentTri,transform);
+           
            edge12 = newTri.getSide12();
            edge13 = newTri.getSide13();
            edge23 = newTri.getSide23();
