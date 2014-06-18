@@ -80,20 +80,29 @@ public class TriangleSet {
        MeshVertex vertex1,vertex2,vertex3;
        
        initializeBoundingVertices();
-       VertexBuffer tc = mesh.getBuffer(Type.TexCoord);
-        FloatBuffer fb = (FloatBuffer) tc.getData();
-        fb.clear();
-        for (int i = 0; i < 20; i++){
-            float x = fb.get();
-            float y = fb.get();
-            System.out.println("Tex Coords: " + x + " , " + y);
-        }
+       MeshData meshData = new MeshData(mesh);
+       ArrayList<Vector2f> textCoords = meshData.getTextureCoordinates();
+       System.out.println();
+       System.out.println("Sample Texture Coordinates: ");
+       for(int index = 0; index < 30; index++){
+           System.out.println(textCoords.get(index));
+       }
+       
        
        //put all triangles into a hash map
        for(int index = 0; index < mesh.getTriangleCount(); index++){
            currentTri = new Triangle();
            mesh.getTriangle(index, currentTri);
            newTri = new MeshTriangle(currentTri,transform);
+           
+           if(index == 2){
+               TriangleTexture texture = meshData.getTriangleTextCoords(index);
+               System.out.println();
+               System.out.println("Sample Coordinates from Triangle: ");
+               System.out.println("Vert 1 Text Coord: " + texture.getVertex1texCoord());
+               System.out.println("Vert 2 Text Coord: " + texture.getVertex2texCoord());
+               System.out.println("Vert 3 Text Coord: " + texture.getVertex3texCoord());
+           }
            
            edge12 = newTri.getSide12();
            edge13 = newTri.getSide13();
