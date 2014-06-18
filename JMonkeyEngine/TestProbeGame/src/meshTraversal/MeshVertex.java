@@ -4,6 +4,7 @@
  */
 package meshTraversal;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
 /**
@@ -13,8 +14,8 @@ import com.jme3.math.Vector3f;
 public class MeshVertex {
 
     private Vector3f vertex;
-    
-    
+    private int vertexIndex;
+    private Vector2f textureCoord;
     
     public MeshVertex(Vector3f vertex){
         this.vertex = vertex;
@@ -22,6 +23,22 @@ public class MeshVertex {
 
     public Vector3f getVertex() {
         return vertex;
+    }
+
+    public int getVertexIndex() {
+        return vertexIndex;
+    }
+
+    public void setVertexIndex(int vertexIndex) {
+        this.vertexIndex = vertexIndex;
+    }
+
+    public Vector2f getTextureCoord() {
+        return textureCoord;
+    }
+
+    public void setTextureCoord(Vector2f textureCoord) {
+        this.textureCoord = textureCoord;
     }
 
     @Override

@@ -62,6 +62,12 @@ public class MeshTriangle {
 
     public void setTextureCoords(TriangleTexture textureCoords) {
         this.textureCoords = textureCoords;
+        if(textureCoords != null){
+            vertex1.setTextureCoord(textureCoords.getVertex1texCoord());
+            vertex2.setTextureCoord(textureCoords.getVertex2texCoord());
+            vertex3.setTextureCoord(textureCoords.getVertex3texCoord());
+        }
+        
     }
     
     public Vector3f getNormal(){
