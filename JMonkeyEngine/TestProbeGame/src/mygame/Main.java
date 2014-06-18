@@ -257,6 +257,9 @@ public class Main extends SimpleApplication {
             displaySurfaceTriangles();
         }
         
+        //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
+        //rootNode.attachChild(testSurface);
+        
         ModelVerification.performModelVerification(meshInfo);
         
     }

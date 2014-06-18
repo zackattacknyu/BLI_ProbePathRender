@@ -80,7 +80,7 @@ public class ObjectHelper {
             if(currentTriangle.getTextureCoords() != null){
                 texCoord[3*index] = currentTriangle.getVertex1().getTextureCoord();
                 texCoord[3*index + 1] = currentTriangle.getVertex2().getTextureCoord();
-                texCoord[3*index + 2] = currentTriangle.getVertex1().getTextureCoord();
+                texCoord[3*index + 2] = currentTriangle.getVertex3().getTextureCoord();
             }
             
             //indices
