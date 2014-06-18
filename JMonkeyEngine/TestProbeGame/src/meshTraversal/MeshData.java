@@ -34,13 +34,18 @@ public class MeshData {
     
     private FloatBuffer obtainMeshBuffer(VertexBuffer.Type type){
         VertexBuffer pb = mesh.getBuffer(type);
+        if(pb == null) return null;
         FloatBuffer fpb = (FloatBuffer) pb.getData();
         return fpb;
     }
     
     private void constructTextureCoordList(){
-        textureCoordinates = new ArrayList<Vector2f>(mesh.getVertexCount());
         FloatBuffer fb = obtainMeshBuffer(VertexBuffer.Type.TexCoord);
+        if(fb == null){
+            textureCoordinates = null;
+            return;
+        }
+        textureCoordinates = new ArrayList<Vector2f>(mesh.getVertexCount());
         fb.clear();
         while(fb.remaining() > 0){
             float x = fb.get();
@@ -50,6 +55,9 @@ public class MeshData {
     }
     
     public TriangleTexture getTriangleTextCoords(int index){
+        
+        if(textureCoordinates == null) return null;
+        
         IndexBuffer ib = mesh.getIndicesAsList();
 
         // aquire triangle's vertex indices

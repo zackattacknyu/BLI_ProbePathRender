@@ -51,6 +51,8 @@ public class Main extends SimpleApplication {
             readModeText, recordingText, resetProbeText, probeMoveModeText;
     private boolean onStartPoint = true;
     
+    private final boolean sphereWireframeOn=true, lolaWireframeOn=false;
+    
     private ProbeTracker probeTracker;
     
     private CameraTracker cameraTracker;
@@ -135,6 +137,7 @@ public class Main extends SimpleApplication {
             //ballMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
             ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
             ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
+            if(lolaWireframeOn) ballMat.getAdditionalRenderState().setWireframe(true);
         }
         
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
@@ -148,6 +151,7 @@ public class Main extends SimpleApplication {
         zMat.setColor("Color", ColorRGBA.Green);
         
         Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+        if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
         if(sphereOn){
             surface = ModelHelper.generateModel(sphereLocation, lightedSphere, assetManager);
         }else{
