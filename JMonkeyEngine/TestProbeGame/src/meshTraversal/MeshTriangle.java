@@ -28,6 +28,8 @@ public class MeshTriangle {
     
     private boolean boundaryTriangle = false;
     
+    private TriangleTexture textureCoords;
+    
     public MeshTriangle(Triangle triangle, Matrix4f transform){
         vertices = new ArrayList<MeshVertex>(3);
         
@@ -52,6 +54,14 @@ public class MeshTriangle {
         vertices.add(vertex1);
         vertices.add(vertex2);
         vertices.add(vertex3);
+    }
+
+    public TriangleTexture getTextureCoords() {
+        return textureCoords;
+    }
+
+    public void setTextureCoords(TriangleTexture textureCoords) {
+        this.textureCoords = textureCoords;
     }
     
     public Vector3f getNormal(){

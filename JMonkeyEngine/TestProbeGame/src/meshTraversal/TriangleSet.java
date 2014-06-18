@@ -81,28 +81,13 @@ public class TriangleSet {
        
        initializeBoundingVertices();
        MeshData meshData = new MeshData(mesh);
-       ArrayList<Vector2f> textCoords = meshData.getTextureCoordinates();
-       System.out.println();
-       System.out.println("Sample Texture Coordinates: ");
-       for(int index = 0; index < 30; index++){
-           System.out.println(textCoords.get(index));
-       }
-       
        
        //put all triangles into a hash map
        for(int index = 0; index < mesh.getTriangleCount(); index++){
            currentTri = new Triangle();
            mesh.getTriangle(index, currentTri);
            newTri = new MeshTriangle(currentTri,transform);
-           
-           if(index == 2){
-               TriangleTexture texture = meshData.getTriangleTextCoords(index);
-               System.out.println();
-               System.out.println("Sample Coordinates from Triangle: ");
-               System.out.println("Vert 1 Text Coord: " + texture.getVertex1texCoord());
-               System.out.println("Vert 2 Text Coord: " + texture.getVertex2texCoord());
-               System.out.println("Vert 3 Text Coord: " + texture.getVertex3texCoord());
-           }
+           newTri.setTextureCoords(meshData.getTriangleTextCoords(index));
            
            edge12 = newTri.getSide12();
            edge13 = newTri.getSide13();
