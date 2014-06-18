@@ -4,11 +4,7 @@
  */
 package meshTraversal;
 
-import java.util.AbstractQueue;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -20,6 +16,7 @@ public class ConnectedComponent {
 
     private TriangleSet parentTriangleSet;
     private TriangleSet componentTriangleSet;
+    private TriangleSet remainingTriangleSet;
     private Set<MeshTriangle> componentTriangles;
     private Set<MeshTriangle> remainingTriangles;
     
@@ -33,7 +30,7 @@ public class ConnectedComponent {
         
         viewRemainingTriangles();
         
-        constructComponentTriangleSet();
+        constructTriangleSets();
     }
     
     private void initRemainingTriangles(){
@@ -94,11 +91,17 @@ public class ConnectedComponent {
         return componentTriangles;
     }
 
-    private void constructComponentTriangleSet() {
-        componentTriangleSet = new TriangleSet();
-        for(MeshTriangle meshTri: componentTriangles){
-            componentTriangleSet.addTriangle(meshTri);
+    private void constructTriangleSets() {
+        componentTriangleSet = constructTriangleSet(componentTriangles);
+        remainingTriangleSet = constructTriangleSet(remainingTriangles);
+    }
+    
+    public static TriangleSet constructTriangleSet(Set<MeshTriangle> triangles){
+        TriangleSet newTriSet = new TriangleSet();
+        for(MeshTriangle meshTri: triangles){
+            newTriSet.addTriangle(meshTri);
         }
+        return newTriSet;
     }
     
 }

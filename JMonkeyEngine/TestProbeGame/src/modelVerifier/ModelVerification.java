@@ -50,6 +50,10 @@ public class ModelVerification {
         System.out.println("Smooth Normals: " + smoothNormals);
     }
     
+    public static void displayComponents(TriangleSet triangles){
+        
+    }
+    
     /**
      * This verifies that the triangles are a single connected component. It works
      *      by recursively travelling through all the neighbors of a triangle
