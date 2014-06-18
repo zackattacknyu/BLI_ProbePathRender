@@ -33,6 +33,11 @@ public class TriangleTexture {
     public Vector2f getVertex3texCoord() {
         return vertex3texCoord;
     }
+
+    @Override
+    public String toString() {
+        return vertex1texCoord + " , " + vertex2texCoord + " , " + vertex3texCoord + '}';
+    }
     
     
     

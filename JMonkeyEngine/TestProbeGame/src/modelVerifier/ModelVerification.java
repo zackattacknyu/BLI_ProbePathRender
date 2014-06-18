@@ -140,6 +140,7 @@ public class ModelVerification {
                     (Math.abs(dotProd+1) < Constants.EPSILON)){
                 //if dot prod is near 1 or -1, then unit vectors are identical
                 System.out.println("Degen Triangle: " + triangle);
+                System.out.println("Degen Triangle texture coordinates: " + triangle.getTextureCoords());
                 return false;
             }
             
@@ -183,6 +184,8 @@ public class ModelVerification {
                 currentNormal = currentTriangle.getNormal();
                 if(!verifyOutwardDir(currentNormal,baseNormal)){
                     System.out.println("Bad Adjacent Normals: " + currentNormal + " and " + baseNormal);
+                    System.out.println("Normal 1 Texture Coords: " + currentTriangle.getTextureCoords());
+                    System.out.println("Normal 2 Texture Coords: " + baseTriangle.getTextureCoords());
                     return false;
                 }
             }
