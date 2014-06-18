@@ -41,6 +41,8 @@ public class TriangleSet {
        triangleList = new ArrayList<MeshTriangle>(30000);
        
        transform = new Matrix4f();
+       
+       initializeBoundingVertices();
    }
 
     public void setTransform(Matrix4f transform) {
@@ -76,10 +78,6 @@ public class TriangleSet {
    public void addMesh(Mesh mesh){
        Triangle currentTri;
        MeshTriangle newTri;
-       MeshEdge edge12, edge23, edge13;
-       MeshVertex vertex1,vertex2,vertex3;
-       
-       initializeBoundingVertices();
        MeshData meshData = new MeshData(mesh);
        
        //put all triangles into a hash map
@@ -88,25 +86,33 @@ public class TriangleSet {
            mesh.getTriangle(index, currentTri);
            newTri = new MeshTriangle(currentTri,transform);
            newTri.setTextureCoords(meshData.getTriangleTextCoords(index));
+           addTriangle(newTri);
            
-           edge12 = newTri.getSide12();
-           edge13 = newTri.getSide13();
-           edge23 = newTri.getSide23();
-           
-           vertex1 = newTri.getVertex1();
-           vertex2 = newTri.getVertex2();
-           vertex3 = newTri.getVertex3();
-           
-           addEdgeToTriangleMap(edge12,newTri);
-           addEdgeToTriangleMap(edge13,newTri);
-           addEdgeToTriangleMap(edge23,newTri);
-           
-           addVertexToTriangleMap(vertex1,newTri);
-           addVertexToTriangleMap(vertex2,newTri);
-           addVertexToTriangleMap(vertex3,newTri);
-           
-           triangleList.add(newTri);
        }
+   }
+   
+   public void addTriangle(MeshTriangle newTri){
+
+       MeshEdge edge12, edge23, edge13;
+       MeshVertex vertex1,vertex2,vertex3;
+           
+        edge12 = newTri.getSide12();
+        edge13 = newTri.getSide13();
+        edge23 = newTri.getSide23();
+
+        vertex1 = newTri.getVertex1();
+        vertex2 = newTri.getVertex2();
+        vertex3 = newTri.getVertex3();
+
+        addEdgeToTriangleMap(edge12,newTri);
+        addEdgeToTriangleMap(edge13,newTri);
+        addEdgeToTriangleMap(edge23,newTri);
+
+        addVertexToTriangleMap(vertex1,newTri);
+        addVertexToTriangleMap(vertex2,newTri);
+        addVertexToTriangleMap(vertex3,newTri);
+
+        triangleList.add(newTri);
    }
    
    public void setBoundaryTriangles(){

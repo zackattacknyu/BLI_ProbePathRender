@@ -18,12 +18,13 @@ import java.util.Stack;
  */
 public class ConnectedComponent {
 
-    private TriangleSet triangles;
+    private TriangleSet parentTriangleSet;
+    private TriangleSet componentTriangleSet;
     private Set<MeshTriangle> componentTriangles;
     private Set<MeshTriangle> remainingTriangles;
     
     public ConnectedComponent(TriangleSet triangles, MeshTriangle seedTriangle){
-        this.triangles = triangles;
+        this.parentTriangleSet = triangles;
         componentTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
         
         initRemainingTriangles();
@@ -31,15 +32,17 @@ public class ConnectedComponent {
         constructComponentFromSeed(seedTriangle);
         
         viewRemainingTriangles();
+        
+        constructComponentTriangleSet();
     }
     
     private void initRemainingTriangles(){
         /*
          * In case they are not all in a connected component, this tells 
-         *      us the triangles that are left
+         *      us the parentTriangleSet that are left
          */
-        remainingTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
-        for(MeshTriangle triangle: triangles.getTriangleList()){
+        remainingTriangles = new HashSet<MeshTriangle>(parentTriangleSet.getTriangleList().size());
+        for(MeshTriangle triangle: parentTriangleSet.getTriangleList()){
             remainingTriangles.add(triangle);
         }
     }
@@ -53,7 +56,7 @@ public class ConnectedComponent {
     
     /**
      * This constructs the connected component from a seed triangle
-     * This works by maintaining a stack of triangles to be visited. Once
+     * This works by maintaining a stack of parentTriangleSet to be visited. Once
      *      a triangle is visited, all its unvisited neighbors get added to the
      *      stack.
      * 
@@ -77,7 +80,7 @@ public class ConnectedComponent {
                 componentTriangles.add(currentTriangle);
                 remainingTriangles.remove(currentTriangle);
                 
-                for(MeshTriangle triangle: triangles.getEdgeNeighbors(currentTriangle)){
+                for(MeshTriangle triangle: parentTriangleSet.getEdgeNeighbors(currentTriangle)){
                     if(!componentTriangles.contains(triangle)){
                         trianglesToVisit.push(triangle);
                     }
@@ -89,6 +92,13 @@ public class ConnectedComponent {
 
     public Set<MeshTriangle> getComponentTriangles() {
         return componentTriangles;
+    }
+
+    private void constructComponentTriangleSet() {
+        componentTriangleSet = new TriangleSet();
+        for(MeshTriangle meshTri: componentTriangles){
+            componentTriangleSet.addTriangle(meshTri);
+        }
     }
     
 }
