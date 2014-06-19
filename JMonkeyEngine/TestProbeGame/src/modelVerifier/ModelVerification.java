@@ -4,6 +4,7 @@
  */
 package modelVerifier;
 
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -182,7 +183,7 @@ public class ModelVerification {
         return true;
     }
     
-    private static boolean verifyOutwardDir(Vector3f dirToCheck, Vector3f currentOutwardDir){
+    public static boolean verifyOutwardDir(Vector3f dirToCheck, Vector3f currentOutwardDir){
         return dirToCheck.normalize().dot(currentOutwardDir.normalize()) > 0;
     }
 
@@ -190,19 +191,21 @@ public class ModelVerification {
         Vector3f baseNormal;
         Vector3f currentNormal;
         
+        boolean badPairExists = false;
+        
         for(MeshTriangle baseTriangle : triangles.getTriangleList()){
             baseNormal = baseTriangle.getNormal();
             for(MeshTriangle currentTriangle : triangles.getEdgeNeighbors(baseTriangle)){
                 currentNormal = currentTriangle.getNormal();
                 if(!verifyOutwardDir(currentNormal,baseNormal)){
                     System.out.println("Bad Adjacent Normals: " + currentNormal + " and " + baseNormal);
-                    System.out.println("Normal 1 Texture Coords: " + currentTriangle.getTextureCoords());
-                    System.out.println("Normal 2 Texture Coords: " + baseTriangle.getTextureCoords());
-                    return false;
+                    currentTriangle.reorderVertices();
+                    System.out.println("After Reforming Triangle, is it smooth: " + verifyOutwardDir(baseNormal,currentTriangle.getNormal()));
+                    badPairExists = true;
                 }
             }
         }
         
-        return true;
+        return badPairExists;
     }
 }

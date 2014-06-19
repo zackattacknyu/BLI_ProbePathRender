@@ -4,8 +4,13 @@
  */
 package modelVerifier;
 
+import com.jme3.math.Triangle;
+import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import meshTraversal.ConnectedComponent;
+import meshTraversal.MeshTriangle;
 import meshTraversal.TriangleSet;
 
 /**
@@ -13,6 +18,36 @@ import meshTraversal.TriangleSet;
  * @author BLI
  */
 public class ModelCorrection {
+    
+    public static TriangleSet getSmoothedTriangleSet(TriangleSet triangles){
+        Vector3f baseNormal;
+        Vector3f currentNormal;
+        
+        TriangleSet newTriSet = new TriangleSet();
+
+        Set<MeshTriangle> addedTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
+        MeshTriangle reformedTriangle;
+        
+        for(MeshTriangle baseTriangle : triangles.getTriangleList()){
+            baseNormal = baseTriangle.getNormal();
+            for(MeshTriangle currentTriangle : triangles.getEdgeNeighbors(baseTriangle)){
+                
+                currentNormal = currentTriangle.getNormal();
+                
+                if(!addedTriangles.contains(currentTriangle)){
+                    
+                    if(!ModelVerification.verifyOutwardDir(currentNormal,baseNormal)){
+                        currentTriangle.reorderVertices();   
+                    }
+                    newTriSet.addTriangle(currentTriangle);
+                    addedTriangles.add(currentTriangle);
+                }
+                
+            }
+        }
+        
+        return newTriSet;
+    }
 
     
     public static ConnectedComponent getLargestComponent(TriangleSet triangles){

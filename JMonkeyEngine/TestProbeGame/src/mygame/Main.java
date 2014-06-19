@@ -53,7 +53,7 @@ public class Main extends SimpleApplication {
             readModeText, recordingText, resetProbeText, probeMoveModeText;
     private boolean onStartPoint = true;
     
-    private final boolean sphereWireframeOn=true, lolaWireframeOn=true;
+    private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
     
     private ProbeTracker probeTracker;
     
@@ -123,8 +123,8 @@ public class Main extends SimpleApplication {
         cameraTracker.setDefaultCamera(sphereOn);
         
         //String objFileLocation = "Models/lola_mesh.obj";
-        String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
-        //String objFileLocation = "Models/lola_mesh_simplified.obj";
+        //String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
+        String objFileLocation = "Models/lola_mesh_simplePatch2_simplified.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
@@ -245,6 +245,7 @@ public class Main extends SimpleApplication {
         }
         
         ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(meshInfo);
+        //TriangleSet correctedMesh = ModelCorrection.getSmoothedTriangleSet(mainComponent.getComponentTriangleSet());
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
@@ -272,25 +273,35 @@ public class Main extends SimpleApplication {
         
     }
     
-    private void obtainSphereTriangleData(){
+    private void obtainTriangleData(Matrix4f transform){
         meshInfo = new TriangleSet();
-        meshInfo.setTransform(sphereTransform);
-        Geometry surfaceGeom = (Geometry)surface;
-        meshInfo.addMesh(surfaceGeom.getMesh());
-        meshInfo.setBoundaryTriangles();
+        meshInfo.setTransform(transform);
+        if(surface instanceof Node){
+            System.out.println("**NOTE: Node Triangle Data generated**");
+            Node surfaceNode = (Node)surface;
+            for(Spatial child: surfaceNode.getChildren()){
+                Geometry surfaceGeom = (Geometry)child;
+                meshInfo.addMesh(surfaceGeom.getMesh());
+            }
+        }else if(surface instanceof Geometry){
+            System.out.println("**NOTE: Geometry Triangle Data generated**");
+            Geometry surfaceGeom = (Geometry)surface;
+            meshInfo.addMesh(surfaceGeom.getMesh());
+            meshInfo.setBoundaryTriangles();
+        }
     }
     
     private void obtainSurfaceTriangleData(){
-        
-        Node surfaceNode = (Node)surface;
-        meshInfo = new TriangleSet();
-        meshInfo.setTransform(surfaceTransform);
-        for(Spatial child: surfaceNode.getChildren()){
-            Geometry surfaceGeom = (Geometry)child;
-            meshInfo.addMesh(surfaceGeom.getMesh());
-        }
+        obtainTriangleData(surfaceTransform);
         
     }
+    
+    private void obtainSphereTriangleData(){
+        obtainTriangleData(sphereTransform);
+        
+    }
+    
+    
     
     private void addLineLights(){
         PointLight ballLight = new PointLight();
@@ -584,7 +595,7 @@ public class Main extends SimpleApplication {
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println("Contact Normal: " + point.getNormal());
-                            meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
                             //meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){

@@ -31,7 +31,6 @@ public class MeshTriangle {
     private TriangleTexture textureCoords;
     
     public MeshTriangle(Triangle triangle, Matrix4f transform){
-        vertices = new ArrayList<MeshVertex>(3);
         
         Vector3f vert1 = triangle.get1();
         Vector3f vert2 = triangle.get2();
@@ -41,6 +40,18 @@ public class MeshTriangle {
         Vector3f vert2Trans = transform.mult(vert2);
         Vector3f vert3Trans = transform.mult(vert3);
         
+        addAllVertices(vert1Trans,vert2Trans,vert3Trans);
+    }
+    
+    //reorder vertices so that the normal points in correct direction
+    public void reorderVertices(){
+        Vector3f vert1 = vertex1.getVertex().clone();
+        Vector3f vert2 = vertex2.getVertex().clone();
+        Vector3f vert3 = vertex3.getVertex().clone();
+        addAllVertices(vert1,vert3,vert2);
+    }
+    
+    private void addAllVertices(Vector3f vert1Trans, Vector3f vert2Trans,Vector3f vert3Trans){
         vertex1 = new MeshVertex(vert1Trans);
         vertex2 = new MeshVertex(vert2Trans);
         vertex3 = new MeshVertex(vert3Trans);
@@ -51,6 +62,7 @@ public class MeshTriangle {
         side13 = new MeshEdge(vertex1,vertex3);
         side23 = new MeshEdge(vertex2,vertex3);
 
+        vertices = new ArrayList<MeshVertex>(3);
         vertices.add(vertex1);
         vertices.add(vertex2);
         vertices.add(vertex3);
