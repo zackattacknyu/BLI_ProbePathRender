@@ -75,22 +75,19 @@ public class ConnectedComponent {
     private void constructComponentFromSeed(MeshTriangle seedTriangle){
         MeshTriangle currentTriangle = seedTriangle;
         Stack<MeshTriangle> trianglesToVisit = new Stack<MeshTriangle>();
+        Set<MeshTriangle> visitedTriangles = new HashSet<MeshTriangle>();
         trianglesToVisit.push(currentTriangle);
         while(!trianglesToVisit.isEmpty()){
             currentTriangle = trianglesToVisit.pop();
+            visitedTriangles.add(currentTriangle);
             
-            //in case a triangle was added to the stack twice
-            if(!componentTriangles.contains(currentTriangle)){
-                
-                componentTriangles.add(currentTriangle);
-                remainingTriangles.remove(currentTriangle);
-                
-                for(MeshTriangle triangle: parentTriangleSet.getEdgeNeighbors(currentTriangle)){
-                    if(!componentTriangles.contains(triangle)){
-                        trianglesToVisit.push(triangle);
-                    }
-                }
+            componentTriangles.add(currentTriangle);
+            remainingTriangles.remove(currentTriangle);
 
+            for(MeshTriangle triangle: parentTriangleSet.getEdgeNeighbors(currentTriangle)){
+                if(!visitedTriangles.contains(triangle)){
+                    trianglesToVisit.push(triangle);
+                }
             }
         }
     }
