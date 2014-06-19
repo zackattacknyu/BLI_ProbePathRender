@@ -28,9 +28,17 @@ public class ConnectedComponent {
         
         constructComponentFromSeed(seedTriangle);
         
-        viewRemainingTriangles();
+        //viewRemainingTriangles();
         
         constructTriangleSets();
+    }
+
+    public TriangleSet getComponentTriangleSet() {
+        return componentTriangleSet;
+    }
+
+    public TriangleSet getRemainingTriangleSet() {
+        return remainingTriangleSet;
     }
     
     private void initRemainingTriangles(){

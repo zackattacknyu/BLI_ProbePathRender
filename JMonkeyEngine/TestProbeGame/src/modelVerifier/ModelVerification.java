@@ -5,6 +5,7 @@
 package modelVerifier;
 
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import meshTraversal.ConnectedComponent;
@@ -48,9 +49,13 @@ public class ModelVerification {
         System.out.println("No Degenerate Triangles: " + noDegenTriangles);
         System.out.println("Bounding Vertex Normals Point Outward: " + boundingNormalsOutward);
         System.out.println("Smooth Normals: " + smoothNormals);
+        
+        displayComponents(triangles);
     }
     
     public static void displayComponents(TriangleSet triangles){
+        ConnectedComponent mainComp = ModelCorrection.getLargestComponent(triangles);
+        System.out.println("Main Component has " + mainComp.getComponentTriangles().size() + " triangles");
         
     }
     

@@ -34,6 +34,7 @@ import java.util.Properties;
 import meshTraversal.MeshHelper;
 import modelVerifier.ModelVerification;
 import meshTraversal.TriangleSet;
+import modelVerifier.ModelCorrection;
 import render.ObjectHelper;
 
 
@@ -235,7 +236,19 @@ public class Main extends SimpleApplication {
             rootNode.attachChild(background);
         }
         
+        if(sphereOn){
+            addSphereLights();
+            obtainSphereTriangleData();
+        }else{
+            obtainSurfaceTriangleData();
+        }
         
+        TriangleSet correctedMesh = ModelCorrection.getLargestComponent(meshInfo).getComponentTriangleSet();
+        surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
+        //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
+        //rootNode.attachChild(testSurface);
+        
+        ModelVerification.performModelVerification(correctedMesh);
         
         
         initKeyboardInputs();
@@ -250,21 +263,13 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         probePathSet = new ProbePathSet(lineMaterial);
         
-        if(sphereOn){
-            addSphereLights();
-            getSphereTriangles();
-        }else{
-            displaySurfaceTriangles();
-        }
         
-        //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
-        //rootNode.attachChild(testSurface);
         
-        ModelVerification.performModelVerification(meshInfo);
+        
         
     }
     
-    private void getSphereTriangles(){
+    private void obtainSphereTriangleData(){
         meshInfo = new TriangleSet();
         meshInfo.setTransform(sphereTransform);
         Geometry surfaceGeom = (Geometry)surface;
@@ -272,7 +277,7 @@ public class Main extends SimpleApplication {
         meshInfo.setBoundaryTriangles();
     }
     
-    private void displaySurfaceTriangles(){
+    private void obtainSurfaceTriangleData(){
         
         Node surfaceNode = (Node)surface;
         meshInfo = new TriangleSet();
