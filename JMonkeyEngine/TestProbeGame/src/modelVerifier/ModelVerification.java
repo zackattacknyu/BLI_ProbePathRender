@@ -34,6 +34,10 @@ public class ModelVerification {
     };
     
     public static void performModelVerification(TriangleSet triangles){
+        System.out.println();
+        System.out.println("Now Running Model Verification:");
+        System.out.println("It is being done on a model with " + triangles.getTriangleList().size() + " triangles");
+        
         boolean numEdgesPerTriangle = verifyNumEdgesPerTriangle(triangles);
         boolean numTrianglesPerEdge = verifyNumTrianglesPerEdge(triangles);
         boolean singleComponent = singleConnectedComponent(triangles);
@@ -41,8 +45,7 @@ public class ModelVerification {
         boolean boundingNormalsOutward = verifyOutwardBoundingNormals(triangles);
         boolean smoothNormals = verifySmoothNormals(triangles);
         
-        System.out.println();
-        System.out.println("Now Running Model Verification:");
+        
         System.out.println("3 Edges Exist for each triangle: " + numEdgesPerTriangle);
         System.out.println("2 Triangles Per Edge unless boundary: " + numTrianglesPerEdge);
         System.out.println("Mesh is Single Connected Component: " + singleComponent);

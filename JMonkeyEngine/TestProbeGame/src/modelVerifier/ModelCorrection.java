@@ -37,6 +37,8 @@ public class ModelCorrection {
             }
         }
         
+        System.out.println("Largest Component has " + currentComp.getComponentTriangles().size() + " triangles");
+        
         return currentComp;
     }
     

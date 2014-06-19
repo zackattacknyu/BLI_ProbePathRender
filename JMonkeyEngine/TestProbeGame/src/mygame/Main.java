@@ -31,6 +31,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import meshTraversal.ConnectedComponent;
 import meshTraversal.MeshHelper;
 import modelVerifier.ModelVerification;
 import meshTraversal.TriangleSet;
@@ -52,7 +53,7 @@ public class Main extends SimpleApplication {
             readModeText, recordingText, resetProbeText, probeMoveModeText;
     private boolean onStartPoint = true;
     
-    private final boolean sphereWireframeOn=true, lolaWireframeOn=false;
+    private final boolean sphereWireframeOn=true, lolaWireframeOn=true;
     
     private ProbeTracker probeTracker;
     
@@ -243,7 +244,9 @@ public class Main extends SimpleApplication {
             obtainSurfaceTriangleData();
         }
         
-        TriangleSet correctedMesh = ModelCorrection.getLargestComponent(meshInfo).getComponentTriangleSet();
+        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(meshInfo);
+        TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
+        System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
         //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
         //rootNode.attachChild(testSurface);
