@@ -45,6 +45,8 @@ public class ProbeTracker {
     
     private float firstYaw=0, firstPitch = 0, firstRoll = (float)(Math.PI/2.0);
     
+    private float currentDebugX = 0.0f,currentDebugY = 0.0f;
+    
     private short readMode = 0;
     
     private Quaternion localRotation;
@@ -62,7 +64,8 @@ public class ProbeTracker {
     
     private short displacementMode = 2;
     
-    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter;
+    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter,
+            currentXYPathDataWriter, currentYawPitchRollDataWriter;
     
     private Path logFileParentPath,pathRecordingFilePath;
     
@@ -122,6 +125,10 @@ public class ProbeTracker {
         currentXYDisp = TrackingHelper.scaleXYDisplacement(
                 currentXYDisp, scaleFactorX, scaleFactorY);
         
+        //gets x,y if there was no rotation change to it
+        currentDebugX = currentDebugX + currentXYDisp.getX();
+        currentDebugY = currentDebugY + currentXYDisp.getY();
+        
         switch(displacementMode){
             
                 //only use X,Y
@@ -171,6 +178,11 @@ public class ProbeTracker {
                 currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
                                                   cubePath.getLastY() + "," + 
                                                   cubePath.getLastZ());
+                currentXYPathDataWriter.writeLine(currentDebugX + "," + 
+                        currentDebugY);
+                currentYawPitchRollDataWriter.writeLine(currentYaw + "," + 
+                        currentPitch + "," + 
+                        currentRoll);
             } catch (IOException ex) {
                 System.out.println(ex);
             }
@@ -220,8 +232,12 @@ public class ProbeTracker {
             if(recordingPath){
                 currentPathOutputWriter.closeWriter();
                 currentPathVertexWriter.closeWriter();
+                currentXYPathDataWriter.closeWriter();
+                currentYawPitchRollDataWriter.closeWriter();
                 currentPathOutputWriter = null;
                 currentPathVertexWriter = null;
+                currentXYPathDataWriter = null;
+                currentYawPitchRollDataWriter = null;
                 
                 
             }else{   
@@ -230,6 +246,10 @@ public class ProbeTracker {
                         pathRecordingFilePath,"pathOutput",currentTimestamp);
                 currentPathVertexWriter = new ProbeDataWriter(
                         pathRecordingFilePath,"pathVertices",currentTimestamp);
+                currentXYPathDataWriter = new ProbeDataWriter(
+                        pathRecordingFilePath,"pathXYdata",currentTimestamp);
+                currentYawPitchRollDataWriter = new ProbeDataWriter(
+                        pathRecordingFilePath,"pathYawPitchRollData",currentTimestamp);
                 
             }
         } catch (IOException ex) {
