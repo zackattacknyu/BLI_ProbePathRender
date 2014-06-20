@@ -249,7 +249,12 @@ public class Main extends SimpleApplication {
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
+        if(sphereOn){
+            surface = ObjectHelper.createMeshFromTriangles(correctedMesh, lightedSphere);
+        }else{
+            surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
+        }
+        meshInfo = correctedMesh;
         //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
         //rootNode.attachChild(testSurface);
         
@@ -283,7 +288,7 @@ public class Main extends SimpleApplication {
         Node normals = new Node();
         Vector3f startPt;
         Vector3f endPt;
-        float scaleFactor = 0.2f;
+        float scaleFactor = 5.0f;
         Spatial currentNormal;
         ArrayList<Vector3f> currentNormalVerts;
         
@@ -622,8 +627,8 @@ public class Main extends SimpleApplication {
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println("Contact Normal: " + point.getNormal());
-                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
-                            //meshInfo.displayVertexNeighbors(point.getTriangle());
+                            meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){
                                 
