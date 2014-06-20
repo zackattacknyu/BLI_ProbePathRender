@@ -191,7 +191,7 @@ public class ModelVerification {
         Vector3f baseNormal;
         Vector3f currentNormal;
         
-        boolean badPairExists = false;
+        boolean noBadPairs = true;
         
         for(MeshTriangle baseTriangle : triangles.getTriangleList()){
             baseNormal = baseTriangle.getNormal();
@@ -201,11 +201,11 @@ public class ModelVerification {
                     System.out.println("Bad Adjacent Normals: " + currentNormal + " and " + baseNormal);
                     currentTriangle.reorderVertices();
                     System.out.println("After Reforming Triangle, is it smooth: " + verifyOutwardDir(baseNormal,currentTriangle.getNormal()));
-                    badPairExists = true;
+                    noBadPairs = false;
                 }
             }
         }
         
-        return badPairExists;
+        return noBadPairs;
     }
 }

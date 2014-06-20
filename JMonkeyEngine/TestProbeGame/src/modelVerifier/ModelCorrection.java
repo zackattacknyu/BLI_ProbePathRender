@@ -26,7 +26,6 @@ public class ModelCorrection {
         TriangleSet newTriSet = new TriangleSet();
 
         Set<MeshTriangle> addedTriangles = new HashSet<MeshTriangle>(triangles.getTriangleList().size());
-        MeshTriangle reformedTriangle;
         
         for(MeshTriangle baseTriangle : triangles.getTriangleList()){
             baseNormal = baseTriangle.getNormal();

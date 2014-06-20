@@ -245,8 +245,8 @@ public class Main extends SimpleApplication {
         }
         
         ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(meshInfo);
-        //TriangleSet correctedMesh = ModelCorrection.getSmoothedTriangleSet(mainComponent.getComponentTriangleSet());
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
+        correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
         //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
