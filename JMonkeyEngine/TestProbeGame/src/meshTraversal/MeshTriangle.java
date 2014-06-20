@@ -71,6 +71,10 @@ public class MeshTriangle {
     public TriangleTexture getTextureCoords() {
         return textureCoords;
     }
+    
+    public Vector3f getCenter(){
+        return triangleData.getCenter();
+    }
 
     public void setTextureCoords(TriangleTexture textureCoords) {
         this.textureCoords = textureCoords;

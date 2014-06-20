@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import meshTraversal.ConnectedComponent;
 import meshTraversal.MeshHelper;
+import meshTraversal.MeshTriangle;
 import modelVerifier.ModelVerification;
 import meshTraversal.TriangleSet;
 import modelVerifier.ModelCorrection;
@@ -268,9 +269,35 @@ public class Main extends SimpleApplication {
         probePathSet = new ProbePathSet(lineMaterial);
         
         
+        //displayNormals(correctedMesh);
         
         
+    }
+    
+    /*
+     * This displays each of the normals for all the triangles.
+     * It is meant to be used to visually verify that all the normals
+     *      point outside the surface
+     */
+    private void displayNormals(TriangleSet triangles){
+        Node normals = new Node();
+        Vector3f startPt;
+        Vector3f endPt;
+        float scaleFactor = 0.2f;
+        Spatial currentNormal;
+        ArrayList<Vector3f> currentNormalVerts;
         
+        for(MeshTriangle tri: triangles.getTriangleList()){
+            startPt = tri.getCenter();
+            endPt = startPt.add(tri.getNormal().mult(scaleFactor));
+            currentNormalVerts = new ArrayList<Vector3f>(2);
+            currentNormalVerts.add(startPt); 
+            currentNormalVerts.add(endPt);
+            currentNormal = ObjectHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
+            normals.attachChild(currentNormal);
+        }
+        
+        rootNode.attachChild(normals);
     }
     
     private void obtainTriangleData(Matrix4f transform){
