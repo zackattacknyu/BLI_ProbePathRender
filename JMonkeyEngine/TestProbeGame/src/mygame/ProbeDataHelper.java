@@ -17,12 +17,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
  * @author Zach
  */
 public class ProbeDataHelper {
+    
+    public static File importPathUsingFileSelector(File initialImportDirectory){
+        JFileChooser selector = new JFileChooser(initialImportDirectory);
+        int chosenOption = selector.showOpenDialog(null);
+        File selectedFile = null;
+        if(chosenOption == JFileChooser.APPROVE_OPTION){
+            selectedFile = selector.getSelectedFile();
+        }
+        return selectedFile;
+    }
 
     public static ArrayList<Vector3f> getVerticesFromFile(File dataFile){
         ArrayList<String> lines = getLinesFromFile(dataFile);

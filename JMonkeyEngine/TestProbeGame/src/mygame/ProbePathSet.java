@@ -59,14 +59,12 @@ public class ProbePathSet {
     }
     
     public boolean importPathUsingFileSelector(File initialImportDirectory){
-        JFileChooser selector = new JFileChooser(initialImportDirectory);
-        int chosenOption = selector.showOpenDialog(null);
-        boolean optionChosen = false;
-        if(chosenOption == JFileChooser.APPROVE_OPTION){
-            optionChosen = true;
-            File selectedFile = selector.getSelectedFile();
+        File selectedFile = ProbeDataHelper.importPathUsingFileSelector(initialImportDirectory);
+        if(selectedFile == null){
+            return false;
+        }else{
             addPath(ProbeDataHelper.getVerticesFromFile(selectedFile));
+            return true;
         }
-        return optionChosen;
     }
 }
