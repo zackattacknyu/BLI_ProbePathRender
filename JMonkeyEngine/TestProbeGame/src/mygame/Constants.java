@@ -12,6 +12,9 @@ import com.jme3.math.ColorRGBA;
  */
 public class Constants {
 
+    //min lenght of individual segment
+    public static final float MIN_SEGMENT_LENGTH = 0.001f;
+    
     
     public static final float PATH_LINE_WIDTH = 30f;
     public static final ColorRGBA LINE_COLOR = ColorRGBA.Black;
