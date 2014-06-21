@@ -108,6 +108,15 @@ public class CameraTrackerImpl extends CameraTracker{
             currentCam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
         }
         
+        /*
+         * TODO: Add mode and make this one of the camera modes
+         */
+        boolean rawData = false;
+        if(rawData){
+            currentCam.setLocation(new Vector3f(-0.67807275f, 0.5436802f, -2.7487648f));
+            currentCam.setRotation(new Quaternion(0.15252174f, -2.9824104E-4f, 0.7722618f, 0.61672425f));
+        }
+        
     }
     
     protected void enableFlyCam(){

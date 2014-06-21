@@ -44,10 +44,10 @@ public class RawProbeData {
         }
     }
     
-    public Node generateSpatialNode(Material lineMat){
+    public Node generateSpatialNode(Material xyMat, Material rotMat){
         Node rawData = new Node();
-        Spatial xyLine = ObjectHelper.createLineFromVertices(xyDisplayValues, lineMat);
-        Spatial yawPitchRollLine = ObjectHelper.createLineFromVertices(yawPitchRollDisplayValues, lineMat);
+        Spatial xyLine = ObjectHelper.createLineFromVertices(xyDisplayValues, xyMat);
+        Spatial yawPitchRollLine = ObjectHelper.createLineFromVertices(yawPitchRollDisplayValues, rotMat);
         rawData.attachChild(xyLine);
         rawData.attachChild(yawPitchRollLine);
         return rawData;

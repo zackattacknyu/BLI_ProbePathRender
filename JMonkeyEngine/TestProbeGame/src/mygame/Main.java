@@ -588,7 +588,7 @@ public class Main extends SimpleApplication {
                 if(name.equals("exportLine") && keyPressed){
                     //System.out.println("Export Line Chosen");
                     RawProbeData probeData = RawProbeData.obtainRawProbeData(initialImportDirectory);
-                    rootNode.attachChild(probeData.generateSpatialNode(orangeLineMaterial));
+                    rootNode.attachChild(probeData.generateSpatialNode(orangeLineMaterial,redLineMaterial));
                 }
                 
                 if(name.equals("deleteLine") && keyPressed){
