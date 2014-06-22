@@ -4,6 +4,8 @@
  */
 package cameraImpl;
 
+import camera.CameraHelper;
+import camera.CameraRotate;
 import com.jme3.input.InputManager;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
@@ -14,7 +16,7 @@ import mouseKeyboard.GeneralMouseAnalogMethod;
  *
  * @author BLI
  */
-public class CameraRotateImpl extends GeneralMouseAnalogMethod{
+public class CameraRotateImpl extends GeneralMouseAnalogMethod implements CameraRotate{
     
     private Camera camera;
     private Matrix3f rotMatrix;
@@ -33,10 +35,24 @@ public class CameraRotateImpl extends GeneralMouseAnalogMethod{
 
     @Override
     public void analogMethod() {
-        if(mouseClick.isMouseDown()){
-            camera.setLocation(rotMatrix.mult(camera.getLocation()));
-            camera.lookAt(lookAtCenter, camera.getUp());
+        if(shouldRotate()){
+            changeLocation();
+            changeLookAt();
         }
+    }
+
+    public boolean shouldRotate() {
+        return mouseClick.isMouseDown();
+    }
+
+    public void changeLocation() {
+        camera.setLocation(CameraHelper.getRotatedCameraLocation(
+                    rotMatrix, camera.getLocation()));
+    }
+
+    public void changeLookAt() {
+        camera.lookAt(CameraHelper.getLookAtCenter(lookAtCenter), 
+                    CameraHelper.getLookAtUpVector(camera.getUp()));
     }
     
 }

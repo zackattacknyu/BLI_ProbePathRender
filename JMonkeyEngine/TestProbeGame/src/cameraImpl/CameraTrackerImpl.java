@@ -34,12 +34,6 @@ public class CameraTrackerImpl extends CameraTracker{
     
     private Vector3f lookAtCenter = Vector3f.ZERO;
     
-    private static final float rotationAmount = 1.0f/20.0f;
-    private static final float rotationAmountNeg = -1*rotationAmount;
-    
-    private static Vector3f leftRightAxis = Vector3f.UNIT_Y;
-    private static Vector3f upDownAxis = Vector3f.UNIT_X;
-    
     private InputManager inputMang;
     
     public CameraTrackerImpl(Camera currentCam, FlyByCamera currentFlyCam, InputManager manager){
@@ -55,16 +49,16 @@ public class CameraTrackerImpl extends CameraTracker{
         new CameraRotateImpl(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     protected void rotateUp(){
-        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false,rotationAmountNeg, upDownAxis);
+        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false,ROTATION_AMOUNT_NEG, UP_DOWN_AXIS);
     }
     protected void rotateDown(){
-        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true,rotationAmount, upDownAxis);
+        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true,ROTATION_AMOUNT, UP_DOWN_AXIS);
     }
     protected void rotateLeft(){
-        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false,rotationAmountNeg, leftRightAxis);
+        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false,ROTATION_AMOUNT_NEG, LEFT_RIGHT_AXIS);
     }
     protected void rotateRight(){
-        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true,rotationAmount, leftRightAxis);
+        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true,ROTATION_AMOUNT, LEFT_RIGHT_AXIS);
     }
     
     private void addMovementListener(String name,int keyCode){
