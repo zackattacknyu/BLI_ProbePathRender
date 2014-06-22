@@ -6,9 +6,7 @@ package cameraImpl;
 
 import camera.CameraRotate;
 import camera.CameraTracker;
-import cameraImpl.CameraMovementImpl;
-import cameraImpl.CameraRadialMovementImpl;
-import cameraImpl.CameraRotateImpl;
+import camera.CameraViewpointRotate;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -50,36 +48,49 @@ public class CameraTrackerImpl extends CameraTracker{
         new CameraRotateImpl(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     protected void rotateUp(){
-        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false, CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.UP_DOWN_AXIS);
+        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false, 
+                CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.UP_DOWN_AXIS);
     }
     protected void rotateDown(){
-        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true, CameraRotate.ROTATION_AMOUNT, CameraRotate.UP_DOWN_AXIS);
+        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true, 
+                CameraRotate.ROTATION_AMOUNT, CameraRotate.UP_DOWN_AXIS);
     }
     protected void rotateLeft(){
-        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false, CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.LEFT_RIGHT_AXIS);
+        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false, 
+                CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.LEFT_RIGHT_AXIS);
     }
     protected void rotateRight(){
-        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true, CameraRotate.ROTATION_AMOUNT, CameraRotate.LEFT_RIGHT_AXIS);
+        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true, 
+                CameraRotate.ROTATION_AMOUNT, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
-    private void addMovementListener(String name,int keyCode){
-        new CameraMovementImpl(inputMang,name,keyCode,currentCam);
+    private void addMovementListener(String name,int keyCode,Vector3f rotAxis, float angle){
+        new CameraViewpointRotateImpl(inputMang,name,keyCode,currentCam,rotAxis,angle);
     }
     protected void moveUp(){
-        addMovementListener("moveCameraUp",KeyInput.KEY_UP);
+        addMovementListener("moveCameraUp",KeyInput.KEY_UP,
+                currentCam.getLeft(),
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT);
     }
     protected void moveDown(){
-        addMovementListener("moveCameraDown",KeyInput.KEY_DOWN);
+        addMovementListener("moveCameraDown",KeyInput.KEY_DOWN,
+                currentCam.getLeft(),
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
     protected void moveLeft(){
-        addMovementListener("moveCameraLeft",KeyInput.KEY_LEFT);
+        addMovementListener("moveCameraLeft",KeyInput.KEY_LEFT,
+                currentCam.getUp(),
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT);
     }
     protected void moveRight(){
-        addMovementListener("moveCameraRight",KeyInput.KEY_RIGHT);
+        addMovementListener("moveCameraRight",KeyInput.KEY_RIGHT,
+                currentCam.getUp(),
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
     
     private void addRadialMovementListener(String name, int keyCode, boolean inward){
-        new CameraRadialMovementImpl(inputMang,name,keyCode,currentCam,lookAtCenter,inward);
+        new CameraRadialMovementImpl(inputMang,name,keyCode,
+                currentCam,lookAtCenter,inward);
     }
     protected void moveInward(){
         addRadialMovementListener("moveInward",KeyInput.KEY_R,true);
