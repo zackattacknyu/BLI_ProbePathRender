@@ -23,6 +23,17 @@ import util.GeneralHelper;
  */
 public class CameraTrackerImpl extends CameraTracker{
     
+    //mouse input codes for mouse axes used in rotation
+    public static final int ROTATE_UPDOWN_MOUSEAXIS = MouseInput.AXIS_Y;
+    public static final int ROTATE_LEFTRIGHT_MOUSEAXIS = MouseInput.AXIS_X;
+    
+    /*
+     * These are used to invert the y or x axis on the mouse
+     *      when rotating the camera about a center point
+     */
+    public static final boolean INVERT_Y_FOR_ROTATION = false;
+    public static final boolean INVERT_X_FOR_ROTATION = false;
+    
     private Camera currentCam;
     private FlyByCamera currentFlyCam;
     
@@ -67,7 +78,7 @@ public class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera upwards
      */
     protected void rotateUp(){
-        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false, 
+        addRotateListener("rotCameraUp",ROTATE_UPDOWN_MOUSEAXIS,INVERT_Y_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.UP_DOWN_AXIS);
     }
     
@@ -75,7 +86,7 @@ public class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera downwards
      */
     protected void rotateDown(){
-        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true, 
+        addRotateListener("rotCameraDown",ROTATE_UPDOWN_MOUSEAXIS,!INVERT_Y_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT, CameraRotate.UP_DOWN_AXIS);
     }
     
@@ -83,7 +94,7 @@ public class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera left
      */
     protected void rotateLeft(){
-        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false, 
+        addRotateListener("rotCameraLeft",ROTATE_LEFTRIGHT_MOUSEAXIS,INVERT_X_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
@@ -91,7 +102,7 @@ public class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera right
      */
     protected void rotateRight(){
-        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true, 
+        addRotateListener("rotCameraRight",ROTATE_LEFTRIGHT_MOUSEAXIS,!INVERT_X_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
