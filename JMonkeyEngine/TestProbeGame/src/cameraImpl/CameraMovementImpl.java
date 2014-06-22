@@ -4,6 +4,7 @@
  */
 package cameraImpl;
 
+import camera.CameraHelper;
 import camera.CameraMovement;
 import camera.CameraRotate;
 import com.jme3.input.InputManager;
@@ -31,27 +32,13 @@ public class CameraMovementImpl extends GeneralKeyboardActionMethod implements C
 
     @Override
     public void actionMethod() {
-        Matrix3f mat = new Matrix3f();
-        
-        /**
-         * This code is lifted directly from the flyCamera rotate code
-         */
-        mat.fromAngleNormalAxis(CameraRotate.ROTATION_AMOUNT, camera.getLeft());
-
-        Vector3f up = camera.getUp();
-        Vector3f left = camera.getLeft();
-        Vector3f dir = camera.getDirection();
-
-        mat.mult(up, up);
-        mat.mult(left, left);
-        mat.mult(dir, dir);
-
-        Quaternion q = new Quaternion();
-        q.fromAxes(left, up, dir);
-        q.normalizeLocal();
-
-        camera.setAxes(q);
-        System.out.println(name + " from Location of " + camera.getLocation().toString());
+        Vector3f rotAxis = camera.getLeft();
+        float angle = CameraRotate.ROTATION_AMOUNT;
+        camera.setAxes(CameraHelper.getRotationAxes(
+                angle, rotAxis, 
+                camera.getUp(), 
+                camera.getLeft(), 
+                camera.getDirection()));
     }
 
     public void moveCameraUp() {

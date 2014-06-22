@@ -5,6 +5,7 @@
 package camera;
 
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 
 /**This contains static helper methods that are used
@@ -56,5 +57,27 @@ public class CameraHelper {
         Vector3f moveVector = direction.mult(moveAmount);
         return currentLoc.add(moveVector);
     }
+    
+    /*
+     * This next block is used for the camera movement methods
+     *      which rotate the camera itself 
+     * 
+     * Most of this code is lifted directly from the FlyByCamera
+     *      code in JMonkeyEngine
+     */
+    public static Quaternion getRotationAxes(float angle, Vector3f rotAxis, Vector3f upAxis, Vector3f leftAxis, Vector3f cameraDir){
+        Matrix3f mat = new Matrix3f();
+        mat.fromAngleNormalAxis(angle, rotAxis);
+
+        mat.mult(upAxis, upAxis);
+        mat.mult(leftAxis, leftAxis);
+        mat.mult(cameraDir, cameraDir);
+
+        Quaternion q = new Quaternion();
+        q.fromAxes(leftAxis, upAxis, cameraDir);
+        q.normalizeLocal();
+        return q;
+    }
+    
     
 }
