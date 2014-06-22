@@ -17,7 +17,7 @@ public abstract class CameraTracker {
      * This adds all the listeners
      */
     protected void addListeners(){
-        addMovementListeners();
+        addRotateViewpointListeners();
         addRadialMovementListeners();
         addRotationListeners();
     }
@@ -61,33 +61,33 @@ public abstract class CameraTracker {
     protected abstract void rotateRight();
     
     /**
-     * This moves the camera up
+     * This rotates the camera viewpoint up
      */
-    protected abstract void moveUp();
+    protected abstract void rotateViewpointUp();
     
     /**
-     * This moves the camera down
+     * This rotates the camera viewpoint down
      */
-    protected abstract void moveDown();
+    protected abstract void rotateViewpointDown();
     
     /**
-     * This moves the camera left
+     * This rotates the camera viewpoint left
      */
-    protected abstract void moveLeft();
+    protected abstract void rotateViewpointLeft();
     
     /**
-     * This moves the camera right
+     * This rotates the camera viewpoint right
      */
-    protected abstract void moveRight();
+    protected abstract void rotateViewpointRight();
     
     /**
-     * This adds the movement listeners
+     * This adds the rotate movement listeners
      */
-    private void addMovementListeners(){
-        moveUp(); 
-        moveDown();
-        moveLeft();
-        moveRight();
+    private void addRotateViewpointListeners(){
+        rotateViewpointUp(); 
+        rotateViewpointDown();
+        rotateViewpointLeft();
+        rotateViewpointRight();
     }
     
     

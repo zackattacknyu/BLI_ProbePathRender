@@ -33,16 +33,16 @@ public interface CameraRotate {
      *  mouse is pressed down or not
      * @return      whether or not to go through with rotation
      */
-    public boolean shouldRotate();
+    boolean shouldRotate();
     
     /**
      * Changes the camera's location as per the rotation
      */
-    public void changeLocation();
+    void changeLocation();
     
     /**
      * Ensures the lookAt location is intact
      */
-    public void changeLookAt();
+    void changeLookAt();
     
 }
