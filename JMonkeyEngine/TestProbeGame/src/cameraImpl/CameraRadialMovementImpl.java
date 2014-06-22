@@ -4,6 +4,8 @@
  */
 package cameraImpl;
 
+import camera.CameraHelper;
+import camera.CameraRadialMovement;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -13,32 +15,42 @@ import mouseKeyboard.GeneralKeyboardActionMethod;
  *
  * @author BLI
  */
-public class CameraRadialMovementImpl extends GeneralKeyboardActionMethod{
+public class CameraRadialMovementImpl extends GeneralKeyboardActionMethod implements CameraRadialMovement{
     
     private Camera camera;
     private String name;
     
-    private Vector3f lookAtCenter;
+    private boolean inward;
     
-    private float moveAmount = 1.0f/5.0f;
+    private Vector3f lookAtCenter;
     
     public CameraRadialMovementImpl(InputManager manager, String name, int keyCode, Camera camera, Vector3f lookAtCenter, boolean inward){
         super(manager,name,keyCode);
         this.camera = camera;
         this.name = name;
+        this.inward = inward;
         this.lookAtCenter = lookAtCenter;
-        if(inward){
-            moveAmount = -1*moveAmount;
-        }
     }
 
     @Override
     public void actionMethod() {
-        Vector3f currentLoc = camera.getLocation();
-        Vector3f direction = currentLoc.subtract(lookAtCenter);
-        direction.normalizeLocal();
-        Vector3f moveVector = direction.mult(moveAmount);
-        camera.setLocation(currentLoc.add(moveVector));
+        if(isInward()){
+            move(MOVE_AMOUNT_INWARD);
+        }else{
+            move(MOVE_AMOUNT_OUTWARD);
+        }
     }
+
+    public boolean isInward() {
+        return inward;
+    }
+
+    public void move(float amount) {
+        camera.setLocation(
+                CameraHelper.getNewRadialLocation(
+                camera.getLocation(), lookAtCenter, amount));
+    }
+
+
     
 }

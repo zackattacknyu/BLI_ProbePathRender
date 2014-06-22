@@ -34,5 +34,12 @@ public class CameraHelper {
      * This block is used
      * for radial movement
      */
+    public static Vector3f getNewRadialLocation(Vector3f currentLoc, 
+            Vector3f lookAtCenter, float moveAmount){
+        Vector3f direction = currentLoc.subtract(lookAtCenter);
+        direction.normalizeLocal();
+        Vector3f moveVector = direction.mult(moveAmount);
+        return currentLoc.add(moveVector);
+    }
     
 }

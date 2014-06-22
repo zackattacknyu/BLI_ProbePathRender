@@ -4,6 +4,7 @@
  */
 package cameraImpl;
 
+import camera.CameraRotate;
 import camera.CameraTracker;
 import cameraImpl.CameraMovementImpl;
 import cameraImpl.CameraRadialMovementImpl;
@@ -49,16 +50,16 @@ public class CameraTrackerImpl extends CameraTracker{
         new CameraRotateImpl(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     protected void rotateUp(){
-        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false,ROTATION_AMOUNT_NEG, UP_DOWN_AXIS);
+        addRotateListener("rotCameraUp",MouseInput.AXIS_Y,false, CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.UP_DOWN_AXIS);
     }
     protected void rotateDown(){
-        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true,ROTATION_AMOUNT, UP_DOWN_AXIS);
+        addRotateListener("rotCameraDown",MouseInput.AXIS_Y,true, CameraRotate.ROTATION_AMOUNT, CameraRotate.UP_DOWN_AXIS);
     }
     protected void rotateLeft(){
-        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false,ROTATION_AMOUNT_NEG, LEFT_RIGHT_AXIS);
+        addRotateListener("rotCameraLeft",MouseInput.AXIS_X,false, CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.LEFT_RIGHT_AXIS);
     }
     protected void rotateRight(){
-        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true,ROTATION_AMOUNT, LEFT_RIGHT_AXIS);
+        addRotateListener("rotCameraRight",MouseInput.AXIS_X,true, CameraRotate.ROTATION_AMOUNT, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
     private void addMovementListener(String name,int keyCode){
