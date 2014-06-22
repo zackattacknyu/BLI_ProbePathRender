@@ -14,7 +14,7 @@ import meshTraversal.MeshEdge;
 import meshTraversal.MeshEdgeTriangles;
 import meshTraversal.MeshTriangle;
 import meshTraversal.TriangleSet;
-import mygame.Constants;
+import mygame.ProgramConstants;
 
 /**
  *
@@ -139,8 +139,8 @@ public class ModelVerification {
             vector13 = triangle.getSide13().getVector();
             
             //degenerate side
-            if( (vector12.length() < Constants.EPSILON) 
-                    || (vector13.length() < Constants.EPSILON) ){
+            if( (vector12.length() < ProgramConstants.EPSILON) 
+                    || (vector13.length() < ProgramConstants.EPSILON) ){
                 System.out.println("Degen Triangle: " + triangle);
                 return false;
             }
@@ -149,8 +149,8 @@ public class ModelVerification {
             vector12.normalizeLocal();
             vector13.normalizeLocal();
             dotProd = vector12.dot(vector13);
-            if((Math.abs(dotProd-1) < Constants.EPSILON) || 
-                    (Math.abs(dotProd+1) < Constants.EPSILON)){
+            if((Math.abs(dotProd-1) < ProgramConstants.EPSILON) || 
+                    (Math.abs(dotProd+1) < ProgramConstants.EPSILON)){
                 //if dot prod is near 1 or -1, then unit vectors are identical
                 System.out.println("Degen Triangle: " + triangle);
                 System.out.println("Degen Triangle texture coordinates: " + triangle.getTextureCoords());

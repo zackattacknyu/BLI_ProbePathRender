@@ -61,7 +61,7 @@ public class ProbePath {
         float currentLength;
         for(Vector3f vertex: vertices){
             currentLength = vertex.distance(lastPointAdded);
-            if(currentLength > Constants.MIN_SEGMENT_LENGTH){
+            if(currentLength > ProgramConstants.MIN_SEGMENT_LENGTH){
                 newPath.add(vertex);
                 lastPointAdded = vertex;
             }

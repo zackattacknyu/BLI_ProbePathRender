@@ -27,7 +27,7 @@ public class ProbePathDisplay {
     private ShortBuffer index;
     
     private static final int initNumEntries = 500000;
-    private static final ColorRGBA lineColor = Constants.LINE_COLOR;
+    private static final ColorRGBA lineColor = ProgramConstants.LINE_COLOR;
     private static final float lineColorRed = lineColor.getRed();
     private static final float lineColorGreen = lineColor.getGreen();
     private static final float lineColorBlue = lineColor.getBlue();
@@ -48,7 +48,7 @@ public class ProbePathDisplay {
         mesh.setBuffer(VertexBuffer.Type.Position, 3, position);
         mesh.setBuffer(VertexBuffer.Type.Index, 2, index);
         mesh.setBuffer(VertexBuffer.Type.Color, 4, color);
-        mesh.setLineWidth(Constants.PATH_LINE_WIDTH);
+        mesh.setLineWidth(ProgramConstants.PATH_LINE_WIDTH);
         probePathLine = new Geometry("Line",mesh);
         probePathLine.setName("probeLine");
         probePathLine.setLocalScale(1);

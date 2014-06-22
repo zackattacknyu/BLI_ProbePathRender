@@ -8,7 +8,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import mygame.Constants;
+import mygame.ProgramConstants;
 
 /**
  *
@@ -168,7 +168,7 @@ public class TriangleLineSegmentIntersection {
      */
     private static float getIntersection(float start, float dir){
         float absDir = (float)Math.abs(dir);
-        if(absDir<Constants.EPSILON){
+        if(absDir<ProgramConstants.EPSILON){
             //System.out.println("DIR WAS NEAR ZERO!!!");
             return Float.POSITIVE_INFINITY;
         }else{

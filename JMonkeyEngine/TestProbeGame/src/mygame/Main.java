@@ -128,7 +128,7 @@ public class Main extends SimpleApplication {
         String objFileLocation = "Models/lola_mesh_simplePatch2_simplified.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
-        viewPort.setBackgroundColor(Constants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
         trackerProps = PropertiesHelper.getProperties();
         lightVisible = Boolean.parseBoolean(
                 trackerProps.getProperty("lighting.visible"));
