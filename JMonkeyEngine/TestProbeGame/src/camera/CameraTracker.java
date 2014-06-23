@@ -113,7 +113,7 @@ public abstract class CameraTracker {
      * This sets the default settings for the camera
      *      for the most common mode
      */
-    protected abstract void setDefaultCamera();
+    public abstract void setDefaultCamera();
     
     /**
      * This sets the default camera depending on the mode

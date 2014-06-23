@@ -2,6 +2,7 @@ package mygame;
 
 import camera.CameraTracker;
 import cameraImpl.CameraTrackerImpl;
+import cameraImpl_ProbePathRender.CameraTrackerImpl_ProbePathRender;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
@@ -84,7 +85,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
 
     public static void main(String[] args) {
         
@@ -120,7 +121,7 @@ public class Main extends SimpleApplication {
         
         initialImportDirectory = Paths.get("textFiles").toFile();
         
-        cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
+        cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
         if(sphereOn){
             cameraTracker.setDefaultCamera((short)0);
         }else{

@@ -21,7 +21,7 @@ import util.GeneralHelper;
  *
  * @author BLI
  */
-public class CameraTrackerImpl extends CameraTracker{
+public abstract class CameraTrackerImpl extends CameraTracker{
     
     //mouse input codes for mouse axes used in rotation
     public static final int ROTATE_UPDOWN_MOUSEAXIS = MouseInput.AXIS_Y;
@@ -47,8 +47,8 @@ public class CameraTrackerImpl extends CameraTracker{
     //used to specify speed to move fly cam
     public static final float FLY_CAM_MOVE_SPEED = 10f;
     
-    private Camera currentCam;
-    private FlyByCamera currentFlyCam;
+    protected Camera currentCam;
+    protected FlyByCamera currentFlyCam;
     
     private CameraRotateImpl rotUp;
     private CameraRotateImpl rotDown;
@@ -195,37 +195,14 @@ public class CameraTrackerImpl extends CameraTracker{
     /**
      * Sets up default camera
      */
-    protected void setDefaultCamera(){
-        setDefaultCamera((short)1);        
-    }
+    public abstract void setDefaultCamera();
     
     /**
      * Sets up default camera depending on the mode we are in
      * TODO: Change this to take in mode and use that
      * @param sphereOn 
      */
-    public void setDefaultCamera(short mode){
-        switch(mode){
-            case 0:
-                //when viewing the sphere
-                currentCam.setLocation(new Vector3f(-22.649244f, -17.260416f, -67.74668f));
-                currentCam.setRotation(new Quaternion(0.17899777f, 0.0838113f, 0.95806247f, -0.20748913f));
-                break;
-                
-            case 1:
-                //settings for when viewing lola
-                currentCam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
-                currentCam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
-                break;
-                
-            case 2:
-                //when viewing raw data
-                currentCam.setLocation(new Vector3f(-0.67807275f, 0.5436802f, -2.7487648f));
-                currentCam.setRotation(new Quaternion(0.15252174f, -2.9824104E-4f, 0.7722618f, 0.61672425f));
-                break;
-        }
-        
-    }
+    public abstract void setDefaultCamera(short mode);
     
     /**
      * Enables the flyCam, which is a JME convience method to enable
