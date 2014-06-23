@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpreters;
+package dataInterpreterImpl;
 
-import dataReaders.SerialReader;
+import dataReaderImpl.SerialReader;
 import util.PropertiesHelper;
 import com.jme3.math.FastMath;
 import java.util.HashMap;

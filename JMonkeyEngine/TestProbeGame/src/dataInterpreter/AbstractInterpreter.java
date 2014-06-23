@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpreters;
+package dataInterpreter;
 
 /**
  * This will be the super-class for all classs which take raw

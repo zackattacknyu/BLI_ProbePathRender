@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataReaders;
+package dataReaderImpl;
 
 import util.PropertiesHelper;
 import java.io.BufferedReader;
