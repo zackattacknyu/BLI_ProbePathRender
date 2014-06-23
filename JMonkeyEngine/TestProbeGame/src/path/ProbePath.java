@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import meshTraversal.MeshHelper;
-import mygame.LineTransformation;
 import util.ProgramConstants;
 import render.ObjectHelper;
 
@@ -41,9 +40,8 @@ public class ProbePath {
     public ArrayList<Vector3f> transformEndpoint(Vector3f newEndpoint){
         Vector3f startPoint = vertices.get(0);
         Vector3f oldEndpoint = vertices.get(vertices.size()-1);
-        LineTransformation lineMove = new LineTransformation(
-                startPoint,newEndpoint,oldEndpoint);
-        return lineMove.transformVertices(vertices);
+        Matrix4f wholeTransformation = MeshHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        return MeshHelper.getTransformedVertices(vertices, wholeTransformation);
         
     }
     
