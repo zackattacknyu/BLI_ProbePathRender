@@ -46,20 +46,17 @@ public class CameraTrackerImpl_ProbePathRender extends CameraTrackerImpl{
         switch(mode){
             case 0:
                 //when viewing the sphere
-                currentCam.setLocation(SPHERE_MODE_DEFAULT_LOCATION);
-                currentCam.setRotation(SPHERE_MODE_DEFAULT_ROTATION);
+                setDefaultCamera(SPHERE_MODE_DEFAULT_LOCATION,SPHERE_MODE_DEFAULT_ROTATION);
                 break;
                 
             case 1:
                 //settings for when viewing lola
-                currentCam.setLocation(LOLA_MODE_DEFAULT_LOCATION);
-                currentCam.setRotation(LOLA_MODE_DEFAULT_ROTATION);
+                setDefaultCamera(LOLA_MODE_DEFAULT_LOCATION,LOLA_MODE_DEFAULT_ROTATION);
                 break;
                 
             case 2:
                 //when viewing raw data
-                currentCam.setLocation(RAW_DATA_MODE_DEFAULT_LOCATION);
-                currentCam.setRotation(RAW_DATA_MODE_DEFAULT_ROTATION);
+                setDefaultCamera(RAW_DATA_MODE_DEFAULT_LOCATION,RAW_DATA_MODE_DEFAULT_ROTATION);
                 break;
         }
     }

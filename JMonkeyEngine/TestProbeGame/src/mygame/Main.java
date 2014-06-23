@@ -85,7 +85,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
 
     public static void main(String[] args) {
         

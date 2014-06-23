@@ -4,6 +4,9 @@
  */
 package camera;
 
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+
 /**This is an abstract class for planned camera tracker 
  *      methods. It includes adding the mouse/keyboard 
  *      listeners for the different movements and enabling
@@ -125,5 +128,12 @@ public abstract class CameraTracker {
      * This is meant to enable the fly by camera (w,a,s,d,q,z buttons)
      */
     protected abstract void enableFlyCam();
+    
+    /**
+     * Sets the default camera based on location and rotation
+     * @param defaultLocation       default location of camera
+     * @param defaultRotation       default rotation of camera
+     */
+    public abstract void setDefaultCamera(Vector3f defaultLocation, Quaternion defaultRotation);
     
 }

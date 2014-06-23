@@ -199,10 +199,19 @@ public abstract class CameraTrackerImpl extends CameraTracker{
     
     /**
      * Sets up default camera depending on the mode we are in
-     * TODO: Change this to take in mode and use that
      * @param sphereOn 
      */
     public abstract void setDefaultCamera(short mode);
+    
+    /**
+     * Sets default camera location
+     * @param defaultLocation       initial camera location
+     * @param defaultRotation       initial camera rotation
+     */
+    public void setDefaultCamera(Vector3f defaultLocation, Quaternion defaultRotation){
+        currentCam.setLocation(defaultLocation);
+        currentCam.setRotation(defaultRotation);
+    }
     
     /**
      * Enables the flyCam, which is a JME convience method to enable
