@@ -9,9 +9,9 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import meshTraversal.ConnectedComponent;
-import meshTraversal.MeshTriangle;
-import meshTraversal.TriangleSet;
+import mesh.ConnectedComponent;
+import mesh.MeshTriangle;
+import mesh.TriangleSet;
 
 /**
  *

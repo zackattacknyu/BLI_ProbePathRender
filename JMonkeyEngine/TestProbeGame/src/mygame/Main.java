@@ -31,11 +31,12 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
-import meshTraversal.ConnectedComponent;
+import mesh.ConnectedComponent;
 import meshTraversal.MeshHelper;
-import meshTraversal.MeshTriangle;
+import mesh.MeshTriangle;
 import modelVerifier.ModelVerification;
-import meshTraversal.TriangleSet;
+import mesh.TriangleSet;
+import meshTraversal.MeshFollowHelper;
 import modelVerifier.ModelCorrection;
 import render.ObjectHelper;
 
@@ -679,7 +680,7 @@ public class Main extends SimpleApplication {
                                         probePathSet.compressCurrentPath();
                                         displayCurrentPath();
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> newPath = meshInfo.makePathFollowMesh2(oldPath,startingTriangle);
+                                        ArrayList<Vector3f> newPath = MeshFollowHelper.makePathFollowMesh2(oldPath,startingTriangle,meshInfo);
                                         probePathSet.addPath(newPath,orangeLineMaterial);
                                         displayCurrentPath();
 

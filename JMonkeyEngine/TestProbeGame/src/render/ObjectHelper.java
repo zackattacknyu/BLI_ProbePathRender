@@ -16,8 +16,8 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import meshTraversal.MeshTriangle;
-import meshTraversal.TriangleSet;
+import mesh.MeshTriangle;
+import mesh.TriangleSet;
 import mygame.ProgramConstants;
 
 /**

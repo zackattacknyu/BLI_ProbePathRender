@@ -4,6 +4,8 @@
  */
 package meshTraversal;
 
+import mesh.MeshEdge;
+import mesh.MeshTriangle;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
