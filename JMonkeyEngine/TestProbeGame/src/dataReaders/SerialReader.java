@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame;
+package dataReaders;
 
+import util.PropertiesHelper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
