@@ -1,5 +1,7 @@
 package mygame;
 
+import util.ProgramConstants;
+import path.ProbePathSet;
 import camera.CameraTracker;
 import cameraImpl_ProbePathRender.CameraTrackerImpl_ProbePathRender;
 import com.jme3.app.SimpleApplication;

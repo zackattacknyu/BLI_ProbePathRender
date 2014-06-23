@@ -14,7 +14,7 @@ import mesh.MeshEdge;
 import mesh.MeshEdgeTriangles;
 import mesh.MeshTriangle;
 import mesh.TriangleSet;
-import mygame.ProgramConstants;
+import util.ProgramConstants;
 
 /**
  *

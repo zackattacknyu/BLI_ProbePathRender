@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame;
+package render;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -14,6 +14,7 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import util.ProgramConstants;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame;
+package path;
 
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import mygame.ProbeDataHelper;
 
 /**
  *

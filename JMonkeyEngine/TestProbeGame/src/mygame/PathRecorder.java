@@ -4,10 +4,8 @@
  */
 package mygame;
 
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  *
@@ -94,6 +92,16 @@ public class PathRecorder {
         return zCoords;
     }
     
+    public ArrayList<Vector3f> toLineVertices() {
+        int size = xCoords.size();
+        ArrayList<Vector3f> pathVertices = new ArrayList<Vector3f>(size);
+        Vector3f currentVertex;
+        for (int index = 0; index < size; index++) {
+            currentVertex = new Vector3f(xCoords.get(index), yCoords.get(index), zCoords.get(index));
+            pathVertices.add(currentVertex);
+        }
+        return pathVertices;
+    }
     
     
 }

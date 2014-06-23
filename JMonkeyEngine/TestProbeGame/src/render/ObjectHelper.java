@@ -18,7 +18,7 @@ import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
 import mesh.MeshTriangle;
 import mesh.TriangleSet;
-import mygame.ProgramConstants;
+import util.ProgramConstants;
 
 /**
  * This class is meant to take in objects from the program

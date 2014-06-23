@@ -10,7 +10,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import mygame.ProgramConstants;
+import util.ProgramConstants;
 
 /**
  *

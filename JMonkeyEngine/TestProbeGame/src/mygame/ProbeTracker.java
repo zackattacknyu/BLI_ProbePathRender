@@ -8,15 +8,11 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -258,7 +254,7 @@ public class ProbeTracker {
         
         if(recordingPath){
             System.out.println("Recording New Path Stopped");
-            currentPathVertices = LineHelper.convertPathRecordingToLineVertices(cubePath);
+            currentPathVertices = cubePath.toLineVertices();
             newPathExists = true;
             recordingText = "Press N to record a new path";
             recordingPath = false;
