@@ -40,7 +40,7 @@ import modelVerifier.ModelVerification;
 import mesh.TriangleSet;
 import meshTraversal.MeshFollowHelper;
 import modelVerifier.ModelCorrection;
-import render.ObjectHelper;
+import pathImpl.PathHelper;
 
 
 /**
@@ -168,9 +168,9 @@ public class Main extends SimpleApplication {
         Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
         if(sphereOn){
-            surface = ObjectHelper.generateModel(sphereLocation, lightedSphere, assetManager);
+            surface = meshImpl.MeshHelper.generateModel(sphereLocation, lightedSphere, assetManager);
         }else{
-            surface = ObjectHelper.generateModel(
+            surface = meshImpl.MeshHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         }
         
@@ -262,9 +262,9 @@ public class Main extends SimpleApplication {
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         if(sphereOn){
-            surface = ObjectHelper.createMeshFromTriangles(correctedMesh, lightedSphere);
+            surface = meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, lightedSphere);
         }else{
-            surface = ObjectHelper.createMeshFromTriangles(correctedMesh, ballMat);
+            surface = meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, ballMat);
         }
         meshInfo = correctedMesh;
         //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
@@ -312,7 +312,7 @@ public class Main extends SimpleApplication {
             currentNormalVerts = new ArrayList<Vector3f>(2);
             currentNormalVerts.add(startPt); 
             currentNormalVerts.add(endPt);
-            currentNormal = ObjectHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
+            currentNormal = PathHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
             normals.attachChild(currentNormal);
         }
         
@@ -418,7 +418,7 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
         xLineVertices.add(new Vector3f(0,0,4f));
         xLineVertices.add(new Vector3f(0,0,-4f));
-        return ObjectHelper.createLineFromVertices(xLineVertices,ballMat);
+        return PathHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
     private Spatial initYLine(Material ballMat){
@@ -426,14 +426,14 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
         yLineVertices.add(new Vector3f(0,4f,0));
         yLineVertices.add(new Vector3f(0,-4f,0));
-        return ObjectHelper.createLineFromVertices(yLineVertices,ballMat);
+        return PathHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
         zLineVertices.add(new Vector3f(-4f,0,0));
         zLineVertices.add(new Vector3f(2f,0,0));
-        return ObjectHelper.createLineFromVertices(zLineVertices,ballMat);
+        return PathHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
     @Override
@@ -535,7 +535,7 @@ public class Main extends SimpleApplication {
         normalVertices.add(point.getContactPoint());
         normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
         Spatial controlPointNormal = 
-                ObjectHelper.createLineFromVertices(
+                PathHelper.createLineFromVertices(
                 normalVertices, lineMaterial);
         rootNode.attachChild(controlPointNormal);
     }

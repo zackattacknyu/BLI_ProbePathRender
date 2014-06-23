@@ -11,7 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
-import render.ObjectHelper;
+import pathImpl.PathHelper;
 
 /**
  *
@@ -52,8 +52,8 @@ public class RawProbeData {
     
     public Node generateSpatialNode(Material xyMat, Material rotMat){
         Node rawData = new Node();
-        Spatial xyLine = ObjectHelper.createLineFromVertices(xyDisplayValues, xyMat);
-        Spatial yawPitchRollLine = ObjectHelper.createLineFromVertices(yawPitchRollDisplayValues, rotMat);
+        Spatial xyLine = PathHelper.createLineFromVertices(xyDisplayValues, xyMat);
+        Spatial yawPitchRollLine = PathHelper.createLineFromVertices(yawPitchRollDisplayValues, rotMat);
         rawData.attachChild(xyLine);
         rawData.attachChild(yawPitchRollLine);
         return rawData;
