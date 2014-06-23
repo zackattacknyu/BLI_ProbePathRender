@@ -111,12 +111,15 @@ public abstract class CameraTracker {
     
     /**
      * This sets the default settings for the camera
+     *      for the most common mode
      */
     protected abstract void setDefaultCamera();
     
-    //TODO: Change this to accept a short number which will be used
-    //      to denote the mode
-    public abstract void setDefaultCamera(boolean sphereOn);
+    /**
+     * This sets the default camera depending on the mode
+     * @param mode      mode depending on context
+     */
+    public abstract void setDefaultCamera(short mode);
     
     /**
      * This is meant to enable the fly by camera (w,a,s,d,q,z buttons)

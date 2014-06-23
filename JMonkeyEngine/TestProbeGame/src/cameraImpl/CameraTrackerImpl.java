@@ -196,32 +196,33 @@ public class CameraTrackerImpl extends CameraTracker{
      * Sets up default camera
      */
     protected void setDefaultCamera(){
-        setDefaultCamera(false);        
+        setDefaultCamera((short)1);        
     }
     
     /**
-     * Sets up default camera
+     * Sets up default camera depending on the mode we are in
      * TODO: Change this to take in mode and use that
      * @param sphereOn 
      */
-    public void setDefaultCamera(boolean sphereOn){
-        if(sphereOn){
-            //when viewing the sphere
-            currentCam.setLocation(new Vector3f(-22.649244f, -17.260416f, -67.74668f));
-            currentCam.setRotation(new Quaternion(0.17899777f, 0.0838113f, 0.95806247f, -0.20748913f));
-        }else{
-            //settings for when viewing lola
-            currentCam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
-            currentCam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
-        }
-        
-        /*
-         * TODO: Add mode and make this one of the camera modes
-         */
-        boolean rawData = false;
-        if(rawData){
-            currentCam.setLocation(new Vector3f(-0.67807275f, 0.5436802f, -2.7487648f));
-            currentCam.setRotation(new Quaternion(0.15252174f, -2.9824104E-4f, 0.7722618f, 0.61672425f));
+    public void setDefaultCamera(short mode){
+        switch(mode){
+            case 0:
+                //when viewing the sphere
+                currentCam.setLocation(new Vector3f(-22.649244f, -17.260416f, -67.74668f));
+                currentCam.setRotation(new Quaternion(0.17899777f, 0.0838113f, 0.95806247f, -0.20748913f));
+                break;
+                
+            case 1:
+                //settings for when viewing lola
+                currentCam.setLocation(new Vector3f(-16.928802f, 23.251862f, -54.489124f));
+                currentCam.setRotation(new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f));
+                break;
+                
+            case 2:
+                //when viewing raw data
+                currentCam.setLocation(new Vector3f(-0.67807275f, 0.5436802f, -2.7487648f));
+                currentCam.setRotation(new Quaternion(0.15252174f, -2.9824104E-4f, 0.7722618f, 0.61672425f));
+                break;
         }
         
     }

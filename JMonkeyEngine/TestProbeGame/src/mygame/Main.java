@@ -84,7 +84,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
 
     public static void main(String[] args) {
         
@@ -121,7 +121,12 @@ public class Main extends SimpleApplication {
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
-        cameraTracker.setDefaultCamera(sphereOn);
+        if(sphereOn){
+            cameraTracker.setDefaultCamera((short)0);
+        }else{
+            cameraTracker.setDefaultCamera((short)1);
+        }
+        
         
         //String objFileLocation = "Models/lola_mesh.obj";
         //String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
