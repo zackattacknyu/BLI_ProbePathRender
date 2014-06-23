@@ -34,6 +34,19 @@ public class CameraTrackerImpl extends CameraTracker{
     public static final boolean INVERT_Y_FOR_ROTATION = false;
     public static final boolean INVERT_X_FOR_ROTATION = false;
     
+    //used to denote keycodes for rotating the camera viewpoint up,down,left, or right
+    public static final int ROTATE_VIEWPOINT_UP_KEY = KeyInput.KEY_UP;
+    public static final int ROTATE_VIEWPOINT_DOWN_KEY = KeyInput.KEY_DOWN;
+    public static final int ROTATE_VIEWPOINT_LEFT_KEY = KeyInput.KEY_LEFT;
+    public static final int ROTATE_VIEWPOINT_RIGHT_KEY = KeyInput.KEY_RIGHT;
+    
+    //used for keycodes for radial movment
+    public static final int RADIAL_MOVEMENT_INWARD_KEY = KeyInput.KEY_R;
+    public static final int RADIAL_MOVEMENT_OUTWARD_KEY = KeyInput.KEY_F;
+    
+    //used to specify speed to move fly cam
+    public static final float FLY_CAM_MOVE_SPEED = 10f;
+    
     private Camera currentCam;
     private FlyByCamera currentFlyCam;
     
@@ -121,16 +134,16 @@ public class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint upwards
      */
     protected void rotateViewpointUp(){
-        addViewpointRotateListener("moveCameraUp",KeyInput.KEY_UP,
+        addViewpointRotateListener("moveCameraUp",ROTATE_VIEWPOINT_UP_KEY,
                 currentCam.getLeft(),
-                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT);
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_POS);
     }
     
     /**
      * adds the viewpoint rotation listener for rotating the viewpoint downwards
      */
     protected void rotateViewpointDown(){
-        addViewpointRotateListener("moveCameraDown",KeyInput.KEY_DOWN,
+        addViewpointRotateListener("moveCameraDown",ROTATE_VIEWPOINT_DOWN_KEY,
                 currentCam.getLeft(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
@@ -139,16 +152,16 @@ public class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint left
      */
     protected void rotateViewpointLeft(){
-        addViewpointRotateListener("moveCameraLeft",KeyInput.KEY_LEFT,
+        addViewpointRotateListener("moveCameraLeft",ROTATE_VIEWPOINT_LEFT_KEY,
                 currentCam.getUp(),
-                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT);
+                CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_POS);
     }
     
     /**
      * adds the viewpoint rotation listener for rotating the viewpoint right
      */
     protected void rotateViewpointRight(){
-        addViewpointRotateListener("moveCameraRight",KeyInput.KEY_RIGHT,
+        addViewpointRotateListener("moveCameraRight",ROTATE_VIEWPOINT_RIGHT_KEY,
                 currentCam.getUp(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
@@ -169,14 +182,14 @@ public class CameraTrackerImpl extends CameraTracker{
      * Makes the listener that moves the camera inward
      */
     protected void moveInward(){
-        addRadialMovementListener("moveInward",KeyInput.KEY_R,true);
+        addRadialMovementListener("moveInward",RADIAL_MOVEMENT_INWARD_KEY,true);
     }
     
     /**
      * Makes the listener that moves the camera outward
      */
     protected void moveOutward(){
-        addRadialMovementListener("moveOutward",KeyInput.KEY_F,false);
+        addRadialMovementListener("moveOutward",RADIAL_MOVEMENT_OUTWARD_KEY,false);
     }
     
     /**
@@ -219,9 +232,9 @@ public class CameraTrackerImpl extends CameraTracker{
      */
     protected void enableFlyCam(){
         currentFlyCam.setEnabled(true);
-        currentFlyCam.setDragToRotate(true);
-        currentFlyCam.setMoveSpeed(10f);
-        currentFlyCam.setRotationSpeed(0f);
+        currentFlyCam.setDragToRotate(true); //if not specified as true, cursor won't appear
+        currentFlyCam.setMoveSpeed(FLY_CAM_MOVE_SPEED);
+        currentFlyCam.setRotationSpeed(0f); //rotation is handled elsewhere, hence the zero
     }
     
 }

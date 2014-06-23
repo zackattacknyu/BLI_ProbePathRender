@@ -17,7 +17,7 @@ public interface CameraViewpointRotate {
      * These are the angles in radians that a single keystroke
      *      will cause in rotation
      */
-    public static final float VIEWPOINT_ROTATION_AMOUNT = (1.0f/20.0f);
+    public static final float VIEWPOINT_ROTATION_AMOUNT_POS = (1.0f/20.0f);
     public static final float VIEWPOINT_ROTATION_AMOUNT_NEG = (-1.0f/20.0f);
     
     /**
