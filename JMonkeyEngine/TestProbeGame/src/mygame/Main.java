@@ -168,9 +168,9 @@ public class Main extends SimpleApplication {
         Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
         if(sphereOn){
-            surface = ModelHelper.generateModel(sphereLocation, lightedSphere, assetManager);
+            surface = ObjectHelper.generateModel(sphereLocation, lightedSphere, assetManager);
         }else{
-            surface = ModelHelper.generateModel(
+            surface = ObjectHelper.generateModel(
                 objFileLocation, ballMat, assetManager);
         }
         

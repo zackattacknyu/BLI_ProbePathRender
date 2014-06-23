@@ -4,6 +4,7 @@
  */
 package render;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -100,6 +101,12 @@ public class ObjectHelper {
         Geometry geom = new Geometry("OurMesh", m);
         geom.setMaterial(material);
         return geom;
+    }
+
+    public static Spatial generateModel(String objFileLocation, Material ballMat, AssetManager assetManager) {
+        Spatial sampleMesh = assetManager.loadModel(objFileLocation);
+        sampleMesh.setMaterial(ballMat);
+        return sampleMesh;
     }
     
 }
