@@ -1,7 +1,6 @@
 package mygame;
 
 import camera.CameraTracker;
-import cameraImpl.CameraTrackerImpl;
 import cameraImpl_ProbePathRender.CameraTrackerImpl_ProbePathRender;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
@@ -71,22 +70,24 @@ public class Main extends SimpleApplication {
     private Node shootables,probeRep;
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
-    private boolean mousePressedDown = false;
     
     private Quaternion surfaceRotation;
     private float surfaceScale;
     private Vector3f surfaceLoc;
     private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
-    private Vector3f lookAtCenter = Vector3f.ZERO;
     private Vector3f lastPointClicked;
     private Triangle startingTriangle;
-    private Vector3f startingNormal;
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
-
+    private boolean sphereOn = false;
+    
+    //if we want to display the raw data instead of 
+    //      the sphere or lola mesh. This overrides
+    //      the above setting.
+    private boolean displayRawDataMode = false;
+    
     public static void main(String[] args) {
         
         /*
@@ -122,7 +123,9 @@ public class Main extends SimpleApplication {
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        if(sphereOn){
+        if(displayRawDataMode){
+            cameraTracker.setDefaultCamera((short)2);
+        }else if(sphereOn){
             cameraTracker.setDefaultCamera((short)0);
         }else{
             cameraTracker.setDefaultCamera((short)1);
@@ -207,7 +210,7 @@ public class Main extends SimpleApplication {
         probeRep.attachChild(xAxisBox);
         probeRep.attachChild(yAxisBox);
         probeRep.attachChild(zAxisBox);
-        rootNode.attachChild(probeRep);
+        if(!displayRawDataMode) rootNode.attachChild(probeRep);
         moveableObject = probeRep;
         
         probeMat = new Material(assetManager, 
@@ -240,7 +243,7 @@ public class Main extends SimpleApplication {
         
         background = initBackgroundBox(boxMat, "background");
         
-        if(!sphereOn){
+        if(!sphereOn && !displayRawDataMode){
             rootNode.attachChild(background);
         }
         
@@ -276,7 +279,9 @@ public class Main extends SimpleApplication {
         shootables = new Node("shootables");
         shootables.attachChild(surface);
         
-        rootNode.attachChild(shootables);
+        if(!displayRawDataMode){
+            rootNode.attachChild(shootables);
+        }
         probePathSet = new ProbePathSet(lineMaterial);
         
         
@@ -653,7 +658,6 @@ public class Main extends SimpleApplication {
                                         startingTriangle = point.getTriangle();
                                         Vector3f startPoint = oldPath.get(0);
                                         Vector3f moveVector = endPoint.subtract(startPoint);
-                                        startingNormal = point.getNormal();
                                         Matrix4f moveTransform = new Matrix4f();
                                         moveTransform.setTranslation(moveVector);
                                         ArrayList<Vector3f> newPath = MeshHelper.getTransformedVertices(oldPath, moveTransform);

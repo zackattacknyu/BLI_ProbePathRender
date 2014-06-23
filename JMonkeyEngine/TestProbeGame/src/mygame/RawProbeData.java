@@ -24,6 +24,12 @@ public class RawProbeData {
     private ArrayList<Vector3f> xyDisplayValues;
     private ArrayList<Vector3f> yawPitchRollDisplayValues;
     
+    /**
+     * This is used to be the start point on the sphere that will get
+     *      rotated by each quaternion in the raw data.
+     */
+    public static final Vector3f START_POINT_ON_SPHERE = new Vector3f(1,0,0);
+    
     private RawProbeData(){
         xValues = new ArrayList<Float>(10000);
         yValues = new ArrayList<Float>(10000);
@@ -84,15 +90,14 @@ public class RawProbeData {
         
         yawPitchRollDisplayValues = new ArrayList<Vector3f>(10000);
         Quaternion currentQuat;
+        Vector3f currentPt;
         for(int index = 0; index < yawValues.size(); index++){
             currentQuat = TrackingHelper.getQuarternion(
                     yawValues.get(index), 
                     pitchValues.get(index), 
                     rollValues.get(index));
-            yawPitchRollDisplayValues.add(new Vector3f(
-                    currentQuat.getX(),
-                    currentQuat.getY(),
-                    currentQuat.getZ()));
+            currentPt = currentQuat.toRotationMatrix().mult(START_POINT_ON_SPHERE);
+            yawPitchRollDisplayValues.add(currentPt);
         }
         
     }
