@@ -22,8 +22,6 @@ public class CameraHelper {
     
     /* This block is
      * used for camera rotation
-     * 
-     * TODO: Make these more sophisticated
      */
     public static Vector3f getRotatedCameraLocation(Matrix3f rotMatrix, Vector3f oldLocation){
         return rotMatrix.mult(oldLocation);
