@@ -1,7 +1,6 @@
 package mygame;
 
 import util.CollisionPoint;
-import probeTracking.RawProbeData;
 import probeTracking.ProbeTracker;
 import util.PropertiesHelper;
 import util.ProgramConstants;
@@ -45,6 +44,8 @@ import mesh.TriangleSet;
 import meshTraversal.MeshFollowHelper;
 import modelVerifier.ModelCorrection;
 import pathImpl.PathHelper;
+import pathImpl.PathXYDataDisplay;
+import pathImpl.PathYawPitchRollDataDisplay;
 
 
 /**
@@ -591,11 +592,24 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
+        inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
+        inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
+        
    
         
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
+                
+                if(name.equals("rawXYdisplay") && keyPressed){
+                    PathXYDataDisplay probeData = PathXYDataDisplay.obtainRawProbeData(initialImportDirectory);
+                    rootNode.attachChild(probeData.generateSpatial(orangeLineMaterial));
+                }
+                
+                if(name.equals("rawYawPitchRollDisplay") && keyPressed){
+                    PathYawPitchRollDataDisplay probeData = PathYawPitchRollDataDisplay.obtainRawProbeData(initialImportDirectory);
+                    rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
+                }
                 
                 
                 if(name.equals("importLine") && keyPressed){
@@ -604,9 +618,8 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("exportLine") && keyPressed){
-                    //System.out.println("Export Line Chosen");
-                    RawProbeData probeData = RawProbeData.obtainRawProbeData(initialImportDirectory);
-                    rootNode.attachChild(probeData.generateSpatialNode(orangeLineMaterial,redLineMaterial));
+                    System.out.println("Export Line Chosen");
+                    
                 }
                 
                 if(name.equals("deleteLine") && keyPressed){
@@ -818,7 +831,9 @@ public class Main extends SimpleApplication {
                 "importLine",
                 "exportLine",
                 "deleteLine",
-                "selectLine");
+                "selectLine",
+                "rawXYdisplay",
+                "rawYawPitchRollDisplay");
 
     }
 }
