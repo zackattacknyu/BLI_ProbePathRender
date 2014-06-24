@@ -82,6 +82,8 @@ public class ArduinoDataInterpreter {
     
     //factor to multiply mean error by before processing the change
     private float thresholdFactor = 3.0f;
+    
+    private SerialDataCalibration currentCalib;
 
     public ArduinoDataInterpreter() {
         trackerProps = PropertiesHelper.getProperties();
@@ -177,22 +179,14 @@ public class ArduinoDataInterpreter {
     
     private void processCurrentCalibrationPoint(){
         
-        initYawData.addToDataSet(currentSerialData.getYaw());
-        initPitchData.addToDataSet(currentSerialData.getPitch());
-        initRollData.addToDataSet(currentSerialData.getRoll());
-        initXData.addToDataSet(currentSerialData.getX());
-        initYData.addToDataSet(currentSerialData.getY());
+        currentCalib.addCalibrationPoint(currentSerialData);
         yawData.addToData(currentSerialData.getYaw());
         
     }
     
     private void processCalibration(){
         
-        initYawData.processData();
-        initPitchData.processData();
-        initRollData.processData();
-        initXData.processData();
-        initYData.processData();
+        currentCalib.finishCalibration();
         
         lastPitch = currentSerialData.getPitch();
         lastRoll = currentSerialData.getRoll();
@@ -206,9 +200,9 @@ public class ArduinoDataInterpreter {
         firstRoll = lastRoll;
         firstYaw = lastYaw;
         
-        meanErrorPitch = initPitchData.getMeanError();
-        meanErrorRoll = initRollData.getMeanError();
-        meanErrorYaw = initYawData.getMeanError();
+        meanErrorPitch = currentCalib.getMeanErrorPitch();
+        meanErrorRoll = currentCalib.getMeanErrorRoll();
+        meanErrorYaw = currentCalib.getMeanErrorYaw();
         
 
     }
@@ -306,11 +300,7 @@ public class ArduinoDataInterpreter {
         if(calibrating){
             
             //start the calibration code
-            initYawData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
-            initPitchData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
-            initRollData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
-            initXData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
-            initYData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
+            currentCalib = new SerialDataCalibration();
             yawData = new LowPassFilterData(3);
             
         }else{
@@ -318,35 +308,8 @@ public class ArduinoDataInterpreter {
             //end the calibration
             calibrated = true;
             processCalibration();
-            displayCalibrationResults();
+            currentCalib.displayCalibrationResults();
         }
-        
-    }
-    
-    
-    private void displayCalibrationResults(){
-        System.out.println("Init Data Established");
-        System.out.println(
-            "Mean: yaw=" + initYawData.getMean()
-            + ", pitch=" + initPitchData.getMean()
-            + ", roll=" + initRollData.getMean()
-            + ", x=" + initXData.getMean()
-            + ", y=" + initYData.getMean()
-                );
-        System.out.println(
-            "Mean Error: yaw=" + initYawData.getMeanError()
-            + ", pitch=" + initPitchData.getMeanError()
-            + ", roll=" + initRollData.getMeanError()
-            + ", x=" + initXData.getMeanError()
-            + ", y=" + initYData.getMeanError()
-                );
-        System.out.println(
-            "Mean Squared Error: yaw=" + initYawData.getMeanSquaredError()
-            + ", pitch=" + initPitchData.getMeanSquaredError()
-            + ", roll=" + initRollData.getMeanSquaredError()
-            + ", x=" + initXData.getMeanSquaredError()
-            + ", y=" + initYData.getMeanSquaredError()
-                );
         
     }
 
