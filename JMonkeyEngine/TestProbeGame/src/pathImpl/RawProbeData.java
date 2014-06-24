@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package probeTracking;
+package pathImpl;
 
 import probeTracking.ProbeDataHelper;
 import com.jme3.material.Material;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -13,6 +14,8 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import pathImpl.PathHelper;
+import probeTracking.ProbeDataHelper;
+import probeTracking.TrackingHelper;
 
 /**
  *
@@ -94,9 +97,9 @@ public class RawProbeData {
         Vector3f currentPt;
         for(int index = 0; index < yawValues.size(); index++){
             currentQuat = TrackingHelper.getQuarternion(
-                    yawValues.get(index), 
-                    pitchValues.get(index), 
-                    rollValues.get(index));
+                    yawValues.get(index)*FastMath.DEG_TO_RAD, 
+                    pitchValues.get(index)*FastMath.DEG_TO_RAD, 
+                    rollValues.get(index)*FastMath.DEG_TO_RAD);
             currentPt = currentQuat.toRotationMatrix().mult(START_POINT_ON_SPHERE);
             yawPitchRollDisplayValues.add(currentPt);
         }
