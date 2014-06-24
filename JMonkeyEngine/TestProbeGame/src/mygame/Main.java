@@ -89,12 +89,12 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
     //      the above setting.
-    private boolean displayRawDataMode = false;
+    private boolean displayRawDataMode = true;
     
     public static void main(String[] args) {
         
@@ -602,12 +602,12 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 
                 if(name.equals("rawXYdisplay") && keyPressed){
-                    PathXYDataDisplay probeData = PathXYDataDisplay.obtainRawProbeData(initialImportDirectory);
+                    PathXYDataDisplay probeData = PathXYDataDisplay.obtainXYProbeData(initialImportDirectory);
                     rootNode.attachChild(probeData.generateSpatial(orangeLineMaterial));
                 }
                 
                 if(name.equals("rawYawPitchRollDisplay") && keyPressed){
-                    PathYawPitchRollDataDisplay probeData = PathYawPitchRollDataDisplay.obtainRawProbeData(initialImportDirectory);
+                    PathYawPitchRollDataDisplay probeData = PathYawPitchRollDataDisplay.obtainYawPitchRollProbeData(initialImportDirectory);
                     rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
                 }
                 
