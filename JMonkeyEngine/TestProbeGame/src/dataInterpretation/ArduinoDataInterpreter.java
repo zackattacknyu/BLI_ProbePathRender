@@ -19,13 +19,8 @@ import dataInterpretation.LowPassFilterData;
  */
 public class ArduinoDataInterpreter {
     
-    //see above for explanation of stages
-    private int currentStage = 1;
-    
-    private SerialReader serial;
-    private SerialDataPoint currentSerialData;
-    //private SerialDataPoint lastArdData;
-    //private SerialDataPoint previousArdData;
+    private SerialDataReader serial;
+
     float deltaXangle=0;
     float deltaYangle=0;
     float deltaZangle=0; 
@@ -44,17 +39,6 @@ public class ArduinoDataInterpreter {
     
     private boolean useLowPassFilterData = false;
     
-    //public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
-    
-    //flag for only showing output and not processing it
-    private boolean onlyDoOutput;
-    
-    //flag for whether or not to parse the output. If not parsed, raw string is shown
-    private boolean parseOutput;
-    
-    private boolean updateExists = false;
-    private boolean showOutput;
-    
     private boolean calibrating = false;
     private boolean calibrated = false;
     
@@ -66,87 +50,16 @@ public class ArduinoDataInterpreter {
     //set to 0 to not use threshold factor
     private float rawSwitch = 1;
     
-    //this is the number of initial estimated data points for calibration
-    private static final int NUMBER_INIT_CALIB_ELEMENTS = 100;
-    
-    private DataSet initYawData;
-    private DataSet initPitchData;
-    private DataSet initRollData;
-    private DataSet initXData;
-    private DataSet initYData;
-    
     private LowPassFilterData yawData;
-    
-    private static HashMap<String,Integer> dataLocations;
-    private Properties trackerProps;
-    
+
     //factor to multiply mean error by before processing the change
     private float thresholdFactor = 3.0f;
     
     private SerialDataCalibration currentCalib;
 
     public ArduinoDataInterpreter() {
-        trackerProps = PropertiesHelper.getProperties();
-        
-        dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
-        try{
-            serial = new SerialReader();
-            serial.beginExecution();
-        }catch(Throwable t){
-            System.out.println("CANNOT USE SERIAL DEVICE. INSTALL RXTX.");
-            System.out.println(t);
-        }
-        
+        serial = new SerialDataReader();
         System.out.println("Waiting to receive input...");
-        
-        onlyDoOutput = Boolean.parseBoolean(
-                trackerProps.getProperty(
-                "arduinoData.onlyDoOutput"));
-        
-        parseOutput = Boolean.parseBoolean(
-                trackerProps.getProperty(
-                "arduinoData.parseOutput"));
-        
-        showOutput = Boolean.parseBoolean(
-                trackerProps.getProperty(
-                "arduinoData.showOutput"));
-        
-        
-        
-    }
-    
-    private void readSerialData(){
-        updateExists = false;
-        try{
-            
-            currentSerialOutput = serial.getCurrentOutput();
-            if(!String.valueOf(currentSerialOutput).equals("null")
-                    && !currentSerialOutput.equals(previousSerialOutput)){
-                
-                if(parseOutput){
-                    currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
-                }
-                
-                //shows the current output
-                if(showOutput){
-                    
-                    if(parseOutput){
-                        //if parsing, show the result
-                        System.out.println(currentSerialData);
-                    }else{
-                        //if no parsing, just show raw output
-                        System.out.println(currentSerialOutput);
-                    }
-                    
-                }
-                
-                updateExists = true;
-                previousSerialOutput = currentSerialOutput;
-            }
-            
-        }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!: " + e);
-        }
     }
 
     public void setRawSwitch(float rawSwitch) {
@@ -163,7 +76,7 @@ public class ArduinoDataInterpreter {
     
     private void processArdData(){
         
-        if(updateExists){
+        if(serial.isUpdateExists()){
             
             if(calibrating){
                 processCurrentCalibrationPoint();
@@ -179,8 +92,8 @@ public class ArduinoDataInterpreter {
     
     private void processCurrentCalibrationPoint(){
         
-        currentCalib.addCalibrationPoint(currentSerialData);
-        yawData.addToData(currentSerialData.getYaw());
+        currentCalib.addCalibrationPoint(serial.getCurrentSerialData());
+        yawData.addToData(serial.getCurrentSerialData().getYaw());
         
     }
     
@@ -206,16 +119,11 @@ public class ArduinoDataInterpreter {
         
 
     }
-    
 
-    
     public void updateData(){
         
-        readSerialData();
-
-        if(!onlyDoOutput){
-            processArdData();
-        }
+        serial.updateData();
+        processArdData();
     }
     
     private void processObjectUpdate(){
@@ -226,18 +134,15 @@ public class ArduinoDataInterpreter {
     }
     
     private void processXYdata(){
-        deltaX = currentSerialData.getX();
-        deltaY = currentSerialData.getY();
-
-        deltaX = deltaX/1000.0f;
-        deltaY = deltaY/1000.0f;
+        deltaX = serial.getDeltaX();
+        deltaY = serial.getDeltaY();
     }
     
     private void processYawPitchRoll(){
         
-        float pitch = currentSerialData.getPitch();
-        float roll = currentSerialData.getRoll();
-        float yaw = currentSerialData.getYaw();
+        float pitch = serial.getCurrentPitch();
+        float roll = serial.getCurrentRoll();
+        float yaw = serial.getCurrentYaw();
         
         yawData.addToData(yaw);
         
@@ -311,10 +216,6 @@ public class ArduinoDataInterpreter {
             currentCalib.displayCalibrationResults();
         }
         
-    }
-
-    public void setOnlyDoOutput(boolean onlyDoOutput) {
-        this.onlyDoOutput = onlyDoOutput;
     }
     
     public float getDeltaXangle() {
