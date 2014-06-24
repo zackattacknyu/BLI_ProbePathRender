@@ -7,7 +7,7 @@ package probeTracking;
 import probeTracking.ProbeDataWriter;
 import probeTracking.ProbeDataHelper;
 import probeTracking.PathRecorder;
-import dataInterpreterImpl.ArduinoDataInterpreter;
+import dataInterpretation.ArduinoDataInterpreter;
 import util.PropertiesHelper;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;

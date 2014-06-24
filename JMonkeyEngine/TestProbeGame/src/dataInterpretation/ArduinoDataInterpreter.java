@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpreterImpl;
+package dataInterpretation;
 
 import dataReaderImpl.SerialReader;
 import util.PropertiesHelper;
@@ -86,7 +86,7 @@ public class ArduinoDataInterpreter {
     public ArduinoDataInterpreter() {
         trackerProps = PropertiesHelper.getProperties();
         
-        makeDataLocationsMap();
+        dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
         try{
             serial = new SerialReader();
             serial.beginExecution();
@@ -111,32 +111,6 @@ public class ArduinoDataInterpreter {
         
         
         
-    }
-    
-    private void makeDataLocationsMap(){
-        
-            int timestampLoc = getLoc("timestamp");
-            int xLoc = getLoc("x");
-            int yLoc = getLoc("y");
-            int yawLoc = getLoc("yaw");
-            int pitchLoc = getLoc("pitch");
-            int rollLoc = getLoc("roll");
-        
-            dataLocations = new HashMap<String,Integer>(10);
-            putLoc("timestamp", timestampLoc);
-            putLoc("x", xLoc);
-            putLoc("y", yLoc);
-            putLoc("yaw", yawLoc);
-            putLoc("pitch", pitchLoc);
-            putLoc("roll", rollLoc);
-        }
-    
-    private int getLoc(String name){
-        return Integer.parseInt(trackerProps.getProperty("dataLocation." + name));
-    }
-    
-    private void putLoc(String name, int location){
-        dataLocations.put(name, location);
     }
     
     private void readSerialData(){
