@@ -23,7 +23,7 @@ public class ArduinoDataInterpreter {
     private int currentStage = 1;
     
     private SerialReader serial;
-    private SerialDataPoint currentArdData;
+    private SerialDataPoint currentSerialData;
     //private SerialDataPoint lastArdData;
     //private SerialDataPoint previousArdData;
     float deltaXangle=0;
@@ -53,7 +53,7 @@ public class ArduinoDataInterpreter {
     private boolean parseOutput;
     
     private boolean updateExists = false;
-    private boolean showOutput = true;
+    private boolean showOutput;
     
     private boolean calibrating = false;
     private boolean calibrated = false;
@@ -105,33 +105,39 @@ public class ArduinoDataInterpreter {
                 trackerProps.getProperty(
                 "arduinoData.parseOutput"));
         
+        showOutput = Boolean.parseBoolean(
+                trackerProps.getProperty(
+                "arduinoData.showOutput"));
+        
         
         
     }
     
     private void makeDataLocationsMap(){
         
-            int timestampLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.timestamp"));
-            int xLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.x"));
-            int yLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.y"));
-            int yawLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.yaw"));
-            int pitchLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.pitch"));
-            int rollLoc = Integer.parseInt(trackerProps.
-                    getProperty("dataLocation.roll"));
+            int timestampLoc = getLoc("timestamp");
+            int xLoc = getLoc("x");
+            int yLoc = getLoc("y");
+            int yawLoc = getLoc("yaw");
+            int pitchLoc = getLoc("pitch");
+            int rollLoc = getLoc("roll");
         
             dataLocations = new HashMap<String,Integer>(10);
-            dataLocations.put("timestamp", timestampLoc);
-            dataLocations.put("x", xLoc);
-            dataLocations.put("y", yLoc);
-            dataLocations.put("yaw", yawLoc);
-            dataLocations.put("pitch", pitchLoc);
-            dataLocations.put("roll", rollLoc);
+            putLoc("timestamp", timestampLoc);
+            putLoc("x", xLoc);
+            putLoc("y", yLoc);
+            putLoc("yaw", yawLoc);
+            putLoc("pitch", pitchLoc);
+            putLoc("roll", rollLoc);
         }
+    
+    private int getLoc(String name){
+        return Integer.parseInt(trackerProps.getProperty("dataLocation." + name));
+    }
+    
+    private void putLoc(String name, int location){
+        dataLocations.put(name, location);
+    }
     
     private void readSerialData(){
         updateExists = false;
@@ -142,7 +148,7 @@ public class ArduinoDataInterpreter {
                     && !currentSerialOutput.equals(previousSerialOutput)){
                 
                 if(parseOutput){
-                    currentArdData = new SerialDataPoint(currentSerialOutput,dataLocations);
+                    currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
                 }
                 
                 //shows the current output
@@ -150,7 +156,7 @@ public class ArduinoDataInterpreter {
                     
                     if(parseOutput){
                         //if parsing, show the result
-                        System.out.println(currentArdData);
+                        System.out.println(currentSerialData);
                     }else{
                         //if no parsing, just show raw output
                         System.out.println(currentSerialOutput);
@@ -197,12 +203,12 @@ public class ArduinoDataInterpreter {
     
     private void processCurrentCalibrationPoint(){
         
-        initYawData.addToDataSet(currentArdData.getYaw());
-        initPitchData.addToDataSet(currentArdData.getPitch());
-        initRollData.addToDataSet(currentArdData.getRoll());
-        initXData.addToDataSet(currentArdData.getX());
-        initYData.addToDataSet(currentArdData.getY());
-        yawData.addToData(currentArdData.getYaw());
+        initYawData.addToDataSet(currentSerialData.getYaw());
+        initPitchData.addToDataSet(currentSerialData.getPitch());
+        initRollData.addToDataSet(currentSerialData.getRoll());
+        initXData.addToDataSet(currentSerialData.getX());
+        initYData.addToDataSet(currentSerialData.getY());
+        yawData.addToData(currentSerialData.getYaw());
         
     }
     
@@ -214,9 +220,9 @@ public class ArduinoDataInterpreter {
         initXData.processData();
         initYData.processData();
         
-        lastPitch = currentArdData.getPitch();
-        lastRoll = currentArdData.getRoll();
-        lastYaw = currentArdData.getYaw();
+        lastPitch = currentSerialData.getPitch();
+        lastRoll = currentSerialData.getRoll();
+        lastYaw = currentSerialData.getYaw();
         
         currentPitch = lastPitch;
         currentRoll = lastRoll;
@@ -252,8 +258,8 @@ public class ArduinoDataInterpreter {
     }
     
     private void processXYdata(){
-        deltaX = currentArdData.getX();
-        deltaY = currentArdData.getY();
+        deltaX = currentSerialData.getX();
+        deltaY = currentSerialData.getY();
 
         deltaX = deltaX/1000.0f;
         deltaY = deltaY/1000.0f;
@@ -261,9 +267,9 @@ public class ArduinoDataInterpreter {
     
     private void processYawPitchRoll(){
         
-        float pitch = currentArdData.getPitch();
-        float roll = currentArdData.getRoll();
-        float yaw = currentArdData.getYaw();
+        float pitch = currentSerialData.getPitch();
+        float roll = currentSerialData.getRoll();
+        float yaw = currentSerialData.getYaw();
         
         yawData.addToData(yaw);
         
