@@ -133,28 +133,6 @@ public class ArduinoDataInterpreter {
             dataLocations.put("roll", rollLoc);
         }
     
-    /*private void readSerialData(){
-        updateExists = false;
-        try{
-            
-            currentSerialOutput = serial.getCurrentOutput();
-            if(!String.valueOf(currentSerialOutput).equals("null")){
-                currentArdData = new SerialDataPoint(currentSerialOutput,dataLocations);
-                if(currentArdData != null){
-                    if(!currentArdData.equals(previousArdData)){
-                        if(showOutput){
-                            System.out.println(currentArdData);
-                        }
-                        updateExists = true;
-                    }
-                }
-            }
-            
-        }catch(Throwable e){
-            System.out.println("READING SERIAL DATA FAILED!: " + e);
-        }
-    }*/
-    
     private void readSerialData(){
         updateExists = false;
         try{
@@ -210,9 +188,6 @@ public class ArduinoDataInterpreter {
             }else if(calibrated){
                 processObjectUpdate();
             }
-            
-            
-            //previousArdData = currentArdData;
             
         }
         
@@ -279,9 +254,6 @@ public class ArduinoDataInterpreter {
     private void processXYdata(){
         deltaX = currentArdData.getX();
         deltaY = currentArdData.getY();
-
-        //if(deltaX > 128) deltaX = deltaX - 256;
-        //if(deltaY > 128) deltaY = deltaY - 256;
 
         deltaX = deltaX/1000.0f;
         deltaY = deltaY/1000.0f;
