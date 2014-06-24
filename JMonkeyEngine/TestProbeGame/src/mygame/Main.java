@@ -89,12 +89,12 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
     //      the above setting.
-    private boolean displayRawDataMode = true;
+    private boolean displayRawDataMode = false;
     
     public static void main(String[] args) {
         

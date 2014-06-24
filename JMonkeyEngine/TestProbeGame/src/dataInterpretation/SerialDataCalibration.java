@@ -56,6 +56,18 @@ public class SerialDataCalibration {
         return initYawData.getMeanError();
     }
     
+    public float getMeanPitch(){
+        return initPitchData.getMean();
+    }
+    
+    public float getMeanYaw(){
+        return initYawData.getMean();
+    }
+    
+    public float getMeanRoll(){
+        return initRollData.getMean();
+    }
+    
     public void displayCalibrationResults(){
         System.out.println("Init Data Established");
         System.out.println(

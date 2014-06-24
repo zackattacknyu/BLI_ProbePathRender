@@ -188,9 +188,9 @@ public class ArduinoDataInterpreter {
         
         currentCalib.finishCalibration();
         
-        lastPitch = currentSerialData.getPitch();
-        lastRoll = currentSerialData.getRoll();
-        lastYaw = currentSerialData.getYaw();
+        lastPitch = currentCalib.getMeanPitch();
+        lastRoll = currentCalib.getMeanRoll();
+        lastYaw = currentCalib.getMeanYaw();
         
         currentPitch = lastPitch;
         currentRoll = lastRoll;
