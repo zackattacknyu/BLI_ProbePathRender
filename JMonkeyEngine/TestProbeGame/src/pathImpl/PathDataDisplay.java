@@ -54,4 +54,6 @@ public abstract class PathDataDisplay {
     
     protected abstract void generateDisplayValues();
     
+    public abstract Spatial generateReferenceObject(Material mat);
+    
 }

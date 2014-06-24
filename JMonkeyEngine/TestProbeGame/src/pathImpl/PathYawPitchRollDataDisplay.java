@@ -4,8 +4,13 @@
  */
 package pathImpl;
 
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
 import probeTracking.TrackingHelper;
@@ -65,6 +70,15 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         yawValues = new ArrayList<Float>(10000);
         pitchValues = new ArrayList<Float>(10000);
         rollValues = new ArrayList<Float>(10000);
+    }
+
+    @Override
+    public Spatial generateReferenceObject(Material mat) {
+        Sphere refSphere = new Sphere(40,40,1.0f);
+        Spatial theSphere = new Geometry("sphere",refSphere);
+        mat.getAdditionalRenderState().setWireframe(true);
+        theSphere.setMaterial(mat);
+        return theSphere;
     }
     
     

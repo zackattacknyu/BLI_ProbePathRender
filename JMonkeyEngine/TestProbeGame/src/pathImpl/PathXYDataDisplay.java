@@ -4,7 +4,9 @@
  */
 package pathImpl;
 
+import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -57,6 +59,11 @@ public class PathXYDataDisplay extends PathDataDisplay{
     protected void initializeArrayLists() {
         xValues = new ArrayList<Float>(10000);
         yValues = new ArrayList<Float>(10000);
+    }
+
+    @Override
+    public Spatial generateReferenceObject(Material mat) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -609,6 +609,7 @@ public class Main extends SimpleApplication {
                 if(name.equals("rawYawPitchRollDisplay") && keyPressed){
                     PathYawPitchRollDataDisplay probeData = PathYawPitchRollDataDisplay.obtainYawPitchRollProbeData(initialImportDirectory);
                     rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
+                    rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
                 
                 
