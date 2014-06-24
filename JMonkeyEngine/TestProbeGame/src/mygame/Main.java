@@ -44,8 +44,8 @@ import mesh.TriangleSet;
 import meshTraversal.MeshFollowHelper;
 import modelVerifier.ModelCorrection;
 import pathImpl.PathHelper;
-import pathImpl.PathXYDataDisplay;
-import pathImpl.PathYawPitchRollDataDisplay;
+import pathImplDebug.PathXYDataDisplay;
+import pathImplDebug.PathYawPitchRollDataDisplay;
 
 
 /**
@@ -604,6 +604,7 @@ public class Main extends SimpleApplication {
                 if(name.equals("rawXYdisplay") && keyPressed){
                     PathXYDataDisplay probeData = PathXYDataDisplay.obtainXYProbeData(initialImportDirectory);
                     rootNode.attachChild(probeData.generateSpatial(orangeLineMaterial));
+                    rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
                 
                 if(name.equals("rawYawPitchRollDisplay") && keyPressed){

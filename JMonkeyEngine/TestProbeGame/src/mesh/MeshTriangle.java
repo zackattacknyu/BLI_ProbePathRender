@@ -31,6 +31,10 @@ public class MeshTriangle {
     
     private TriangleTexture textureCoords;
     
+    public MeshTriangle(Triangle triangle){
+        this(triangle,new Matrix4f());
+    }
+    
     public MeshTriangle(Triangle triangle, Matrix4f transform){
         
         Vector3f vert1 = triangle.get1();

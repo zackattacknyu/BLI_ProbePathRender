@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pathImpl;
+package pathImplDebug;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
+import pathImpl.PathDataDisplay;
 import probeTracking.TrackingHelper;
 
 /**
