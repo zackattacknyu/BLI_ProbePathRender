@@ -11,3 +11,6 @@ Path1: Point1 to Point2
 Path2: Point2 to Point3
 Path3: Point3 to Point4
 Path4: Point4 to Point1
+
+
+**TODO: Path1 is remarkably good and may be the key to getting the initial \Theta value. Must try it out.**
