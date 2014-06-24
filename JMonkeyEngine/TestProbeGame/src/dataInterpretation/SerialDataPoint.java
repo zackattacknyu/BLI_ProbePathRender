@@ -20,15 +20,19 @@ public class SerialDataPoint {
     
     public SerialDataPoint(String data, HashMap<String,Integer> dataLocations){
         this.dataLocations = dataLocations;
-        dataParts = data.split(",");
+        extractData(data);
+    }
+    
+    private void extractData(String data){
+        dataParts = data.split(DataLocationConstants.SERIAL_DATA_STRING_DELIMITER);
         float x,y,yaw,pitch,roll;
-        x = getPart("x");
-        y = getPart("y");
-        yaw = getPart("yaw");
-        pitch = getPart("pitch");
-        roll = getPart("roll");
+        x = getPart(DataLocationConstants.X_KEY);
+        y = getPart(DataLocationConstants.Y_KEY);
+        yaw = getPart(DataLocationConstants.YAW_KEY);
+        pitch = getPart(DataLocationConstants.PITCH_KEY);
+        roll = getPart(DataLocationConstants.ROLL_KEY);
         dataPoint = new ProbeDataPoint(yaw,pitch,roll,x,y);
-        timestamp = getPart("timestamp");
+        timestamp = getPart(DataLocationConstants.TIMESTAMP_KEY);
     }
     
     private float getPart(String partName){

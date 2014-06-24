@@ -14,20 +14,6 @@ import java.util.Properties;
  */
 public class DataLocationsMap {
     
-    //these are the suffix names in the config file
-    //      for the names of the properties
-    public static final String TIMESTAMP_LOCATION_PROPERTY_NAME_SUFFIX = "timestamp";
-    public static final String X_LOCATION_PROPERTY_NAME_SUFFIX = "x";
-    public static final String Y_LOCATION_PROPERTY_NAME_SUFFIX = "y";
-    public static final String YAW_LOCATION_PROPERTY_NAME_SUFFIX = "yaw";
-    public static final String PITCH_LOCATION_PROPERTY_NAME_SUFFIX = "pitch";
-    public static final String ROLL_LOCATION_PROPERTY_NAME_SUFFIX = "roll";
-    
-    //this is the prefix for all the data location property names
-    //      in the config file. This should include the period
-    //      or other mark used as a delimiter in the property name
-    public static final String DATA_LOCATION_PROPERTIES_PREFIX = "dataLocation.";
-    
     
     private HashMap<String,Integer> dataLocations;
     private Properties propsMap;
@@ -49,22 +35,22 @@ public class DataLocationsMap {
     
     private void makeDataLocationsMap(){
         
-            putLoc(TIMESTAMP_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(TIMESTAMP_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(X_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(X_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(Y_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(Y_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(YAW_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(YAW_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(PITCH_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(PITCH_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(ROLL_LOCATION_PROPERTY_NAME_SUFFIX, 
-                    getLoc(ROLL_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.TIMESTAMP_KEY, 
+                    getLoc(DataLocationConstants.TIMESTAMP_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.X_KEY, 
+                    getLoc(DataLocationConstants.X_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.Y_KEY, 
+                    getLoc(DataLocationConstants.Y_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.YAW_KEY, 
+                    getLoc(DataLocationConstants.YAW_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.PITCH_KEY, 
+                    getLoc(DataLocationConstants.PITCH_LOCATION_PROPERTY_NAME_SUFFIX));
+            putLoc(DataLocationConstants.ROLL_KEY, 
+                    getLoc(DataLocationConstants.ROLL_LOCATION_PROPERTY_NAME_SUFFIX));
         }
     
     private int getLoc(String name){
-        return Integer.parseInt(propsMap.getProperty(DATA_LOCATION_PROPERTIES_PREFIX + name));
+        return Integer.parseInt(propsMap.getProperty(DataLocationConstants.DATA_LOCATION_PROPERTIES_PREFIX + name));
     }
     
     private void putLoc(String name, int location){
