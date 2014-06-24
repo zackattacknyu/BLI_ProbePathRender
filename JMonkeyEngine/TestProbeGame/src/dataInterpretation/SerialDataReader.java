@@ -127,9 +127,6 @@ public class SerialDataReader {
     private void processXYdata(){
         deltaX = currentSerialData.getX();
         deltaY = currentSerialData.getY();
-
-        deltaX = deltaX/1000.0f;
-        deltaY = deltaY/1000.0f;
     }
     
     private void processYawPitchRoll(){

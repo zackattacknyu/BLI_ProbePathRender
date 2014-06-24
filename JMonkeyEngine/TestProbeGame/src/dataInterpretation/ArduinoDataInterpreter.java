@@ -136,6 +136,9 @@ public class ArduinoDataInterpreter {
     private void processXYdata(){
         deltaX = serial.getDeltaX();
         deltaY = serial.getDeltaY();
+        
+        deltaX = SerialDataHelper.getReturnX(deltaX);
+        deltaY = SerialDataHelper.getReturnY(deltaY);
     }
     
     private void processYawPitchRoll(){
@@ -152,19 +155,19 @@ public class ArduinoDataInterpreter {
 
         if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch*rawSwitch){
             currentPitch = pitch;
-            outputPitchRadians = getEulerAngle(pitch-firstPitch);
+            outputPitchRadians = SerialDataHelper.getReturnAngle(pitch-firstPitch);
         }
         if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll*rawSwitch){
             currentRoll = roll;
-            outputRollRadians = getEulerAngle(roll-firstRoll);
+            outputRollRadians = SerialDataHelper.getReturnAngle(roll-firstRoll);
         }
         
         if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw*rawSwitch){
             
             if(useLowPassFilterData){
-                outputYawRadians = getEulerAngle(yawData.getAverage()-firstYaw);
+                outputYawRadians = SerialDataHelper.getReturnAngle(yawData.getAverage()-firstYaw);
             }else{
-                outputYawRadians = getEulerAngle(yaw-firstYaw);
+                outputYawRadians = SerialDataHelper.getReturnAngle(yaw-firstYaw);
             }
             
             
@@ -175,14 +178,6 @@ public class ArduinoDataInterpreter {
 
     public boolean isCalibrated() {
         return calibrated;
-    }
-    
-    
-    
-    //converts degrees, which the data is in, to radians, which is used
-    //  by JMonkeyEngine for the rotation
-    private float getEulerAngle(float degrees){
-        return degrees*FastMath.DEG_TO_RAD;
     }
 
     public float getOutputYawRadians() {
