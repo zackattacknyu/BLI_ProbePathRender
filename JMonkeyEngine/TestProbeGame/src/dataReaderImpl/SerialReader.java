@@ -158,7 +158,7 @@ public class SerialReader implements SerialPortEventListener {
             System.out.println("Started");
         }
 
-    public String getCurrentArdOutput() {
+    public String getCurrentOutput() {
         return currentArdOutput;
     }
         

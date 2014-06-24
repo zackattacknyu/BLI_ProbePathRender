@@ -9,7 +9,7 @@ import util.PropertiesHelper;
 import com.jme3.math.FastMath;
 import java.util.HashMap;
 import java.util.Properties;
-import dataInterpretation.ArduinoDataPoint;
+import dataInterpretation.SerialDataPoint;
 import dataInterpretation.DataSet;
 import dataInterpretation.LowPassFilterData;
 
@@ -23,9 +23,9 @@ public class ArduinoDataInterpreter {
     private int currentStage = 1;
     
     private SerialReader serial;
-    private ArduinoDataPoint currentArdData;
-    private ArduinoDataPoint lastArdData;
-    private ArduinoDataPoint previousArdData;
+    private SerialDataPoint currentArdData;
+    //private SerialDataPoint lastArdData;
+    //private SerialDataPoint previousArdData;
     float deltaXangle=0;
     float deltaYangle=0;
     float deltaZangle=0; 
@@ -40,16 +40,16 @@ public class ArduinoDataInterpreter {
     private float currentYaw=0,currentPitch=0,currentRoll=0;
     private float firstYaw=0,firstPitch=0,firstRoll=0;
     private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
-    private String currentArdOutput, previousArdOutput;
+    private String currentSerialOutput, previousSerialOutput;
     
     private boolean useLowPassFilterData = false;
     
-    public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
+    //public static final float degreeToRadianFactor = (float)(Math.PI/180.0);
     
     //flag for only showing output and not processing it
     private boolean onlyDoOutput;
     
-    //flag for not parsing output if onlyDoOutput = true
+    //flag for whether or not to parse the output. If not parsed, raw string is shown
     private boolean parseOutput;
     
     private boolean updateExists = false;
@@ -66,7 +66,8 @@ public class ArduinoDataInterpreter {
     //set to 0 to not use threshold factor
     private float rawSwitch = 1;
     
-    private int numberElements;
+    //this is the number of initial estimated data points for calibration
+    private static final int NUMBER_INIT_CALIB_ELEMENTS = 100;
     
     private DataSet initYawData;
     private DataSet initPitchData;
@@ -95,11 +96,6 @@ public class ArduinoDataInterpreter {
         }
         
         System.out.println("Waiting to receive input...");
-        
-        
-        numberElements = Integer.parseInt(
-                trackerProps.getProperty(
-                "arduinoData.defaultNumberElements"));
         
         onlyDoOutput = Boolean.parseBoolean(
                 trackerProps.getProperty(
@@ -137,13 +133,13 @@ public class ArduinoDataInterpreter {
             dataLocations.put("roll", rollLoc);
         }
     
-    private void readSerialData(){
+    /*private void readSerialData(){
         updateExists = false;
         try{
             
-            currentArdOutput = serial.getCurrentArdOutput();
-            if(!String.valueOf(currentArdOutput).equals("null")){
-                currentArdData = new ArduinoDataPoint(currentArdOutput,dataLocations);
+            currentSerialOutput = serial.getCurrentOutput();
+            if(!String.valueOf(currentSerialOutput).equals("null")){
+                currentArdData = new SerialDataPoint(currentSerialOutput,dataLocations);
                 if(currentArdData != null){
                     if(!currentArdData.equals(previousArdData)){
                         if(showOutput){
@@ -157,20 +153,35 @@ public class ArduinoDataInterpreter {
         }catch(Throwable e){
             System.out.println("READING SERIAL DATA FAILED!: " + e);
         }
-    }
+    }*/
     
-    private void readRawSerialData(){
+    private void readSerialData(){
         updateExists = false;
         try{
             
-            currentArdOutput = serial.getCurrentArdOutput();
-            if(!String.valueOf(currentArdOutput).equals("null")){
-                if(!currentArdOutput.equals(previousArdOutput)){
-                    if(showOutput){
-                        System.out.println(currentArdOutput);
-                    }
-                    updateExists = true;
+            currentSerialOutput = serial.getCurrentOutput();
+            if(!String.valueOf(currentSerialOutput).equals("null")
+                    && !currentSerialOutput.equals(previousSerialOutput)){
+                
+                if(parseOutput){
+                    currentArdData = new SerialDataPoint(currentSerialOutput,dataLocations);
                 }
+                
+                //shows the current output
+                if(showOutput){
+                    
+                    if(parseOutput){
+                        //if parsing, show the result
+                        System.out.println(currentArdData);
+                    }else{
+                        //if no parsing, just show raw output
+                        System.out.println(currentSerialOutput);
+                    }
+                    
+                }
+                
+                updateExists = true;
+                previousSerialOutput = currentSerialOutput;
             }
             
         }catch(Throwable e){
@@ -186,8 +197,8 @@ public class ArduinoDataInterpreter {
         this.useLowPassFilterData = useLowPassFilterData;
     }
 
-    public String getCurrentArdOutput() {
-        return currentArdOutput;
+    public String getCurrentSerialOutput() {
+        return currentSerialOutput;
     }
     
     private void processArdData(){
@@ -201,7 +212,7 @@ public class ArduinoDataInterpreter {
             }
             
             
-            previousArdData = currentArdData;
+            //previousArdData = currentArdData;
             
         }
         
@@ -251,13 +262,8 @@ public class ArduinoDataInterpreter {
     
     public void updateData(){
         
-        if(onlyDoOutput && !parseOutput){
-            readRawSerialData();
-        }else{
-            readSerialData();
-        }
-        
-        
+        readSerialData();
+
         if(!onlyDoOutput){
             processArdData();
         }
@@ -348,11 +354,11 @@ public class ArduinoDataInterpreter {
         if(calibrating){
             
             //start the calibration code
-            initYawData = new DataSet(numberElements);
-            initPitchData = new DataSet(numberElements);
-            initRollData = new DataSet(numberElements);
-            initXData = new DataSet(numberElements);
-            initYData = new DataSet(numberElements);
+            initYawData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
+            initPitchData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
+            initRollData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
+            initXData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
+            initYData = new DataSet(NUMBER_INIT_CALIB_ELEMENTS);
             yawData = new LowPassFilterData(3);
             
         }else{

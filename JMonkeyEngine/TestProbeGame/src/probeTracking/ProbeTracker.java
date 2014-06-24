@@ -173,8 +173,8 @@ public class ProbeTracker {
         if(recordingPath){
             try {
                 
-                if(dataInterpreter.getCurrentArdOutput() != null){
-                    currentPathOutputWriter.writeLine(dataInterpreter.getCurrentArdOutput());
+                if(dataInterpreter.getCurrentSerialOutput() != null){
+                    currentPathOutputWriter.writeLine(dataInterpreter.getCurrentSerialOutput());
                 }
                 currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
                                                   cubePath.getLastY() + "," + 

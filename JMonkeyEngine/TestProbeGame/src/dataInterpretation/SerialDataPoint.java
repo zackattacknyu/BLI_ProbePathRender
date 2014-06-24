@@ -4,41 +4,38 @@
  */
 package dataInterpretation;
 
-import com.jme3.math.Quaternion;
 import java.util.HashMap;
 
 /**
  *
  * @author BLI
  */
-public class ArduinoDataPoint {
+public class SerialDataPoint {
     
     private float timestamp;
     
-    private float yaw;
+    /*private float yaw;
     private float pitch;
     private float roll;
-
     
-
     private float x;
-    private float y;
+    private float y;*/
     
-    private Quaternion rotation;
-    
+    private ProbeDataPoint dataPoint;
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
-    public ArduinoDataPoint(String data, HashMap<String,Integer> dataLocations){
+    public SerialDataPoint(String data, HashMap<String,Integer> dataLocations){
         this.dataLocations = dataLocations;
         dataParts = data.split(",");
+        float x,y,yaw,pitch,roll;
         x = getPart("x");
         y = getPart("y");
         yaw = getPart("yaw");
         pitch = getPart("pitch");
         roll = getPart("roll");
+        dataPoint = new ProbeDataPoint(yaw,pitch,roll,x,y);
         timestamp = getPart("timestamp");
-        rotation = new Quaternion(yaw,pitch,roll,1);
     }
     
     private float getPart(String partName){
@@ -52,14 +49,14 @@ public class ArduinoDataPoint {
     @Override
     public String toString() {
         return "timestamp=" + timestamp 
-                + ", yaw=" + yaw 
-                + ", pitch=" + pitch 
-                + ", roll=" + roll 
-                + ", x=" + x 
-                + ", y=" + y;
+                + ", yaw=" + dataPoint.getYaw()
+                + ", pitch=" + dataPoint.getPitch()
+                + ", roll=" + dataPoint.getRoll()
+                + ", x=" + dataPoint.getX()
+                + ", y=" + dataPoint.getY();
     }
 
-    @Override
+    /*@Override
     public int hashCode() {
         int hash = 3;
         hash = 79 * hash + Float.floatToIntBits(this.timestamp);
@@ -79,7 +76,7 @@ public class ArduinoDataPoint {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ArduinoDataPoint other = (ArduinoDataPoint) obj;
+        final SerialDataPoint other = (SerialDataPoint) obj;
         if (Float.floatToIntBits(this.timestamp) != Float.floatToIntBits(other.timestamp)) {
             return false;
         }
@@ -99,35 +96,29 @@ public class ArduinoDataPoint {
             return false;
         }
         return true;
-    }
-    
-    
-    
-    public Quaternion getRotation() {
-        return rotation;
-    }
+    }*/
     
     public float getTimestamp() {
         return timestamp;
     }
 
     public float getYaw() {
-        return yaw;
+        return dataPoint.getYaw();
     }
 
     public float getPitch() {
-        return pitch;
+        return dataPoint.getPitch();
     }
 
     public float getRoll() {
-        return roll;
+        return dataPoint.getRoll();
     }
 
     public float getY() {
-        return y;
+        return dataPoint.getY();
     }
     public float getX() {
-        return x;
+        return dataPoint.getX();
     }
     
 }
