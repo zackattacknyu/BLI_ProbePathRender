@@ -26,9 +26,7 @@ public class SerialDataFilter {
     private float currentYaw=0,currentPitch=0,currentRoll=0;
     private float firstYaw=0,firstPitch=0,firstRoll=0;
     private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
-    private String currentSerialOutput, previousSerialOutput;
-    
-    private boolean useLowPassFilterData = false;
+    private String currentSerialOutput;
     
     private boolean calibrating = false;
     private boolean calibrated = false;
@@ -37,10 +35,6 @@ public class SerialDataFilter {
     private float meanErrorYaw = 0;
     private float meanErrorRoll = 0;
     
-    //set to 1 to use threshold factor
-    //set to 0 to not use threshold factor
-    private float rawSwitch = 1;
-    
     /* This tells the filter to be used
      *    0: Do not output changes
      *    1: Output raw angles
@@ -48,8 +42,6 @@ public class SerialDataFilter {
      *    3: Output low pass filter angles
      */
     private int filterMode;
-    
-    private LowPassFilterData yawData;
     
     private SerialDataCalibration currentCalib;
     private OrientationFilter orientationFilterRaw;
@@ -88,7 +80,6 @@ public class SerialDataFilter {
     private void processCurrentCalibrationPoint(){
         
         currentCalib.addCalibrationPoint(serial.getCurrentSerialData());
-        yawData.addToData(serial.getCurrentSerialData().getYaw());
         
     }
     
@@ -212,7 +203,6 @@ public class SerialDataFilter {
             
             //start the calibration code
             currentCalib = new SerialDataCalibration();
-            yawData = new LowPassFilterData(3);
             
         }else{
             
