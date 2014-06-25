@@ -1,4 +1,4 @@
-package mygame;
+package main_PathProbeRender;
 
 import util.CollisionPoint;
 import probeTracking.ProbeTracker;
