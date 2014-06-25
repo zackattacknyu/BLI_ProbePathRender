@@ -7,7 +7,7 @@ package probeTracking;
 import probeTracking.ProbeDataWriter;
 import probeTracking.ProbeDataHelper;
 import probeTracking.PathRecorder;
-import dataInterpretation.ArduinoDataInterpreter;
+import dataInterpretation.SerialDataInterpreter;
 import util.PropertiesHelper;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -37,7 +37,7 @@ public class ProbeTracker {
     
     private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
     
-    private ArduinoDataInterpreter dataInterpreter;
+    private SerialDataInterpreter dataInterpreter;
     
     private float baselineYaw,currentYaw,
             baselinePitch = 0,currentPitch = 0,
@@ -72,7 +72,7 @@ public class ProbeTracker {
     
     public ProbeTracker(){
         
-        dataInterpreter = new ArduinoDataInterpreter();
+        dataInterpreter = new SerialDataInterpreter();
         
         Properties trackerProps = PropertiesHelper.getProperties();
         displacementMode = Short.parseShort(
@@ -380,29 +380,27 @@ public class ProbeTracker {
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Only Show Output";
-                dataInterpreter.setRawSwitch(1);
+                dataInterpreter.setFilterMode(0);
                 break;
             case 1:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Raw Output Mode";
-                dataInterpreter.setRawSwitch(0);
+                dataInterpreter.setFilterMode(1);
                 break;
 
             case 2:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Low-Pass Filter Mode";
-                dataInterpreter.setUseLowPassFilterData(true);
-                dataInterpreter.setRawSwitch(0);
+                dataInterpreter.setFilterMode(3);
                 break;
 
             case 3:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Mean Error as Threshold Mode";
-                dataInterpreter.setUseLowPassFilterData(false);
-                dataInterpreter.setRawSwitch(1);
+                dataInterpreter.setFilterMode(2);
                 break;
         }
         

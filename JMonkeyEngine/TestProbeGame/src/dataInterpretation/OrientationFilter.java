@@ -21,6 +21,10 @@ public abstract class OrientationFilter {
         this.firstPitch = firstPitch;
         this.firstRoll = firstRoll;
         this.firstYaw = firstYaw;
+        
+        this.lastPitch = firstPitch;
+        this.lastRoll = firstRoll;
+        this.lastYaw = firstYaw;
     }
     
     public void addDataToFilter(float pitch, float yaw, float roll){
@@ -29,6 +33,10 @@ public abstract class OrientationFilter {
         inputYaw = yaw;
         
         filterData();
+        
+        lastPitch = outputPitch;
+        lastYaw = outputYaw;
+        lastRoll = outputRoll;
     }
     
     public abstract void filterData();

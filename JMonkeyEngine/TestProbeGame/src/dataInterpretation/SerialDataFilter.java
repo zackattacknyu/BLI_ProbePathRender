@@ -41,25 +41,27 @@ public class SerialDataFilter {
     //set to 0 to not use threshold factor
     private float rawSwitch = 1;
     
+    /* This tells the filter to be used
+     *    0: Do not output changes
+     *    1: Output raw angles
+     *    2: Output angles with thresholded changes
+     *    3: Output low pass filter angles
+     */
+    private int filterMode;
+    
     private LowPassFilterData yawData;
-
-    //factor to multiply mean error by before processing the change
-    private float thresholdFactor = 3.0f;
     
     private SerialDataCalibration currentCalib;
-    private OrientationFilter orientationFilter;
+    private OrientationFilter orientationFilterRaw;
+    private OrientationFilter orientationFilterThreshold;
 
     public SerialDataFilter() {
         serial = new SerialDataReader();
         System.out.println("Waiting to receive input...");
     }
 
-    public void setRawSwitch(float rawSwitch) {
-        this.rawSwitch = rawSwitch;
-    }
-
-    public void setUseLowPassFilterData(boolean useLowPassFilterData) {
-        this.useLowPassFilterData = useLowPassFilterData;
+    public void setFilterMode(int filterMode) {
+        this.filterMode = filterMode;
     }
 
     public String getCurrentSerialOutput() {
@@ -109,7 +111,11 @@ public class SerialDataFilter {
         meanErrorRoll = currentCalib.getMeanErrorRoll();
         meanErrorYaw = currentCalib.getMeanErrorYaw();
         
-        orientationFilter = new OrientationFilterRaw(firstPitch,firstYaw,firstRoll);
+        orientationFilterRaw = new OrientationFilterRaw(
+                firstPitch,firstYaw,firstRoll);
+        orientationFilterThreshold = new OrientationFilterThreshold(
+                firstPitch,firstYaw,firstRoll,
+                meanErrorPitch,meanErrorYaw,meanErrorRoll);
         
 
     }
@@ -144,16 +150,33 @@ public class SerialDataFilter {
         deltaY = serial.getDeltaY();
     }
     
-    private void processYawPitchRoll(){
-        
-        orientationFilter.addDataToFilter(
+    private void addCurrentDataToFilter(OrientationFilter filter){
+        filter.addDataToFilter(
                 serial.getCurrentPitch(), 
                 serial.getCurrentYaw(), 
                 serial.getCurrentRoll());
+    }
+    
+    private void setDataUsingFilter(OrientationFilter filter){
+        currentPitch = filter.getOutputPitch();
+        currentRoll = filter.getOutputRoll();
+        currentYaw = filter.getOutputYaw();
+    }
+    
+    private void processYawPitchRoll(){
         
-        currentPitch = orientationFilter.getOutputPitch();
-        currentRoll = orientationFilter.getOutputRoll();
-        currentYaw = orientationFilter.getOutputYaw();
+        addCurrentDataToFilter(orientationFilterRaw);
+        addCurrentDataToFilter(orientationFilterThreshold);
+        
+        switch(filterMode){
+            case 1:
+                setDataUsingFilter(orientationFilterRaw);
+                break;
+                
+            case 2:
+                setDataUsingFilter(orientationFilterThreshold);
+                break;
+        }
         
         /*yawData.addToData(yaw);
         

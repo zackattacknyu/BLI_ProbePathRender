@@ -8,7 +8,7 @@ package dataInterpretation;
  * 
  * @author BLI
  */
-public class ArduinoDataInterpreter {
+public class SerialDataInterpreter {
     
     private SerialDataFilter serial;
 
@@ -17,7 +17,7 @@ public class ArduinoDataInterpreter {
     private float outputYawRadians,outputPitchRadians,outputRollRadians;
 
 
-    public ArduinoDataInterpreter() {
+    public SerialDataInterpreter() {
         serial = new SerialDataFilter();
         System.out.println("Waiting to receive input...");
     }
@@ -83,6 +83,10 @@ public class ArduinoDataInterpreter {
         serial.startStopCalibration();
     }
     
+    public void setFilterMode(int mode){
+        serial.setFilterMode(mode);
+    }
+    
 
     public boolean isCalibrating() {
         return serial.isCalibrating();
@@ -94,14 +98,6 @@ public class ArduinoDataInterpreter {
 
     public float getDeltaY() {
         return deltaY;
-    }
-
-    public void setRawSwitch(int i) {
-        //TODO: Fill this in
-    }
-
-    public void setUseLowPassFilterData(boolean b) {
-        //TODO: Fill this in
     }
 
     public String getCurrentSerialOutput() {
