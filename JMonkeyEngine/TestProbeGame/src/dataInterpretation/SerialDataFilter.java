@@ -54,6 +54,7 @@ public class SerialDataFilter {
     private SerialDataCalibration currentCalib;
     private OrientationFilter orientationFilterRaw;
     private OrientationFilter orientationFilterThreshold;
+    private OrientationFilter orientationFilterLowPass;
 
     public SerialDataFilter() {
         serial = new SerialDataReader();
@@ -116,6 +117,8 @@ public class SerialDataFilter {
         orientationFilterThreshold = new OrientationFilterThreshold(
                 firstPitch,firstYaw,firstRoll,
                 meanErrorPitch,meanErrorYaw,meanErrorRoll);
+        orientationFilterLowPass = new OrientationFilterLowPass(
+                firstPitch,firstYaw,firstRoll);
         
 
     }
@@ -167,6 +170,7 @@ public class SerialDataFilter {
         
         addCurrentDataToFilter(orientationFilterRaw);
         addCurrentDataToFilter(orientationFilterThreshold);
+        addCurrentDataToFilter(orientationFilterLowPass);
         
         switch(filterMode){
             case 1:
@@ -176,35 +180,11 @@ public class SerialDataFilter {
             case 2:
                 setDataUsingFilter(orientationFilterThreshold);
                 break;
+                
+            case 3:
+                setDataUsingFilter(orientationFilterLowPass);
+                break;
         }
-        
-        /*yawData.addToData(yaw);
-        
-        deltaPitch = pitch - lastPitch;
-        deltaRoll = roll - lastRoll;
-        deltaYaw = yaw - lastYaw;
-
-        if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch*rawSwitch){
-            currentPitch = pitch;
-            outputPitchRadians = SerialDataHelper.getReturnAngle(pitch-firstPitch);
-        }
-        if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll*rawSwitch){
-            currentRoll = roll;
-            outputRollRadians = SerialDataHelper.getReturnAngle(roll-firstRoll);
-        }
-        
-        if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw*rawSwitch){
-            
-            if(useLowPassFilterData){
-                outputYawRadians = SerialDataHelper.getReturnAngle(yawData.getAverage()-firstYaw);
-            }else{
-                outputYawRadians = SerialDataHelper.getReturnAngle(yaw-firstYaw);
-            }
-            
-            
-            
-            currentYaw = yaw;
-        }*/
     }
 
     public boolean isCalibrated() {
