@@ -12,16 +12,12 @@ import com.jme3.math.FastMath;
  */
 public class SerialDataHelper {
 
-    public static final float initXscaleFactor = 1000.0f;
-    public static final float initYscaleFactor = 1000.0f;
+    public static final float uniformScaleFactor = 1000.0f;
     
-    public static float getReturnX(float originalX){
-        return originalX/initXscaleFactor;
-    }    
-    
-    public static float getReturnY(float originalY){
-        return originalY/initYscaleFactor;
+    public static float getReturnDisp(float disp){
+        return disp/1000.0f;
     }
+    
     
     public static float getReturnAngle(float initAngle){
         return initAngle*FastMath.DEG_TO_RAD;

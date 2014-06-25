@@ -4,180 +4,66 @@
  */
 package dataInterpretation;
 
-import dataReaderImpl.SerialReader;
-import util.PropertiesHelper;
-import com.jme3.math.FastMath;
-import java.util.HashMap;
-import java.util.Properties;
-import dataInterpretation.SerialDataPoint;
-import dataInterpretation.DataSet;
-import dataInterpretation.LowPassFilterData;
-
 /**
  * 
  * @author BLI
  */
 public class ArduinoDataInterpreter {
     
-    private SerialDataReader serial;
+    private SerialDataFilter serial;
 
-    float deltaXangle=0;
-    float deltaYangle=0;
-    float deltaZangle=0; 
     float deltaX = 0;
     float deltaY = 0;
-    float deltaPitch = 0;
-    float deltaRoll = 0;
-    float deltaYaw = 0;
-    float lastPitch = 0;
-    float lastRoll = 0;
-    float lastYaw = 0;
-    private float currentYaw=0,currentPitch=0,currentRoll=0;
-    private float firstYaw=0,firstPitch=0,firstRoll=0;
-    private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
-    private String currentSerialOutput, previousSerialOutput;
-    
-    private boolean useLowPassFilterData = false;
-    
-    private boolean calibrating = false;
-    private boolean calibrated = false;
-    
-    private float meanErrorPitch = 0;
-    private float meanErrorYaw = 0;
-    private float meanErrorRoll = 0;
-    
-    //set to 1 to use threshold factor
-    //set to 0 to not use threshold factor
-    private float rawSwitch = 1;
-    
-    private LowPassFilterData yawData;
+    private float outputYawRadians,outputPitchRadians,outputRollRadians;
 
-    //factor to multiply mean error by before processing the change
-    private float thresholdFactor = 3.0f;
-    
-    private SerialDataCalibration currentCalib;
 
     public ArduinoDataInterpreter() {
-        serial = new SerialDataReader();
+        serial = new SerialDataFilter();
         System.out.println("Waiting to receive input...");
     }
 
-    public void setRawSwitch(float rawSwitch) {
-        this.rawSwitch = rawSwitch;
-    }
-
-    public void setUseLowPassFilterData(boolean useLowPassFilterData) {
-        this.useLowPassFilterData = useLowPassFilterData;
-    }
-
-    public String getCurrentSerialOutput() {
-        return currentSerialOutput;
-    }
-    
-    private void processArdData(){
-        
-        if(serial.isUpdateExists()){
-            
-            if(calibrating){
-                processCurrentCalibrationPoint();
-            }else if(calibrated){
-                processObjectUpdate();
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    private void processCurrentCalibrationPoint(){
-        
-        currentCalib.addCalibrationPoint(serial.getCurrentSerialData());
-        yawData.addToData(serial.getCurrentSerialData().getYaw());
-        
-    }
-    
-    private void processCalibration(){
-        
-        currentCalib.finishCalibration();
-        
-        lastPitch = currentCalib.getMeanPitch();
-        lastRoll = currentCalib.getMeanRoll();
-        lastYaw = currentCalib.getMeanYaw();
-        
-        currentPitch = lastPitch;
-        currentRoll = lastRoll;
-        currentYaw = lastYaw;
-        
-        firstPitch = lastPitch;
-        firstRoll = lastRoll;
-        firstYaw = lastYaw;
-        
-        meanErrorPitch = currentCalib.getMeanErrorPitch();
-        meanErrorRoll = currentCalib.getMeanErrorRoll();
-        meanErrorYaw = currentCalib.getMeanErrorYaw();
-        
-
-    }
-
     public void updateData(){
-        
         serial.updateData();
-        processArdData();
-    }
-    
-    private void processObjectUpdate(){
-        
         processYawPitchRoll();
         processXYdata();
-
     }
     
     private void processXYdata(){
         deltaX = serial.getDeltaX();
         deltaY = serial.getDeltaY();
         
-        deltaX = SerialDataHelper.getReturnX(deltaX);
-        deltaY = SerialDataHelper.getReturnY(deltaY);
+        deltaX = getOutputDisp(deltaX);
+        deltaY = getOutputDisp(deltaY);
     }
     
     private void processYawPitchRoll(){
-        
-        float pitch = serial.getCurrentPitch();
-        float roll = serial.getCurrentRoll();
-        float yaw = serial.getCurrentYaw();
-        
-        yawData.addToData(yaw);
-        
-        deltaPitch = pitch - lastPitch;
-        deltaRoll = roll - lastRoll;
-        deltaYaw = yaw - lastYaw;
-
-        if(Math.abs(deltaPitch) > thresholdFactor*meanErrorPitch*rawSwitch){
-            currentPitch = pitch;
-            outputPitchRadians = SerialDataHelper.getReturnAngle(pitch-firstPitch);
-        }
-        if(Math.abs(deltaRoll) > thresholdFactor*meanErrorRoll*rawSwitch){
-            currentRoll = roll;
-            outputRollRadians = SerialDataHelper.getReturnAngle(roll-firstRoll);
-        }
-        
-        if(Math.abs(deltaYaw) > thresholdFactor*meanErrorYaw*rawSwitch){
-            
-            if(useLowPassFilterData){
-                outputYawRadians = SerialDataHelper.getReturnAngle(yawData.getAverage()-firstYaw);
-            }else{
-                outputYawRadians = SerialDataHelper.getReturnAngle(yaw-firstYaw);
-            }
-            
-            
-            
-            currentYaw = yaw;
-        }
+        outputYawRadians = getOutputAngle(serial.getCurrentYaw());
+        outputRollRadians = getOutputAngle(serial.getCurrentRoll());
+        outputPitchRadians = getOutputAngle(serial.getCurrentPitch());
+    }
+    
+    /**
+     * This is the method that takes in an angle from the probe
+     *      and returns the desired angle to the tracker
+     * @param angle
+     * @return 
+     */
+    private float getOutputAngle(float angle){
+        return SerialDataHelper.getReturnAngle(angle);
+    }
+    
+    /**
+     * This is the method that takes in an x or y value from the probe
+     *      and returns the desired displacement to the tracker
+     * @param disp
+     * @return 
+     */
+    private float getOutputDisp(float disp){
+        return SerialDataHelper.getReturnDisp(disp);
     }
 
     public boolean isCalibrated() {
-        return calibrated;
+        return serial.isCalibrated();
     }
 
     public float getOutputYawRadians() {
@@ -194,39 +80,12 @@ public class ArduinoDataInterpreter {
     
     
     public void startStopCalibration(){
-        
-        calibrating = !calibrating; 
-        
-        if(calibrating){
-            
-            //start the calibration code
-            currentCalib = new SerialDataCalibration();
-            yawData = new LowPassFilterData(3);
-            
-        }else{
-            
-            //end the calibration
-            calibrated = true;
-            processCalibration();
-            currentCalib.displayCalibrationResults();
-        }
-        
+        serial.startStopCalibration();
     }
     
-    public float getDeltaXangle() {
-        return deltaXangle;
-    }
-
-    public float getDeltaYangle() {
-        return deltaYangle;
-    }
-
-    public float getDeltaZangle() {
-        return deltaZangle;
-    }
 
     public boolean isCalibrating() {
-        return calibrating;
+        return serial.isCalibrating();
     }
     
     public float getDeltaX() {
@@ -235,6 +94,18 @@ public class ArduinoDataInterpreter {
 
     public float getDeltaY() {
         return deltaY;
+    }
+
+    public void setRawSwitch(int i) {
+        //TODO: Fill this in
+    }
+
+    public void setUseLowPassFilterData(boolean b) {
+        //TODO: Fill this in
+    }
+
+    public String getCurrentSerialOutput() {
+        return serial.getCurrentSerialOutput();
     }
    
 }
