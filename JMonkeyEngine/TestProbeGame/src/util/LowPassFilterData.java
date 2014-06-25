@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpretation;
+package util;
 
 import java.util.ArrayList;
 

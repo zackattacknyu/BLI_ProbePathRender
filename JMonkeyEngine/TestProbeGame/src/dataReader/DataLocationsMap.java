@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpretation;
+package dataReader;
 
+import dataReader.DataLocationConstants;
 import java.util.HashMap;
 import java.util.Properties;
 

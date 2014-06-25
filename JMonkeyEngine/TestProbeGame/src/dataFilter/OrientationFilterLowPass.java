@@ -2,7 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpretation;
+package dataFilter;
+
+import dataFilter.OrientationFilter;
+import util.LowPassFilterData;
 
 /**
  *

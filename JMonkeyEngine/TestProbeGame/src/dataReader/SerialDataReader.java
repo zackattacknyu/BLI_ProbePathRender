@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataInterpretation;
+package dataReader;
 
-import dataReaderImpl.SerialReader;
+import serialInterface.SerialReader;
 import util.PropertiesHelper;
 import java.util.HashMap;
 import java.util.Properties;

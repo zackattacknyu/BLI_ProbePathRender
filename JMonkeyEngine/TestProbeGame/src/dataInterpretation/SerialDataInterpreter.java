@@ -4,6 +4,8 @@
  */
 package dataInterpretation;
 
+import dataFilter.SerialDataFilter;
+
 /**
  * 
  * @author BLI

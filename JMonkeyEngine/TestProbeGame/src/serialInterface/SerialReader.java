@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataReaderImpl;
+package serialInterface;
 
 import util.PropertiesHelper;
 import java.io.BufferedReader;
