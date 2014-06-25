@@ -704,6 +704,14 @@ public class Main extends SimpleApplication {
                                         ArrayList<Vector3f> newPath = MeshFollowHelper.makePathFollowMesh2(oldPath,startingTriangle,meshInfo);
                                         probePathSet.addPath(newPath,orangeLineMaterial);
                                         displayCurrentPath();
+                                        
+                                        probePathSet.transformCurrentPathEndpoint(endPoint, zMat);
+                                        displayCurrentPath();
+                                        
+                                        ArrayList<Vector3f> newerPath = probePathSet.getCurrentPath().getVertices();
+                                        ArrayList<Vector3f> evenNewerPath = MeshFollowHelper.makePathFollowMesh2(newerPath, startingTriangle, meshInfo);
+                                        probePathSet.addPath(evenNewerPath,lineMaterial);
+                                        displayCurrentPath();
 
                                         moveLine = false;
                                         onStartPoint = true;

@@ -6,11 +6,13 @@ package path;
 
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import meshTraversal.MeshHelper;
 import pathImpl.PathHelper;
+import util.AngleAxisRotation;
 import util.ProgramConstants;
 
 /**
@@ -41,8 +43,15 @@ public class ProbePath {
         Vector3f startPoint = vertices.get(0);
         Vector3f oldEndpoint = vertices.get(vertices.size()-1);
         Matrix4f wholeTransformation = MeshHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        displayAngleOfRotation(wholeTransformation);
         return MeshHelper.getTransformedVertices(vertices, wholeTransformation);
         
+    }
+    
+    public void displayAngleOfRotation(Matrix4f transform){
+        Quaternion rotation = transform.toRotationQuat();
+        AngleAxisRotation rot = new AngleAxisRotation(rotation);
+        System.out.println("Angle is: " + rot.getAngle() + " radians");
     }
     
     public ArrayList<Vector3f> scaleForNewEndpoint(Vector3f newEndPoint){
@@ -51,6 +60,7 @@ public class ProbePath {
         float currentLength = oldEndpoint.subtract(startPoint).length();
         float desiredLength = newEndPoint.subtract(startPoint).length();
         float scaleFactor = desiredLength/currentLength;
+        System.out.println("Scale Factor was: " + scaleFactor);
         Matrix4f transform = MeshHelper.getScaleAroundPoint(startPoint, scaleFactor);
         return MeshHelper.getTransformedVertices(vertices, transform);
     }
