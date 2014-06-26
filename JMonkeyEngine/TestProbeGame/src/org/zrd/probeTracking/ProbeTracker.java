@@ -296,6 +296,11 @@ public class ProbeTracker {
         baselineRoll = roll;
     }
     
+    public void setBaselineRotation(Quaternion rotation, Vector3f normal){
+        setBaselineRotation(rotation);
+        currentNormal = normal;
+    }
+    
     public void setBaselineRotation(Quaternion rotation){
         setBaselineRotation(TrackingHelper.getYaw(rotation),
                 TrackingHelper.getPitch(rotation),
@@ -303,11 +308,8 @@ public class ProbeTracker {
     }
     
     public void setBaselineRotation(Quaternion rotation, Vector3f normal, float extraAngle){
-        AngleAxisRotation rot = new AngleAxisRotation(normal,extraAngle);
-        Quaternion newRot = rot.getQuat().mult(rotation);
-        setBaselineRotation(TrackingHelper.getYaw(newRot),
-                TrackingHelper.getPitch(newRot),
-                TrackingHelper.getRoll(newRot));        
+        setBaselineRotation(rotation,normal);
+        baselinePitch = baselinePitch + extraAngle;
     }
     
     public void moveUp(){
@@ -364,14 +366,6 @@ public class ProbeTracker {
     
     public void rollBackward(){
         baselineRoll = baselineRoll - 1.0f/20.0f;
-    }
-    
-    public void rotateByNormalClockwise(){
-        
-    }
-    
-    public void rotateByNormal(float angle){
-        
     }
     
     public String getRecordingText() {
