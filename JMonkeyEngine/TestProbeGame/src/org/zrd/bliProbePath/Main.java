@@ -722,7 +722,7 @@ public class Main extends SimpleApplication {
                                 
                             }else if(moveProbe){
                                 //addLineForNormal(point);
-                                probeTracker.setBaselineRotation(point.getRotation());
+                                probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                             }
                         }
