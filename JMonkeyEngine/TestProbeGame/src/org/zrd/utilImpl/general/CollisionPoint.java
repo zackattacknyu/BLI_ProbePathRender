@@ -8,7 +8,6 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Mesh;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 
 /**
@@ -16,6 +15,8 @@ import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
  * @author BLI
  */
 public class CollisionPoint {
+    
+    public static final Vector3f BASELINE_NORMAL = new Vector3f(0,0,-1);
     
     private Vector3f normal;
     private Vector3f contactPoint;
@@ -59,10 +60,9 @@ public class CollisionPoint {
     }
     
     private void calculateRotation(){
-        
-        Vector3f baselineNormal = new Vector3f(-1,0,0);
-        float rotAngle = (float) Math.acos(baselineNormal.dot(normal));
-        Vector3f rotAxis = baselineNormal.cross(normal);
+       
+        float rotAngle = (float) Math.acos(BASELINE_NORMAL.dot(normal));
+        Vector3f rotAxis = BASELINE_NORMAL.cross(normal);
         rotation = new Quaternion();
         rotation.fromAngleAxis(rotAngle, rotAxis);
         

@@ -56,10 +56,11 @@ public class TrackingHelper {
     public static Quaternion getQuarternion(float yawInRadians, 
             float pitchInRadians, float rollInRadians){
         
-        Quaternion rotation = new Quaternion();
+        /*Quaternion rotation = new Quaternion();
         rotation.fromAngles(pitchInRadians, rollInRadians, yawInRadians);
+        return rotation;*/
         
-        /*
+        
         Quaternion yaw = new Quaternion();
         yaw.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
         
@@ -71,9 +72,9 @@ public class TrackingHelper {
         
         Quaternion yawPitch = yaw.mult(pitch);
         
-        return yawPitch.mult(roll);*/
+        return yawPitch.mult(roll);
         
-        return rotation;
+        
     }
     
     public static float getYaw(Quaternion rotation){

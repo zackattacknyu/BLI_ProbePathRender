@@ -421,8 +421,8 @@ public class Main extends SimpleApplication {
     
     private Spatial initXLine(Material ballMat){
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
-        xLineVertices.add(new Vector3f(0,0,4f));
-        xLineVertices.add(new Vector3f(0,0,-4f));
+        xLineVertices.add(new Vector3f(4f,0,0));
+        xLineVertices.add(new Vector3f(-4f,0,0));
         return PathHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
@@ -436,8 +436,8 @@ public class Main extends SimpleApplication {
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
-        zLineVertices.add(new Vector3f(-4f,0,0));
-        zLineVertices.add(new Vector3f(2f,0,0));
+        zLineVertices.add(new Vector3f(0,0,-4f));
+        zLineVertices.add(new Vector3f(0,0,2f));
         return PathHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
