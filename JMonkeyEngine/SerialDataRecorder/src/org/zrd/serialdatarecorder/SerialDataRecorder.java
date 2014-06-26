@@ -19,6 +19,7 @@ public class SerialDataRecorder {
         SerialDataInterpreter serialData = new SerialDataInterpreter();
         String currentString, previousString = "n";
         while(true){
+            serialData.updateData();
             currentString = String.valueOf(serialData.getCurrentSerialOutput());
             if(!currentString.equals(previousString)){
                 System.out.println(currentString);
