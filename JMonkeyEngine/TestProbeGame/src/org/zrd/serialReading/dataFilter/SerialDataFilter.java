@@ -65,7 +65,7 @@ public class SerialDataFilter {
     }
 
     public String getCurrentSerialOutput() {
-        return currentSerialOutput;
+        return serial.getCurrentSerialOutput();
     }
     
     private void processArdData(){

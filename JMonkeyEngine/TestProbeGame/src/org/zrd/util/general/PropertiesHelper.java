@@ -17,6 +17,10 @@ import java.util.logging.Logger;
  */
 public class PropertiesHelper {
     
+    public static final String FILE_PATH = 
+            "C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\JMonkeyEngine"
+            + "\\TestProbeGame\\src\\org\\zrd\\bliProbePath\\tracker.properties";
+    
     
     public static Properties getProperties(String fileName){
         
@@ -36,8 +40,12 @@ public class PropertiesHelper {
         
     }
     
+    /**
+     * TODO: Make the path better
+     * @return 
+     */
     public static Properties getProperties(){
-        return getProperties("src/org/zrd/bliProbePath/tracker.properties");
+        return getProperties(FILE_PATH);
     }
     
 }
