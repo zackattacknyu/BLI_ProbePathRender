@@ -662,8 +662,8 @@ public class Main extends SimpleApplication {
                             System.out.println("Contact Point:" + point.getContactPoint());
                             System.out.println("Contact Triangle: " + point.getTriangleInfo());
                             System.out.println("Contact Normal: " + point.getNormal());
-                            meshInfo.displayEdgeNeighbors(point.getTriangle());
-                            meshInfo.displayVertexNeighbors(point.getTriangle());
+                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
+                            //meshInfo.displayVertexNeighbors(point.getTriangle());
 
                             if(moveLine){
                                 
@@ -697,7 +697,7 @@ public class Main extends SimpleApplication {
                                         
                                         lastPointClicked = endPoint;
                                         probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
-                                        //displayCurrentPath();
+                                        displayCurrentPath();
                                         probePathSet.compressCurrentPath();
                                         displayCurrentPath();
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();

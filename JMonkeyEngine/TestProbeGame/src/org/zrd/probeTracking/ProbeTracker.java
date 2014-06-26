@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 
 /**
  *
@@ -47,6 +48,8 @@ public class ProbeTracker {
     private float firstYaw=0, firstPitch = 0, firstRoll = (float)(Math.PI/2.0);
     
     private float currentDebugX = 0.0f,currentDebugY = 0.0f;
+    
+    private Vector3f currentNormal = new Vector3f(0,-1,0);
     
     private short readMode = 0;
     
@@ -299,6 +302,14 @@ public class ProbeTracker {
                 TrackingHelper.getRoll(rotation));        
     }
     
+    public void setBaselineRotation(Quaternion rotation, Vector3f normal, float extraAngle){
+        AngleAxisRotation rot = new AngleAxisRotation(normal,extraAngle);
+        Quaternion newRot = rot.getQuat().mult(rotation);
+        setBaselineRotation(TrackingHelper.getYaw(newRot),
+                TrackingHelper.getPitch(newRot),
+                TrackingHelper.getRoll(newRot));        
+    }
+    
     public void moveUp(){
         currentManualDeltaY = 4.0f;
     }
@@ -353,6 +364,14 @@ public class ProbeTracker {
     
     public void rollBackward(){
         baselineRoll = baselineRoll - 1.0f/20.0f;
+    }
+    
+    public void rotateByNormalClockwise(){
+        
+    }
+    
+    public void rotateByNormal(float angle){
+        
     }
     
     public String getRecordingText() {

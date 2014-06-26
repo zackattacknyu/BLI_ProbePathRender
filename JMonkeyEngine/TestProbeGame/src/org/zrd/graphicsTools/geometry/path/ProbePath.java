@@ -48,10 +48,11 @@ public class ProbePath {
         
     }
     
-    public void displayAngleOfRotation(Matrix4f transform){
+    public static void displayAngleOfRotation(Matrix4f transform){
         Quaternion rotation = transform.toRotationQuat();
         AngleAxisRotation rot = new AngleAxisRotation(rotation);
         System.out.println("Angle is: " + rot.getAngle() + " radians");
+        System.out.println("Axis of Rotation is: " + rot.getAxis());
     }
     
     public ArrayList<Vector3f> scaleForNewEndpoint(Vector3f newEndPoint){
