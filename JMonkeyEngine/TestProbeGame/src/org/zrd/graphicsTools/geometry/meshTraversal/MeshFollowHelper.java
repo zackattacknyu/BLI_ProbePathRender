@@ -18,8 +18,14 @@ import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
  */
 public class MeshFollowHelper {
 
-    /*
-     * Here will be the code for following the surface using Triangles:
+    public static ArrayList<Vector3f> projectPathOntoPlane(ArrayList<Vector3f> path, Vector3f normal) {
+        Vector3f initPoint = path.get(0);
+        Vector3f initEndPoint = path.get(1);
+        Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
+        return MeshHelper.getTransformedVertices(path, currentTransform);
+    }
+
+    /* Here will be the code for following the surface using Triangles:
      *
      * At each triangle, we will have a normal and a line segment.
      * We are allowed to rotate around the plane that the two vectors make
@@ -59,33 +65,7 @@ public class MeshFollowHelper {
      *          s_2 is the rest of the segment
      *          remove s from L and insert s_2
      *          insert s_1 into L'
-     */
-    /*
-     * In the end Psuedo code will be the following:
-     *
-     * Set startPoint to start point of path
-     * Set actualEndPoint to end point of recorded path
-     * Set desiredEndPoint to desired calibration point
-     * while dist(actualEndPoint,desiredEndPoint)>epsilon:
-     *      Make initial guess theta based on startPoint, actualEndPoint, desiredEndPoint
-     *      Rotate the curve using theta
-     *      Project the curve onto the surface
-     *      After projection, change actualEndPoint to the end point of the projected curve
-     */
-    public static ArrayList<Vector3f> makePathFollowMesh(ArrayList<Vector3f> path, Triangle initTriangle, Vector3f initNormal, TriangleSet triangleSet) {
-        Vector3f initPoint = path.get(0);
-        Vector3f initEndPoint = path.get(1);
-        Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(initNormal, initPoint, initEndPoint);
-        MeshTriangle startTriangle = new MeshTriangle(initTriangle, triangleSet.getTransform());
-        Vector3f initEndPointMod = currentTransform.mult(initEndPoint);
-        TriangleLineSegmentIntersection intersection = new TriangleLineSegmentIntersection(startTriangle, initPoint, initEndPointMod);
-        System.out.println("12 Intersect: " + intersection.getIntersectEdge12());
-        System.out.println("13 Intersect: " + intersection.getIntersectEdge13());
-        System.out.println("23 Intersect: " + intersection.getIntersectEdge23());
-        return MeshHelper.getTransformedVertices(path, currentTransform);
-    }
-
-    /*
+     * 
      * In the end Psuedo code will be the following:
      *
      * Set startPoint to start point of path

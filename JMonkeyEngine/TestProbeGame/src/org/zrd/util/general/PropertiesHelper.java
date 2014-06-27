@@ -21,6 +21,9 @@ public class PropertiesHelper {
             "C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\JMonkeyEngine"
             + "\\TestProbeGame\\src\\org\\zrd\\bliProbePath\\tracker.properties";
     
+    public static final String FILE_PATH_2=
+            "src\\org\\zrd\\bliProbePath\\tracker.properties";
+    
     
     public static Properties getProperties(String fileName){
         
@@ -45,7 +48,7 @@ public class PropertiesHelper {
      * @return 
      */
     public static Properties getProperties(){
-        return getProperties(FILE_PATH);
+        return getProperties(FILE_PATH_2);
     }
     
 }

@@ -96,6 +96,9 @@ public class Main extends SimpleApplication {
     //      the above setting.
     private boolean displayRawDataMode = false;
     
+    //to be used if we are only testing using recorded paths
+    private boolean showProbeRepLines = false;
+    
     public static void main(String[] args) {
         
         /*
@@ -218,7 +221,9 @@ public class Main extends SimpleApplication {
         probeRep.attachChild(xAxisLine);
         probeRep.attachChild(yAxisLine);
         probeRep.attachChild(zAxisLine);
-        if(!displayRawDataMode) rootNode.attachChild(probeRep);
+        if(!displayRawDataMode && showProbeRepLines){
+            rootNode.attachChild(probeRep);
+        }
         moveableObject = probeRep;
         
         probeMat = new Material(assetManager, 
@@ -696,7 +701,11 @@ public class Main extends SimpleApplication {
                                         addBoxAtPoint(endPoint);
                                         
                                         lastPointClicked = endPoint;
-                                        probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
+                                        ArrayList<Vector3f> path1 = probePathSet.getCurrentPath().getVertices();
+                                        ArrayList<Vector3f> path2 = MeshFollowHelper.projectPathOntoPlane(path1, startingTriangle.getNormal());
+                                        probePathSet.addPath(path2,redLineMaterial);
+                                        displayCurrentPath();
+                                        /*probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
                                         displayCurrentPath();
                                         probePathSet.compressCurrentPath();
                                         displayCurrentPath();
@@ -711,7 +720,7 @@ public class Main extends SimpleApplication {
                                         ArrayList<Vector3f> newerPath = probePathSet.getCurrentPath().getVertices();
                                         ArrayList<Vector3f> evenNewerPath = MeshFollowHelper.makePathFollowMesh2(newerPath, startingTriangle, meshInfo);
                                         probePathSet.addPath(evenNewerPath,lineMaterial);
-                                        displayCurrentPath();
+                                        displayCurrentPath();*/
 
                                         moveLine = false;
                                         onStartPoint = true;
