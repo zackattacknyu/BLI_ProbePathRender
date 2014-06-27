@@ -118,29 +118,42 @@ public class ProbePathSet {
         float numberTries = 4;
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
+            //rotatation of current path to endpoint 
             rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
             AngleAxisRotation rotToEndptAngAxis = 
                     new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
             currentRotationAngle = rotToEndptAngAxis.getAngle();
             rotToEndptAxis = rotToEndptAngAxis.getAxis();
 
+            //in case they point in opposite directions, does the negation of angle
             if(rotationAxis.dot(rotToEndptAxis) < 0){
                 //the axes normals could be flipped
                 currentRotationAngle = -1*currentRotationAngle;
             }
             totalAngle += currentRotationAngle;
+            
+            //DEBUG code
             System.out.println("Try: " + tryNum + ", Angle: " + 
                     currentRotationAngle + ", TotalAngle: " + totalAngle);
+            
+            //gets the rotation we will actually do which is on the surface
+            //      of the starting Triangle
             currentRotationAngAxis = 
                     new AngleAxisRotation(rotationAxis,currentRotationAngle);
             currentRotationTransform = MeshHelper.getRotationAroundPoint(
                     getCurrentPath().getVertices().get(0), 
                     currentRotationAngAxis.getQuat());
+            
+            //find the rotated path
             currentRotatedPath = MeshHelper.getTransformedVertices(
                     getCurrentPath().getVertices(), 
                     currentRotationTransform);
+            
+            //projects the rotated path on the surface
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                     currentRotatedPath,startingTriangle,meshInfo);
+            
+            //saves the path for later display
             addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
     }
