@@ -43,6 +43,7 @@ import org.zrd.graphicsTools.geometry.modelVerifier.ModelVerification;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
 import org.zrd.graphicsTools.geometry.modelVerifier.ModelCorrection;
+import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
@@ -702,10 +703,28 @@ public class Main extends SimpleApplication {
                                         
                                         lastPointClicked = endPoint;
                                         probePathSet.scaleCurrentPathEndpoint(endPoint, orangeLineMaterial);
-                                        displayCurrentPath();
+                                        //displayCurrentPath();
                                         ArrayList<Vector3f> path1 = probePathSet.getCurrentPath().getVertices();
                                         ArrayList<Vector3f> path2 = MeshFollowHelper.projectPathOntoPlane(path1, startingTriangle.getNormal());
                                         probePathSet.addPath(path2,redLineMaterial);
+                                        displayCurrentPath();
+                                        Matrix4f rotation1 = probePathSet.getCurrentPath().getTransformOfEndpoint(endPoint);
+                                        AngleAxisRotation rotation1AngAxis = 
+                                                new AngleAxisRotation(rotation1.toRotationQuat());
+                                        float rotation2Angle = rotation1AngAxis.getAngle();
+                                        Vector3f rotation2Axis = startingTriangle.getNormal();
+                                        Vector3f rotation1Axis = rotation1AngAxis.getAxis();
+                                        if(rotation2Axis.dot(rotation1Axis) < 0){
+                                            //the axes normals could be flipped
+                                            rotation2Angle = -1*rotation2Angle;
+                                        }
+                                        AngleAxisRotation rotation2AngAxis = 
+                                                new AngleAxisRotation(rotation2Axis,rotation2Angle);
+                                        Matrix4f rotation2 = MeshHelper.getRotationAroundPoint(
+                                                probePathSet.getCurrentPath().getVertices().get(0), 
+                                                rotation2AngAxis.getQuat());
+                                        ArrayList<Vector3f> path3 = MeshHelper.getTransformedVertices(path2, rotation2);
+                                        probePathSet.addPath(path3,orangeLineMaterial);
                                         displayCurrentPath();
                                         /*probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
                                         displayCurrentPath();

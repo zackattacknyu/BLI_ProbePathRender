@@ -40,12 +40,16 @@ public class ProbePath {
     }
     
     public ArrayList<Vector3f> transformEndpoint(Vector3f newEndpoint){
-        Vector3f startPoint = vertices.get(0);
-        Vector3f oldEndpoint = vertices.get(vertices.size()-1);
-        Matrix4f wholeTransformation = MeshHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        Matrix4f wholeTransformation = getTransformOfEndpoint(newEndpoint);
         displayAngleOfRotation(wholeTransformation);
         return MeshHelper.getTransformedVertices(vertices, wholeTransformation);
         
+    }
+    
+    public Matrix4f getTransformOfEndpoint(Vector3f newEndpoint){
+        Vector3f startPoint = vertices.get(0);
+        Vector3f oldEndpoint = vertices.get(vertices.size()-1);
+        return MeshHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
     }
     
     public static void displayAngleOfRotation(Matrix4f transform){
