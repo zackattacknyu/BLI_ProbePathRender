@@ -116,6 +116,8 @@ public class ProbePathSet {
         float totalAngle = 0;
         
         float numberTries = 4;
+        
+        currentRotatedPath = getCurrentPath().getVertices();
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint 
@@ -146,7 +148,7 @@ public class ProbePathSet {
             
             //find the rotated path
             currentRotatedPath = MeshHelper.getTransformedVertices(
-                    getCurrentPath().getVertices(), 
+                    currentRotatedPath, 
                     currentRotationTransform);
             
             //projects the rotated path on the surface
