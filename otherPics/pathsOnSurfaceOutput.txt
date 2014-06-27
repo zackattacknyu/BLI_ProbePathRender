@@ -1,0 +1,9 @@
+Scale Factor was: 0.44034418
+Try: 0.0, Angle: -1.6827145, TotalAngle: -1.6827145
+Try: 1.0, Angle: -0.16290128, TotalAngle: -1.8456157
+Try: 2.0, Angle: 0.108268596, TotalAngle: -1.7373471
+Try: 3.0, Angle: 0.023950825, TotalAngle: -1.7133963
+CURRENT TRIANGLE WAS NULL
+Try: 4.0, Angle: -0.13574013, TotalAngle: -1.8491365
+
+**NOTE: -1.8 seems like a good angle value to use**

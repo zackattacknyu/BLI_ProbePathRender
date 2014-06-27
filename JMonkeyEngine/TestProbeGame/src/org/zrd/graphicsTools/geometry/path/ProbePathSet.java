@@ -113,6 +113,7 @@ public class ProbePathSet {
         AngleAxisRotation currentRotationAngAxis;
         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
         Vector3f rotToEndptAxis;
+        float totalAngle = 0;
         
         float numberTries = 4;
 
@@ -127,7 +128,9 @@ public class ProbePathSet {
                 //the axes normals could be flipped
                 currentRotationAngle = -1*currentRotationAngle;
             }
-
+            totalAngle += currentRotationAngle;
+            System.out.println("Try: " + tryNum + ", Angle: " + 
+                    currentRotationAngle + ", TotalAngle: " + totalAngle);
             currentRotationAngAxis = 
                     new AngleAxisRotation(rotationAxis,currentRotationAngle);
             currentRotationTransform = MeshHelper.getRotationAroundPoint(
