@@ -703,34 +703,45 @@ public class Main extends SimpleApplication {
                                         
                                         lastPointClicked = endPoint;
                                         probePathSet.scaleCurrentPathEndpoint(endPoint, orangeLineMaterial);
-                                        //displayCurrentPath();
-                                        ArrayList<Vector3f> path1 = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> path2 = MeshFollowHelper.projectPathOntoPlane(path1, startingTriangle.getNormal());
-                                        probePathSet.addPath(path2,redLineMaterial);
-                                        displayCurrentPath();
-                                        Matrix4f rotation1 = probePathSet.getCurrentPath().getTransformOfEndpoint(endPoint);
-                                        AngleAxisRotation rotation1AngAxis = 
-                                                new AngleAxisRotation(rotation1.toRotationQuat());
-                                        float rotation2Angle = rotation1AngAxis.getAngle();
-                                        Vector3f rotation2Axis = startingTriangle.getNormal();
-                                        Vector3f rotation1Axis = rotation1AngAxis.getAxis();
-                                        if(rotation2Axis.dot(rotation1Axis) < 0){
-                                            //the axes normals could be flipped
-                                            rotation2Angle = -1*rotation2Angle;
-                                        }
-                                        AngleAxisRotation rotation2AngAxis = 
-                                                new AngleAxisRotation(rotation2Axis,rotation2Angle);
-                                        Matrix4f rotation2 = MeshHelper.getRotationAroundPoint(
-                                                probePathSet.getCurrentPath().getVertices().get(0), 
-                                                rotation2AngAxis.getQuat());
-                                        ArrayList<Vector3f> path3 = MeshHelper.getTransformedVertices(path2, rotation2);
-                                        probePathSet.addPath(path3,orangeLineMaterial);
-                                        //displayCurrentPath();
                                         probePathSet.compressCurrentPath();
-                                        ArrayList<Vector3f> path4 = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> path5 = MeshFollowHelper.makePathFollowMesh2(path4,startingTriangle,meshInfo);
-                                        probePathSet.addPath(path5,orangeLineMaterial);
+                                        //displayCurrentPath();
+                                        ArrayList<Vector3f> initScaledPath = probePathSet.getCurrentPath().getVertices();
+                                        ArrayList<Vector3f> initProjectedPath = MeshFollowHelper.projectPathOntoPlane(initScaledPath, startingTriangle.getNormal());
+                                        probePathSet.addPath(initProjectedPath,redLineMaterial);
                                         displayCurrentPath();
+                                        Vector3f rotationAxis = startingTriangle.getNormal();
+                                        
+                                        Matrix4f rotationToEndpoint,currentRotationTransform;
+                                        float currentRotationAngle;
+                                        AngleAxisRotation currentRotationAngAxis;
+                                        ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
+                                        Vector3f rotToEndptAxis;
+                                        
+                                        for(int tryNum = 0; tryNum < 3; tryNum++){
+                                            rotationToEndpoint = probePathSet.getCurrentPath().getTransformOfEndpoint(endPoint);
+                                            AngleAxisRotation rotToEndptAngAxis = 
+                                                    new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
+                                            currentRotationAngle = rotToEndptAngAxis.getAngle();
+                                            rotToEndptAxis = rotToEndptAngAxis.getAxis();
+                                            
+                                            if(rotationAxis.dot(rotToEndptAxis) < 0){
+                                                //the axes normals could be flipped
+                                                currentRotationAngle = -1*currentRotationAngle;
+                                            }
+                                            
+                                            currentRotationAngAxis = 
+                                                    new AngleAxisRotation(rotationAxis,currentRotationAngle);
+                                            currentRotationTransform = MeshHelper.getRotationAroundPoint(
+                                                    probePathSet.getCurrentPath().getVertices().get(0), 
+                                                    currentRotationAngAxis.getQuat());
+                                            currentRotatedPath = MeshHelper.getTransformedVertices(
+                                                    probePathSet.getCurrentPath().getVertices(), 
+                                                    currentRotationTransform);
+                                            currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
+                                                    currentRotatedPath,startingTriangle,meshInfo);
+                                            probePathSet.addPath(currentPathOnSurface,orangeLineMaterial);
+                                            displayCurrentPath();
+                                        }
 
                                         moveLine = false;
                                         onStartPoint = true;
