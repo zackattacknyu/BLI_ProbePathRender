@@ -725,23 +725,12 @@ public class Main extends SimpleApplication {
                                                 rotation2AngAxis.getQuat());
                                         ArrayList<Vector3f> path3 = MeshHelper.getTransformedVertices(path2, rotation2);
                                         probePathSet.addPath(path3,orangeLineMaterial);
-                                        displayCurrentPath();
-                                        /*probePathSet.transformCurrentPathEndpoint(endPoint,redLineMaterial);
-                                        displayCurrentPath();
+                                        //displayCurrentPath();
                                         probePathSet.compressCurrentPath();
+                                        ArrayList<Vector3f> path4 = probePathSet.getCurrentPath().getVertices();
+                                        ArrayList<Vector3f> path5 = MeshFollowHelper.makePathFollowMesh2(path4,startingTriangle,meshInfo);
+                                        probePathSet.addPath(path5,orangeLineMaterial);
                                         displayCurrentPath();
-                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> newPath = MeshFollowHelper.makePathFollowMesh2(oldPath,startingTriangle,meshInfo);
-                                        probePathSet.addPath(newPath,orangeLineMaterial);
-                                        displayCurrentPath();
-                                        
-                                        probePathSet.transformCurrentPathEndpoint(endPoint, zMat);
-                                        displayCurrentPath();
-                                        
-                                        ArrayList<Vector3f> newerPath = probePathSet.getCurrentPath().getVertices();
-                                        ArrayList<Vector3f> evenNewerPath = MeshFollowHelper.makePathFollowMesh2(newerPath, startingTriangle, meshInfo);
-                                        probePathSet.addPath(evenNewerPath,lineMaterial);
-                                        displayCurrentPath();*/
 
                                         moveLine = false;
                                         onStartPoint = true;
