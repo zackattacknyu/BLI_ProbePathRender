@@ -52,6 +52,9 @@ public class ProbePathSet {
     
     public void transformCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
         addPath(currentPath.transformEndpoint(newEndpoint),mat);
+    }
+    
+    public void scaleCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
         addPath(currentPath.scaleForNewEndpoint(newEndpoint),mat);
     }
     

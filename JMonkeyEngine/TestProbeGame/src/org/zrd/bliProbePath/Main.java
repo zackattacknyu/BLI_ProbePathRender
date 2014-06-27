@@ -701,6 +701,8 @@ public class Main extends SimpleApplication {
                                         addBoxAtPoint(endPoint);
                                         
                                         lastPointClicked = endPoint;
+                                        probePathSet.scaleCurrentPathEndpoint(endPoint, orangeLineMaterial);
+                                        displayCurrentPath();
                                         ArrayList<Vector3f> path1 = probePathSet.getCurrentPath().getVertices();
                                         ArrayList<Vector3f> path2 = MeshFollowHelper.projectPathOntoPlane(path1, startingTriangle.getNormal());
                                         probePathSet.addPath(path2,redLineMaterial);
