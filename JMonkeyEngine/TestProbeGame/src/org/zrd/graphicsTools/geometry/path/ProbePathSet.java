@@ -4,7 +4,9 @@
  */
 package org.zrd.graphicsTools.geometry.path;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
@@ -28,10 +30,16 @@ public class ProbePathSet {
     private int currentIndex = 0;
     private ProbePath currentPath;
     private Material lineMaterial;
+    private ArrayList<ProbePath> pathsToSave;
     
     public ProbePathSet(Material lineMaterial){
         paths = new ArrayList<ProbePath>();
+        pathsToSave = new ArrayList<ProbePath>();
         this.lineMaterial = lineMaterial;
+    }
+
+    public ArrayList<ProbePath> getPathsToSave() {
+        return pathsToSave;
     }
 
     public int getCurrentIndex() {
@@ -54,6 +62,11 @@ public class ProbePathSet {
         currentPath = new ProbePath(vertices,mat);
         paths.add(currentPath);
         currentIndex++;
+    }
+    
+    public void addPathToSaveList(ArrayList<Vector3f> vertices, Material mat){
+        addPath(vertices,mat);
+        pathsToSave.add(currentPath);
     }
     
     public void transformCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
@@ -86,7 +99,7 @@ public class ProbePathSet {
         }
     }
     
-    public void rotateAndProjectCurrentPath(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo){
+    public void rotateAndProjectCurrentPath(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();
         //displayCurrentPath();
@@ -100,8 +113,10 @@ public class ProbePathSet {
         AngleAxisRotation currentRotationAngAxis;
         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
         Vector3f rotToEndptAxis;
+        
+        float numberTries = 4;
 
-        for(int tryNum = 0; tryNum < 1; tryNum++){
+        for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
             AngleAxisRotation rotToEndptAngAxis = 
                     new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
@@ -123,7 +138,14 @@ public class ProbePathSet {
                     currentRotationTransform);
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                     currentRotatedPath,startingTriangle,meshInfo);
-            addPath(currentPathOnSurface);
+            addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
+    }
+    
+    private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
+        Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        ColorRGBA grayColor = new ColorRGBA(brightness,brightness,brightness,1.0f);
+        outputMaterial.setColor("Color", grayColor);
+        return outputMaterial;
     }
 }

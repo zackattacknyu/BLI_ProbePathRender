@@ -43,6 +43,7 @@ import org.zrd.graphicsTools.geometry.modelVerifier.ModelVerification;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
 import org.zrd.graphicsTools.geometry.modelVerifier.ModelCorrection;
+import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
@@ -523,7 +524,18 @@ public class Main extends SimpleApplication {
     }
     
     private void displayCurrentPath(){
-        rootNode.attachChild(probePathSet.getCurrentPathSpatial());
+        displayPath(probePathSet.getCurrentPathSpatial());
+    }
+    
+    private void displayPath(Spatial path){
+        rootNode.attachChild(path);
+    }
+    
+    private void displayCurrentPaths(){
+        ArrayList<ProbePath> paths = probePathSet.getPathsToSave();
+        for(ProbePath currentPath: paths){
+            displayPath(currentPath.getProbePath());
+        }
     }
     
     private CollisionResults getCollisionResults(){
@@ -702,9 +714,9 @@ public class Main extends SimpleApplication {
                                         addBoxAtPoint(endPoint);
                                         
                                         lastPointClicked = endPoint;
-                                        probePathSet.rotateAndProjectCurrentPath(endPoint, startingTriangle, meshInfo);
+                                        probePathSet.rotateAndProjectCurrentPath(endPoint, startingTriangle, meshInfo,assetManager);
                                         
-                                        displayCurrentPath();
+                                        displayCurrentPaths();
 
                                         moveLine = false;
                                         onStartPoint = true;
