@@ -46,7 +46,8 @@ public class ProbeTracker {
             baselineRoll = 0, 
             currentRoll = 0;
     
-    private float firstYaw=0, firstPitch = 0, firstRoll = (float)(Math.PI/2.0);
+    private float firstYaw=0, firstPitch = 0;
+    private float firstRoll=0;
     
     private float currentDebugX = 0.0f,currentDebugY = 0.0f;
     
@@ -76,6 +77,8 @@ public class ProbeTracker {
     
     private Vector3f currentXAxis = new Vector3f(1,0,0);
     private Vector3f currentYAxis = new Vector3f(0,1,0);
+    private Vector3f startingXAxis = new Vector3f(1,0,0);
+    private Vector3f startingYAxis = new Vector3f(0,1,0);
     
     public ProbeTracker(){
         
@@ -136,6 +139,9 @@ public class ProbeTracker {
         //gets x,y if there was no rotation change to it
         currentDebugX = currentDebugX + currentXYDisp.getX();
         currentDebugY = currentDebugY + currentXYDisp.getY();
+        
+        currentXAxis = localRotation.mult(startingXAxis);
+        currentYAxis = localRotation.mult(startingYAxis);
         
         switch(displacementMode){
             
@@ -330,10 +336,10 @@ public class ProbeTracker {
     }
     private void reAdjustXYAxis(){
         Vector3f xVector = new Vector3f(1,0,0);
-        currentXAxis = MeshHelper.getVectorProjOnPlane(currentNormal, xVector);
-        currentXAxis.normalizeLocal();
-        currentYAxis = currentNormal.cross(currentXAxis);
-        currentYAxis.normalizeLocal();
+        startingXAxis = MeshHelper.getVectorProjOnPlane(currentNormal, xVector);
+        startingXAxis.normalizeLocal();
+        startingYAxis = currentNormal.cross(startingXAxis);
+        startingYAxis.normalizeLocal();
     }
     
     public void setBaselineRotation(Quaternion rotation, Vector3f normal){
