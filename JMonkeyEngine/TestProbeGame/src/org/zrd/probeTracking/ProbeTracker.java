@@ -42,14 +42,14 @@ public class ProbeTracker {
     
     private float baselineYaw,currentYaw,
             baselinePitch = 0,currentPitch = 0,
-            baselineRoll = (float)(Math.PI/2.0), 
-            currentRoll = (float)(Math.PI/2.0);
+            baselineRoll = 0, 
+            currentRoll = 0;
     
     private float firstYaw=0, firstPitch = 0, firstRoll = (float)(Math.PI/2.0);
     
     private float currentDebugX = 0.0f,currentDebugY = 0.0f;
     
-    private Vector3f currentNormal = new Vector3f(0,-1,0);
+    private Vector3f currentNormal = new Vector3f(0,0,-1);
     
     private short readMode = 0;
     
@@ -155,6 +155,11 @@ public class ProbeTracker {
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
                         localRotation);
+                /*currentDisp = TrackingHelper.getXYZDisplacement(
+                        currentXYDisp.getX(),
+                        currentXYDisp.getY(), 
+                        currentNormal,
+                        localRotation);*/
             break;
         
         }

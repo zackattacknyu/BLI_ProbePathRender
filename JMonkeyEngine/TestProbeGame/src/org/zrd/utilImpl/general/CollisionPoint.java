@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.probeTracking.TrackingHelper;
 
 /**
  *
@@ -65,6 +66,11 @@ public class CollisionPoint {
         Vector3f rotAxis = BASELINE_NORMAL.cross(normal);
         rotation = new Quaternion();
         rotation.fromAngleAxis(rotAngle, rotAxis);
+        
+        /*float yawAngle = (float)Math.acos(Vector3f.UNIT_Z.dot(normal));
+        float rollAngle = (float)Math.acos(Vector3f.UNIT_Y.dot(normal));
+        float pitchAngle = (float)Math.acos(Vector3f.UNIT_X.dot(normal));
+        rotation = TrackingHelper.getQuarternion(yawAngle, pitchAngle, rollAngle);*/
         
     }
 

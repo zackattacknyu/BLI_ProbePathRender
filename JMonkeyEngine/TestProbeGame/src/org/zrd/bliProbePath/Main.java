@@ -427,7 +427,6 @@ public class Main extends SimpleApplication {
     }
     
     private Spatial initYLine(Material ballMat){
-        Box b = new Box(0.2f, 3f, 0.2f);
         ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
         yLineVertices.add(new Vector3f(0,4f,0));
         yLineVertices.add(new Vector3f(0,-4f,0));
@@ -721,7 +720,7 @@ public class Main extends SimpleApplication {
                                 
                                 
                             }else if(moveProbe){
-                                //addLineForNormal(point);
+                                addLineForNormal(point);
                                 probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                             }

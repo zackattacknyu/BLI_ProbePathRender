@@ -8,6 +8,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 
 /**
  *
@@ -24,14 +25,45 @@ public class TrackingHelper {
         
     }
     
-    public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Quaternion localRotation){
+    public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Vector3f currentNormal, Quaternion localRotation){
         
-        Vector3f mouseDisp = new Vector3f(deltaX,deltaY,0);
-        Matrix3f rotMatrix = localRotation.toRotationMatrix();
+        Vector3f xVector = new Vector3f(1,0,0);
         
-        return rotMatrix.mult(mouseDisp);
+        Vector3f xDispProj = MeshHelper.getVectorProjOnPlane(currentNormal, xVector);
+        xDispProj.normalizeLocal();
+        
+        Vector3f yDispProj = currentNormal.cross(xDispProj);
+        yDispProj.normalizeLocal();
+        
+        Vector3f totalXDisp = xDispProj.mult(deltaX);
+        Vector3f totalYDisp = yDispProj.mult(deltaY);
+        
+        if(Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0){
+            System.out.println("change in (x,y) = (" + deltaX + "," + deltaY + ")");
+            System.out.println("Normal is " + currentNormal);
+            System.out.println("X Disp Proj: " + xDispProj);
+            System.out.println("Y Disp Proj: " + yDispProj);
+        }
+        
+        return totalXDisp.add(totalYDisp);
         
     }
+    
+    public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Quaternion localRotation){
+        
+        
+        
+        Vector3f mouseDisp = new Vector3f(0,deltaX,deltaY);
+        Matrix3f rotMatrix = localRotation.toRotationMatrix();
+        Vector3f newDisp = rotMatrix.mult(mouseDisp);
+        
+        
+        return newDisp;
+        
+    }
+    
+    
+    
     
     public static Vector2f scaleXYDisplacement(Vector2f displacement, float xScale, float yScale){
         float xVal = displacement.getX();
