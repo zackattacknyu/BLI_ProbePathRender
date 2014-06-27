@@ -54,7 +54,7 @@ import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject,background,surface,moveableObject,xAxisBox,yAxisBox,zAxisBox;
+    private Spatial littleObject,background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
     private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
     private Material redLineMaterial,orangeLineMaterial;
     
@@ -210,14 +210,14 @@ public class Main extends SimpleApplication {
         }
         
         
-        xAxisBox = initXLine(xMat);
-        yAxisBox = initYLine(yMat);
-        zAxisBox = initZLine(zMat);
+        xAxisLine = initXLine(xMat);
+        yAxisLine = initYLine(yMat);
+        zAxisLine = initZLine(zMat);
         
         probeRep = new Node("probeRep");
-        probeRep.attachChild(xAxisBox);
-        probeRep.attachChild(yAxisBox);
-        probeRep.attachChild(zAxisBox);
+        probeRep.attachChild(xAxisLine);
+        probeRep.attachChild(yAxisLine);
+        probeRep.attachChild(zAxisLine);
         if(!displayRawDataMode) rootNode.attachChild(probeRep);
         moveableObject = probeRep;
         
@@ -535,13 +535,14 @@ public class Main extends SimpleApplication {
     }
     
     private void addLineForNormal(CollisionPoint point){
-        ArrayList<Vector3f> normalVertices = new ArrayList<Vector3f>();
-        normalVertices.add(point.getContactPoint());
-        normalVertices.add(point.getContactPoint().add(point.getNormal().mult(3)));
-        Spatial controlPointNormal = 
-                PathHelper.createLineFromVertices(
-                normalVertices, lineMaterial);
-        rootNode.attachChild(controlPointNormal);
+        rootNode.attachChild(makeLineForVector(point.getContactPoint(),point.getNormal()));
+    }
+    
+    private Spatial makeLineForVector(Vector3f contactPoint, Vector3f vector){
+        ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
+        vertices.add(contactPoint.add(vector.mult(-1)));
+        vertices.add(contactPoint.add(vector.mult(3)));
+        return PathHelper.createLineFromVertices(vertices, lineMaterial);
     }
 
     private void initKeyboardInputs() {
@@ -721,6 +722,10 @@ public class Main extends SimpleApplication {
                                 
                             }else if(moveProbe){
                                 addLineForNormal(point);
+                                /*probeTracker.setNormal(point.getNormal());
+                                xAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentXAxis());
+                                yAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentYAxis());
+                                zAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentNormal());*/
                                 probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                             }

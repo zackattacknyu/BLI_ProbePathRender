@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 
 /**
@@ -72,6 +73,9 @@ public class ProbeTracker {
             currentXYPathDataWriter, currentYawPitchRollDataWriter;
     
     private Path logFileParentPath,pathRecordingFilePath;
+    
+    private Vector3f currentXAxis;
+    private Vector3f currentYAxis;
     
     public ProbeTracker(){
         
@@ -159,7 +163,7 @@ public class ProbeTracker {
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
                         currentNormal,
-                        localRotation);*/
+                        localRotation)*/;
             break;
         
         }
@@ -215,6 +219,18 @@ public class ProbeTracker {
 
         calibratingY = !calibratingY;
         
+    }
+
+    public Vector3f getCurrentXAxis() {
+        return currentXAxis;
+    }
+
+    public Vector3f getCurrentYAxis() {
+        return currentYAxis;
+    }
+    
+    public Vector3f getCurrentNormal(){
+        return currentNormal;
     }
     
     public void updateXcalibration(){
@@ -299,6 +315,18 @@ public class ProbeTracker {
         baselineYaw = yaw;
         baselinePitch = pitch;
         baselineRoll = roll;
+    }
+    
+    public void setNormal(Vector3f normal){
+        currentNormal = normal;
+        reAdjustXYAxis();
+    }
+    private void reAdjustXYAxis(){
+        Vector3f xVector = new Vector3f(1,0,0);
+        currentXAxis = MeshHelper.getVectorProjOnPlane(currentNormal, xVector);
+        currentXAxis.normalizeLocal();
+        currentYAxis = currentNormal.cross(currentXAxis);
+        currentYAxis.normalizeLocal();
     }
     
     public void setBaselineRotation(Quaternion rotation, Vector3f normal){
