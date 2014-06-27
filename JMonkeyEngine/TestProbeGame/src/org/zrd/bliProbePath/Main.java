@@ -168,12 +168,12 @@ public class Main extends SimpleApplication {
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         boxMat.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
         
-        xMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        xMat.setColor("Color", ColorRGBA.Red);
-        yMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        yMat.setColor("Color", ColorRGBA.Orange);
-        zMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        zMat.setColor("Color", ColorRGBA.Green);
+        xMat = makeColorMaterial(ColorRGBA.Red);
+        yMat = makeColorMaterial(ColorRGBA.Orange);
+        zMat = makeColorMaterial(ColorRGBA.Green);
+        lineMaterial = makeColorMaterial(ColorRGBA.Black);
+        redLineMaterial = makeColorMaterial(ColorRGBA.Red);
+        orangeLineMaterial = makeColorMaterial(ColorRGBA.Orange);
         
         Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
@@ -218,6 +218,8 @@ public class Main extends SimpleApplication {
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
+        probeTracker = new ProbeTracker();
+        //displayAxisLines();
         
         probeRep = new Node("probeRep");
         probeRep.attachChild(xAxisLine);
@@ -232,17 +234,7 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/Unshaded.j3md");
         probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
         
-        lineMaterial = new Material(assetManager, 
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        lineMaterial.setColor("Color", ColorRGBA.Black);
         
-        redLineMaterial = new Material(assetManager, 
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        redLineMaterial.setColor("Color", ColorRGBA.Red);
-        
-        orangeLineMaterial = new Material(assetManager, 
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        orangeLineMaterial.setColor("Color", ColorRGBA.Orange);
         
         /* This is a code block to illustrate
          *      lines with varying color
@@ -286,9 +278,6 @@ public class Main extends SimpleApplication {
         
         
         initKeyboardInputs();
-        
-        probeTracker = new ProbeTracker();
-        
         initDebugText();
         
         shootables = new Node("shootables");
@@ -303,6 +292,12 @@ public class Main extends SimpleApplication {
         //displayNormals(correctedMesh);
         
         
+    }
+    
+    private Material makeColorMaterial(ColorRGBA color){
+        Material returnMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        returnMat.setColor("Color", color);
+        return returnMat;
     }
     
     /*
@@ -538,6 +533,12 @@ public class Main extends SimpleApplication {
         }
     }
     
+    private void displayAxisLines() {
+        xAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentXAxis(),xMat);
+        yAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentYAxis(),yMat);
+        zAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentNormal(),zMat);
+    }
+    
     private CollisionResults getCollisionResults(){
         Vector2f click2d = inputManager.getCursorPosition();
         System.out.println("Mouse Point:" + click2d);
@@ -553,14 +554,14 @@ public class Main extends SimpleApplication {
     }
     
     private void addLineForNormal(CollisionPoint point){
-        rootNode.attachChild(makeLineForVector(point.getContactPoint(),point.getNormal()));
+        rootNode.attachChild(makeLineForVector(point.getContactPoint(),point.getNormal(),lineMaterial));
     }
     
-    private Spatial makeLineForVector(Vector3f contactPoint, Vector3f vector){
+    private Spatial makeLineForVector(Vector3f contactPoint, Vector3f vector,Material mat){
         ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
-        vertices.add(contactPoint.add(vector.mult(-1)));
-        vertices.add(contactPoint.add(vector.mult(3)));
-        return PathHelper.createLineFromVertices(vertices, lineMaterial);
+        vertices.add(contactPoint.clone().add(vector.mult(-1)));
+        vertices.add(contactPoint.clone().add(vector.mult(3)));
+        return PathHelper.createLineFromVertices(vertices, mat);
     }
 
     private void initKeyboardInputs() {
@@ -728,11 +729,10 @@ public class Main extends SimpleApplication {
                             }else if(moveProbe){
                                 addLineForNormal(point);
                                 probeTracker.setNormal(point.getNormal());
-                                xAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentXAxis());
-                                yAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentYAxis());
-                                zAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentNormal());
-                                //probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
                                 probeTracker.setCurrentPosition(point.getContactPoint());
+                                displayAxisLines();
+                                //probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
+                                
                             }
                         }
                     }
@@ -824,6 +824,8 @@ public class Main extends SimpleApplication {
                     displayReadMode();
                 }
             }
+
+            
         };
 
         inputManager.addListener(acl,

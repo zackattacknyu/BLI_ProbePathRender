@@ -306,6 +306,11 @@ public class ProbeTracker {
         setBaselineRotation(firstYaw,firstPitch,firstRoll);
         
     }
+    
+    public Vector3f getCurrentPosition(){
+        return new Vector3f(currentX,currentY,currentZ);
+    }
+    
     public void setCurrentPosition(Vector3f position){
         currentX = position.getX();
         currentY = position.getY();
