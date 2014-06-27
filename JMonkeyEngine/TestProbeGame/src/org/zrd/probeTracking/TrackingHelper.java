@@ -62,6 +62,12 @@ public class TrackingHelper {
         
     }
     
+    public static Vector3f getDisplacement(float deltaX, float deltaY, Vector3f xAxis, Vector3f yAxis){
+        Vector3f xDisp = xAxis.mult(deltaX);
+        Vector3f yDisp = yAxis.mult(deltaY);
+        return xDisp.add(yDisp);
+    }
+    
     
     
     

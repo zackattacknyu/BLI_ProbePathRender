@@ -99,7 +99,7 @@ public class Main extends SimpleApplication {
     private boolean displayRawDataMode = false;
     
     //to be used if we are only testing using recorded paths
-    private boolean showProbeRepLines = false;
+    private boolean showProbeRepLines = true;
     
     public static void main(String[] args) {
         
@@ -727,11 +727,11 @@ public class Main extends SimpleApplication {
                                 
                             }else if(moveProbe){
                                 addLineForNormal(point);
-                                /*probeTracker.setNormal(point.getNormal());
+                                probeTracker.setNormal(point.getNormal());
                                 xAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentXAxis());
                                 yAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentYAxis());
-                                zAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentNormal());*/
-                                probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
+                                zAxisLine = makeLineForVector(point.getContactPoint(),probeTracker.getCurrentNormal());
+                                //probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                             }
                         }

@@ -74,8 +74,8 @@ public class ProbeTracker {
     
     private Path logFileParentPath,pathRecordingFilePath;
     
-    private Vector3f currentXAxis;
-    private Vector3f currentYAxis;
+    private Vector3f currentXAxis = new Vector3f(1,0,0);
+    private Vector3f currentYAxis = new Vector3f(0,1,0);
     
     public ProbeTracker(){
         
@@ -155,10 +155,12 @@ public class ProbeTracker {
 
                 //use X,Y and Yaw, Pitch, Roll
             case 2:
-                currentDisp = TrackingHelper.getXYZDisplacement(
+                /*currentDisp = TrackingHelper.getXYZDisplacement(
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
-                        localRotation);
+                        localRotation);*/
+                currentDisp = TrackingHelper.getDisplacement(currentXYDisp.getX(), 
+                        currentXYDisp.getY(), currentXAxis, currentYAxis);
                 /*currentDisp = TrackingHelper.getXYZDisplacement(
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
