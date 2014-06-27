@@ -717,7 +717,7 @@ public class Main extends SimpleApplication {
                                         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
                                         Vector3f rotToEndptAxis;
                                         
-                                        for(int tryNum = 0; tryNum < 3; tryNum++){
+                                        for(int tryNum = 0; tryNum < 6; tryNum++){
                                             rotationToEndpoint = probePathSet.getCurrentPath().getTransformOfEndpoint(endPoint);
                                             AngleAxisRotation rotToEndptAngAxis = 
                                                     new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
@@ -740,8 +740,10 @@ public class Main extends SimpleApplication {
                                             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                                                     currentRotatedPath,startingTriangle,meshInfo);
                                             probePathSet.addPath(currentPathOnSurface,orangeLineMaterial);
-                                            displayCurrentPath();
+                                            //displayCurrentPath();
                                         }
+                                        
+                                        displayCurrentPath();
 
                                         moveLine = false;
                                         onStartPoint = true;
