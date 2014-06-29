@@ -108,9 +108,9 @@ public class TrackingHelper {
         Quaternion roll = new Quaternion();
         roll.fromAngleAxis(rollInRadians, Vector3f.UNIT_Y);
         
-        Quaternion yawPitch = yaw.mult(pitch);
+        return (yaw.mult(pitch)).mult(roll);
         
-        return yawPitch.mult(roll);
+        //return (roll.mult(pitch)).mult(yaw);
         
         
     }
