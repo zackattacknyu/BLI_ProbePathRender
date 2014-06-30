@@ -52,12 +52,12 @@ public class SerialDataRecorder {
         System.out.println("Press Enter to end calibration:");
         sc.nextLine();
         serialData.startStopCalibration();
-        /*System.out.println("Press Enter to begin path recording");
+        System.out.println("Press Enter to begin path recording");
         sc.nextLine();
         serialData.startStopRecording(filePath);
         System.out.println("Press Enter to end path recording");
         sc.nextLine();
-        serialData.startStopRecording(filePath);*/
+        serialData.startStopRecording(filePath);
     }
     
     
