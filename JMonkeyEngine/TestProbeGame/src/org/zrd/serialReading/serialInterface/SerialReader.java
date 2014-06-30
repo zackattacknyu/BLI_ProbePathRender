@@ -14,6 +14,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
 import java.util.Properties;
+import org.zrd.bliProbePath.Properties_BLIProbePath;
 
 /*
  * 
@@ -58,7 +59,7 @@ public class SerialReader implements SerialPortEventListener {
 
 	public void initialize() {
             
-            serialProperties = PropertiesHelper.getProperties();
+            serialProperties = Properties_BLIProbePath.getProperties();
             
             TIME_OUT = Integer.parseInt(serialProperties.getProperty("serial.time_out"));
             DATA_RATE = Integer.parseInt(serialProperties.getProperty("serial.data_rate"));

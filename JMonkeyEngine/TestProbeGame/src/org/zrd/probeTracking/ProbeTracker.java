@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 
@@ -84,7 +85,7 @@ public class ProbeTracker {
         
         dataInterpreter = new SerialDataInterpreter();
         
-        Properties trackerProps = PropertiesHelper.getProperties();
+        Properties trackerProps = Properties_BLIProbePath.getProperties();
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         

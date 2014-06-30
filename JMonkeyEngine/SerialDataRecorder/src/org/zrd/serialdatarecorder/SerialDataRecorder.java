@@ -9,6 +9,8 @@ import org.zrd.probeTracking.TrackingHelper;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author BLI
@@ -25,6 +27,11 @@ public class SerialDataRecorder {
         SerialDataInterpreter serialData = new SerialDataInterpreter();
         String currentString, previousString = "n";
         while(true){
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ex) {
+                System.out.println(ex);
+            }
             serialData.updateData();
             currentString = String.valueOf(serialData.getCurrentSerialOutput());
             if(!currentString.equals(previousString)){

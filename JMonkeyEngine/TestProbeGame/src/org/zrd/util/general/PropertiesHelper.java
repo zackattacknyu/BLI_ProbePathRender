@@ -43,12 +43,4 @@ public class PropertiesHelper {
         
     }
     
-    /**
-     * TODO: Make the path better
-     * @return 
-     */
-    public static Properties getProperties(){
-        return getProperties(FILE_PATH_2);
-    }
-    
 }

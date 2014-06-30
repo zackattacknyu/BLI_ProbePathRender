@@ -8,6 +8,7 @@ import org.zrd.serialReading.serialInterface.SerialReader;
 import org.zrd.util.general.PropertiesHelper;
 import java.util.HashMap;
 import java.util.Properties;
+import org.zrd.bliProbePath.Properties_BLIProbePath;
 
 /**
  * 
@@ -35,7 +36,7 @@ public class SerialDataReader {
     private Properties trackerProps;
 
     public SerialDataReader() {
-        trackerProps = PropertiesHelper.getProperties();
+        trackerProps = Properties_BLIProbePath.getProperties();
         
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
         try{

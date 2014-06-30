@@ -111,7 +111,7 @@ public class Main extends SimpleApplication {
          * 
          * 
          */
-        Properties appProps = PropertiesHelper.getProperties();
+        Properties appProps = Properties_BLIProbePath.getProperties();
         AppSettings settings = new AppSettings(true);
         
         //adjusts title shown on window
@@ -151,7 +151,7 @@ public class Main extends SimpleApplication {
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
-        trackerProps = PropertiesHelper.getProperties();
+        trackerProps = Properties_BLIProbePath.getProperties();
         lightVisible = Boolean.parseBoolean(
                 trackerProps.getProperty("lighting.visible"));
         
