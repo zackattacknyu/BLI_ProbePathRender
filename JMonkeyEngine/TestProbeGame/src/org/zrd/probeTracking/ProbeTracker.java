@@ -4,9 +4,7 @@
  */
 package org.zrd.probeTracking;
 
-import org.zrd.probeTracking.ProbeDataWriter;
-import org.zrd.probeTracking.ProbeDataHelper;
-import org.zrd.probeTracking.PathRecorder;
+import com.jme3.input.InputManager;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.keyboardTrackingRead.KeyboardTrackingImpl;
 
 /**
  *
@@ -73,16 +72,18 @@ public class ProbeTracker {
     
     private Path logFileParentPath,pathRecordingFilePath;
     
+    private KeyboardTrackingImpl keyboardAngleTracker;
+    
     private Vector3f currentXAxis = new Vector3f(1,0,0);
     private Vector3f currentYAxis = new Vector3f(0,1,0);
     private Vector3f startingXAxis = new Vector3f(1,0,0);
     private Vector3f startingYAxis = new Vector3f(0,1,0);
     
-    public ProbeTracker(){
+    public ProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
         dataInterpreter = new SerialDataInterpreter(trackerProps);
         
-        
+        keyboardAngleTracker = new KeyboardTrackingImpl(manager);
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         
@@ -99,6 +100,10 @@ public class ProbeTracker {
     public void updateValues(){
         
         dataInterpreter.updateData();
+        
+        baselineYaw = keyboardAngleTracker.getCurrentAngles().getCurrentYaw();
+        baselineRoll = keyboardAngleTracker.getCurrentAngles().getCurrentRoll();
+        baselinePitch = keyboardAngleTracker.getCurrentAngles().getCurrentPitch();
         
         //use this style for displaying the rotation
         if(dataInterpreter.isCalibrated() && readMode > 0){
@@ -356,21 +361,6 @@ public class ProbeTracker {
     public void moveRight(){
         currentManualDeltaX = -4.0f;
     }
-    
-    public void rotateClockwise(){
-        
-        baselineYaw = baselineYaw - 1.0f/20.0f;
-    }
-    
-    public void rotateCounterClockwise(){
-        
-        baselineYaw = baselineYaw + 1.0f/20.0f;
-    }
-    
-    public void pitchLeft(){
-        
-        baselinePitch = baselinePitch - 1.0f/20.0f;
-    }
 
     public float getCurrentPitch() {
         return currentPitch;
@@ -378,19 +368,6 @@ public class ProbeTracker {
 
     public float getCurrentRoll() {
         return currentRoll;
-    }
-    
-    public void pitchRight(){
-        
-        baselinePitch = baselinePitch + 1.0f/20.0f;
-    }
-    
-    public void rollForward(){
-        baselineRoll = baselineRoll + 1.0f/20.0f;
-    }
-    
-    public void rollBackward(){
-        baselineRoll = baselineRoll - 1.0f/20.0f;
     }
     
     public String getRecordingText() {

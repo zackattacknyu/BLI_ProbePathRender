@@ -218,7 +218,7 @@ public class Main extends SimpleApplication {
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
-        probeTracker = new ProbeTracker();
+        probeTracker = new ProbeTracker(inputManager);
         //displayAxisLines();
         
         probeRep = new Node("probeRep");
@@ -585,18 +585,8 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("moveLeft", new KeyTrigger(KeyInput.KEY_NUMPAD4));
         inputManager.addMapping("moveRight", new KeyTrigger(KeyInput.KEY_NUMPAD6));
-        
-        inputManager.addMapping("rotateClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD1));
-        inputManager.addMapping("rotateCounterClockwise", new KeyTrigger(KeyInput.KEY_NUMPAD3));
+
         inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
-        
-        inputManager.addMapping("pitchLeft", new KeyTrigger(KeyInput.KEY_NUMPAD7));
-        inputManager.addMapping("pitchRight", new KeyTrigger(KeyInput.KEY_NUMPAD9));
-        
-        inputManager.addMapping("rollForward", new KeyTrigger(KeyInput.KEY_NUMPAD5));
-        inputManager.addMapping("rollBackward", new KeyTrigger(KeyInput.KEY_NUMPAD0));
-        
-        inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
         inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
@@ -759,13 +749,6 @@ public class Main extends SimpleApplication {
                      }
                      
                  }
- 
-                if(name.equals("rotateClockwise") && keyPressed){
-                    probeTracker.rotateClockwise();
-                }
-                if(name.equals("rotateCounterClockwise") && keyPressed){
-                    probeTracker.rotateCounterClockwise();
-                }
                 
                 if(name.equals("resetProbe") && keyPressed){
                     probeTracker.resetProbe();
@@ -777,22 +760,6 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("moveDown") && keyPressed){
                     probeTracker.moveDown();
-                }
-                
-                if(name.equals("pitchLeft") && keyPressed){
-                    probeTracker.pitchLeft();
-                }
-                
-                if(name.equals("pitchRight") && keyPressed){
-                    probeTracker.pitchRight();
-                }
-                
-                if(name.equals("rollForward") && keyPressed){
-                    probeTracker.rollForward();
-                }
-                
-                if(name.equals("rollBackward") && keyPressed){
-                    probeTracker.rollBackward();
                 }
                 
                 if(name.equals("moveLeft") && keyPressed){
@@ -838,14 +805,8 @@ public class Main extends SimpleApplication {
                 "moveDown",
                 "moveLeft",
                 "moveRight",
-                "rotateClockwise",
-                "rotateCounterClockwise",
                 "resetProbe",
                 "recalibrateProbe",
-                "pitchRight",
-                "pitchLeft",
-                "rollBackward",
-                "rollForward",
                 "changeProbeMoveMode",
                 "changeMoveableObject",
                 "changeLineMoveMode",
