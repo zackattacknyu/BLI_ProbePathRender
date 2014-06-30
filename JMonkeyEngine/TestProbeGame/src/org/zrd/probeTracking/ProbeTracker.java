@@ -69,7 +69,7 @@ public class ProbeTracker {
     
     private short displacementMode = 2;
     
-    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter;
+    private ProbeDataWriter currentPathVertexWriter;
     
     private Path logFileParentPath,pathRecordingFilePath;
     
@@ -190,10 +190,7 @@ public class ProbeTracker {
         
         if(recordingPath){
             try {
-                
-                if(dataInterpreter.getCurrentSerialOutput() != null){
-                    currentPathOutputWriter.writeLine(dataInterpreter.getCurrentSerialOutput());
-                }
+
                 currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
                                                   cubePath.getLastY() + "," + 
                                                   cubePath.getLastZ());
@@ -256,16 +253,12 @@ public class ProbeTracker {
     public void updatePathRecording(){
         try {
             if(recordingPath){
-                currentPathOutputWriter.closeWriter();
                 currentPathVertexWriter.closeWriter();
-                currentPathOutputWriter = null;
                 currentPathVertexWriter = null;
                 dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }else{   
                 String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
-                currentPathOutputWriter = new ProbeDataWriter(
-                        pathRecordingFilePath,"pathOutput",currentTimestamp);
                 currentPathVertexWriter = new ProbeDataWriter(
                         pathRecordingFilePath,"pathVertices",currentTimestamp);
                 dataInterpreter.startStopRecording(pathRecordingFilePath);

@@ -27,7 +27,7 @@ public class SerialDataInterpreter {
     
     private boolean recording = false;
     private ProbeDataWriter currentXYRecording;
-    private ProbeDataWriter currentYawPitchRollRecording;
+    private ProbeDataWriter currentYawPitchRollRecording,currentPathOutputWriter;
 
 
     public SerialDataInterpreter(Properties props) {
@@ -39,10 +39,12 @@ public class SerialDataInterpreter {
         try {
             
             if(recording){
+                currentPathOutputWriter.closeWriter();
                 currentXYRecording.closeWriter();
                 currentYawPitchRollRecording.closeWriter();
                 currentXYRecording = null;
                 currentYawPitchRollRecording = null;
+                currentPathOutputWriter = null;
                 
                 
             }else{   
@@ -51,6 +53,8 @@ public class SerialDataInterpreter {
                         filePath,"pathXYdata",currentTimestamp);
                 currentYawPitchRollRecording = new ProbeDataWriter(
                         filePath,"pathYawPitchRollData",currentTimestamp);
+                currentPathOutputWriter = new ProbeDataWriter(
+                        filePath,"pathOutput",currentTimestamp);
                 
             }
             
@@ -64,6 +68,15 @@ public class SerialDataInterpreter {
         serial.updateData();
         processYawPitchRoll();
         processXYdata();
+        try {
+            if(recording){
+                currentPathOutputWriter.writeLine(outputYawRadians + "," + 
+                    outputRollRadians + "," + outputPitchRadians +
+                    "," + deltaX + "," + deltaY );
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
     
     private void processXYdata(){
