@@ -4,6 +4,7 @@
  */
 package org.zrd.util.general;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,11 +19,16 @@ public class PropertiesHelper {
     
     public static Properties getProperties(String fileName){
         
+        return getProperties(new File(fileName));
+        
+    }
+    
+    public static Properties getProperties(File file){
         FileReader reader;
         Properties trackerProps = new Properties();
         
         try {
-            reader = new FileReader(fileName);
+            reader = new FileReader(file);
             trackerProps.load(reader);
         } catch (FileNotFoundException exc) {
             System.err.println("Properties File Not Found: " + exc);
@@ -31,7 +37,6 @@ public class PropertiesHelper {
         }
         
         return trackerProps;
-        
     }
     
 }
