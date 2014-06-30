@@ -4,7 +4,13 @@
  */
 package org.zrd.serialReading.dataInterpretation;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.zrd.probeTracking.ProbeDataHelper;
+import org.zrd.probeTracking.ProbeDataWriter;
 import org.zrd.serialReading.dataFilter.SerialDataFilter;
 
 /**
@@ -18,11 +24,40 @@ public class SerialDataInterpreter {
     float deltaX = 0;
     float deltaY = 0;
     private float outputYawRadians,outputPitchRadians,outputRollRadians;
+    
+    private boolean recording = false;
+    private ProbeDataWriter currentXYRecording;
+    private ProbeDataWriter currentYawPitchRollRecording;
 
 
     public SerialDataInterpreter(Properties props) {
         serial = new SerialDataFilter(props);
         System.out.println("Waiting to receive input...");
+    }
+    
+    public void startStopRecording(Path filePath){
+        try {
+            
+            if(recording){
+                currentXYRecording.closeWriter();
+                currentYawPitchRollRecording.closeWriter();
+                currentXYRecording = null;
+                currentYawPitchRollRecording = null;
+                
+                
+            }else{   
+                String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
+                currentXYRecording = new ProbeDataWriter(
+                        filePath,"pathXYdata",currentTimestamp);
+                currentYawPitchRollRecording = new ProbeDataWriter(
+                        filePath,"pathYawPitchRollData",currentTimestamp);
+                
+            }
+            
+            recording = !recording; //flips the switch saying whether it is recording or not
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
 
     public void updateData(){
@@ -37,12 +72,28 @@ public class SerialDataInterpreter {
         
         deltaX = getOutputDisp(deltaX);
         deltaY = getOutputDisp(deltaY);
+        
+        if(recording){
+            try {
+                currentXYRecording.writeLine(deltaX + "," + deltaY);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
     }
     
     private void processYawPitchRoll(){
         outputYawRadians = getOutputAngle(serial.getCurrentYaw());
         outputRollRadians = getOutputAngle(serial.getCurrentRoll());
         outputPitchRadians = getOutputAngle(serial.getCurrentPitch());
+        
+        if(recording){
+            try {
+                currentYawPitchRollRecording.writeLine(outputYawRadians + "," + outputPitchRadians + "," + outputRollRadians);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
     }
     
     /**

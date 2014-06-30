@@ -29,16 +29,16 @@ public class SerialDataRecorder {
         String currentString, previousString = "n";
         while(true){
             try {
-                Thread.sleep(5);
+                Thread.sleep(30);
             } catch (InterruptedException ex) {
                 System.out.println(ex);
             }
             serialData.updateData();
-            currentString = String.valueOf(serialData.getCurrentSerialOutput());
+            /*currentString = String.valueOf(serialData.getCurrentSerialOutput());
             if(!currentString.equals(previousString)){
                 System.out.println(currentString);
             }
-            previousString = currentString;
+            previousString = currentString;*/
         }
     }
     

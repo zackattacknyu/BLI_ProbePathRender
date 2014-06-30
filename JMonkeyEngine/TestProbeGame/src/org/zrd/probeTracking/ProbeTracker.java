@@ -8,7 +8,6 @@ import org.zrd.probeTracking.ProbeDataWriter;
 import org.zrd.probeTracking.ProbeDataHelper;
 import org.zrd.probeTracking.PathRecorder;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
-import org.zrd.util.general.PropertiesHelper;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
-import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 
 /**
  *
@@ -71,8 +69,7 @@ public class ProbeTracker {
     
     private short displacementMode = 2;
     
-    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter,
-            currentXYPathDataWriter, currentYawPitchRollDataWriter;
+    private ProbeDataWriter currentPathOutputWriter,currentPathVertexWriter;
     
     private Path logFileParentPath,pathRecordingFilePath;
     
@@ -200,11 +197,6 @@ public class ProbeTracker {
                 currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
                                                   cubePath.getLastY() + "," + 
                                                   cubePath.getLastZ());
-                currentXYPathDataWriter.writeLine(currentDebugX + "," + 
-                        currentDebugY);
-                currentYawPitchRollDataWriter.writeLine(currentYaw + "," + 
-                        currentPitch + "," + 
-                        currentRoll);
             } catch (IOException ex) {
                 System.out.println(ex);
             }
@@ -266,13 +258,9 @@ public class ProbeTracker {
             if(recordingPath){
                 currentPathOutputWriter.closeWriter();
                 currentPathVertexWriter.closeWriter();
-                currentXYPathDataWriter.closeWriter();
-                currentYawPitchRollDataWriter.closeWriter();
                 currentPathOutputWriter = null;
                 currentPathVertexWriter = null;
-                currentXYPathDataWriter = null;
-                currentYawPitchRollDataWriter = null;
-                
+                dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }else{   
                 String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
@@ -280,10 +268,7 @@ public class ProbeTracker {
                         pathRecordingFilePath,"pathOutput",currentTimestamp);
                 currentPathVertexWriter = new ProbeDataWriter(
                         pathRecordingFilePath,"pathVertices",currentTimestamp);
-                currentXYPathDataWriter = new ProbeDataWriter(
-                        pathRecordingFilePath,"pathXYdata",currentTimestamp);
-                currentYawPitchRollDataWriter = new ProbeDataWriter(
-                        pathRecordingFilePath,"pathYawPitchRollData",currentTimestamp);
+                dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }
         } catch (IOException ex) {
