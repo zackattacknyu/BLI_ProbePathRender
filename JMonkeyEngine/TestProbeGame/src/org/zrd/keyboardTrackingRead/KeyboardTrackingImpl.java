@@ -14,38 +14,57 @@ import com.jme3.input.KeyInput;
 public class KeyboardTrackingImpl {
 
     private KeyboardInputAngles currentAngles;
+    private KeyboardInputPositionChange currentPosChange;
     private InputManager inputManager;
     
     public KeyboardTrackingImpl(InputManager inputManager){
         currentAngles = new KeyboardInputAngles();
+        currentPosChange = new KeyboardInputPositionChange();
         this.inputManager = inputManager;
-        addListeners();
+        addAngleListeners();
+        addPositionChangeListeners();
     }
     
-    private void addListeners() {
+    private void addAngleListeners() {
         
-        addListener("pitchLeft",KeyInput.KEY_NUMPAD7,
+        addAngleListener("pitchLeft",KeyInput.KEY_NUMPAD7,
                 AngleChange.ANGLE_TYPE.PITCH,true);
-        addListener("pitchRight",KeyInput.KEY_NUMPAD9,
+        addAngleListener("pitchRight",KeyInput.KEY_NUMPAD9,
                 AngleChange.ANGLE_TYPE.PITCH,false);
         
-        addListener("rollForward",KeyInput.KEY_NUMPAD5,
+        addAngleListener("rollForward",KeyInput.KEY_NUMPAD5,
                 AngleChange.ANGLE_TYPE.ROLL,true);
-        addListener("rollBackward",KeyInput.KEY_NUMPAD0,
+        addAngleListener("rollBackward",KeyInput.KEY_NUMPAD0,
                 AngleChange.ANGLE_TYPE.ROLL,false);
         
-        addListener("rotateClockwise",KeyInput.KEY_NUMPAD1,
+        addAngleListener("rotateClockwise",KeyInput.KEY_NUMPAD1,
                 AngleChange.ANGLE_TYPE.YAW,true);
-        addListener("rotateCounterclockwise",KeyInput.KEY_NUMPAD3,
+        addAngleListener("rotateCounterclockwise",KeyInput.KEY_NUMPAD3,
                 AngleChange.ANGLE_TYPE.YAW,false);
     }
 
-    private void addListener(String name, int keyCode, AngleChange.ANGLE_TYPE type, boolean inc) {
+    private void addAngleListener(String name, int keyCode, AngleChange.ANGLE_TYPE type, boolean inc) {
         new AngleChange(inputManager,name,keyCode,currentAngles, type,inc);
     }
 
     public KeyboardInputAngles getCurrentAngles() {
         return currentAngles;
+    }
+
+    private void addPositionChangeListeners() {
+        addPositionChangeListener("moveUp",KeyInput.KEY_NUMPAD8,PositionChange.DISP_AXIS.Y,true);
+        addPositionChangeListener("moveDown",KeyInput.KEY_NUMPAD2,PositionChange.DISP_AXIS.Y,false);
+        
+        addPositionChangeListener("moveRight",KeyInput.KEY_NUMPAD6,PositionChange.DISP_AXIS.X,true);
+        addPositionChangeListener("moveLeft",KeyInput.KEY_NUMPAD4,PositionChange.DISP_AXIS.X,false);
+    }
+    
+    private void addPositionChangeListener(String name, int keyCode, PositionChange.DISP_AXIS axis, boolean posDir){
+        new PositionChange(inputManager,name,keyCode,currentPosChange,axis,posDir);
+    }
+
+    public KeyboardInputPositionChange getCurrentPosChange() {
+        return currentPosChange;
     }
     
 }

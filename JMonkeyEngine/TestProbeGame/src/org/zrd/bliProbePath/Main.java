@@ -579,12 +579,6 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
         
         inputManager.addMapping("readModeChange", new KeyTrigger(KeyInput.KEY_V));
-        
-        inputManager.addMapping("moveUp", new KeyTrigger(KeyInput.KEY_NUMPAD8));
-        inputManager.addMapping("moveDown", new KeyTrigger(KeyInput.KEY_NUMPAD2));
-        
-        inputManager.addMapping("moveLeft", new KeyTrigger(KeyInput.KEY_NUMPAD4));
-        inputManager.addMapping("moveRight", new KeyTrigger(KeyInput.KEY_NUMPAD6));
 
         inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
         
@@ -754,22 +748,6 @@ public class Main extends SimpleApplication {
                     probeTracker.resetProbe();
                 }
                 
-                if(name.equals("moveUp") && keyPressed){
-                    probeTracker.moveUp();
-                }
-                
-                if(name.equals("moveDown") && keyPressed){
-                    probeTracker.moveDown();
-                }
-                
-                if(name.equals("moveLeft") && keyPressed){
-                    probeTracker.moveLeft();
-                }
-                
-                if(name.equals("moveRight") && keyPressed){
-                    probeTracker.moveRight();
-                }
-                
                 
                 if(name.equals("recalibrateX") && keyPressed){
                     probeTracker.updateXcalibration();
@@ -801,10 +779,6 @@ public class Main extends SimpleApplication {
                 "recalibrateX",
                 "recalibrateY",
                 "readModeChange",
-                "moveUp",
-                "moveDown",
-                "moveLeft",
-                "moveRight",
                 "resetProbe",
                 "recalibrateProbe",
                 "changeProbeMoveMode",

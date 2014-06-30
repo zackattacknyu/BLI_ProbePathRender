@@ -33,8 +33,6 @@ public class ProbeTracker {
     private float currentX=-0.4f,currentY=-0.97f,currentZ=-15.35f;
     private final Vector3f startingPosition = new Vector3f(currentX,currentY,currentZ);
     
-    private float currentManualDeltaX,currentManualDeltaY;
-    
     private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
     
     private SerialDataInterpreter dataInterpreter;
@@ -72,7 +70,7 @@ public class ProbeTracker {
     
     private Path logFileParentPath,pathRecordingFilePath;
     
-    private KeyboardTrackingImpl keyboardAngleTracker;
+    private KeyboardTrackingImpl keyboardInputTracker;
     
     private Vector3f currentXAxis = new Vector3f(1,0,0);
     private Vector3f currentYAxis = new Vector3f(0,1,0);
@@ -83,7 +81,7 @@ public class ProbeTracker {
         Properties trackerProps = Properties_BLIProbePath.getProperties();
         dataInterpreter = new SerialDataInterpreter(trackerProps);
         
-        keyboardAngleTracker = new KeyboardTrackingImpl(manager);
+        keyboardInputTracker = new KeyboardTrackingImpl(manager);
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         
@@ -101,9 +99,9 @@ public class ProbeTracker {
         
         dataInterpreter.updateData();
         
-        baselineYaw = keyboardAngleTracker.getCurrentAngles().getCurrentYaw();
-        baselineRoll = keyboardAngleTracker.getCurrentAngles().getCurrentRoll();
-        baselinePitch = keyboardAngleTracker.getCurrentAngles().getCurrentPitch();
+        baselineYaw = keyboardInputTracker.getCurrentAngles().getCurrentYaw();
+        baselineRoll = keyboardInputTracker.getCurrentAngles().getCurrentRoll();
+        baselinePitch = keyboardInputTracker.getCurrentAngles().getCurrentPitch();
         
         //use this style for displaying the rotation
         if(dataInterpreter.isCalibrated() && readMode > 0){
@@ -130,6 +128,9 @@ public class ProbeTracker {
                 currentYaw+firstYaw, 
                 currentPitch+firstPitch, 
                 currentRoll+firstRoll);
+        
+        float currentManualDeltaX =keyboardInputTracker.getCurrentPosChange().getXDisp();
+        float currentManualDeltaY=keyboardInputTracker.getCurrentPosChange().getYDisp();
         
         Vector2f currentXYDisp = new Vector2f(
                 -dataInterpreter.getDeltaX() + currentManualDeltaX,
@@ -178,9 +179,6 @@ public class ProbeTracker {
             break;
         
         }
-        
-        currentManualDeltaX = 0;
-        currentManualDeltaY = 0;
         
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();
@@ -341,25 +339,9 @@ public class ProbeTracker {
         setBaselineRotation(rotation,normal);
         baselinePitch = baselinePitch + extraAngle;
     }
-    
-    public void moveUp(){
-        currentManualDeltaY = 4.0f;
-    }
-    
-    public void moveDown(){
-        currentManualDeltaY = -4.0f;
-    }
 
     public float getCurrentZ() {
         return currentZ;
-    }
-    
-    public void moveLeft(){
-        currentManualDeltaX = 4.0f;
-    }
-    
-    public void moveRight(){
-        currentManualDeltaX = -4.0f;
     }
 
     public float getCurrentPitch() {
