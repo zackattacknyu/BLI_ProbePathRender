@@ -9,6 +9,9 @@ import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author BLI
@@ -21,41 +24,36 @@ public class SerialDataRecorder {
     public static void main(String[] args) {
         
         //doRotationTesting();
+        
         Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
-        SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
-        while(true){
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException ex) {
-                System.out.println(ex);
+        final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
+        
+        Thread t = new Thread(){
+            public void run(){
+                while(true){
+                    try {
+                        Thread.sleep(30);
+                        serialData.updateData();
+                    } catch (InterruptedException ex) {
+                        break;
+                    }
+                }
             }
-            serialData.updateData();
-        }
+        };
+                
+        System.out.println("Press Enter to begin calibration:");
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+        t.start();
+        serialData.startStopCalibration();
+        System.out.println("Press Enter to end calibration:");
+        sc.nextLine();
+        serialData.startStopCalibration();
+        System.out.println("Press Enter to begin path recording");
+        sc.nextLine();
+        System.out.println("Press Enter to end path recording");
+        sc.nextLine();
     }
     
-    public static void doRotationTesting(){
-        float yaw = (float)(Math.random()*(Math.PI/2.0));
-        float pitch = (float)(Math.random()*(Math.PI/2.0));
-        float roll = (float)(Math.random()*(Math.PI/2.0));
-        
-        Quaternion yawQ = new Quaternion();
-        yawQ.fromAngleAxis(yaw, Vector3f.UNIT_Z);
-        Matrix3f yawQMat = yawQ.toRotationMatrix();
-        
-        Quaternion pitchQ = new Quaternion();
-        pitchQ.fromAngleAxis(pitch, Vector3f.UNIT_X);
-        Matrix3f pitchQMat = pitchQ.toRotationMatrix();
-        
-        Quaternion rollQ = new Quaternion();
-        rollQ.fromAngleAxis(roll, Vector3f.UNIT_Y);
-        Matrix3f rollQMat = rollQ.toRotationMatrix();
-        
-        Quaternion quat = (yawQ.mult(pitchQ)).mult(rollQ);
-        Matrix3f quatMat = quat.toRotationMatrix();
-        Matrix3f rotMat = (yawQMat.mult(pitchQMat)).mult(rollQMat);
-        
-        System.out.println("(Yaw,Pitch,Roll)=(" + yaw + "," + pitch + "," + roll + ")");
-        System.out.println("Rotation Matrix with quat " + quatMat);
-        System.out.println("Rotation Matrix without quat: " + rotMat);
-    }
+    
 }
