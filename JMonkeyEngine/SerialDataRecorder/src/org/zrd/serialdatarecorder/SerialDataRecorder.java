@@ -4,16 +4,11 @@
  */
 package org.zrd.serialdatarecorder;
 
-import com.jme3.math.Matrix3f;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author BLI
@@ -54,12 +49,15 @@ public class SerialDataRecorder {
         sc.nextLine();
         serialData.startStopCalibration();
         serialData.setFilterMode(filterMode);
-        System.out.println("Press Enter to begin path recording");
-        sc.nextLine();
-        serialData.startStopRecording(filePath);
-        System.out.println("Press Enter to end path recording");
-        sc.nextLine();
-        serialData.startStopRecording(filePath);
+        
+        while(true){
+            System.out.println("Press Enter to begin path recording");
+            sc.nextLine();
+            serialData.startStopRecording(filePath);
+            System.out.println("Press Enter to end path recording");
+            sc.nextLine();
+            serialData.startStopRecording(filePath);
+        }
     }
     
     

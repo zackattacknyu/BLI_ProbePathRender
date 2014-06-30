@@ -45,7 +45,7 @@ public class SerialDataInterpreter {
                 currentXYRecording = null;
                 currentYawPitchRollRecording = null;
                 currentPathOutputWriter = null;
-                
+                recording = false;
                 
             }else{   
                 String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
@@ -55,10 +55,10 @@ public class SerialDataInterpreter {
                         filePath,"pathYawPitchRollData",currentTimestamp);
                 currentPathOutputWriter = new ProbeDataWriter(
                         filePath,"pathOutput",currentTimestamp);
+                recording = true;
                 
             }
             
-            recording = !recording; //flips the switch saying whether it is recording or not
         } catch (IOException ex) {
             System.out.println(ex);
         }
