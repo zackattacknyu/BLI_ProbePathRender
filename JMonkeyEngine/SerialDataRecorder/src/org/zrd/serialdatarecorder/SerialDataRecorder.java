@@ -5,13 +5,10 @@
 package org.zrd.serialdatarecorder;
 
 import com.jme3.math.Matrix3f;
-import org.zrd.probeTracking.TrackingHelper;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author BLI
@@ -26,7 +23,6 @@ public class SerialDataRecorder {
         //doRotationTesting();
         Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
         SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
-        String currentString, previousString = "n";
         while(true){
             try {
                 Thread.sleep(30);
@@ -34,11 +30,6 @@ public class SerialDataRecorder {
                 System.out.println(ex);
             }
             serialData.updateData();
-            /*currentString = String.valueOf(serialData.getCurrentSerialOutput());
-            if(!currentString.equals(previousString)){
-                System.out.println(currentString);
-            }
-            previousString = currentString;*/
         }
     }
     
