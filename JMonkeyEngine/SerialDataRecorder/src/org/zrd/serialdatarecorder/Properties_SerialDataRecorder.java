@@ -14,7 +14,7 @@ import org.zrd.util.general.PropertiesHelper;
 public class Properties_SerialDataRecorder {
 
     public static final String FILE_PATH=
-            "src\\org\\zrd\\serialdatarecorder\\tracker.properties";
+            "tracker.properties";
     
     public static Properties getProperties(){
            return PropertiesHelper.getProperties(FILE_PATH);
