@@ -4,11 +4,7 @@
  */
 package org.zrd.serialReading.dataFilter;
 
-import org.zrd.serialReading.dataFilter.SerialDataCalibration;
-import org.zrd.serialReading.dataFilter.OrientationFilterThreshold;
-import org.zrd.serialReading.dataFilter.OrientationFilterRaw;
-import org.zrd.serialReading.dataFilter.OrientationFilterLowPass;
-import org.zrd.serialReading.dataFilter.OrientationFilter;
+import java.util.Properties;
 import org.zrd.serialReading.dataReader.SerialDataReader;
 
 /**
@@ -55,8 +51,8 @@ public class SerialDataFilter {
     private OrientationFilter orientationFilterThreshold;
     private OrientationFilter orientationFilterLowPass;
 
-    public SerialDataFilter() {
-        serial = new SerialDataReader();
+    public SerialDataFilter(Properties props) {
+        serial = new SerialDataReader(props);
         System.out.println("Waiting to receive input...");
     }
 

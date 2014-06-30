@@ -59,8 +59,6 @@ public class SerialReader implements SerialPortEventListener {
 
 	public void initialize() {
             
-            serialProperties = Properties_BLIProbePath.getProperties();
-            
             TIME_OUT = Integer.parseInt(serialProperties.getProperty("serial.time_out"));
             DATA_RATE = Integer.parseInt(serialProperties.getProperty("serial.data_rate"));
             PORT_NAME = serialProperties.getProperty("serial.port_name");
@@ -138,12 +136,12 @@ public class SerialReader implements SerialPortEventListener {
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
 
-        public static void executeMain(){
-            SerialReader main = new SerialReader();
-            main.beginExecution();
+        private void setSerialProperties(Properties serialProperties){
+            this.serialProperties = serialProperties;
         }
         
-        public void beginExecution(){
+        public void beginExecution(Properties props){
+            setSerialProperties(props);
             initialize();
             Thread t=new Thread() {
                 public void run() {

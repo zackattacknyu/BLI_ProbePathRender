@@ -9,6 +9,7 @@ import org.zrd.probeTracking.TrackingHelper;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -23,8 +24,8 @@ public class SerialDataRecorder {
     public static void main(String[] args) {
         
         //doRotationTesting();
-        
-        SerialDataInterpreter serialData = new SerialDataInterpreter();
+        Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
+        SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
         String currentString, previousString = "n";
         while(true){
             try {

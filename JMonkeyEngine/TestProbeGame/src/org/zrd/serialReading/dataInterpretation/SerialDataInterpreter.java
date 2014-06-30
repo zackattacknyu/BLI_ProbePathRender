@@ -4,6 +4,7 @@
  */
 package org.zrd.serialReading.dataInterpretation;
 
+import java.util.Properties;
 import org.zrd.serialReading.dataFilter.SerialDataFilter;
 
 /**
@@ -19,8 +20,8 @@ public class SerialDataInterpreter {
     private float outputYawRadians,outputPitchRadians,outputRollRadians;
 
 
-    public SerialDataInterpreter() {
-        serial = new SerialDataFilter();
+    public SerialDataInterpreter(Properties props) {
+        serial = new SerialDataFilter(props);
         System.out.println("Waiting to receive input...");
     }
 

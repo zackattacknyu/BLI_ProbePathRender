@@ -8,21 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author BLI
  */
 public class PropertiesHelper {
-    
-    public static final String FILE_PATH = 
-            "C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\JMonkeyEngine"
-            + "\\TestProbeGame\\src\\org\\zrd\\bliProbePath\\tracker.properties";
-    
-    public static final String FILE_PATH_2=
-            "src\\org\\zrd\\bliProbePath\\tracker.properties";
     
     
     public static Properties getProperties(String fileName){

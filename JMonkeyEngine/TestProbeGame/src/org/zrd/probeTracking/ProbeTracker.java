@@ -82,10 +82,10 @@ public class ProbeTracker {
     private Vector3f startingYAxis = new Vector3f(0,1,0);
     
     public ProbeTracker(){
-        
-        dataInterpreter = new SerialDataInterpreter();
-        
         Properties trackerProps = Properties_BLIProbePath.getProperties();
+        dataInterpreter = new SerialDataInterpreter(trackerProps);
+        
+        
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         

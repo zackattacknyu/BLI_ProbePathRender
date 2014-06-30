@@ -35,13 +35,13 @@ public class SerialDataReader {
     private static HashMap<String,Integer> dataLocations;
     private Properties trackerProps;
 
-    public SerialDataReader() {
-        trackerProps = Properties_BLIProbePath.getProperties();
+    public SerialDataReader(Properties trackerProps) {
+        this.trackerProps = trackerProps;
         
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
         try{
             serial = new SerialReader();
-            serial.beginExecution();
+            serial.beginExecution(trackerProps);
         }catch(Throwable t){
             System.out.println("CANNOT USE SERIAL DEVICE. INSTALL RXTX.");
             System.out.println(t);
