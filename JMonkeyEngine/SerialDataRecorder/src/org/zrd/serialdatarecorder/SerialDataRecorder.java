@@ -8,6 +8,8 @@ import com.jme3.math.Matrix3f;
 import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -26,6 +28,7 @@ public class SerialDataRecorder {
         //doRotationTesting();
         
         Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
+        Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
         final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
         
         Thread t = new Thread(){
@@ -49,10 +52,12 @@ public class SerialDataRecorder {
         System.out.println("Press Enter to end calibration:");
         sc.nextLine();
         serialData.startStopCalibration();
-        System.out.println("Press Enter to begin path recording");
+        /*System.out.println("Press Enter to begin path recording");
         sc.nextLine();
+        serialData.startStopRecording(filePath);
         System.out.println("Press Enter to end path recording");
         sc.nextLine();
+        serialData.startStopRecording(filePath);*/
     }
     
     
