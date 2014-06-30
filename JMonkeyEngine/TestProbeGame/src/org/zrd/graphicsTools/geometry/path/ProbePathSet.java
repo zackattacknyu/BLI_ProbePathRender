@@ -102,6 +102,36 @@ public class ProbePathSet {
     public void rotateAndProjectCurrentPath(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();
+        transformCurrentPathEndpoint(endPoint);
+        
+        ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
+        
+        float numberTries = 4;
+        
+        Matrix4f rotationToEndpoint;
+        currentRotatedPath = getCurrentPath().getVertices();
+
+        for(float tryNum = 0; tryNum <= numberTries; tryNum++){
+            //rotatation of current path to endpoint
+            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
+            
+            //find the rotated path
+            currentRotatedPath = MeshHelper.getTransformedVertices(
+                    currentRotatedPath, 
+                    rotationToEndpoint);
+            
+            //projects the rotated path on the surface
+            currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
+                    currentRotatedPath,startingTriangle,meshInfo);
+            
+            //saves the path for later display
+            addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
+        }
+    }
+    
+    public void rotateAndProjectCurrentPath2(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
+        scaleCurrentPathEndpoint(endPoint);
+        compressCurrentPath();
         //displayCurrentPath();
         ArrayList<Vector3f> initScaledPath = getCurrentPath().getVertices();
         ArrayList<Vector3f> initProjectedPath = MeshFollowHelper.projectPathOntoPlane(initScaledPath, startingTriangle.getNormal());
