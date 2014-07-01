@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.dataFilter;
+package org.zrd.serialDataInterpreter.dataFilter;
 
-import org.zrd.serialReading.dataFilter.OrientationFilter;
+import org.zrd.serialDataInterpreter.dataFilter.OrientationFilter;
 import org.zrd.util.stats.LowPassFilterData;
 
 /**

@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.dataReader;
+package org.zrd.serialDataInterpreter.dataReader;
 
+import org.zrd.serialDataInterpreter.dataReader.ProbeDataPoint;
+import org.zrd.serialDataInterpreter.dataReader.DataLocationConstants;
 import java.util.HashMap;
 
 /**

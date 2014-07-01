@@ -10,8 +10,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.zrd.probeTracking.ProbeDataHelper;
-import org.zrd.probeTracking.ProbeDataWriter;
-import org.zrd.serialReading.dataFilter.SerialDataFilter;
+import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.serialDataInterpreter.dataFilter.SerialDataFilter;
 
 /**
  * 

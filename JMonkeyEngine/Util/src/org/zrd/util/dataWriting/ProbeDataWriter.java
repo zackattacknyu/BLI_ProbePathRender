@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTracking;
+package org.zrd.util.dataWriting;
 
 import java.io.BufferedWriter;
 import java.io.File;

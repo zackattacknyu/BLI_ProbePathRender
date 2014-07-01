@@ -2,13 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.dataReader;
+package org.zrd.serialDataInterpreter.dataReader;
 
 import org.zrd.serialInterface.arduinoReading.SerialReader;
-import org.zrd.util.properties.PropertiesHelper;
 import java.util.HashMap;
 import java.util.Properties;
-import org.zrd.bliProbePath.Properties_BLIProbePath;
 
 /**
  * 

@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.dataFilter;
+package org.zrd.serialDataInterpreter.dataFilter;
 
 import java.util.Properties;
-import org.zrd.serialReading.dataReader.SerialDataReader;
+import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 
 /**
  * 
