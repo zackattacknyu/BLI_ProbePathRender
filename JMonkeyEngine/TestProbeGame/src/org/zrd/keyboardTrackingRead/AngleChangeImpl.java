@@ -23,9 +23,9 @@ public class AngleChangeImpl extends GeneralKeyboardActionMethod implements Angl
         this.currentAngles = currentAngles;
         this.type = type;
         if(increment){
-            angleDiff = AngleChange.POS_FACTOR*AngleChange.ANGLE_CHANGE_RADIANS;
+            angleDiff = POS_FACTOR*ANGLE_CHANGE_RADIANS;
         }else{
-            angleDiff = AngleChange.NEG_FACTOR*AngleChange.ANGLE_CHANGE_RADIANS;
+            angleDiff = NEG_FACTOR*ANGLE_CHANGE_RADIANS;
         }
     }
 

@@ -11,19 +11,23 @@ import org.zrd.utilImpl.mouseKeyboard.GeneralKeyboardActionMethod;
  *
  * @author BLI
  */
-public class PositionChangeImpl extends GeneralKeyboardActionMethod{
+public class PositionChangeImpl extends GeneralKeyboardActionMethod implements PositionChange{
     
     public enum DISP_AXIS {X,Y};
     
     private KeyboardInputPositionChange currentPosChange;
-    private float factor = 1;
+    private float positionDiff;
     private DISP_AXIS axis;
 
     public PositionChangeImpl(InputManager manager, String name, int keyCode, 
             KeyboardInputPositionChange currentPosChange, PositionChangeImpl.DISP_AXIS axis, boolean posDirection){
         super(manager,name,keyCode);
         this.currentPosChange = currentPosChange;
-        if(!posDirection) factor = -1;
+        if(posDirection){
+            positionDiff = POS_FACTOR*POSITION_CHANGE;
+        }else{
+            positionDiff = NEG_FACTOR*POSITION_CHANGE;
+        }
         this.axis = axis;
     }
     
@@ -32,13 +36,21 @@ public class PositionChangeImpl extends GeneralKeyboardActionMethod{
     public void actionMethod() {
         switch(axis){
             case X:
-                currentPosChange.setXDisp(factor);
+                changeX(positionDiff);
                 break;
                 
             case Y:
-                currentPosChange.setYDisp(factor);
+                changeY(positionDiff);
                 break;
         }
+    }
+    
+    public void changeX(float change) {
+        currentPosChange.setXDisp(change);
+    }
+
+    public void changeY(float change) {
+        currentPosChange.setYDisp(change);
     }
     
 }
