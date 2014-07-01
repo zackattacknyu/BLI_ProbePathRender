@@ -17,6 +17,28 @@ import com.jme3.math.Vector3f;
 public abstract class CameraTracker {
     
     /**
+     * The following block of 10 strings is all the listener names.
+     * Uniqueness is important here
+     * NOTE: Only change these strings if absolutely necessary
+     */
+    
+    //rotates the camera up,down,left, or right
+    public static final String ROTATE_CAMERA_UP_LISTENER_NAME = "rotCameraUp";
+    public static final String ROTATE_CAMERA_DOWN_LISTENER_NAME = "rotCameraDown";
+    public static final String ROTATE_CAMERA_LEFT_LISTENER_NAME = "rotCameraLeft";
+    public static final String ROTATE_CAMERA_RIGHT_LISTENER_NAME = "rotCameraRight";
+    
+    //rotates the viewpoint up,down,left,or right
+    public static final String ROTATE_CAMERA_VIEWPOINT_UP_LISTENER_NAME = "rotViewpointUp";
+    public static final String ROTATE_CAMERA_VIEWPOINT_DOWN_LISTENER_NAME = "rotViewpointDown";
+    public static final String ROTATE_CAMERA_VIEWPOINT_LEFT_LISTENER_NAME = "rotViewpointLeft";
+    public static final String ROTATE_CAMERA_VIEWPOINT_RIGHT_LISTENER_NAME = "rotViewpointRight";
+    
+    //radial movement listener names
+    public static final String RADIAL_MOVEMENT_INWARD_LISTENER_NAME = "moveCameraInward";
+    public static final String RADIAL_MOVEMENT_OUTWARD_LISTENER_NAME = "moveCameraOutward";
+    
+    /**
      * This adds all the listeners
      */
     protected void addListeners(){
