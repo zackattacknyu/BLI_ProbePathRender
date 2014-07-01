@@ -5,7 +5,7 @@
 package org.zrd.serialReading.dataFilter;
 
 import org.zrd.serialReading.dataFilter.OrientationFilter;
-import org.zrd.util.general.LowPassFilterData;
+import org.zrd.util.stats.LowPassFilterData;
 
 /**
  *

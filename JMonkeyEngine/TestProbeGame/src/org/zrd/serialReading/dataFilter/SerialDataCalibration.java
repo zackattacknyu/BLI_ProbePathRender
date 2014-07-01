@@ -4,7 +4,7 @@
  */
 package org.zrd.serialReading.dataFilter;
 
-import org.zrd.util.general.DataSet;
+import org.zrd.util.stats.DataSet;
 import org.zrd.serialReading.dataReader.SerialDataPoint;
 
 /**

@@ -5,7 +5,7 @@
 package org.zrd.serialdatarecorder;
 
 import java.util.Properties;
-import org.zrd.util.general.PropertiesHelper;
+import org.zrd.util.properties.PropertiesHelper;
 
 /**
  *

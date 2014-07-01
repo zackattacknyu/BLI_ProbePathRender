@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.util.general;
+package org.zrd.util.properties;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -5,7 +5,7 @@
 package org.zrd.serialReading.dataReader;
 
 import org.zrd.serialInterface.arduinoReading.SerialReader;
-import org.zrd.util.general.PropertiesHelper;
+import org.zrd.util.properties.PropertiesHelper;
 import java.util.HashMap;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
