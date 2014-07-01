@@ -10,27 +10,50 @@ import org.zrd.keyboardTrackingRead.AngleChange;
 import org.zrd.keyboardTrackingRead.KeyboardTracking;
 
 /**
- *
+ *This implements all the object tracking using 
+ *      just keyboard inputs. It adds the listeners
+ *      which manipulate the values of yaw, pitch, roll
+ *      as well as x,y displacement from the keyboard.
+ * 
+ * 
  * @author Zach
  */
 public class KeyboardTrackingImpl extends KeyboardTracking{
 
     private InputManager inputManager;
     
+    /**
+     * Constructs the keyboard tracker
+     * @param inputManager      inputManger that keeps track of keyboard events
+     */
     public KeyboardTrackingImpl(InputManager inputManager){
         super();
         this.inputManager = inputManager;
         addListeners();
     }
 
+    /**
+     * This adds a listener for an angle change
+     * @param name      name of listener
+     * @param keyCode   keycode for angle change
+     * @param type      which angle to change (yaw, pitch, or roll)
+     * @param inc       whether or not to increment or decremetn
+     */
     private void addAngleListener(String name, int keyCode, AngleChange.ANGLE_TYPE type, boolean inc) {
         new AngleChangeImpl(inputManager,name,keyCode,currentAngles, type,inc);
     }
 
+    /**
+     * This adds a listener for a position change
+     * @param name      name of listener
+     * @param keyCode   keycode for position change
+     * @param axis      whether it's x or y axis that will change
+     * @param posDir    whether or not the displacement is in the positive or negative direction
+     */
     private void addPositionChangeListener(String name, int keyCode, PositionChangeImpl.DISP_AXIS axis, boolean posDir){
         new PositionChangeImpl(inputManager,name,keyCode,currentPosChange,axis,posDir);
     }
-    
+
     @Override
     protected void addPitchLeftListener() {
         addAngleListener("pitchLeft",KeyInput.KEY_NUMPAD7,
