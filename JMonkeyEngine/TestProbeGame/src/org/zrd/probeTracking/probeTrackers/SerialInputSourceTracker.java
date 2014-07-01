@@ -42,5 +42,21 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
     public float getDeltaY() {
         return dataInterpreter.getDeltaY();
     }
+
+    public boolean canBeginTracking() {
+        return dataInterpreter.isCalibrated();
+    }
+
+    public boolean isCalibrating() {
+        return dataInterpreter.isCalibrating();
+    }
+
+    public void startStopCalibration() {
+        dataInterpreter.startStopCalibration();
+    }
+
+    public void setFilterMode(int mode) {
+        dataInterpreter.setFilterMode(mode);
+    }
     
 }

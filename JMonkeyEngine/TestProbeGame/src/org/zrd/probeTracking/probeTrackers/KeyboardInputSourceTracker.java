@@ -38,5 +38,22 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
     public float getDeltaY() {
         return keyboardInputTracker.getCurrentPosChange().getYDisp();
     }
+
+    public boolean canBeginTracking() {
+        return true;
+    }
+
+    public void updateData() {
+    }
+
+    public boolean isCalibrating() {
+        return false;
+    }
+
+    public void startStopCalibration() {
+    }
+
+    public void setFilterMode(int mode) {
+    }
     
 }

@@ -19,6 +19,9 @@ import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl.KeyboardTrackingImpl;
+import org.zrd.probeTracking.probeTrackers.AbstractInputSourceTracker;
+import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
+import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
 import org.zrd.util.timeTools.TimeHelper;
 
 /**
@@ -37,15 +40,10 @@ public class ProbeTracker {
     
     private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
     
-    private SerialDataInterpreter dataInterpreter;
-    
     private float baselineYaw,currentYaw,
             baselinePitch = 0,currentPitch = 0,
             baselineRoll = 0, 
             currentRoll = 0;
-    
-    private float firstYaw=0, firstPitch = 0;
-    private float firstRoll=0;
     
     private float currentDebugX = 0.0f,currentDebugY = 0.0f;
     
@@ -54,7 +52,6 @@ public class ProbeTracker {
     private short readMode = 0;
     
     private Quaternion localRotation;
-    private Quaternion displayRotation;
     private Vector3f localTranslation;
     
     private boolean calibratingX = false, calibratingY = false, recordingPath = false;
@@ -68,11 +65,16 @@ public class ProbeTracker {
     
     private short displacementMode = 2;
     
+    private float currentDeltaX=0,currentDeltaY=0;
+    
     private ProbeDataWriter currentPathVertexWriter;
     
     private Path logFileParentPath,pathRecordingFilePath;
+
+    private AbstractInputSourceTracker currentSourceTracker;
     
-    private KeyboardTrackingImpl keyboardInputTracker;
+    //set to true if using the keyboard. if using the serial, set to false
+    private boolean debugTracking = true;
     
     private Vector3f currentXAxis = new Vector3f(1,0,0);
     private Vector3f currentYAxis = new Vector3f(0,1,0);
@@ -81,9 +83,13 @@ public class ProbeTracker {
     
     public ProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
-        dataInterpreter = new SerialDataInterpreter(trackerProps);
         
-        keyboardInputTracker = new KeyboardTrackingImpl(manager);
+        if(debugTracking){
+            currentSourceTracker = new KeyboardInputSourceTracker(manager);
+        }else{
+            currentSourceTracker = new SerialInputSourceTracker(trackerProps);
+        }
+
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         
@@ -99,48 +105,23 @@ public class ProbeTracker {
     
     public void updateValues(){
         
-        dataInterpreter.updateData();
+        currentSourceTracker.updateData();
         
-        baselineYaw = keyboardInputTracker.getCurrentAngles().getCurrentYaw();
-        baselineRoll = keyboardInputTracker.getCurrentAngles().getCurrentRoll();
-        baselinePitch = keyboardInputTracker.getCurrentAngles().getCurrentPitch();
-        
-        //use this style for displaying the rotation
-        if(dataInterpreter.isCalibrated() && readMode > 0){
-            currentYaw = dataInterpreter.getOutputYawRadians() + baselineYaw - firstYaw;
-        }else{
-            currentYaw = baselineYaw - firstYaw;
+        if(currentSourceTracker.canBeginTracking() && readMode > 0){
+            currentYaw = currentSourceTracker.getCurrentYawRadians();
+            currentPitch = currentSourceTracker.getCurrentPitchRadians();
+            currentRoll = currentSourceTracker.getCurrentRollRadians();
+            
+            currentDeltaX = currentSourceTracker.getDeltaX();
+            currentDeltaY = currentSourceTracker.getDeltaY();
         }
         
-        if(dataInterpreter.isCalibrated() && readMode > 0){
-            currentPitch = dataInterpreter.getOutputYawRadians() + baselinePitch - firstPitch;
-        }else{
-            currentPitch = baselinePitch - firstPitch;
-        }
+        localRotation = TrackingHelper.getQuarternion(currentYaw,currentPitch,currentRoll);
         
-        if(dataInterpreter.isCalibrated() && readMode > 0){
-            currentRoll = dataInterpreter.getOutputYawRadians() + baselineRoll - firstRoll;
-        }else{
-            currentRoll = baselineRoll - firstRoll;
-        }
-        
-        localRotation = TrackingHelper.getQuarternion(
-                currentYaw,currentPitch,currentRoll);
-        displayRotation = TrackingHelper.getQuarternion(
-                currentYaw+firstYaw, 
-                currentPitch+firstPitch, 
-                currentRoll+firstRoll);
-        
-        float currentManualDeltaX =keyboardInputTracker.getCurrentPosChange().getXDisp();
-        float currentManualDeltaY=keyboardInputTracker.getCurrentPosChange().getYDisp();
-        
-        Vector2f currentXYDisp = new Vector2f(
-                -dataInterpreter.getDeltaX() + currentManualDeltaX,
-                -dataInterpreter.getDeltaY() + currentManualDeltaY);
+        Vector2f currentXYDisp = new Vector2f(currentDeltaX,currentDeltaY);
         Vector3f currentDisp = new Vector3f(0,0,0);
         
-        currentXYDisp = TrackingHelper.scaleXYDisplacement(
-                currentXYDisp, scaleFactorX, scaleFactorY);
+        currentXYDisp = TrackingHelper.scaleXYDisplacement(currentXYDisp, scaleFactorX, scaleFactorY);
         
         //gets x,y if there was no rotation change to it
         currentDebugX = currentDebugX + currentXYDisp.getX();
@@ -260,13 +241,13 @@ public class ProbeTracker {
             if(recordingPath){
                 currentPathVertexWriter.closeWriter();
                 currentPathVertexWriter = null;
-                dataInterpreter.startStopRecording(pathRecordingFilePath);
+                //dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }else{   
                 String currentTimestamp = TimeHelper.getTimestampSuffix();
                 currentPathVertexWriter = new ProbeDataWriter(
                         pathRecordingFilePath,"pathVertices",currentTimestamp);
-                dataInterpreter.startStopRecording(pathRecordingFilePath);
+                //dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }
         } catch (IOException ex) {
@@ -293,7 +274,7 @@ public class ProbeTracker {
     public void resetProbe(){
         
         setCurrentPosition(startingPosition);
-        setBaselineRotation(firstYaw,firstPitch,firstRoll);
+        setBaselineRotation(0,0,0);
         
     }
     
@@ -360,14 +341,14 @@ public class ProbeTracker {
     
     public void updateProbeCalibration(){
         
-        if(dataInterpreter.isCalibrating()){
+        if(currentSourceTracker.isCalibrating()){
 
             setReadMode();
-            dataInterpreter.startStopCalibration();
+            currentSourceTracker.startStopCalibration();
 
         }else{
             readModeText = "Now Recalibrating. Press B again to stop.";
-            dataInterpreter.startStopCalibration();
+            currentSourceTracker.startStopCalibration();
         }
         
     }
@@ -379,27 +360,27 @@ public class ProbeTracker {
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Only Show Output";
-                dataInterpreter.setFilterMode(0);
+                currentSourceTracker.setFilterMode(0);
                 break;
             case 1:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Raw Output Mode";
-                dataInterpreter.setFilterMode(1);
+                currentSourceTracker.setFilterMode(1);
                 break;
 
             case 2:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Low-Pass Filter Mode";
-                dataInterpreter.setFilterMode(3);
+                currentSourceTracker.setFilterMode(3);
                 break;
 
             case 3:
                 readModeText = "Probe Output Reading "
                         + "(Press V to change): "
                         + "Mean Error as Threshold Mode";
-                dataInterpreter.setFilterMode(2);
+                currentSourceTracker.setFilterMode(2);
                 break;
         }
         
@@ -463,10 +444,6 @@ public class ProbeTracker {
 
     public float getScaleFactorY() {
         return scaleFactorY;
-    }
-
-    public Quaternion getDisplayRotation() {
-        return displayRotation;
     }
 
     public float getCurrentYaw() {

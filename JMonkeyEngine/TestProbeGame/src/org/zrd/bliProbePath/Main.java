@@ -87,7 +87,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
@@ -446,7 +446,7 @@ public class Main extends SimpleApplication {
         
         probeTracker.updateValues();
         
-        moveableObject.setLocalRotation(probeTracker.getDisplayRotation());
+        moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         
         moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
         //zAxisBox.move(zAxisBoxInitLocation);
