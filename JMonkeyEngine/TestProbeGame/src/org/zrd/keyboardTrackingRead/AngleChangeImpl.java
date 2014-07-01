@@ -15,40 +15,44 @@ public class AngleChangeImpl extends GeneralKeyboardActionMethod implements Angl
     
     private KeyboardInputAngles currentAngles;
     private AngleChange.ANGLE_TYPE type;
-    private float factor = 1;
+    private float angleDiff;
     
     public AngleChangeImpl(InputManager manager, String name, int keyCode, 
             KeyboardInputAngles currentAngles, AngleChange.ANGLE_TYPE type, boolean increment){
         super(manager,name,keyCode);
         this.currentAngles = currentAngles;
         this.type = type;
-        if(!increment) factor = -1;
+        if(increment){
+            angleDiff = AngleChange.POS_FACTOR*AngleChange.ANGLE_CHANGE_RADIANS;
+        }else{
+            angleDiff = AngleChange.NEG_FACTOR*AngleChange.ANGLE_CHANGE_RADIANS;
+        }
     }
 
     @Override
     public void actionMethod() {
         switch(type){
             case YAW:
-                changeYaw(factor);
+                changeYaw(angleDiff);
                 break;
             case PITCH:
-                changePitch(factor);
+                changePitch(angleDiff);
                 break;
             case ROLL: 
-                changeRoll(factor);
+                changeRoll(angleDiff);
                 break;
         }
     }
 
-    public void changeYaw(float factor) {
-        currentAngles.changeYaw(factor);
+    public void changeYaw(float change) {
+        currentAngles.changeYaw(change);
     }
 
-    public void changeRoll(float factor) {
-        currentAngles.changeRoll(factor);
+    public void changeRoll(float change) {
+        currentAngles.changeRoll(change);
     }
 
-    public void changePitch(float factor) {
-        currentAngles.changePitch(factor);
+    public void changePitch(float change) {
+        currentAngles.changePitch(change);
     }
 }
