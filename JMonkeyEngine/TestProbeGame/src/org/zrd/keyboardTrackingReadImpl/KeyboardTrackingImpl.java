@@ -20,6 +20,25 @@ import org.zrd.keyboardTrackingRead.KeyboardTracking;
  */
 public class KeyboardTrackingImpl extends KeyboardTracking{
     
+    /*
+     * The following booleans are used for which angle direction
+     *      is considered a positive angle direction
+     */
+    public static final boolean PITCH_LEFT_IS_POSITIVE = true;
+    public static final boolean ROLL_FORWARD_IS_POSITIVE = true;
+    public static final boolean ROTATE_CLOCKWISE_IS_POSITIVE = true;
+    
+    //if true, then left is considered a positive displacement. 
+    public static final boolean INVERT_X_AXIS_FOR_DISPLACEMENT = false;
+    
+    //if true, then up is considered a positive displacement
+    public static final boolean INVERT_Y_AXIS_FOR_DISPLACEMENT = false;
+    
+    /*
+     * The following strings are keycodes 
+     * for the keyboard tracking actions
+     */
+    
     public static final int PITCH_LEFT_KEY = KeyInput.KEY_NUMPAD7;
     public static final int PITCH_RIGHT_KEY = KeyInput.KEY_NUMPAD9;
     
@@ -72,62 +91,62 @@ public class KeyboardTrackingImpl extends KeyboardTracking{
     @Override
     protected void addPitchLeftListener() {
         addAngleListener(PITCH_LEFT_LISTENER_NAME,PITCH_LEFT_KEY,
-                AngleChange.ANGLE_TYPE.PITCH,true);
+                AngleChange.ANGLE_TYPE.PITCH,PITCH_LEFT_IS_POSITIVE);
     }
 
     @Override
     protected void addPitchRightListener() {
         addAngleListener(PITCH_RIGHT_LISTENER_NAME,PITCH_RIGHT_KEY,
-                AngleChange.ANGLE_TYPE.PITCH,false);
+                AngleChange.ANGLE_TYPE.PITCH,!PITCH_LEFT_IS_POSITIVE);
     }
 
     @Override
     protected void addRollBackwardListener() {
         addAngleListener(ROLL_BACKWARD_LISTENER_NAME,ROLL_BACKWARD_KEY,
-                AngleChange.ANGLE_TYPE.ROLL,false);
+                AngleChange.ANGLE_TYPE.ROLL,!ROLL_FORWARD_IS_POSITIVE);
     }
 
     @Override
     protected void addRollForwardListener() {
         addAngleListener(ROLL_FORWARD_LISTENER_NAME,ROLL_FORWARD_KEY,
-                AngleChange.ANGLE_TYPE.ROLL,true);
+                AngleChange.ANGLE_TYPE.ROLL,ROLL_FORWARD_IS_POSITIVE);
     }
 
     @Override
     protected void addRotateClockwiseListener() {
         addAngleListener(ROTATE_CLOCKWISE_LISTENER_NAME,ROTATE_CLOCKWISE_KEY,
-                AngleChange.ANGLE_TYPE.YAW,true);
+                AngleChange.ANGLE_TYPE.YAW,ROTATE_CLOCKWISE_IS_POSITIVE);
     }
 
     @Override
     protected void addRotateCounterClockwiseListener() {
         addAngleListener(ROTATE_COUNTERCLOCKWISE_LISTENER_NAME,
                 ROTATE_COUNTERCLOCKWISE_KEY,
-                AngleChange.ANGLE_TYPE.YAW,false);
+                AngleChange.ANGLE_TYPE.YAW,!ROTATE_CLOCKWISE_IS_POSITIVE);
     }
 
     @Override
     protected void addMoveUpListener() {
         addPositionChangeListener(MOVE_UP_LISTENER_NAME,MOVE_UP_KEY,
-                PositionChangeImpl.DISP_AXIS.Y,true);
+                PositionChangeImpl.DISP_AXIS.Y,!INVERT_Y_AXIS_FOR_DISPLACEMENT);
     }
 
     @Override
     protected void addMoveDownListener() {
         addPositionChangeListener(MOVE_DOWN_LISTENER_NAME,MOVE_DOWN_KEY,
-                PositionChangeImpl.DISP_AXIS.Y,false);
+                PositionChangeImpl.DISP_AXIS.Y,INVERT_Y_AXIS_FOR_DISPLACEMENT);
     }
 
     @Override
     protected void addMoveLeftListener() {
         addPositionChangeListener(MOVE_LEFT_LISTENER_NAME,MOVE_LEFT_KEY,
-                PositionChangeImpl.DISP_AXIS.X,false);
+                PositionChangeImpl.DISP_AXIS.X,INVERT_X_AXIS_FOR_DISPLACEMENT);
     }
 
     @Override
     protected void addMoveRightListener() {
         addPositionChangeListener(MOVE_RIGHT_LISTENER_NAME,MOVE_RIGHT_KEY,
-                PositionChangeImpl.DISP_AXIS.X,true);
+                PositionChangeImpl.DISP_AXIS.X,!INVERT_X_AXIS_FOR_DISPLACEMENT);
     }
     
 }
