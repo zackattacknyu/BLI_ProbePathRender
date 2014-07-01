@@ -6,7 +6,7 @@ package org.zrd.probeTracking;
 
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import com.jme3.input.InputManager;
-import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
+import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -19,6 +19,7 @@ import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.keyboardTrackingReadImpl.KeyboardTrackingImpl;
+import org.zrd.util.timeTools.TimeHelper;
 
 /**
  *
@@ -262,7 +263,7 @@ public class ProbeTracker {
                 dataInterpreter.startStopRecording(pathRecordingFilePath);
                 
             }else{   
-                String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
+                String currentTimestamp = TimeHelper.getTimestampSuffix();
                 currentPathVertexWriter = new ProbeDataWriter(
                         pathRecordingFilePath,"pathVertices",currentTimestamp);
                 dataInterpreter.startStopRecording(pathRecordingFilePath);

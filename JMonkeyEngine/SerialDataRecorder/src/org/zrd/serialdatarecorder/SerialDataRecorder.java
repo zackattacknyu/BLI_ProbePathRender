@@ -4,7 +4,7 @@
  */
 package org.zrd.serialdatarecorder;
 
-import org.zrd.serialReading.dataInterpretation.SerialDataInterpreter;
+import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;

@@ -2,16 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.dataInterpretation;
+package org.zrd.serialDataInterpreter.dataInterpretation;
 
+import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataHelper;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.zrd.probeTracking.ProbeDataHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.serialDataInterpreter.dataFilter.SerialDataFilter;
+import org.zrd.util.timeTools.TimeHelper;
 
 /**
  * 
@@ -48,7 +47,7 @@ public class SerialDataInterpreter {
                 recording = false;
                 
             }else{   
-                String currentTimestamp = ProbeDataHelper.getTimestampSuffix();
+                String currentTimestamp = TimeHelper.getTimestampSuffix();
                 currentXYRecording = new ProbeDataWriter(
                         filePath,"pathXYdata",currentTimestamp);
                 currentYawPitchRollRecording = new ProbeDataWriter(

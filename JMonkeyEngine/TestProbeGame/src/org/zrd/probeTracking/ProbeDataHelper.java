@@ -62,10 +62,4 @@ public class ProbeDataHelper {
         Float zPart = Float.valueOf(parts[2]);
         return new Vector3f(xPart,yPart,zPart);
     }
-
-    public static String getTimestampSuffix() {
-        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy_MM_dd__kk_mm_ss");
-        Calendar rightNow = Calendar.getInstance();
-        return myFormat.format(rightNow.getTime());
-    }
 }
