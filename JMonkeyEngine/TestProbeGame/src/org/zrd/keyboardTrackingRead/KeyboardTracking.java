@@ -4,7 +4,11 @@
  */
 package org.zrd.keyboardTrackingRead;
 
-/**
+/**This is the abstract class for moving around an object
+ *  using keyboard inputs.
+ * 
+ * In this case, we are moving a probe using yaw,pitch,roll angle
+ *      and x,y displacement
  *
  * @author BLI
  */
@@ -14,7 +18,8 @@ public abstract class KeyboardTracking {
     protected KeyboardInputAngles currentAngles;
     protected KeyboardInputPositionChange currentPosChange;
     
-    public KeyboardTracking(){
+    
+    protected KeyboardTracking(){
         currentAngles = new KeyboardInputAngles();
         currentPosChange = new KeyboardInputPositionChange();
     }
@@ -58,10 +63,20 @@ public abstract class KeyboardTracking {
     protected abstract void addMoveLeftListener();
     protected abstract void addMoveRightListener();
     
+    /**
+     * Gets the object representing the current angles
+     *      that come from keyboard input
+     * @return      current angles from keyboard input
+     */
     public KeyboardInputAngles getCurrentAngles() {
         return currentAngles;
     }
     
+    /**
+     * Gets the object representing the current x,y
+     *      displacement that comes from the keyboard input
+     * @return      current position change from keyboard input
+     */
     public KeyboardInputPositionChange getCurrentPosChange() {
         return currentPosChange;
     }
