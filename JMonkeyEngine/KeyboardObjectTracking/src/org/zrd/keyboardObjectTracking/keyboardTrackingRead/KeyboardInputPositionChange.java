@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.keyboardTrackingRead;
+package org.zrd.keyboardObjectTracking.keyboardTrackingRead;
 
 /**This simply tracks the current x and y displacement
  *      that is coming from keyboard input

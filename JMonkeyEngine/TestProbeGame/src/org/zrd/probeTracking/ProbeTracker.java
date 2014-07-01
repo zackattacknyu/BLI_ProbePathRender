@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
-import org.zrd.keyboardTrackingReadImpl.KeyboardTrackingImpl;
+import org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl.KeyboardTrackingImpl;
 import org.zrd.util.timeTools.TimeHelper;
 
 /**

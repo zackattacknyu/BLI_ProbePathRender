@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.keyboardTrackingReadImpl;
+package org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl;
 
 import com.jme3.input.InputManager;
-import org.zrd.keyboardTrackingRead.KeyboardInputPositionChange;
-import org.zrd.keyboardTrackingRead.PositionChange;
+import org.zrd.keyboardObjectTracking.keyboardTrackingRead.KeyboardInputPositionChange;
+import org.zrd.keyboardObjectTracking.keyboardTrackingRead.PositionChange;
 import org.zrd.renderUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**This implements position changes via the keyboard input
