@@ -27,13 +27,6 @@ public abstract class CameraTrackerImpl extends CameraTracker{
     public static final int ROTATE_UPDOWN_MOUSEAXIS = MouseInput.AXIS_Y;
     public static final int ROTATE_LEFTRIGHT_MOUSEAXIS = MouseInput.AXIS_X;
     
-    /*
-     * These are used to invert the y or x axis on the mouse
-     *      when rotating the camera about a center point
-     */
-    public static final boolean INVERT_Y_FOR_ROTATION = false;
-    public static final boolean INVERT_X_FOR_ROTATION = false;
-    
     //used to denote keycodes for rotating the camera viewpoint up,down,left, or right
     public static final int ROTATE_VIEWPOINT_UP_KEY = KeyInput.KEY_UP;
     public static final int ROTATE_VIEWPOINT_DOWN_KEY = KeyInput.KEY_DOWN;

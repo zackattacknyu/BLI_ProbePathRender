@@ -16,6 +16,13 @@ import com.jme3.math.Vector3f;
  */
 public abstract class CameraTracker {
     
+    /*
+     * These are used to invert the y or x axis on the mouse
+     *      when rotating the camera about a center point
+     */
+    public static final boolean INVERT_Y_FOR_ROTATION = false;
+    public static final boolean INVERT_X_FOR_ROTATION = false;
+    
     /**
      * The following block of 10 strings is all the listener names.
      * Uniqueness is important here
