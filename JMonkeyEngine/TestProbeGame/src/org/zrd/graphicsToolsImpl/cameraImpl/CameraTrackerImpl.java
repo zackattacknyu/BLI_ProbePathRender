@@ -47,13 +47,30 @@ public abstract class CameraTrackerImpl extends CameraTracker{
     //used to specify speed to move fly cam
     public static final float FLY_CAM_MOVE_SPEED = 10f;
     
+    /**
+     * The following block of 10 strings is all the listener names.
+     * Uniqueness is important here
+     * NOTE: Only change these strings if absolutely necessary
+     */
+    
+    //rotates the camera up,down,left, or right
+    public static final String ROTATE_CAMERA_UP_LISTENER_NAME = "rotCameraUp";
+    public static final String ROTATE_CAMERA_DOWN_LISTENER_NAME = "rotCameraDown";
+    public static final String ROTATE_CAMERA_LEFT_LISTENER_NAME = "rotCameraLeft";
+    public static final String ROTATE_CAMERA_RIGHT_LISTENER_NAME = "rotCameraRight";
+    
+    //rotates the viewpoint up,down,left,or right
+    public static final String ROTATE_CAMERA_VIEWPOINT_UP_LISTENER_NAME = "rotViewpointUp";
+    public static final String ROTATE_CAMERA_VIEWPOINT_DOWN_LISTENER_NAME = "rotViewpointDown";
+    public static final String ROTATE_CAMERA_VIEWPOINT_LEFT_LISTENER_NAME = "rotViewpointLeft";
+    public static final String ROTATE_CAMERA_VIEWPOINT_RIGHT_LISTENER_NAME = "rotViewpointRight";
+    
+    //radial movement listener names
+    public static final String RADIAL_MOVEMENT_INWARD_LISTENER_NAME = "moveCameraInward";
+    public static final String RADIAL_MOVEMENT_OUTWARD_LISTENER_NAME = "moveCameraOutward";
+    
     protected Camera currentCam;
     protected FlyByCamera currentFlyCam;
-    
-    private CameraRotateImpl rotUp;
-    private CameraRotateImpl rotDown;
-    private CameraRotateImpl rotLeft;
-    private CameraRotateImpl rotRight;
     
     private Vector3f lookAtCenter = Vector3f.ZERO;
     
@@ -91,7 +108,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera upwards
      */
     protected void rotateUp(){
-        addRotateListener("rotCameraUp",ROTATE_UPDOWN_MOUSEAXIS,INVERT_Y_FOR_ROTATION, 
+        addRotateListener(ROTATE_CAMERA_UP_LISTENER_NAME,
+                ROTATE_UPDOWN_MOUSEAXIS,INVERT_Y_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.UP_DOWN_AXIS);
     }
     
@@ -99,7 +117,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera downwards
      */
     protected void rotateDown(){
-        addRotateListener("rotCameraDown",ROTATE_UPDOWN_MOUSEAXIS,!INVERT_Y_FOR_ROTATION, 
+        addRotateListener(ROTATE_CAMERA_DOWN_LISTENER_NAME,
+                ROTATE_UPDOWN_MOUSEAXIS,!INVERT_Y_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT, CameraRotate.UP_DOWN_AXIS);
     }
     
@@ -107,7 +126,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera left
      */
     protected void rotateLeft(){
-        addRotateListener("rotCameraLeft",ROTATE_LEFTRIGHT_MOUSEAXIS,INVERT_X_FOR_ROTATION, 
+        addRotateListener(ROTATE_CAMERA_LEFT_LISTENER_NAME,
+                ROTATE_LEFTRIGHT_MOUSEAXIS,INVERT_X_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT_NEG, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
@@ -115,7 +135,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * Adds the rotation listener for rotating a camera right
      */
     protected void rotateRight(){
-        addRotateListener("rotCameraRight",ROTATE_LEFTRIGHT_MOUSEAXIS,!INVERT_X_FOR_ROTATION, 
+        addRotateListener(ROTATE_CAMERA_RIGHT_LISTENER_NAME,
+                ROTATE_LEFTRIGHT_MOUSEAXIS,!INVERT_X_FOR_ROTATION, 
                 CameraRotate.ROTATION_AMOUNT, CameraRotate.LEFT_RIGHT_AXIS);
     }
     
@@ -134,7 +155,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint upwards
      */
     protected void rotateViewpointUp(){
-        addViewpointRotateListener("moveCameraUp",ROTATE_VIEWPOINT_UP_KEY,
+        addViewpointRotateListener(ROTATE_CAMERA_VIEWPOINT_UP_LISTENER_NAME,
+                ROTATE_VIEWPOINT_UP_KEY,
                 currentCam.getLeft(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_POS);
     }
@@ -143,7 +165,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint downwards
      */
     protected void rotateViewpointDown(){
-        addViewpointRotateListener("moveCameraDown",ROTATE_VIEWPOINT_DOWN_KEY,
+        addViewpointRotateListener(ROTATE_CAMERA_VIEWPOINT_DOWN_LISTENER_NAME,
+                ROTATE_VIEWPOINT_DOWN_KEY,
                 currentCam.getLeft(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
@@ -152,7 +175,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint left
      */
     protected void rotateViewpointLeft(){
-        addViewpointRotateListener("moveCameraLeft",ROTATE_VIEWPOINT_LEFT_KEY,
+        addViewpointRotateListener(ROTATE_CAMERA_VIEWPOINT_LEFT_LISTENER_NAME,
+                ROTATE_VIEWPOINT_LEFT_KEY,
                 currentCam.getUp(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_POS);
     }
@@ -161,7 +185,8 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * adds the viewpoint rotation listener for rotating the viewpoint right
      */
     protected void rotateViewpointRight(){
-        addViewpointRotateListener("moveCameraRight",ROTATE_VIEWPOINT_RIGHT_KEY,
+        addViewpointRotateListener(ROTATE_CAMERA_VIEWPOINT_RIGHT_LISTENER_NAME,
+                ROTATE_VIEWPOINT_RIGHT_KEY,
                 currentCam.getUp(),
                 CameraViewpointRotate.VIEWPOINT_ROTATION_AMOUNT_NEG);
     }
@@ -182,14 +207,16 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * Makes the listener that moves the camera inward
      */
     protected void moveInward(){
-        addRadialMovementListener("moveInward",RADIAL_MOVEMENT_INWARD_KEY,true);
+        addRadialMovementListener(RADIAL_MOVEMENT_INWARD_LISTENER_NAME,
+                RADIAL_MOVEMENT_INWARD_KEY,true);
     }
     
     /**
      * Makes the listener that moves the camera outward
      */
     protected void moveOutward(){
-        addRadialMovementListener("moveOutward",RADIAL_MOVEMENT_OUTWARD_KEY,false);
+        addRadialMovementListener(RADIAL_MOVEMENT_OUTWARD_LISTENER_NAME,
+                RADIAL_MOVEMENT_OUTWARD_KEY,false);
     }
     
     /**
