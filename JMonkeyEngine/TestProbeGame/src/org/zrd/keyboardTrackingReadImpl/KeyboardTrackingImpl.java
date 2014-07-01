@@ -20,7 +20,20 @@ import org.zrd.keyboardTrackingRead.KeyboardTracking;
  */
 public class KeyboardTrackingImpl extends KeyboardTracking{
     
+    public static final int PITCH_LEFT_KEY = KeyInput.KEY_NUMPAD7;
+    public static final int PITCH_RIGHT_KEY = KeyInput.KEY_NUMPAD9;
     
+    public static final int ROLL_FORWARD_KEY = KeyInput.KEY_NUMPAD5;
+    public static final int ROLL_BACKWARD_KEY = KeyInput.KEY_NUMPAD0;
+    
+    public static final int ROTATE_CLOCKWISE_KEY = KeyInput.KEY_NUMPAD1;
+    public static final int ROTATE_COUNTERCLOCKWISE_KEY = KeyInput.KEY_NUMPAD3;
+    
+    public static final int MOVE_UP_KEY = KeyInput.KEY_NUMPAD8;
+    public static final int MOVE_DOWN_KEY = KeyInput.KEY_NUMPAD2;
+    
+    public static final int MOVE_LEFT_KEY = KeyInput.KEY_NUMPAD4;
+    public static final int MOVE_RIGHT_KEY = KeyInput.KEY_NUMPAD6;
 
     private InputManager inputManager;
     
@@ -58,61 +71,62 @@ public class KeyboardTrackingImpl extends KeyboardTracking{
 
     @Override
     protected void addPitchLeftListener() {
-        addAngleListener(PITCH_LEFT_LISTENER_NAME,KeyInput.KEY_NUMPAD7,
+        addAngleListener(PITCH_LEFT_LISTENER_NAME,PITCH_LEFT_KEY,
                 AngleChange.ANGLE_TYPE.PITCH,true);
     }
 
     @Override
     protected void addPitchRightListener() {
-        addAngleListener(PITCH_RIGHT_LISTENER_NAME,KeyInput.KEY_NUMPAD9,
+        addAngleListener(PITCH_RIGHT_LISTENER_NAME,PITCH_RIGHT_KEY,
                 AngleChange.ANGLE_TYPE.PITCH,false);
     }
 
     @Override
     protected void addRollBackwardListener() {
-        addAngleListener(ROLL_BACKWARD_LISTENER_NAME,KeyInput.KEY_NUMPAD0,
+        addAngleListener(ROLL_BACKWARD_LISTENER_NAME,ROLL_BACKWARD_KEY,
                 AngleChange.ANGLE_TYPE.ROLL,false);
     }
 
     @Override
     protected void addRollForwardListener() {
-        addAngleListener(ROLL_FORWARD_LISTENER_NAME,KeyInput.KEY_NUMPAD5,
+        addAngleListener(ROLL_FORWARD_LISTENER_NAME,ROLL_FORWARD_KEY,
                 AngleChange.ANGLE_TYPE.ROLL,true);
     }
 
     @Override
     protected void addRotateClockwiseListener() {
-        addAngleListener(ROTATE_CLOCKWISE_LISTENER_NAME,KeyInput.KEY_NUMPAD1,
+        addAngleListener(ROTATE_CLOCKWISE_LISTENER_NAME,ROTATE_CLOCKWISE_KEY,
                 AngleChange.ANGLE_TYPE.YAW,true);
     }
 
     @Override
     protected void addRotateCounterClockwiseListener() {
-        addAngleListener(ROTATE_COUNTERCLOCKWISE_LISTENER_NAME,KeyInput.KEY_NUMPAD3,
+        addAngleListener(ROTATE_COUNTERCLOCKWISE_LISTENER_NAME,
+                ROTATE_COUNTERCLOCKWISE_KEY,
                 AngleChange.ANGLE_TYPE.YAW,false);
     }
 
     @Override
     protected void addMoveUpListener() {
-        addPositionChangeListener(MOVE_UP_LISTENER_NAME,KeyInput.KEY_NUMPAD8,
+        addPositionChangeListener(MOVE_UP_LISTENER_NAME,MOVE_UP_KEY,
                 PositionChangeImpl.DISP_AXIS.Y,true);
     }
 
     @Override
     protected void addMoveDownListener() {
-        addPositionChangeListener(MOVE_DOWN_LISTENER_NAME,KeyInput.KEY_NUMPAD2,
+        addPositionChangeListener(MOVE_DOWN_LISTENER_NAME,MOVE_DOWN_KEY,
                 PositionChangeImpl.DISP_AXIS.Y,false);
     }
 
     @Override
     protected void addMoveLeftListener() {
-        addPositionChangeListener(MOVE_LEFT_LISTENER_NAME,KeyInput.KEY_NUMPAD4,
+        addPositionChangeListener(MOVE_LEFT_LISTENER_NAME,MOVE_LEFT_KEY,
                 PositionChangeImpl.DISP_AXIS.X,false);
     }
 
     @Override
     protected void addMoveRightListener() {
-        addPositionChangeListener(MOVE_RIGHT_LISTENER_NAME,KeyInput.KEY_NUMPAD6,
+        addPositionChangeListener(MOVE_RIGHT_LISTENER_NAME,MOVE_RIGHT_KEY,
                 PositionChangeImpl.DISP_AXIS.X,true);
     }
     
