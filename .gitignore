@@ -18,3 +18,6 @@
 /JMonkeyEngine/Util/build/
 /JMonkeyEngine/SerialInterface/dist/
 /JMonkeyEngine/Util/dist/
+/JMonkeyEngine/RenderUtil/nbproject/private/
+/JMonkeyEngine/RenderUtil/build/
+/JMonkeyEngine/RenderUtil/dist/

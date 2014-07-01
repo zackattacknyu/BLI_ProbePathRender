@@ -7,7 +7,7 @@ package org.zrd.keyboardTrackingReadImpl;
 import com.jme3.input.InputManager;
 import org.zrd.keyboardTrackingRead.AngleChange;
 import org.zrd.keyboardTrackingRead.KeyboardInputAngles;
-import org.zrd.utilImpl.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.renderUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**This implements an individual angle change action from the keyboard
  *

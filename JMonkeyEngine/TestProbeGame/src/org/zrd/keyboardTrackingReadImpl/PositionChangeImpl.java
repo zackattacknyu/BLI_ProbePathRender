@@ -7,7 +7,7 @@ package org.zrd.keyboardTrackingReadImpl;
 import com.jme3.input.InputManager;
 import org.zrd.keyboardTrackingRead.KeyboardInputPositionChange;
 import org.zrd.keyboardTrackingRead.PositionChange;
-import org.zrd.utilImpl.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.renderUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**This implements position changes via the keyboard input
  *
