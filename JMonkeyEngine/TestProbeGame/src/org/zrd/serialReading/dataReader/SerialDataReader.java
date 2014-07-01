@@ -4,7 +4,7 @@
  */
 package org.zrd.serialReading.dataReader;
 
-import org.zrd.serialReading.serialInterface.SerialReader;
+import org.zrd.serialInterface.arduinoReading.SerialReader;
 import org.zrd.util.general.PropertiesHelper;
 import java.util.HashMap;
 import java.util.Properties;

@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.serialReading.serialInterface;
+package org.zrd.serialInterface.arduinoReading;
 
-import org.zrd.util.general.PropertiesHelper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -14,7 +13,6 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
 import java.util.Properties;
-import org.zrd.bliProbePath.Properties_BLIProbePath;
 
 /*
  * 
