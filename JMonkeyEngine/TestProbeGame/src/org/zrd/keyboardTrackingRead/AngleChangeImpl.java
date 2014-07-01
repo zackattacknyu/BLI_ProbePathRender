@@ -11,16 +11,14 @@ import org.zrd.utilImpl.mouseKeyboard.GeneralKeyboardActionMethod;
  *
  * @author Zach
  */
-public class AngleChangeImpl extends GeneralKeyboardActionMethod{
-    
-    public enum ANGLE_TYPE{ YAW, PITCH, ROLL};
+public class AngleChangeImpl extends GeneralKeyboardActionMethod implements AngleChange{
     
     private KeyboardInputAngles currentAngles;
-    private ANGLE_TYPE type;
+    private AngleChange.ANGLE_TYPE type;
     private float factor = 1;
     
     public AngleChangeImpl(InputManager manager, String name, int keyCode, 
-            KeyboardInputAngles currentAngles, ANGLE_TYPE type, boolean increment){
+            KeyboardInputAngles currentAngles, AngleChange.ANGLE_TYPE type, boolean increment){
         super(manager,name,keyCode);
         this.currentAngles = currentAngles;
         this.type = type;
@@ -31,14 +29,26 @@ public class AngleChangeImpl extends GeneralKeyboardActionMethod{
     public void actionMethod() {
         switch(type){
             case YAW:
-                currentAngles.changeYaw(factor);
+                changeYaw(factor);
                 break;
             case PITCH:
-                currentAngles.changePitch(factor);
+                changePitch(factor);
                 break;
             case ROLL: 
-                currentAngles.changeRoll(factor);
+                changeRoll(factor);
                 break;
         }
+    }
+
+    public void changeYaw(float factor) {
+        currentAngles.changeYaw(factor);
+    }
+
+    public void changeRoll(float factor) {
+        currentAngles.changeRoll(factor);
+    }
+
+    public void changePitch(float factor) {
+        currentAngles.changePitch(factor);
     }
 }

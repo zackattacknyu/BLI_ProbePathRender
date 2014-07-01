@@ -28,22 +28,22 @@ public class KeyboardTrackingImpl {
     private void addAngleListeners() {
         
         addAngleListener("pitchLeft",KeyInput.KEY_NUMPAD7,
-                AngleChangeImpl.ANGLE_TYPE.PITCH,true);
+                AngleChange.ANGLE_TYPE.PITCH,true);
         addAngleListener("pitchRight",KeyInput.KEY_NUMPAD9,
-                AngleChangeImpl.ANGLE_TYPE.PITCH,false);
+                AngleChange.ANGLE_TYPE.PITCH,false);
         
         addAngleListener("rollForward",KeyInput.KEY_NUMPAD5,
-                AngleChangeImpl.ANGLE_TYPE.ROLL,true);
+                AngleChange.ANGLE_TYPE.ROLL,true);
         addAngleListener("rollBackward",KeyInput.KEY_NUMPAD0,
-                AngleChangeImpl.ANGLE_TYPE.ROLL,false);
+                AngleChange.ANGLE_TYPE.ROLL,false);
         
         addAngleListener("rotateClockwise",KeyInput.KEY_NUMPAD1,
-                AngleChangeImpl.ANGLE_TYPE.YAW,true);
+                AngleChange.ANGLE_TYPE.YAW,true);
         addAngleListener("rotateCounterclockwise",KeyInput.KEY_NUMPAD3,
-                AngleChangeImpl.ANGLE_TYPE.YAW,false);
+                AngleChange.ANGLE_TYPE.YAW,false);
     }
 
-    private void addAngleListener(String name, int keyCode, AngleChangeImpl.ANGLE_TYPE type, boolean inc) {
+    private void addAngleListener(String name, int keyCode, AngleChange.ANGLE_TYPE type, boolean inc) {
         new AngleChangeImpl(inputManager,name,keyCode,currentAngles, type,inc);
     }
 
