@@ -4,7 +4,7 @@ import org.zrd.utilImpl.general.CollisionPoint;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.utilImpl.general.ProgramConstants;
 import org.zrd.graphicsTools.geometry.path.ProbePathSet;
-import org.zrd.graphicsTools.camera.CameraTracker;
+import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;

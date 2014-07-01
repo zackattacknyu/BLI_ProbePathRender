@@ -4,7 +4,7 @@
  */
 package org.zrd.bliProbePath;
 
-import org.zrd.graphicsToolsImpl.cameraImpl.CameraTrackerImpl;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;

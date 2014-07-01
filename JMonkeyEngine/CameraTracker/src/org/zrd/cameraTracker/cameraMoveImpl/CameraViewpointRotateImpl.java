@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsToolsImpl.cameraImpl;
+package org.zrd.cameraTracker.cameraMoveImpl;
 
-import org.zrd.graphicsTools.camera.CameraHelper;
-import org.zrd.graphicsTools.camera.CameraViewpointRotate;
+import org.zrd.cameraTracker.cameraMoves.CameraHelper;
+import org.zrd.cameraTracker.cameraMoves.CameraViewpointRotate;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;

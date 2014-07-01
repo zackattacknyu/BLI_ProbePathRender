@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsToolsImpl.cameraImpl;
+package org.zrd.cameraTracker.cameraMoveImpl;
 
-import org.zrd.graphicsTools.camera.CameraRotate;
-import org.zrd.graphicsTools.camera.CameraTracker;
-import org.zrd.graphicsTools.camera.CameraViewpointRotate;
+import org.zrd.cameraTracker.cameraMoves.CameraRotate;
+import org.zrd.cameraTracker.cameraMoves.CameraTracker;
+import org.zrd.cameraTracker.cameraMoves.CameraViewpointRotate;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -15,7 +15,6 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import org.zrd.graphicsTools.geometry.util.GeneralHelper;
 
 /**
  *
@@ -73,7 +72,7 @@ public abstract class CameraTrackerImpl extends CameraTracker{
      * @param rotAxis       axis to rotate camera about
      */
     private void addRotateListener(String name, int mouseCode, boolean dir, float rotAmount,Vector3f rotAxis){
-        Matrix3f rotMatrix = GeneralHelper.getRotationMatrix(rotAmount, rotAxis);
+        Matrix3f rotMatrix = getRotationMatrix(rotAmount, rotAxis);
         new CameraRotateImpl(inputMang,name,mouseCode,dir,currentCam,rotMatrix,lookAtCenter);
     }
     
@@ -222,6 +221,12 @@ public abstract class CameraTrackerImpl extends CameraTracker{
         currentFlyCam.setDragToRotate(true); //if not specified as true, cursor won't appear
         currentFlyCam.setMoveSpeed(FLY_CAM_MOVE_SPEED);
         currentFlyCam.setRotationSpeed(0f); //rotation is handled elsewhere, hence the zero
+    }
+    
+    public static Matrix3f getRotationMatrix(float angle, Vector3f axis) {
+        Quaternion rotation = new Quaternion();
+        rotation.fromAngleAxis(angle, axis);
+        return rotation.toRotationMatrix();
     }
     
 }
