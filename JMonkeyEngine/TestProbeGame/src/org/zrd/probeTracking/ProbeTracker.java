@@ -19,7 +19,9 @@ import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.probeTracking.probeTrackers.AbstractInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
@@ -77,8 +79,8 @@ public class ProbeTracker {
     //set to true if using the keyboard. if using the serial, set to false
     private boolean debugTracking = true;
     
-    private Vector3f currentXAxis = new Vector3f(1,0,0);
-    private Vector3f currentYAxis = new Vector3f(0,1,0);
+    private AbstractSerialInputToWorldConverter coordConverter;
+
     private Vector3f startingXAxis = new Vector3f(1,0,0);
     private Vector3f startingYAxis = new Vector3f(0,1,0);
     
@@ -99,6 +101,23 @@ public class ProbeTracker {
             displacementMode = 2;
         }
         
+        switch(displacementMode){
+            case 0:
+                coordConverter = new SerialInputTo2DConverter();
+                break;
+                
+            case 1:
+                coordConverter = new SerialInputToRotated2DConverter();
+                break;
+                
+            case 2:
+                coordConverter = new SerialInputTo3DConverter();
+                break;
+        }
+        
+        coordConverter.setScaleFactorX(scaleFactorX);
+        coordConverter.setScaleFactorY(scaleFactorY);
+        
         logFileParentPath = Paths.get("textFiles").resolve("logs");
         pathRecordingFilePath = logFileParentPath.resolve("paths");
         
@@ -117,10 +136,9 @@ public class ProbeTracker {
             currentDeltaY = currentSourceTracker.getDeltaY();
         }
         
-        localRotation = TrackingHelper.getQuarternion(currentYaw,currentPitch,currentRoll);
+        localRotation = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
         Vector2f currentXYDisp = new Vector2f(currentDeltaX,currentDeltaY);
-        Vector3f currentDisp = new Vector3f(0,0,0);
         
         //currentXYDisp = TrackingHelper.scaleXYDisplacement(currentXYDisp, scaleFactorX, scaleFactorY);
         
@@ -128,47 +146,9 @@ public class ProbeTracker {
         currentDebugX = currentDebugX + currentXYDisp.getX();
         currentDebugY = currentDebugY + currentXYDisp.getY();
         
-        currentXAxis = localRotation.mult(startingXAxis);
-        currentYAxis = localRotation.mult(startingYAxis);
         
-        AbstractSerialInputToWorldConverter converter = new SerialInputTo3DConverter();
-        converter.setScaleFactorX(scaleFactorX);
-        converter.setScaleFactorY(scaleFactorY);
-        
-        switch(displacementMode){
-            
-                //only use X,Y
-            case 0:
-                currentDisp = new Vector3f(currentXYDisp.getX(),
-                        currentXYDisp.getY(),0.0f);
-            break;
-
-                // use X,Y and Yaw
-            case 1:
-                currentDisp = TrackingHelper.getXYDisplacement(
-                        currentXYDisp.getX(),
-                        currentXYDisp.getY(),
-                        currentYaw);
-            break;
-
-                //use X,Y and Yaw, Pitch, Roll
-            case 2:
-                currentDisp = converter.getXYZDisplacement(currentDeltaX, currentDeltaY, 
+        Vector3f currentDisp = coordConverter.getXYZDisplacement(currentDeltaX, currentDeltaY, 
                         currentYaw, currentPitch, currentRoll);
-                /*currentDisp = TrackingHelper.getXYZDisplacement(
-                        currentXYDisp.getX(),
-                        currentXYDisp.getY(), 
-                        localRotation);*/
-                /*currentDisp = TrackingHelper.getDisplacement(currentXYDisp.getX(), 
-                        currentXYDisp.getY(), currentXAxis, currentYAxis);*/
-                /*currentDisp = TrackingHelper.getXYZDisplacement(
-                        currentXYDisp.getX(),
-                        currentXYDisp.getY(), 
-                        currentNormal,
-                        localRotation)*/;
-            break;
-        
-        }
         
         currentX = currentX + currentDisp.getX();
         currentY = currentY + currentDisp.getY();
@@ -210,14 +190,6 @@ public class ProbeTracker {
 
         calibratingY = !calibratingY;
         
-    }
-
-    public Vector3f getCurrentXAxis() {
-        return currentXAxis;
-    }
-
-    public Vector3f getCurrentYAxis() {
-        return currentYAxis;
     }
     
     public Vector3f getCurrentNormal(){
@@ -471,6 +443,14 @@ public class ProbeTracker {
 
     public String getReadModeText() {
         return readModeText;
+    }
+
+    public Vector3f getCurrentXAxis() {
+        return coordConverter.getCurrentXAxis();
+    }
+
+    public Vector3f getCurrentYAxis() {
+        return coordConverter.getCurrentYAxis();
     }
     
     

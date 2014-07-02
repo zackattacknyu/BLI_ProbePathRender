@@ -49,14 +49,19 @@ public abstract class AbstractSerialInputToWorldConverter {
     //vector for y displacement
     public static final Vector3f INIT_Y_VECTOR = new Vector3f(0,1,0);
     
+    //rotation matrix for most recent yaw, pitch, roll numbers
+    private Matrix3f currentRotationMatrix = new Matrix3f();
+    
     public Vector3f getXYZDisplacement(float deltaX, float deltaY, 
             float yaw, float pitch, float roll){
         
         float xChangeMagnitude = deltaX*scaleFactorX;
         float yChangeMagnitude = deltaY*scaleFactorY;
         
-        Vector3f xDispVector = getRotatedVector(INIT_X_VECTOR,yaw,pitch,roll);
-        Vector3f yDispVector = getRotatedVector(INIT_Y_VECTOR,yaw,pitch,roll);
+        currentRotationMatrix = getRotationMatrix(yaw,pitch,roll);
+        
+        Vector3f xDispVector = currentRotationMatrix.mult(INIT_X_VECTOR);
+        Vector3f yDispVector = currentRotationMatrix.mult(INIT_Y_VECTOR);
         
         Vector3f xDisplacement = xDispVector.mult(xChangeMagnitude);
         Vector3f yDisplacement = yDispVector.mult(yChangeMagnitude);
@@ -66,8 +71,7 @@ public abstract class AbstractSerialInputToWorldConverter {
         return rotationCalibrationMatrix.mult(initDisplacement);
     }
     
-    protected abstract Vector3f getRotatedVector(Vector3f inputVector, 
-            float yaw, float pitch, float roll);
+    protected abstract Matrix3f getRotationMatrix(float yaw, float pitch, float roll);
 
     public void setRotationCalibrationMatrix(Matrix3f rotationCalibrationMatrix) {
         this.rotationCalibrationMatrix = rotationCalibrationMatrix;
@@ -79,6 +83,14 @@ public abstract class AbstractSerialInputToWorldConverter {
 
     public void setScaleFactorY(float scaleFactorY) {
         this.scaleFactorY = scaleFactorY;
+    }
+    
+    public Vector3f getCurrentXAxis(){
+        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(INIT_X_VECTOR);
+    }
+    
+    public Vector3f getCurrentYAxis(){
+        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(INIT_Y_VECTOR);
     }
     
     

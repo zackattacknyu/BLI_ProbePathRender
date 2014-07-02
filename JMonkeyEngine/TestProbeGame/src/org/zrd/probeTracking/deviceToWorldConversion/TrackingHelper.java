@@ -19,7 +19,7 @@ public class TrackingHelper {
     public static Vector3f getXYDisplacement(float deltaX, float deltaY, float yawInRadians){
         
         Vector3f mouseDisp = new Vector3f(deltaX,deltaY,0);
-        Matrix3f rotMatrix = getQuarternion(yawInRadians).toRotationMatrix();
+        Matrix3f rotMatrix = getQuaternion(yawInRadians).toRotationMatrix();
         
         return rotMatrix.mult(mouseDisp);
         
@@ -79,19 +79,27 @@ public class TrackingHelper {
     
     public static Matrix3f getRotationMatrix(float yawInRadians){
         
-        return getQuarternion(yawInRadians).toRotationMatrix();
+        return getQuaternion(yawInRadians).toRotationMatrix();
         
         
     }
     
-    public static Quaternion getQuarternion(float yawInRadians){
+    public static Matrix3f getRotationmatrix(float yawInRadians){
+        return getQuaternion(yawInRadians).toRotationMatrix();
+    }
+    
+    public static Matrix3f getRotationMatrix(float yawInRadians,float pitchInRadians, float rollInRadians){
+        return getQuaternion(yawInRadians,pitchInRadians,rollInRadians).toRotationMatrix();
+    }
+    
+    public static Quaternion getQuaternion(float yawInRadians){
         
         Quaternion output = new Quaternion();
         output.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
         return output;
     }
     
-    public static Quaternion getQuarternion(float yawInRadians, 
+    public static Quaternion getQuaternion(float yawInRadians, 
             float pitchInRadians, float rollInRadians){
         
         /*Quaternion rotation = new Quaternion();

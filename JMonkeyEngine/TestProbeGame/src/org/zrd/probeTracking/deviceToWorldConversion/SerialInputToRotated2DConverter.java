@@ -10,11 +10,15 @@ import com.jme3.math.Matrix3f;
  *
  * @author BLI
  */
-public class SerialInputTo3DConverter extends AbstractSerialInputToWorldConverter{
+public class SerialInputToRotated2DConverter extends AbstractSerialInputToWorldConverter{
+
 
     @Override
-    protected Matrix3f getRotationMatrix(float yaw, float pitch, float roll) {
-        return TrackingHelper.getRotationMatrix(yaw, pitch, roll);
+    public Matrix3f getRotationMatrix(float yaw,float pitch, float roll){
+        return TrackingHelper.getRotationMatrix(yaw);
     }
+
+    
+    
     
 }

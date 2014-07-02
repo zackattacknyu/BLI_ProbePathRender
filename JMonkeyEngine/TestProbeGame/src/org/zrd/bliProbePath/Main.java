@@ -555,7 +555,7 @@ public class Main extends SimpleApplication {
     
     private Spatial makeLineForVector(Vector3f contactPoint, Vector3f vector,Material mat){
         ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
-        vertices.add(contactPoint.clone().add(vector.mult(-1)));
+        vertices.add(contactPoint.clone().add(vector.mult(-0.2f)));
         vertices.add(contactPoint.clone().add(vector.mult(3)));
         return PathHelper.createLineFromVertices(vertices, mat);
     }

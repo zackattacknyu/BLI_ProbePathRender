@@ -49,7 +49,7 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         Quaternion currentQuat;
         Vector3f currentPt;
         for(int index = 0; index < yawValues.size(); index++){
-            currentQuat = TrackingHelper.getQuarternion(
+            currentQuat = TrackingHelper.getQuaternion(
                     yawValues.get(index), 
                     pitchValues.get(index), 
                     rollValues.get(index));
