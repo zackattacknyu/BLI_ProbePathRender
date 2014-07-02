@@ -14,7 +14,7 @@ import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.graphicsToolsImpl.pathImpl.PathDataDisplay;
-import org.zrd.probeTracking.TrackingHelper;
+import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
  *

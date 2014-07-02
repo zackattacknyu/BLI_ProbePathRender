@@ -4,6 +4,7 @@
  */
 package org.zrd.probeTracking;
 
+import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
@@ -105,7 +106,7 @@ public class ProbeTracker {
         
         currentSourceTracker.updateData();
         
-        if(currentSourceTracker.canBeginTracking() && readMode > 0){
+        if(currentSourceTracker.canBeginTracking()){
             currentYaw = currentSourceTracker.getCurrentYawRadians();
             currentPitch = currentSourceTracker.getCurrentPitchRadians();
             currentRoll = currentSourceTracker.getCurrentRollRadians();
@@ -146,12 +147,12 @@ public class ProbeTracker {
 
                 //use X,Y and Yaw, Pitch, Roll
             case 2:
-                /*currentDisp = TrackingHelper.getXYZDisplacement(
+                currentDisp = TrackingHelper.getXYZDisplacement(
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
-                        localRotation);*/
-                currentDisp = TrackingHelper.getDisplacement(currentXYDisp.getX(), 
-                        currentXYDisp.getY(), currentXAxis, currentYAxis);
+                        localRotation);
+                /*currentDisp = TrackingHelper.getDisplacement(currentXYDisp.getX(), 
+                        currentXYDisp.getY(), currentXAxis, currentYAxis);*/
                 /*currentDisp = TrackingHelper.getXYZDisplacement(
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 

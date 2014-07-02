@@ -14,6 +14,7 @@ import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 public class SerialInputSourceTracker implements AbstractInputSourceTracker{
     
     SerialDataInterpreter dataInterpreter;
+    private int mode = 0;
     
     public SerialInputSourceTracker(Properties trackerProps){
         dataInterpreter = new SerialDataInterpreter(trackerProps);
@@ -44,7 +45,7 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
     }
 
     public boolean canBeginTracking() {
-        return dataInterpreter.isCalibrated();
+        return dataInterpreter.isCalibrated() && mode>0;
     }
 
     public boolean isCalibrating() {
@@ -56,6 +57,7 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
     }
 
     public void setFilterMode(int mode) {
+        this.mode = mode;
         dataInterpreter.setFilterMode(mode);
     }
     
