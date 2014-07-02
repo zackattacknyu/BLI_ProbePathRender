@@ -39,7 +39,7 @@ public class ProbeTracker {
     private float currentX=-0.4f,currentY=-0.97f,currentZ=-15.35f;
     private final Vector3f startingPosition = new Vector3f(currentX,currentY,currentZ);
     
-    private float scaleFactorX = -0.02f,scaleFactorY = 0.02f;
+    private float scaleFactorX = -0.00001f,scaleFactorY = 0.00001f;
     
     private float baselineYaw,currentYaw,
             baselinePitch = 0,currentPitch = 0,

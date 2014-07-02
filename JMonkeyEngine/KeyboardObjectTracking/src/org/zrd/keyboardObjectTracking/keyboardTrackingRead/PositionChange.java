@@ -19,8 +19,11 @@ public interface PositionChange {
     /**
      * This is the magnitude of the position change
      *      from one keystroke on the keyboard
+     * 
+     * The number is large only because it will be manipulated by 
+     *      a scale factor that is very small
      */
-    public static final float POSITION_CHANGE = 4.0f;
+    public static final float POSITION_CHANGE = 8000.0f;
     
     /**
      * Factor used if moving up or right

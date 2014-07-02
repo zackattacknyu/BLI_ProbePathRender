@@ -4,7 +4,6 @@
  */
 package org.zrd.serialDataInterpreter.dataInterpretation;
 
-import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataHelper;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
@@ -17,6 +16,8 @@ import org.zrd.util.timeTools.TimeHelper;
  * @author BLI
  */
 public class SerialDataInterpreter {
+    
+    public static final float DEG_TO_RAD_FACTOR = (float) (Math.PI/180.0);
     
     private SerialDataFilter serial;
 
@@ -111,21 +112,26 @@ public class SerialDataInterpreter {
     /**
      * This is the method that takes in an angle from the probe
      *      and returns the desired angle to the tracker
+     * 
+     * In this case, it takes the input which is in degrees and converts
+     *      it to radians
      * @param angle
      * @return 
      */
     private float getOutputAngle(float angle){
-        return SerialDataHelper.getReturnAngle(angle);
+        return angle*DEG_TO_RAD_FACTOR;
     }
     
     /**
      * This is the method that takes in an x or y value from the probe
-     *      and returns the desired displacement to the tracker
+     *      and returns the desired displacement to the tracker.
+     * 
+     * 
      * @param disp
      * @return 
      */
     private float getOutputDisp(float disp){
-        return SerialDataHelper.getReturnDisp(disp);
+        return disp;
     }
 
     public boolean isCalibrated() {
