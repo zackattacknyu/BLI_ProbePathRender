@@ -6,7 +6,6 @@ package org.zrd.probeTracking;
 
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import com.jme3.input.InputManager;
-import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
-import org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl.KeyboardTrackingImpl;
 import org.zrd.probeTracking.probeTrackers.AbstractInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
