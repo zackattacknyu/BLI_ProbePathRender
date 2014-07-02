@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.probeTrackers.AbstractInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
@@ -120,7 +122,7 @@ public class ProbeTracker {
         Vector2f currentXYDisp = new Vector2f(currentDeltaX,currentDeltaY);
         Vector3f currentDisp = new Vector3f(0,0,0);
         
-        currentXYDisp = TrackingHelper.scaleXYDisplacement(currentXYDisp, scaleFactorX, scaleFactorY);
+        //currentXYDisp = TrackingHelper.scaleXYDisplacement(currentXYDisp, scaleFactorX, scaleFactorY);
         
         //gets x,y if there was no rotation change to it
         currentDebugX = currentDebugX + currentXYDisp.getX();
@@ -128,6 +130,10 @@ public class ProbeTracker {
         
         currentXAxis = localRotation.mult(startingXAxis);
         currentYAxis = localRotation.mult(startingYAxis);
+        
+        AbstractSerialInputToWorldConverter converter = new SerialInputTo3DConverter();
+        converter.setScaleFactorX(scaleFactorX);
+        converter.setScaleFactorY(scaleFactorY);
         
         switch(displacementMode){
             
@@ -147,10 +153,12 @@ public class ProbeTracker {
 
                 //use X,Y and Yaw, Pitch, Roll
             case 2:
-                currentDisp = TrackingHelper.getXYZDisplacement(
+                currentDisp = converter.getXYZDisplacement(currentDeltaX, currentDeltaY, 
+                        currentYaw, currentPitch, currentRoll);
+                /*currentDisp = TrackingHelper.getXYZDisplacement(
                         currentXYDisp.getX(),
                         currentXYDisp.getY(), 
-                        localRotation);
+                        localRotation);*/
                 /*currentDisp = TrackingHelper.getDisplacement(currentXYDisp.getX(), 
                         currentXYDisp.getY(), currentXAxis, currentYAxis);*/
                 /*currentDisp = TrackingHelper.getXYZDisplacement(

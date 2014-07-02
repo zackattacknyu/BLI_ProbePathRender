@@ -19,7 +19,7 @@ import com.jme3.math.Vector3f;
  *
  * @author BLI
  */
-public class AbstractSerialInputToWorldConverter {
+public abstract class AbstractSerialInputToWorldConverter {
 
     /*
      * The following three variables are calibration factors
@@ -36,8 +36,51 @@ public class AbstractSerialInputToWorldConverter {
     //scale factor for y coordinate. should be same as one for x coordinate
     protected float scaleFactorY = 1.0f;
     
-    public Vector3f getXYZDisplacement(float deltaX, float deltaY, float yaw, float pitch, float roll){
-        return new Vector3f();
+    /*
+     * These vectors are the initial x and y displacement vectors.
+     *      The subclasses of this one are in charge of manipulating
+     *      these vectors based on rotation to get the actual
+     *      x, y, and z displacment
+     */
+    
+    //vector for x displacement
+    public static final Vector3f INIT_X_VECTOR = new Vector3f(1,0,0);
+    
+    //vector for y displacement
+    public static final Vector3f INIT_Y_VECTOR = new Vector3f(0,1,0);
+    
+    public Vector3f getXYZDisplacement(float deltaX, float deltaY, 
+            float yaw, float pitch, float roll){
+        
+        float xChangeMagnitude = deltaX*scaleFactorX;
+        float yChangeMagnitude = deltaY*scaleFactorY;
+        
+        Vector3f xDispVector = getRotatedVector(INIT_X_VECTOR,yaw,pitch,roll);
+        Vector3f yDispVector = getRotatedVector(INIT_Y_VECTOR,yaw,pitch,roll);
+        
+        Vector3f xDisplacement = xDispVector.mult(xChangeMagnitude);
+        Vector3f yDisplacement = yDispVector.mult(yChangeMagnitude);
+        
+        Vector3f initDisplacement = xDisplacement.add(yDisplacement);
+        
+        return rotationCalibrationMatrix.mult(initDisplacement);
     }
+    
+    protected abstract Vector3f getRotatedVector(Vector3f inputVector, 
+            float yaw, float pitch, float roll);
+
+    public void setRotationCalibrationMatrix(Matrix3f rotationCalibrationMatrix) {
+        this.rotationCalibrationMatrix = rotationCalibrationMatrix;
+    }
+
+    public void setScaleFactorX(float scaleFactorX) {
+        this.scaleFactorX = scaleFactorX;
+    }
+
+    public void setScaleFactorY(float scaleFactorY) {
+        this.scaleFactorY = scaleFactorY;
+    }
+    
+    
     
 }
