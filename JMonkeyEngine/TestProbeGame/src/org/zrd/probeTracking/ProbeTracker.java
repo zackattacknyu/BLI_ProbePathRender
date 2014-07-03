@@ -129,23 +129,25 @@ public class ProbeTracker {
         
         localRotation = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
+        //gets the current displacement vector
         Vector3f currentDisp = coordConverter.getXYZDisplacement(
                 currentDeltaX, currentDeltaY, 
                 currentYaw, currentPitch, currentRoll);
         
+        //adds the displacement to current position
         currentPosition.addLocal(currentDisp);
 
         //here we record the xyz path
         if(recordingPath || calibratingX || calibratingY){
-            cubePath.addToPath(currentDisp);
+            cubePath.addToPath(currentPosition);
         }
         
         if(recordingPath){
             try {
 
-                currentPathVertexWriter.writeLine(cubePath.getLastX() + "," + 
-                                                  cubePath.getLastY() + "," + 
-                                                  cubePath.getLastZ());
+                currentPathVertexWriter.writeLine(currentPosition.getX() + "," + 
+                                                  currentPosition.getY() + "," + 
+                                                  currentPosition.getZ());
             } catch (IOException ex) {
                 System.out.println(ex);
             }
@@ -214,7 +216,7 @@ public class ProbeTracker {
         
         if(recordingPath){
             System.out.println("Recording New Path Stopped");
-            currentPathVertices = cubePath.toLineVertices();
+            currentPathVertices = cubePath.getVertices();
             newPathExists = true;
             recordingText = "Press N to record a new path";
             recordingPath = false;
