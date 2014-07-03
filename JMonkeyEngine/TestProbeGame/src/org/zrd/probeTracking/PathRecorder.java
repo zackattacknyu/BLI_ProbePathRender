@@ -13,14 +13,15 @@ import java.util.ArrayList;
  */
 public class PathRecorder {
 
-    private ArrayList<Vector3f> vertices = new ArrayList<Vector3f>(100);
+    private ArrayList<Vector3f> vertices;
     
     public PathRecorder(Vector3f startingPosition){
-        vertices.add(startingPosition);
+        vertices = new ArrayList<Vector3f>(100);
+        vertices.add(startingPosition.clone());
     }
     
     public void addToPath(Vector3f vertex){
-        vertices.add(vertex);
+        vertices.add(vertex.clone());
     }
     
     public ArrayList<Vector3f> getVertices() {

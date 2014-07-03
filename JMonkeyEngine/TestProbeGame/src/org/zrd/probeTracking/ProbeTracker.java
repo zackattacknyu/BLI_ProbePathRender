@@ -47,14 +47,12 @@ public class ProbeTracker {
     private Quaternion localRotation;
     private Vector3f currentPosition;
     
-    private boolean calibratingX = false, calibratingY = false, recordingPath = false;
+    private boolean recordingPath = false;
     private String readModeText,scaleYtext,scaleXtext,recordingText;
     
     private PathRecorder currentRecordingPath;
     
     private boolean newPathExists = false;
-    
-    ArrayList<Vector3f> currentPathVertices;
     
     private short displacementMode = 2;
     
@@ -72,6 +70,9 @@ public class ProbeTracker {
     private AbstractSerialInputToWorldConverter coordConverter;
     
     public ProbeTracker(InputManager manager){
+        currentPosition = new Vector3f(0,0,0);
+        currentPosition.addLocal(STARTING_POSITION);
+        
         Properties trackerProps = Properties_BLIProbePath.getProperties();
         
         if(debugTracking){
@@ -114,8 +115,6 @@ public class ProbeTracker {
         
         currentSourceTracker.updateData();
         
-        currentPosition = STARTING_POSITION;
-        
         if(currentSourceTracker.canBeginTracking()){
             currentYaw = currentSourceTracker.getCurrentYawRadians();
             currentPitch = currentSourceTracker.getCurrentPitchRadians();
@@ -136,7 +135,7 @@ public class ProbeTracker {
         currentPosition.addLocal(currentDisp);
 
         //here we record the xyz path
-        if(recordingPath || calibratingX || calibratingY){
+        if(recordingPath){
             currentRecordingPath.addToPath(currentPosition);
         }
         
@@ -200,7 +199,6 @@ public class ProbeTracker {
             currentPathVertexWriter = ProbeDataWriter.closeWriter(currentPathVertexWriter);
             
             System.out.println("Recording New Path Stopped");
-            currentPathVertices = currentRecordingPath.getVertices();
             newPathExists = true;
             recordingText = "Press N to record a new path";
             recordingPath = false;
@@ -315,15 +313,7 @@ public class ProbeTracker {
     }
 
     public ArrayList<Vector3f> getCurrentPathVertices() {
-        return currentPathVertices;
-    }
-    
-    public Vector3f getFirstPathVertex(){
-        return currentPathVertices.get(0);
-    }
-    
-    public Vector3f getLastPathVertex(){
-        return currentPathVertices.get(currentPathVertices.size()-1);
+        return currentRecordingPath.getVertices();
     }
     
     public void incrementReadMode(){
