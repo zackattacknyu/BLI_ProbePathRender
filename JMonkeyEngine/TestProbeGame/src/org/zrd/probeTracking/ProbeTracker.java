@@ -9,6 +9,7 @@ import org.zrd.util.dataWriting.ProbeDataWriter;
 import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,6 +47,7 @@ public class ProbeTracker {
     
     private Quaternion localRotation;
     private Vector3f currentPosition;
+    private Vector2f currentXYPosition;
     
     private boolean recordingPath = false;
     private String readModeText,scaleYtext,scaleXtext,recordingText;
@@ -72,6 +74,9 @@ public class ProbeTracker {
     public ProbeTracker(InputManager manager){
         currentPosition = new Vector3f(0,0,0);
         currentPosition.addLocal(STARTING_POSITION);
+        
+        currentXYPosition = new Vector2f(0,0);
+        currentXYPosition.addLocal(STARTING_POSITION.getX(), STARTING_POSITION.getY());
         
         Properties trackerProps = Properties_BLIProbePath.getProperties();
         
@@ -133,17 +138,18 @@ public class ProbeTracker {
         
         //adds the displacement to current position
         currentPosition.addLocal(currentDisp);
+        
+        currentXYPosition.addLocal(currentDeltaX, currentDeltaY);
 
         //here we record the xyz path
         if(recordingPath){
-            currentRecordingPath.addToPath(currentPosition);
+            currentRecordingPath.addToPath(currentPosition,currentXYPosition,
+                    currentYaw, currentPitch, currentRoll);
         }
         
     }
     
-    public static String getPositionOutputText(Vector3f position){
-        return position.getX() + "," + position.getY() + "," + position.getZ();
-    }
+    
     
     public void updateYcalibration(){
         
