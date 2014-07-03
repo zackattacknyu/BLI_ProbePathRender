@@ -139,12 +139,6 @@ public class ProbeTracker {
             currentRecordingPath.addToPath(currentPosition);
         }
         
-        if(recordingPath){
-            ProbeDataWriter.writeLineInWriter(
-                    currentPathVertexWriter, 
-                    getPositionOutputText(currentPosition));
-        }
-        
     }
     
     public static String getPositionOutputText(Vector3f position){
@@ -195,17 +189,12 @@ public class ProbeTracker {
     public void updatePathRecording(){
         
         if(recordingPath){
-            
-            currentPathVertexWriter = ProbeDataWriter.closeWriter(currentPathVertexWriter);
-            
+            currentRecordingPath.closeRecording();
             System.out.println("Recording New Path Stopped");
             newPathExists = true;
             recordingText = "Press N to record a new path";
             recordingPath = false;
         }else{
-            
-            currentPathVertexWriter = ProbeDataWriter.getNewWriter(pathRecordingFilePath, "pathVertices");
-            
             newPathExists = false;
             recordingText = "Now recording new path (Press N to stop recording)";
             currentRecordingPath = new PathRecorder(currentPosition);
