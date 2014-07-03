@@ -449,7 +449,6 @@ public class Main extends SimpleApplication {
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         
         moveableObject.setLocalTranslation(probeTracker.getCurrentPosition());
-        //zAxisBox.move(zAxisBoxInitLocation);
         
         xyzText.setText(probeTracker.getXYZtext());
         yawPitchRollText.setText(probeTracker.getYawPitchRollText());

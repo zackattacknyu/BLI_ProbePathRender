@@ -10,7 +10,6 @@ import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConve
 import org.zrd.probeTracking.probeTrackers.AbstractInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
-import org.zrd.util.timeTools.TimeHelper;
 
 /**
  *
@@ -52,7 +50,7 @@ public class ProbeTracker {
     private boolean calibratingX = false, calibratingY = false, recordingPath = false;
     private String readModeText,scaleYtext,scaleXtext,recordingText;
     
-    private PathRecorder cubePath;
+    private PathRecorder currentRecordingPath;
     
     private boolean newPathExists = false;
     
@@ -139,26 +137,25 @@ public class ProbeTracker {
 
         //here we record the xyz path
         if(recordingPath || calibratingX || calibratingY){
-            cubePath.addToPath(currentPosition);
+            currentRecordingPath.addToPath(currentPosition);
         }
         
         if(recordingPath){
-            try {
-
-                currentPathVertexWriter.writeLine(currentPosition.getX() + "," + 
-                                                  currentPosition.getY() + "," + 
-                                                  currentPosition.getZ());
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
+            ProbeDataWriter.writeLineInWriter(
+                    currentPathVertexWriter, 
+                    getPositionOutputText(currentPosition));
         }
         
+    }
+    
+    public static String getPositionOutputText(Vector3f position){
+        return position.getX() + "," + position.getY() + "," + position.getZ();
     }
     
     public void updateYcalibration(){
         
         /*if(calibratingY){
-            float lastY = cubePath.getLastY()- cubePath.getFirstY();
+            float lastY = currentRecordingPath.getLastY()- currentRecordingPath.getFirstY();
             float realLastY = 8.0f*scaleFactorY;
             scaleFactorY = realLastY/lastY;
             scaleYtext = "Virtual Y to real Y scale factor "
@@ -166,7 +163,7 @@ public class ProbeTracker {
                     + scaleFactorY;
         }else{
             scaleYtext= "Now calibrating. Press Y has been moved 8 units up ";
-            cubePath = new PathRecorder(currentX,currentY,currentZ);
+            currentRecordingPath = new PathRecorder(currentX,currentY,currentZ);
         }
 
         calibratingY = !calibratingY;*/
@@ -180,7 +177,7 @@ public class ProbeTracker {
     public void updateXcalibration(){
         
         /*if(calibratingX){
-            float lastX = cubePath.getLastX() - cubePath.getFirstX();
+            float lastX = currentRecordingPath.getLastX() - currentRecordingPath.getFirstX();
             float realLastX = 8.0f*scaleFactorX;
             scaleFactorX = realLastX/lastX;
             scaleXtext = "Virtual X to real X scale factor "
@@ -188,7 +185,7 @@ public class ProbeTracker {
                     + scaleFactorX;
         }else{
             scaleXtext="Now calibrating. Press X has been moved 8 units right ";
-            cubePath = new PathRecorder(currentX,currentY,currentZ);
+            currentRecordingPath = new PathRecorder(currentX,currentY,currentZ);
         }
 
         calibratingX = !calibratingX;*/
@@ -197,33 +194,23 @@ public class ProbeTracker {
     }
     
     public void updatePathRecording(){
-        try {
-            if(recordingPath){
-                currentPathVertexWriter.closeWriter();
-                currentPathVertexWriter = null;
-                //dataInterpreter.startStopRecording(pathRecordingFilePath);
-                
-            }else{   
-                String currentTimestamp = TimeHelper.getTimestampSuffix();
-                currentPathVertexWriter = new ProbeDataWriter(
-                        pathRecordingFilePath,"pathVertices",currentTimestamp);
-                //dataInterpreter.startStopRecording(pathRecordingFilePath);
-                
-            }
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
         
         if(recordingPath){
+            
+            currentPathVertexWriter = ProbeDataWriter.closeWriter(currentPathVertexWriter);
+            
             System.out.println("Recording New Path Stopped");
-            currentPathVertices = cubePath.getVertices();
+            currentPathVertices = currentRecordingPath.getVertices();
             newPathExists = true;
             recordingText = "Press N to record a new path";
             recordingPath = false;
         }else{
+            
+            currentPathVertexWriter = ProbeDataWriter.getNewWriter(pathRecordingFilePath, "pathVertices");
+            
             newPathExists = false;
             recordingText = "Now recording new path (Press N to stop recording)";
-            cubePath = new PathRecorder(currentPosition);
+            currentRecordingPath = new PathRecorder(currentPosition);
             System.out.println("Now Recording new path");
             recordingPath = true;
         }
