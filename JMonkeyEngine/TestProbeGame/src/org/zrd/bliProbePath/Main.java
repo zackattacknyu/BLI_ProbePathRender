@@ -448,7 +448,7 @@ public class Main extends SimpleApplication {
         
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         
-        moveableObject.setLocalTranslation(probeTracker.getLocalTranslation());
+        moveableObject.setLocalTranslation(probeTracker.getCurrentPosition());
         //zAxisBox.move(zAxisBoxInitLocation);
         
         xyzText.setText(probeTracker.getXYZtext());
@@ -708,11 +708,8 @@ public class Main extends SimpleApplication {
                                 
                             }else if(moveProbe){
                                 addLineForNormal(point);
-                                probeTracker.setNormal(point.getNormal());
                                 probeTracker.setCurrentPosition(point.getContactPoint());
                                 displayAxisLines();
-                                //probeTracker.setBaselineRotation(point.getRotation(),point.getNormal(), (float)1.7409717);
-                                
                             }
                         }
                     }

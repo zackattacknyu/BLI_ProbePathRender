@@ -9,7 +9,6 @@ import org.zrd.util.dataWriting.ProbeDataWriter;
 import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.Properties_BLIProbePath;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
@@ -37,25 +35,19 @@ import org.zrd.util.timeTools.TimeHelper;
  * @author BLI
  */
 public class ProbeTracker {
-    
-    private float currentX=-0.4f,currentY=-0.97f,currentZ=-15.35f;
-    private final Vector3f startingPosition = new Vector3f(currentX,currentY,currentZ);
+
+    private final Vector3f STARTING_POSITION = new Vector3f(-0.4f,-0.97f,-15.35f);
     
     private float scaleFactorX = -0.00001f,scaleFactorY = 0.00001f;
     
-    private float baselineYaw,currentYaw,
-            baselinePitch = 0,currentPitch = 0,
-            baselineRoll = 0, 
-            currentRoll = 0;
-    
-    private float currentDebugX = 0.0f,currentDebugY = 0.0f;
+    private float currentYaw=0,currentPitch = 0,currentRoll = 0;
     
     private Vector3f currentNormal = new Vector3f(0,0,-1);
     
     private short readMode = 0;
     
     private Quaternion localRotation;
-    private Vector3f localTranslation;
+    private Vector3f currentPosition;
     
     private boolean calibratingX = false, calibratingY = false, recordingPath = false;
     private String readModeText,scaleYtext,scaleXtext,recordingText;
@@ -80,9 +72,6 @@ public class ProbeTracker {
     private boolean debugTracking = true;
     
     private AbstractSerialInputToWorldConverter coordConverter;
-
-    private Vector3f startingXAxis = new Vector3f(1,0,0);
-    private Vector3f startingYAxis = new Vector3f(0,1,0);
     
     public ProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
@@ -127,6 +116,8 @@ public class ProbeTracker {
         
         currentSourceTracker.updateData();
         
+        currentPosition = STARTING_POSITION;
+        
         if(currentSourceTracker.canBeginTracking()){
             currentYaw = currentSourceTracker.getCurrentYawRadians();
             currentPitch = currentSourceTracker.getCurrentPitchRadians();
@@ -138,23 +129,11 @@ public class ProbeTracker {
         
         localRotation = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
-        Vector2f currentXYDisp = new Vector2f(currentDeltaX,currentDeltaY);
+        Vector3f currentDisp = coordConverter.getXYZDisplacement(
+                currentDeltaX, currentDeltaY, 
+                currentYaw, currentPitch, currentRoll);
         
-        //currentXYDisp = TrackingHelper.scaleXYDisplacement(currentXYDisp, scaleFactorX, scaleFactorY);
-        
-        //gets x,y if there was no rotation change to it
-        currentDebugX = currentDebugX + currentXYDisp.getX();
-        currentDebugY = currentDebugY + currentXYDisp.getY();
-        
-        
-        Vector3f currentDisp = coordConverter.getXYZDisplacement(currentDeltaX, currentDeltaY, 
-                        currentYaw, currentPitch, currentRoll);
-        
-        currentX = currentX + currentDisp.getX();
-        currentY = currentY + currentDisp.getY();
-        currentZ = currentZ + currentDisp.getZ();
-        
-        localTranslation = new Vector3f(currentX,currentY,currentZ);
+        currentPosition.addLocal(currentDisp);
 
         //here we record the xyz path
         if(recordingPath || calibratingX || calibratingY){
@@ -176,7 +155,7 @@ public class ProbeTracker {
     
     public void updateYcalibration(){
         
-        if(calibratingY){
+        /*if(calibratingY){
             float lastY = cubePath.getLastY()- cubePath.getFirstY();
             float realLastY = 8.0f*scaleFactorY;
             scaleFactorY = realLastY/lastY;
@@ -188,7 +167,7 @@ public class ProbeTracker {
             cubePath = new PathRecorder(currentX,currentY,currentZ);
         }
 
-        calibratingY = !calibratingY;
+        calibratingY = !calibratingY;*/
         
     }
     
@@ -198,7 +177,7 @@ public class ProbeTracker {
     
     public void updateXcalibration(){
         
-        if(calibratingX){
+        /*if(calibratingX){
             float lastX = cubePath.getLastX() - cubePath.getFirstX();
             float realLastX = 8.0f*scaleFactorX;
             scaleFactorX = realLastX/lastX;
@@ -210,7 +189,7 @@ public class ProbeTracker {
             cubePath = new PathRecorder(currentX,currentY,currentZ);
         }
 
-        calibratingX = !calibratingX;
+        calibratingX = !calibratingX;*/
         
         
     }
@@ -242,7 +221,7 @@ public class ProbeTracker {
         }else{
             newPathExists = false;
             recordingText = "Now recording new path (Press N to stop recording)";
-            cubePath = new PathRecorder(currentX,currentY,currentZ);
+            cubePath = new PathRecorder(currentPosition);
             System.out.println("Now Recording new path");
             recordingPath = true;
         }
@@ -252,58 +231,24 @@ public class ProbeTracker {
 
     public void resetProbe(){
         
-        setCurrentPosition(startingPosition);
-        setBaselineRotation(0,0,0);
+        setCurrentPosition(STARTING_POSITION);
+        setRotation(0,0,0);
         
     }
     
     public Vector3f getCurrentPosition(){
-        return new Vector3f(currentX,currentY,currentZ);
+        return currentPosition;
     }
     
     public void setCurrentPosition(Vector3f position){
-        currentX = position.getX();
-        currentY = position.getY();
-        currentZ = position.getZ();
+        currentPosition = position;
         
     }
     
-    public void setBaselineRotation(float yaw, float pitch, float roll){
-        baselineYaw = yaw;
-        baselinePitch = pitch;
-        baselineRoll = roll;
-    }
-    
-    public void setNormal(Vector3f normal){
-        currentNormal = normal;
-        reAdjustXYAxis();
-    }
-    private void reAdjustXYAxis(){
-        Vector3f xVector = new Vector3f(1,0,0);
-        startingXAxis = MeshHelper.getVectorProjOnPlane(currentNormal, xVector);
-        startingXAxis.normalizeLocal();
-        startingYAxis = currentNormal.cross(startingXAxis);
-        startingYAxis.normalizeLocal();
-    }
-    
-    public void setBaselineRotation(Quaternion rotation, Vector3f normal){
-        setBaselineRotation(rotation);
-        currentNormal = normal;
-    }
-    
-    public void setBaselineRotation(Quaternion rotation){
-        setBaselineRotation(TrackingHelper.getYaw(rotation),
-                TrackingHelper.getPitch(rotation),
-                TrackingHelper.getRoll(rotation));        
-    }
-    
-    public void setBaselineRotation(Quaternion rotation, Vector3f normal, float extraAngle){
-        setBaselineRotation(rotation,normal);
-        baselinePitch = baselinePitch + extraAngle;
-    }
-
-    public float getCurrentZ() {
-        return currentZ;
+    public void setRotation(float yaw, float pitch, float roll){
+        currentYaw = yaw;
+        currentPitch = pitch;
+        currentRoll = roll;
     }
 
     public float getCurrentPitch() {
@@ -367,7 +312,7 @@ public class ProbeTracker {
     }
     
     public String getXYZtext(){
-        return "(X,Y,Z) = (" + currentX + "," + currentY + "," + currentZ + ")";
+        return "(X,Y,Z) = (" + currentPosition;
     }
     
     public String getYawPitchRollText(){
@@ -409,14 +354,6 @@ public class ProbeTracker {
         return scaleXtext;
     }
 
-    public float getCurrentX() {
-        return currentX;
-    }
-    
-    public float getCurrentY() {
-        return currentY;
-    }
-
     public float getScaleFactorX() {
         return scaleFactorX;
     }
@@ -435,10 +372,6 @@ public class ProbeTracker {
 
     public Quaternion getLocalRotation() {
         return localRotation;
-    }
-
-    public Vector3f getLocalTranslation() {
-        return localTranslation;
     }
 
     public String getReadModeText() {

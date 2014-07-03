@@ -29,6 +29,10 @@ public class PathRecorder {
         firstZ = 0;
     }
     
+    public PathRecorder(Vector3f startingPosition){
+        this(startingPosition.getX(),startingPosition.getY(),startingPosition.getZ());
+    }
+    
     public PathRecorder(float xStart, float yStart, float zStart){
         lastX = xStart;
         lastY = yStart;
