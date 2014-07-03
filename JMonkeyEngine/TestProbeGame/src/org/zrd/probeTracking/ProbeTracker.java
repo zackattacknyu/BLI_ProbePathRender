@@ -139,7 +139,7 @@ public class ProbeTracker {
         //adds the displacement to current position
         currentPosition.addLocal(currentDisp);
         
-        currentXYPosition.addLocal(currentDeltaX, currentDeltaY);
+        currentXYPosition.addLocal(currentDeltaX*scaleFactorX, currentDeltaY*scaleFactorY);
 
         //here we record the xyz path
         if(recordingPath){
