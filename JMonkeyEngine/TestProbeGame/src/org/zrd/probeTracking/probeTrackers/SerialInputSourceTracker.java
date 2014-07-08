@@ -4,6 +4,7 @@
  */
 package org.zrd.probeTracking.probeTrackers;
 
+import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 

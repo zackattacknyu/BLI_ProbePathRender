@@ -4,6 +4,7 @@
  */
 package org.zrd.probeTracking.probeTrackers;
 
+import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import com.jme3.input.InputManager;
 import org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl.KeyboardTrackingImpl;
 
