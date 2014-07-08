@@ -21,7 +21,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
-import org.zrd.probeTracking.probeTrackers.KeyboardInputSourceTracker;
+import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
 
 /**

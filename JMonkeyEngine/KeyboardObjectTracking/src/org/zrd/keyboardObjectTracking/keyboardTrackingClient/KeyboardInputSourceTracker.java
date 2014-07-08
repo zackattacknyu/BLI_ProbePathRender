@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTracking.probeTrackers;
+package org.zrd.keyboardObjectTracking.keyboardTrackingClient;
 
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import com.jme3.input.InputManager;
