@@ -22,7 +22,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
-import org.zrd.probeTracking.probeTrackers.SerialInputSourceTracker;
+import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
 
 /**
  *
@@ -67,7 +67,7 @@ public class ProbeTracker {
     private AbstractInputSourceTracker currentSourceTracker;
     
     //set to true if using the keyboard. if using the serial, set to false
-    private boolean debugTracking = true;
+    private boolean debugTracking = false;
     
     private AbstractSerialInputToWorldConverter coordConverter;
     

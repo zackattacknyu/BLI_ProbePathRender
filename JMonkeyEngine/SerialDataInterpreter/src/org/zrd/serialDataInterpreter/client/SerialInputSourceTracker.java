@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTracking.probeTrackers;
+package org.zrd.serialDataInterpreter.client;
 
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import java.util.Properties;
