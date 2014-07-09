@@ -44,6 +44,7 @@ import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
+import org.zrd.probeTracking.ProbeTracker_BLIProbePath;
 
 
 /**
@@ -62,7 +63,7 @@ public class Main extends SimpleApplication {
     
     private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
     
-    private ProbeTracker probeTracker;
+    private ProbeTracker_BLIProbePath probeTracker;
     
     private CameraTracker cameraTracker;
     
@@ -214,7 +215,7 @@ public class Main extends SimpleApplication {
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
-        probeTracker = new ProbeTracker(inputManager);
+        probeTracker = new ProbeTracker_BLIProbePath(inputManager);
         //displayAxisLines();
         
         probeRep = new Node("probeRep");
@@ -742,12 +743,12 @@ public class Main extends SimpleApplication {
                 
                 
                 if(name.equals("recalibrateX") && keyPressed){
-                    probeTracker.updateXcalibration();
+                    //probeTracker.updateXcalibration();
                     scaleXtext.setText(probeTracker.getScaleXtext());
                 }
                 
                 if(name.equals("recalibrateY") && keyPressed){
-                    probeTracker.updateYcalibration();
+                    //probeTracker.updateYcalibration();
                     scaleYtext.setText(probeTracker.getScaleYtext());
                 }
                 

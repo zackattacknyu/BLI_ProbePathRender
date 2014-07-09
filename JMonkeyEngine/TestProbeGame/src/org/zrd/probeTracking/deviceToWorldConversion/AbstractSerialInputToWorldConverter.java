@@ -5,6 +5,7 @@
 package org.zrd.probeTracking.deviceToWorldConversion;
 
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
 /**
@@ -49,6 +50,9 @@ public abstract class AbstractSerialInputToWorldConverter {
     //vector for y displacement
     public static final Vector3f INIT_Y_VECTOR = new Vector3f(0,1,0);
     
+    //vector for normal to displacement
+    public static final Vector3f INIT_NORMAL_VECTOR = new Vector3f(0,0,-1);
+    
     //rotation matrix for most recent yaw, pitch, roll numbers
     private Matrix3f currentRotationMatrix = new Matrix3f();
     
@@ -71,6 +75,10 @@ public abstract class AbstractSerialInputToWorldConverter {
         return rotationCalibrationMatrix.mult(initDisplacement);
     }
     
+    public Vector2f getXYDisplacement(float deltaX, float deltaY){
+        return new Vector2f(deltaX*scaleFactorX,deltaY*scaleFactorY);
+    }
+    
     protected abstract Matrix3f getRotationMatrix(float yaw, float pitch, float roll);
 
     public void setRotationCalibrationMatrix(Matrix3f rotationCalibrationMatrix) {
@@ -85,12 +93,28 @@ public abstract class AbstractSerialInputToWorldConverter {
         this.scaleFactorY = scaleFactorY;
     }
     
+    private Vector3f getManipulatedVector(Vector3f inputVector){
+        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(inputVector);
+    }
+    
     public Vector3f getCurrentXAxis(){
-        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(INIT_X_VECTOR);
+        return getManipulatedVector(INIT_X_VECTOR);
     }
     
     public Vector3f getCurrentYAxis(){
-        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(INIT_Y_VECTOR);
+        return getManipulatedVector(INIT_Y_VECTOR);
+    }
+    
+    public Vector3f getCurrentNormal(){
+        return getManipulatedVector(INIT_NORMAL_VECTOR);
+    }
+
+    public float getScaleFactorX() {
+        return scaleFactorX;
+    }
+
+    public float getScaleFactorY() {
+        return scaleFactorY;
     }
     
     
