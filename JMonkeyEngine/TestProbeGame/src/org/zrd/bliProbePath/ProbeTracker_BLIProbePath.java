@@ -5,6 +5,8 @@
 package org.zrd.bliProbePath;
 
 import com.jme3.input.InputManager;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTrackerClient;
@@ -35,7 +37,13 @@ public class ProbeTracker_BLIProbePath {
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
         
-        return new ProbeTrackerClient(currentSourceTracker,displacementMode);
+        Path pathRecordingFilePath = Paths.get("textFiles").
+                resolve("logs").resolve("paths");
+        
+        ProbeTrackerClient returnClient = new ProbeTrackerClient(
+                currentSourceTracker,displacementMode,pathRecordingFilePath);
+
+        return returnClient;
     }
     
 }

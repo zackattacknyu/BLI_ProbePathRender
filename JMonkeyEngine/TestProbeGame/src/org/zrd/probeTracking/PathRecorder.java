@@ -18,14 +18,19 @@ import org.zrd.util.dataWriting.ProbeDataWriter;
 public class PathRecorder {
 
     private ArrayList<Vector3f> vertices;
+    private boolean pathSpecified = false;
     private ProbeDataWriter xyzVertexWriter;
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
-        Path pathRecordingFilePath = Paths.get("textFiles").
-                resolve("logs").resolve("paths");
+        vertices.add(startingPosition.clone());
+        pathSpecified = false;
+    }
+    
+    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath){
+        this(startingPosition);
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, "pathVertices");
         xyVertexWriter = ProbeDataWriter.getNewWriter(
@@ -33,7 +38,7 @@ public class PathRecorder {
                 "pathXYvertices");
         yawPitchRollWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, "yawPitchRollData");
-        vertices.add(startingPosition.clone());
+        pathSpecified = true;
     }
 
     public static String getPositionOutputText(Vector3f position){
@@ -51,21 +56,27 @@ public class PathRecorder {
     
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyzVertexWriter);
+        ProbeDataWriter.closeWriter(xyVertexWriter);
+        ProbeDataWriter.closeWriter(yawPitchRollWriter);
     }
 
     void addToPath(Vector3f currentPosition, 
             Vector2f currentXYPosition, 
             float currentYaw, float currentPitch, float currentRoll) {
         
-        ProbeDataWriter.writeLineInWriter(
+        if(pathSpecified){
+            
+            ProbeDataWriter.writeLineInWriter(
                     xyzVertexWriter, 
                     getPositionOutputText(currentPosition));
         
-        ProbeDataWriter.writeLineInWriter(xyVertexWriter, 
-                getPositionOutputText(currentXYPosition));
+            ProbeDataWriter.writeLineInWriter(xyVertexWriter, 
+                    getPositionOutputText(currentXYPosition));
+
+            ProbeDataWriter.writeLineInWriter(yawPitchRollWriter, 
+                    getOrientationOutputString(currentYaw,currentPitch,currentRoll));
+        }
         
-        ProbeDataWriter.writeLineInWriter(yawPitchRollWriter, 
-                getOrientationOutputString(currentYaw,currentPitch,currentRoll));
         
         vertices.add(currentPosition.clone());
     }

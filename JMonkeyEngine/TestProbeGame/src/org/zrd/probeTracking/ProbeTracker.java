@@ -8,6 +8,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
@@ -34,6 +35,7 @@ public class ProbeTracker {
     private boolean recordingPath = false;
     
     private PathRecorder currentRecordingPath;
+    private Path pathRecordingFilePath = null;
     
     private boolean newPathExists = false;
     private float currentDeltaX=0,currentDeltaY=0;
@@ -42,7 +44,7 @@ public class ProbeTracker {
     
     public ProbeTracker(AbstractSerialInputToWorldConverter coordConvertor, 
             AbstractInputSourceTracker currentSourceTracker,
-            Vector3f startingPosition){
+            Vector3f startingPosition, Path filePath){
         this.coordConverter = coordConvertor;
         this.currentSourceTracker = currentSourceTracker;
         
@@ -51,6 +53,8 @@ public class ProbeTracker {
         currentPosition = startingPosition.clone();
         
         currentXYPosition = new Vector2f(startingPosition.getX(),startingPosition.getY());
+        
+        pathRecordingFilePath = filePath;
         
     }
     
@@ -103,11 +107,19 @@ public class ProbeTracker {
             recordingPath = false;
         }else{
             newPathExists = false;
-            currentRecordingPath = new PathRecorder(currentPosition);
+            currentRecordingPath = makeNewRecorder();
             recordingPath = true;
         }
         
         
+    }
+    
+    private PathRecorder makeNewRecorder(){
+        if(pathRecordingFilePath == null){
+            return new PathRecorder(currentPosition);
+        }else{
+            return new PathRecorder(currentPosition,pathRecordingFilePath);
+        }
     }
 
     public void resetProbe(){

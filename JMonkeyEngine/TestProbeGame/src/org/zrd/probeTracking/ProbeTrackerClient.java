@@ -7,6 +7,7 @@ package org.zrd.probeTracking;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
@@ -35,7 +36,8 @@ public class ProbeTrackerClient{
 
     private String readModeText,scaleYtext,scaleXtext,recordingText;
     
-    public ProbeTrackerClient(AbstractInputSourceTracker currentSourceTracker, short displacementMode){
+    public ProbeTrackerClient(AbstractInputSourceTracker currentSourceTracker, 
+            short displacementMode, Path filePath){
         AbstractSerialInputToWorldConverter coordConverter;
         
         //default option for coord conversion
@@ -55,7 +57,8 @@ public class ProbeTrackerClient{
         coordConverter.setScaleFactorX(scaleFactorX);
         coordConverter.setScaleFactorY(scaleFactorY);
         
-        currentTracker = new ProbeTracker(coordConverter,currentSourceTracker,STARTING_POSITION);
+        currentTracker = new ProbeTracker(coordConverter,currentSourceTracker,
+                STARTING_POSITION,filePath);
         
     }
     
