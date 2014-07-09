@@ -44,7 +44,7 @@ import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
-import org.zrd.probeTracking.ProbeTracker_BLIProbePath;
+import org.zrd.probeTracking.ProbeTrackerClient;
 
 
 /**
@@ -63,7 +63,7 @@ public class Main extends SimpleApplication {
     
     private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
     
-    private ProbeTracker_BLIProbePath probeTracker;
+    private ProbeTrackerClient probeTracker;
     
     private CameraTracker cameraTracker;
     
@@ -215,7 +215,7 @@ public class Main extends SimpleApplication {
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
-        probeTracker = new ProbeTracker_BLIProbePath(inputManager);
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTrackerClient(inputManager);
         //displayAxisLines();
         
         probeRep = new Node("probeRep");

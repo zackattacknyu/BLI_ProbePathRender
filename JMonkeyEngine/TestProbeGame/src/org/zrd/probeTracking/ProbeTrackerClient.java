@@ -4,25 +4,15 @@
  */
 package org.zrd.probeTracking;
 
-import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
-import org.zrd.util.dataWriting.ProbeDataWriter;
-import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Properties;
-import org.zrd.bliProbePath.Properties_BLIProbePath;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
-import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
-import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
 
 /**
  *
@@ -33,39 +23,25 @@ import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
  * 
  * @author BLI
  */
-public class ProbeTracker_BLIProbePath{
+public class ProbeTrackerClient{
     
     private ProbeTracker currentTracker;
 
     private final Vector3f STARTING_POSITION = new Vector3f(-0.4f,-0.97f,-15.35f);
     
-    private float scaleFactorX = -0.00001f,scaleFactorY = 0.00001f;
+    private float scaleFactorX = 0.00001f,scaleFactorY = 0.00001f;
     
     private short filterMode = 0;
 
     private String readModeText,scaleYtext,scaleXtext,recordingText;
     
-    public ProbeTracker_BLIProbePath(InputManager manager){
-        
-        Properties trackerProps = Properties_BLIProbePath.getProperties();
-        AbstractInputSourceTracker currentSourceTracker;
+    public ProbeTrackerClient(AbstractInputSourceTracker currentSourceTracker, short displacementMode){
         AbstractSerialInputToWorldConverter coordConverter;
-        short displacementMode;
-        boolean debugTracking;
         
-        debugTracking = Boolean.parseBoolean(trackerProps.getProperty("debugTracking"));
-        
-        if(debugTracking){
-            currentSourceTracker = new KeyboardInputSourceTracker(manager);
-        }else{
-            currentSourceTracker = new SerialInputSourceTracker(trackerProps);
-        }
-
-        displacementMode = Short.parseShort(
-                trackerProps.getProperty("trackDisplacementMode"));
-        
+        //default option for coord conversion
         coordConverter = new SerialInputTo3DConverter();
         
+        //other options if specified
         switch(displacementMode){
             case 0:
                 coordConverter = new SerialInputTo2DConverter();
