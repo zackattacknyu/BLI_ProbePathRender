@@ -14,7 +14,7 @@ import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.graphicsToolsImpl.pathImpl.PathDataDisplay;
-import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
+//import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
  *
@@ -49,13 +49,38 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         Quaternion currentQuat;
         Vector3f currentPt;
         for(int index = 0; index < yawValues.size(); index++){
-            currentQuat = TrackingHelper.getQuaternion(
+            currentQuat = getQuaternion(
                     yawValues.get(index), 
                     pitchValues.get(index), 
                     rollValues.get(index));
             currentPt = currentQuat.toRotationMatrix().mult(START_POINT_ON_SPHERE);
             displayVertices.add(currentPt);
         }
+        
+    }
+    
+    //temp method put here for compiling of the code here
+    public static Quaternion getQuaternion(float yawInRadians, 
+            float pitchInRadians, float rollInRadians){
+        
+        /*Quaternion rotation = new Quaternion();
+        rotation.fromAngles(pitchInRadians, rollInRadians, yawInRadians);
+        return rotation;*/
+        
+        
+        Quaternion yaw = new Quaternion();
+        yaw.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
+        
+        Quaternion pitch = new Quaternion();
+        pitch.fromAngleAxis(pitchInRadians, Vector3f.UNIT_X);
+        
+        Quaternion roll = new Quaternion();
+        roll.fromAngleAxis(rollInRadians, Vector3f.UNIT_Y);
+        
+        return (yaw.mult(pitch)).mult(roll);
+        
+        //return (roll.mult(pitch)).mult(yaw);
+        
         
     }
 

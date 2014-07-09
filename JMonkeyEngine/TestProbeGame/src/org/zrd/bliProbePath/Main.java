@@ -88,7 +88,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides

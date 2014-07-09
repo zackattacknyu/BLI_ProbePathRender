@@ -9,7 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
-import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
+//import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
  *

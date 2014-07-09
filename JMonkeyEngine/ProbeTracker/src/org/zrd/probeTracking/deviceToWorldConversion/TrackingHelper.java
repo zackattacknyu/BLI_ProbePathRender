@@ -8,7 +8,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+//import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 
 /**
  *
@@ -24,7 +24,7 @@ public class TrackingHelper {
         return rotMatrix.mult(mouseDisp);
         
     }
-    
+    /*
     public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Vector3f currentNormal, Quaternion localRotation){
         
         Vector3f xVector = new Vector3f(1,0,0);
@@ -47,7 +47,7 @@ public class TrackingHelper {
         
         return totalXDisp.add(totalYDisp);
         
-    }
+    }*/
     
     public static Vector3f getXYZDisplacement(float deltaX, float deltaY, Quaternion localRotation){
         
