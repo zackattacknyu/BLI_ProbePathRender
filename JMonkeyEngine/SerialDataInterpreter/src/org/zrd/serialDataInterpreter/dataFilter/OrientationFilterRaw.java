@@ -9,12 +9,7 @@ package org.zrd.serialDataInterpreter.dataFilter;
  * @author BLI
  */
 public class OrientationFilterRaw extends OrientationFilter{
-   
-    
-    public OrientationFilterRaw(float firstPitch, float firstYaw, float firstRoll){
-        super(firstPitch,firstYaw,firstRoll);
-    }
-    
+
     @Override
     public void filterData() {
         outputPitch = inputPitch;

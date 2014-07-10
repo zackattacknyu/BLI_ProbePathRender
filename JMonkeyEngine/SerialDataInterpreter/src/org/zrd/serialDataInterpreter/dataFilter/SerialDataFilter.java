@@ -32,12 +32,16 @@ public class SerialDataFilter {
     
     private SerialDataCalibration currentCalib;
     private OrientationFilter orientationFilterRaw;
-    private OrientationFilter orientationFilterThreshold;
+    private OrientationFilterThreshold orientationFilterThreshold;
     private OrientationFilter orientationFilterLowPass;
 
     public SerialDataFilter(Properties props) {
         serial = new SerialDataReader(props);
         System.out.println("Waiting to receive input...");
+        
+        orientationFilterRaw = new OrientationFilterRaw();
+        orientationFilterThreshold = new OrientationFilterThreshold();
+        orientationFilterLowPass = new OrientationFilterLowPass();
     }
 
     public void setFilterMode(int filterMode) {
@@ -54,9 +58,8 @@ public class SerialDataFilter {
             
             if(calibrating){
                 processCurrentCalibrationPoint();
-            }else if(calibrated){
-                processObjectUpdate();
             }
+            processObjectUpdate();
             
         }
         
@@ -74,21 +77,10 @@ public class SerialDataFilter {
         
         currentCalib.finishCalibration();
         
-        currentPitch = currentCalib.getMeanPitch();
-        currentRoll = currentCalib.getMeanRoll();
-        currentYaw = currentCalib.getMeanYaw();
-        
-        orientationFilterRaw = new OrientationFilterRaw(
-                currentPitch,currentYaw,currentRoll);
-        orientationFilterThreshold = new OrientationFilterThreshold(
-                currentPitch,
-                currentYaw,
-                currentRoll,
-                currentCalib.getMeanErrorPitch(),
-                currentCalib.getMeanErrorYaw(),
+        orientationFilterThreshold.setMeanErrors(
+                currentCalib.getMeanErrorYaw(), 
+                currentCalib.getMeanErrorPitch(), 
                 currentCalib.getMeanErrorRoll());
-        orientationFilterLowPass = new OrientationFilterLowPass(
-                currentPitch,currentYaw,currentRoll);
         
 
     }

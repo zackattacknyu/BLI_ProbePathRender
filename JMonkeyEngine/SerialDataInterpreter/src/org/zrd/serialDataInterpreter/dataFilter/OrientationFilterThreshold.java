@@ -13,14 +13,11 @@ public class OrientationFilterThreshold extends OrientationFilter{
     //factor to multiply mean error by before processing the change
     public static final float FILTER_THRESHOLD_FACTOR = 3.0f;
     
-    private float meanErrorPitch;
-    private float meanErrorRoll;
-    private float meanErrorYaw;
+    private float meanErrorPitch=0;
+    private float meanErrorRoll=0;
+    private float meanErrorYaw=0;
     
-    public OrientationFilterThreshold(
-            float firstPitch, float firstYaw, float firstRoll, 
-            float meanErrorPitch, float meanErrorYaw, float meanErrorRoll){
-        super(firstPitch,firstYaw,firstRoll);
+    public void setMeanErrors(float meanErrorYaw, float meanErrorPitch, float meanErrorRoll){
         this.meanErrorPitch = meanErrorPitch;
         this.meanErrorRoll = meanErrorRoll;
         this.meanErrorYaw = meanErrorYaw;

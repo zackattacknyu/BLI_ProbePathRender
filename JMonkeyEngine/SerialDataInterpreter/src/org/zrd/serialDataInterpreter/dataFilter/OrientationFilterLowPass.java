@@ -16,16 +16,10 @@ public class OrientationFilterLowPass extends OrientationFilter{
     private LowPassFilterData pitchData;
     private LowPassFilterData rollData;
     
-    public OrientationFilterLowPass(float firstPitch, float firstYaw, float firstRoll){
-        super(firstPitch,firstYaw,firstRoll);
-        
+    public OrientationFilterLowPass(){
         yawData = new LowPassFilterData(3);
         pitchData = new LowPassFilterData(3);
         rollData = new LowPassFilterData(3);
-        
-        yawData.addToData(firstYaw);
-        pitchData.addToData(firstPitch);
-        rollData.addToData(firstRoll);
     }
     
     @Override
