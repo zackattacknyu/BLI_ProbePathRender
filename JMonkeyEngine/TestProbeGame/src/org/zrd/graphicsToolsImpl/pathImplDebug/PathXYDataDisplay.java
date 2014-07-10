@@ -117,10 +117,10 @@ public class PathXYDataDisplay extends PathDataDisplay{
         Vector3f vert12 = new Vector3f(minX,maxY,constantZ);
         Vector3f vert33 = new Vector3f(x3,y3,constantZ);
         
-        MeshTriangle tri1 = new MeshTriangle(new Triangle(vert21,vert33,vert11));
-        MeshTriangle tri2 = new MeshTriangle(new Triangle(vert22,vert33,vert21));
-        MeshTriangle tri3 = new MeshTriangle(new Triangle(vert12,vert33,vert22));
-        MeshTriangle tri4 = new MeshTriangle(new Triangle(vert12,vert11,vert33));
+        MeshTriangle tri1 = new MeshTriangle(vert21,vert33,vert11);
+        MeshTriangle tri2 = new MeshTriangle(vert22,vert33,vert21);
+        MeshTriangle tri3 = new MeshTriangle(vert12,vert33,vert22);
+        MeshTriangle tri4 = new MeshTriangle(vert12,vert11,vert33);
         
         TriangleSet newMesh = new TriangleSet();
         newMesh.addTriangle(tri1);

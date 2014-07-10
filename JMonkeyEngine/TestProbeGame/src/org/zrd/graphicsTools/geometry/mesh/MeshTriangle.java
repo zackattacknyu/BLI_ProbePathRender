@@ -166,6 +166,13 @@ public class MeshTriangle {
     }
 
     @Override
+    public MeshTriangle clone(){
+        return new MeshTriangle(vertex1.getVertex().clone(),
+                vertex2.getVertex().clone(),
+                vertex3.getVertex().clone());
+    }
+
+    @Override
     public String toString() {
         return MeshTraverseHelper.getTriangleInfo(triangleData);
     }

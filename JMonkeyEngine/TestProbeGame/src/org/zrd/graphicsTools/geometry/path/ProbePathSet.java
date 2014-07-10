@@ -13,11 +13,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
+import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
-import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.probeTracking.ProbeDataHelper;
 
 /**
@@ -119,67 +118,6 @@ public class ProbePathSet {
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
                     currentRotatedPath, 
                     rotationToEndpoint);
-            
-            //projects the rotated path on the surface
-            currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
-                    currentRotatedPath,startingTriangle,meshInfo);
-            
-            //saves the path for later display
-            addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
-        }
-    }
-    
-    public void rotateAndProjectCurrentPath2(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
-        scaleCurrentPathEndpoint(endPoint);
-        compressCurrentPath();
-        //displayCurrentPath();
-        ArrayList<Vector3f> initScaledPath = getCurrentPath().getVertices();
-        ArrayList<Vector3f> initProjectedPath = MeshFollowHelper.projectPathOntoPlane(initScaledPath, startingTriangle.getNormal());
-        addPath(initProjectedPath);
-        Vector3f rotationAxis = startingTriangle.getNormal();
-
-        Matrix4f rotationToEndpoint,currentRotationTransform;
-        float currentRotationAngle;
-        AngleAxisRotation currentRotationAngAxis;
-        ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
-        Vector3f rotToEndptAxis;
-        float totalAngle = 0;
-        
-        float numberTries = 4;
-        
-        currentRotatedPath = getCurrentPath().getVertices();
-
-        for(float tryNum = 0; tryNum <= numberTries; tryNum++){
-            //rotatation of current path to endpoint 
-            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
-            AngleAxisRotation rotToEndptAngAxis = 
-                    new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
-            currentRotationAngle = rotToEndptAngAxis.getAngle();
-            rotToEndptAxis = rotToEndptAngAxis.getAxis();
-
-            //in case they point in opposite directions, does the negation of angle
-            if(rotationAxis.dot(rotToEndptAxis) < 0){
-                //the axes normals could be flipped
-                currentRotationAngle = -1*currentRotationAngle;
-            }
-            totalAngle += currentRotationAngle;
-            
-            //DEBUG code
-            System.out.println("Try: " + tryNum + ", Angle: " + 
-                    currentRotationAngle + ", TotalAngle: " + totalAngle);
-            
-            //gets the rotation we will actually do which is on the surface
-            //      of the starting Triangle
-            currentRotationAngAxis = 
-                    new AngleAxisRotation(rotationAxis,currentRotationAngle);
-            currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(
-                    getCurrentPath().getVertices().get(0), 
-                    currentRotationAngAxis.getQuat());
-            
-            //find the rotated path
-            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    currentRotatedPath, 
-                    currentRotationTransform);
             
             //projects the rotated path on the surface
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
