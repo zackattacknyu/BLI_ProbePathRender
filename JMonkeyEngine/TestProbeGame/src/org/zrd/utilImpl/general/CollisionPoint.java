@@ -8,7 +8,7 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 //import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
@@ -57,7 +57,7 @@ public class CollisionPoint {
     }
     
     public String getTriangleInfo(){
-        return MeshHelper.getTriangleInfo(triangle);
+        return MeshTraverseHelper.getTriangleInfo(triangle);
     }
     
     private void calculateRotation(){

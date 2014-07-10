@@ -57,7 +57,7 @@ public class TriangleLineSegmentIntersection {
         * Translates all the points so that
         * vertex1 is now the origin
         */
-       Matrix4f originVertex1 = MeshHelper.makeNewOrigin(vertex1);
+       Matrix4f originVertex1 = MeshTraverseHelper.makeNewOrigin(vertex1);
        Vector3f seg12Vector = originVertex1.mult(vertex2);
        Vector3f seg13Vector = originVertex1.mult(vertex3);
        Vector3f lineSegStartUse = originVertex1.mult(lineSegmentStart);
@@ -89,7 +89,7 @@ public class TriangleLineSegmentIntersection {
         *       the 13 edge. This transformation allows us to easily find all the
         *       t values that we need. 
         */
-       Matrix3f coordMatrix = MeshHelper.getCoordinateTransformation(seg12Vector, seg13Vector, newZVector);
+       Matrix3f coordMatrix = MeshTraverseHelper.getCoordinateTransformation(seg12Vector, seg13Vector, newZVector);
        Vector3f newStart = coordMatrix.mult(lineSegStartUse);
        Vector3f newEnd = coordMatrix.mult(lineSegEndUse);
        Vector3f newDir = newEnd.clone().subtract(newStart);
@@ -104,7 +104,7 @@ public class TriangleLineSegmentIntersection {
        if(Float.isInfinite(intersectEdge12)) numBadEdges++;
        intersectEdge13 = getIntersection(newStart.getX(),newDir.getX());
        if(Float.isInfinite(intersectEdge13)) numBadEdges++;
-       Vector2f intersect23Points = MeshHelper.solveMatrixEqu(
+       Vector2f intersect23Points = MeshTraverseHelper.solveMatrixEqu(
                newDir.getX(), -1, 
                newDir.getY(), 1, 
                -1*newStart.getX(), 1-newStart.getY());

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.zrd.graphicsTools.geometry.mesh.MeshEdge;
 import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
+import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 
 /**
  *
@@ -21,8 +22,8 @@ public class MeshFollowHelper {
     public static ArrayList<Vector3f> projectPathOntoPlane(ArrayList<Vector3f> path, Vector3f normal) {
         Vector3f initPoint = path.get(0);
         Vector3f initEndPoint = path.get(1);
-        Matrix4f currentTransform = MeshHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
-        return MeshHelper.getTransformedVertices(path, currentTransform);
+        Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
+        return MeshTraverseHelper.getTransformedVertices(path, currentTransform);
     }
 
     /* Here will be the code for following the surface using Triangles:
@@ -85,7 +86,7 @@ public class MeshFollowHelper {
         Vector3f initEndPointMod;
         Vector3f currentNormal;
         Matrix4f currentTransform;
-        MeshTriangle currentTriangle = new MeshTriangle(initTriangle, triangleSet.getTransform());
+        MeshTriangle currentTriangle = MeshHelper.convertInputToTriangleToMeshTriangle(initTriangle, triangleSet.getTransform());
         TriangleLineSegmentIntersection intersection;
         MeshEdge intersectingEdge = null;
         Vector3f newPoint;
@@ -94,14 +95,14 @@ public class MeshFollowHelper {
             initPoint = remainingPath.get(0);
             initEndPoint = remainingPath.get(1);
             currentNormal = currentTriangle.getNormal();
-            currentTransform = MeshHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
+            currentTransform = MeshTraverseHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
             if (oldNormal.dot(currentNormal) < 0) {
                 System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
                 break;
             }
             oldNormal = currentNormal;
-            if (!MeshHelper.hasNaN(currentTransform)) {
-                remainingPath = MeshHelper.getTransformedVertices(remainingPath, currentTransform);
+            if (!MeshTraverseHelper.hasNaN(currentTransform)) {
+                remainingPath = MeshTraverseHelper.getTransformedVertices(remainingPath, currentTransform);
                 initEndPoint = remainingPath.get(1);
             }
             intersection = new TriangleLineSegmentIntersection(currentTriangle, initPoint, initEndPoint);

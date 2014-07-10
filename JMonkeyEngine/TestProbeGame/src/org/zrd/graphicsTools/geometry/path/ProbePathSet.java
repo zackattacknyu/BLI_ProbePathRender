@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.probeTracking.ProbeDataHelper;
 
@@ -116,7 +116,7 @@ public class ProbePathSet {
             rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
             
             //find the rotated path
-            currentRotatedPath = MeshHelper.getTransformedVertices(
+            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
                     currentRotatedPath, 
                     rotationToEndpoint);
             
@@ -172,12 +172,12 @@ public class ProbePathSet {
             //      of the starting Triangle
             currentRotationAngAxis = 
                     new AngleAxisRotation(rotationAxis,currentRotationAngle);
-            currentRotationTransform = MeshHelper.getRotationAroundPoint(
+            currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(
                     getCurrentPath().getVertices().get(0), 
                     currentRotationAngAxis.getQuat());
             
             //find the rotated path
-            currentRotatedPath = MeshHelper.getTransformedVertices(
+            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
                     currentRotatedPath, 
                     currentRotationTransform);
             

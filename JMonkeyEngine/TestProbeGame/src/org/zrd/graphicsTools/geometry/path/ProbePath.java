@@ -10,7 +10,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.utilImpl.general.ProgramConstants;
@@ -42,14 +42,14 @@ public class ProbePath {
     public ArrayList<Vector3f> transformEndpoint(Vector3f newEndpoint){
         Matrix4f wholeTransformation = getTransformOfEndpoint(newEndpoint);
         displayAngleOfRotation(wholeTransformation);
-        return MeshHelper.getTransformedVertices(vertices, wholeTransformation);
+        return MeshTraverseHelper.getTransformedVertices(vertices, wholeTransformation);
         
     }
     
     public Matrix4f getTransformOfEndpoint(Vector3f newEndpoint){
         Vector3f startPoint = vertices.get(0);
         Vector3f oldEndpoint = vertices.get(vertices.size()-1);
-        return MeshHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        return MeshTraverseHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
     }
     
     public static void displayAngleOfRotation(Matrix4f transform){
@@ -66,8 +66,8 @@ public class ProbePath {
         float desiredLength = newEndPoint.subtract(startPoint).length();
         float scaleFactor = desiredLength/currentLength;
         System.out.println("Scale Factor was: " + scaleFactor);
-        Matrix4f transform = MeshHelper.getScaleAroundPoint(startPoint, scaleFactor);
-        return MeshHelper.getTransformedVertices(vertices, transform);
+        Matrix4f transform = MeshTraverseHelper.getScaleAroundPoint(startPoint, scaleFactor);
+        return MeshTraverseHelper.getTransformedVertices(vertices, transform);
     }
     
     public ArrayList<Vector3f> compressPath(){

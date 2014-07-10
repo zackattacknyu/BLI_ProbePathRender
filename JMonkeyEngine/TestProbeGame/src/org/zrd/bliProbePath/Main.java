@@ -35,12 +35,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.graphicsTools.geometry.mesh.ConnectedComponent;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
 import org.zrd.graphicsTools.geometry.modelVerifier.ModelVerification;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.modelVerifier.ModelCorrection;
 import org.zrd.graphicsTools.geometry.path.ProbePath;
+import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
@@ -88,7 +89,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
@@ -331,12 +332,14 @@ public class Main extends SimpleApplication {
             Node surfaceNode = (Node)surface;
             for(Spatial child: surfaceNode.getChildren()){
                 Geometry surfaceGeom = (Geometry)child;
-                meshInfo.addMesh(surfaceGeom.getMesh());
+                meshInfo = MeshHelper.addMeshToTriangleSet(
+                        surfaceGeom.getMesh(),transform,meshInfo);
             }
         }else if(surface instanceof Geometry){
             System.out.println("**NOTE: Geometry Triangle Data generated**");
             Geometry surfaceGeom = (Geometry)surface;
-            meshInfo.addMesh(surfaceGeom.getMesh());
+            meshInfo = MeshHelper.addMeshToTriangleSet(
+                    surfaceGeom.getMesh(),transform,meshInfo);
             meshInfo.setBoundaryTriangles();
         }
     }
@@ -681,7 +684,7 @@ public class Main extends SimpleApplication {
                                         Vector3f moveVector = endPoint.subtract(startPoint);
                                         Matrix4f moveTransform = new Matrix4f();
                                         moveTransform.setTranslation(moveVector);
-                                        ArrayList<Vector3f> newPath = MeshHelper.getTransformedVertices(oldPath, moveTransform);
+                                        ArrayList<Vector3f> newPath = MeshTraverseHelper.getTransformedVertices(oldPath, moveTransform);
                                         probePathSet.addPath(newPath);
                                         displayCurrentPath();
                                         onStartPoint = false;

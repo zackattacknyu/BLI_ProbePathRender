@@ -8,7 +8,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
+import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 
 /**
  *
@@ -46,6 +46,10 @@ public class MeshTriangle {
         Vector3f vert3Trans = transform.mult(vert3);
         
         addAllVertices(vert1Trans,vert2Trans,vert3Trans);
+    }
+    
+    public MeshTriangle(Vector3f vertex1, Vector3f vertex2, Vector3f vertex3){
+        addAllVertices(vertex1,vertex2,vertex3);
     }
     
     //reorder vertices so that the normal points in correct direction
@@ -163,7 +167,7 @@ public class MeshTriangle {
 
     @Override
     public String toString() {
-        return MeshHelper.getTriangleInfo(triangleData);
+        return MeshTraverseHelper.getTriangleInfo(triangleData);
     }
     
     

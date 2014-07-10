@@ -4,8 +4,6 @@
  */
 package org.zrd.graphicsTools.geometry.mesh;
 
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-
 /**
  *
  * @author Zach

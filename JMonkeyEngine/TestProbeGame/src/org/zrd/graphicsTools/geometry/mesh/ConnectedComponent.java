@@ -4,8 +4,6 @@
  */
 package org.zrd.graphicsTools.geometry.mesh;
 
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
