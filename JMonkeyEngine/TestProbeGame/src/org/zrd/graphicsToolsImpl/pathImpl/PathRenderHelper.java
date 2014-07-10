@@ -20,7 +20,7 @@ import org.zrd.utilImpl.general.ProgramConstants;
  *
  * @author BLI
  */
-public class PathHelper {
+public class PathRenderHelper {
 
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material material) {
         short[] indices = new short[lineVertices.size() * 2];

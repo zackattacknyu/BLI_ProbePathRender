@@ -18,6 +18,7 @@ import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
 import org.zrd.probeTracking.ProbeDataHelper;
+import org.zrd.utilImpl.general.ProgramConstants;
 
 /**
  *
@@ -69,23 +70,27 @@ public class ProbePathSet {
     }
     
     public void transformCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
-        addPath(currentPath.transformEndpoint(newEndpoint),mat);
+        addPath(PathTransformHelper.transformPathEndpoint(
+                currentPath.getVertices(), newEndpoint),mat);
     }
     
     public void scaleCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
-        addPath(currentPath.scaleForNewEndpoint(newEndpoint),mat);
+        addPath(PathTransformHelper.scalePathForNewEndpoint(
+                currentPath.getVertices(), newEndpoint),mat);
     }
     
     public void transformCurrentPathEndpoint(Vector3f newEndpoint){
-        addPath(currentPath.transformEndpoint(newEndpoint));
+       transformCurrentPathEndpoint(newEndpoint,lineMaterial);
     }
     
     public void scaleCurrentPathEndpoint(Vector3f newEndpoint){
-        addPath(currentPath.scaleForNewEndpoint(newEndpoint));
+        scaleCurrentPathEndpoint(newEndpoint,lineMaterial);
     }
     
     public void compressCurrentPath(){
-        addPath(currentPath.compressPath());
+        addPath(PathTransformHelper.getCompressedPath(
+                currentPath.getVertices(), 
+                ProgramConstants.MIN_SEGMENT_LENGTH));
     }
     
     public boolean importPathUsingFileSelector(File initialImportDirectory){
@@ -112,7 +117,7 @@ public class ProbePathSet {
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint
-            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
+            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(getCurrentPath().getVertices(),endPoint);
             
             //find the rotated path
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(

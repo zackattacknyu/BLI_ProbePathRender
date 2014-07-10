@@ -1,7 +1,6 @@
 package org.zrd.bliProbePath;
 
 import org.zrd.utilImpl.general.CollisionPoint;
-import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.utilImpl.general.ProgramConstants;
 import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
@@ -21,7 +20,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -42,7 +40,7 @@ import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.modelVerifier.ModelCorrection;
 import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
-import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
+import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
 import org.zrd.probeTracking.ProbeTrackerClient;
@@ -317,7 +315,7 @@ public class Main extends SimpleApplication {
             currentNormalVerts = new ArrayList<Vector3f>(2);
             currentNormalVerts.add(startPt); 
             currentNormalVerts.add(endPt);
-            currentNormal = PathHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
+            currentNormal = PathRenderHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
             normals.attachChild(currentNormal);
         }
         
@@ -425,21 +423,21 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
         xLineVertices.add(new Vector3f(4f,0,0));
         xLineVertices.add(new Vector3f(-4f,0,0));
-        return PathHelper.createLineFromVertices(xLineVertices,ballMat);
+        return PathRenderHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
     private Spatial initYLine(Material ballMat){
         ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
         yLineVertices.add(new Vector3f(0,4f,0));
         yLineVertices.add(new Vector3f(0,-4f,0));
-        return PathHelper.createLineFromVertices(yLineVertices,ballMat);
+        return PathRenderHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
         zLineVertices.add(new Vector3f(0,0,-4f));
         zLineVertices.add(new Vector3f(0,0,2f));
-        return PathHelper.createLineFromVertices(zLineVertices,ballMat);
+        return PathRenderHelper.createLineFromVertices(zLineVertices,ballMat);
     }
 
     @Override
@@ -560,7 +558,7 @@ public class Main extends SimpleApplication {
         ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
         vertices.add(contactPoint.clone().add(vector.mult(-0.2f)));
         vertices.add(contactPoint.clone().add(vector.mult(3)));
-        return PathHelper.createLineFromVertices(vertices, mat);
+        return PathRenderHelper.createLineFromVertices(vertices, mat);
     }
 
     private void initKeyboardInputs() {
