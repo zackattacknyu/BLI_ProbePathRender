@@ -4,7 +4,6 @@
  */
 package org.zrd.serialDataInterpreter.dataFilter;
 
-import org.zrd.serialDataInterpreter.dataFilter.OrientationFilter;
 import org.zrd.util.stats.LowPassFilterData;
 
 /**
@@ -36,9 +35,9 @@ public class OrientationFilterLowPass extends OrientationFilter{
         pitchData.addToData(inputPitch);
         rollData.addToData(inputRoll);
         
-        outputPitch = yawData.getAverage() - firstPitch;
-        outputRoll = rollData.getAverage() - firstRoll;
-        outputYaw = yawData.getAverage() - firstYaw;
+        outputPitch = yawData.getAverage();
+        outputRoll = rollData.getAverage();
+        outputYaw = yawData.getAverage();
     }
     
 }

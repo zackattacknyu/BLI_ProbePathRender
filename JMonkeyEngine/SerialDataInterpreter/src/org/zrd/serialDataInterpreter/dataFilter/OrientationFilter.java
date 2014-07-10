@@ -13,18 +13,13 @@ public abstract class OrientationFilter {
     
     protected float inputPitch,inputYaw,inputRoll;
     protected float outputPitch,outputYaw,outputRoll;
-    
-    protected float firstPitch, firstYaw, firstRoll;
+
     protected float lastPitch, lastYaw, lastRoll;
     
-    public OrientationFilter(float firstPitch, float firstYaw, float firstRoll){
-        this.firstPitch = firstPitch;
-        this.firstRoll = firstRoll;
-        this.firstYaw = firstYaw;
-        
-        this.lastPitch = firstPitch;
-        this.lastRoll = firstRoll;
-        this.lastYaw = firstYaw;
+    public OrientationFilter(float initPitch, float initYaw, float initRoll){
+        this.lastPitch = initPitch;
+        this.lastRoll = initRoll;
+        this.lastYaw = initYaw;
     }
     
     public void addDataToFilter(float pitch, float yaw, float roll){

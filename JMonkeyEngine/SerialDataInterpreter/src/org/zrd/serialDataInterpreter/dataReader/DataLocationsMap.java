@@ -4,7 +4,6 @@
  */
 package org.zrd.serialDataInterpreter.dataReader;
 
-import org.zrd.serialDataInterpreter.dataReader.DataLocationConstants;
 import java.util.HashMap;
 import java.util.Properties;
 

@@ -4,8 +4,6 @@
  */
 package org.zrd.serialDataInterpreter.dataFilter;
 
-import org.zrd.serialDataInterpreter.dataFilter.OrientationFilter;
-
 /**
  *
  * @author BLI
@@ -19,9 +17,9 @@ public class OrientationFilterRaw extends OrientationFilter{
     
     @Override
     public void filterData() {
-        outputPitch = inputPitch - firstPitch;
-        outputRoll = inputRoll - firstRoll;
-        outputYaw = inputYaw - firstYaw;
+        outputPitch = inputPitch;
+        outputRoll = inputRoll;
+        outputYaw = inputYaw;
     }
     
 }

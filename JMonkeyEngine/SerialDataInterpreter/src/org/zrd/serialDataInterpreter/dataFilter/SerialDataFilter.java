@@ -14,29 +14,13 @@ import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 public class SerialDataFilter {
     
     private SerialDataReader serial;
-
-    float deltaXangle=0;
-    float deltaYangle=0;
-    float deltaZangle=0; 
+    
     float deltaX = 0;
     float deltaY = 0;
-    float deltaPitch = 0;
-    float deltaRoll = 0;
-    float deltaYaw = 0;
-    float lastPitch = 0;
-    float lastRoll = 0;
-    float lastYaw = 0;
     private float currentYaw=0,currentPitch=0,currentRoll=0;
-    private float firstYaw=0,firstPitch=0,firstRoll=0;
-    private float outputYawRadians=0,outputPitchRadians=0,outputRollRadians=0;
-    private String currentSerialOutput;
     
     private boolean calibrating = false;
     private boolean calibrated = false;
-    
-    private float meanErrorPitch = 0;
-    private float meanErrorYaw = 0;
-    private float meanErrorRoll = 0;
     
     /* This tells the filter to be used
      *    0: Do not output changes
@@ -90,29 +74,21 @@ public class SerialDataFilter {
         
         currentCalib.finishCalibration();
         
-        lastPitch = currentCalib.getMeanPitch();
-        lastRoll = currentCalib.getMeanRoll();
-        lastYaw = currentCalib.getMeanYaw();
-        
-        currentPitch = lastPitch;
-        currentRoll = lastRoll;
-        currentYaw = lastYaw;
-        
-        firstPitch = lastPitch;
-        firstRoll = lastRoll;
-        firstYaw = lastYaw;
-        
-        meanErrorPitch = currentCalib.getMeanErrorPitch();
-        meanErrorRoll = currentCalib.getMeanErrorRoll();
-        meanErrorYaw = currentCalib.getMeanErrorYaw();
+        currentPitch = currentCalib.getMeanPitch();
+        currentRoll = currentCalib.getMeanRoll();
+        currentYaw = currentCalib.getMeanYaw();
         
         orientationFilterRaw = new OrientationFilterRaw(
-                firstPitch,firstYaw,firstRoll);
+                currentPitch,currentYaw,currentRoll);
         orientationFilterThreshold = new OrientationFilterThreshold(
-                firstPitch,firstYaw,firstRoll,
-                meanErrorPitch,meanErrorYaw,meanErrorRoll);
+                currentPitch,
+                currentYaw,
+                currentRoll,
+                currentCalib.getMeanErrorPitch(),
+                currentCalib.getMeanErrorYaw(),
+                currentCalib.getMeanErrorRoll());
         orientationFilterLowPass = new OrientationFilterLowPass(
-                firstPitch,firstYaw,firstRoll);
+                currentPitch,currentYaw,currentRoll);
         
 
     }
@@ -184,19 +160,6 @@ public class SerialDataFilter {
     public boolean isCalibrated() {
         return calibrated;
     }
-
-    public float getOutputYawRadians() {
-        return outputYawRadians;
-    }
-
-    public float getOutputPitchRadians() {
-        return outputPitchRadians;
-    }
-
-    public float getOutputRollRadians() {
-        return outputRollRadians;
-    }
-    
     
     public void startStopCalibration(){
         
@@ -215,18 +178,6 @@ public class SerialDataFilter {
             currentCalib.displayCalibrationResults();
         }
         
-    }
-    
-    public float getDeltaXangle() {
-        return deltaXangle;
-    }
-
-    public float getDeltaYangle() {
-        return deltaYangle;
-    }
-
-    public float getDeltaZangle() {
-        return deltaZangle;
     }
 
     public boolean isCalibrating() {

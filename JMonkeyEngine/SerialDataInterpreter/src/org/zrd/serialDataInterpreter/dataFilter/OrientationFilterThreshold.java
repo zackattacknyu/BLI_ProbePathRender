@@ -4,8 +4,6 @@
  */
 package org.zrd.serialDataInterpreter.dataFilter;
 
-import org.zrd.serialDataInterpreter.dataFilter.OrientationFilter;
-
 /**
  *
  * @author BLI
@@ -30,15 +28,15 @@ public class OrientationFilterThreshold extends OrientationFilter{
 
     @Override
     public void filterData() {
-        outputPitch = getOutputAngle(inputPitch,lastPitch,meanErrorPitch,firstPitch);
-        outputRoll = getOutputAngle(inputRoll,lastRoll,meanErrorRoll,firstRoll);
-        outputYaw = getOutputAngle(inputYaw,lastYaw,meanErrorYaw,firstYaw);
+        outputPitch = getOutputAngle(inputPitch,lastPitch,meanErrorPitch);
+        outputRoll = getOutputAngle(inputRoll,lastRoll,meanErrorRoll);
+        outputYaw = getOutputAngle(inputYaw,lastYaw,meanErrorYaw);
     }
     
-    private float getOutputAngle(float currentAngle, float lastAngle, float meanError, float firstAngle){
+    private float getOutputAngle(float currentAngle, float lastAngle, float meanError){
         float deltaAngle = currentAngle - lastAngle;
         if (Math.abs(deltaAngle) > meanError*FILTER_THRESHOLD_FACTOR){
-            return currentAngle - firstAngle;
+            return currentAngle;
         }else{
             return lastAngle;
         }
