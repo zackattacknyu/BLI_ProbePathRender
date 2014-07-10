@@ -31,23 +31,6 @@ public class MeshTriangle {
     
     private TriangleTexture textureCoords;
     
-    public MeshTriangle(Triangle triangle){
-        this(triangle,new Matrix4f());
-    }
-    
-    public MeshTriangle(Triangle triangle, Matrix4f transform){
-        
-        Vector3f vert1 = triangle.get1();
-        Vector3f vert2 = triangle.get2();
-        Vector3f vert3 = triangle.get3();
-        
-        Vector3f vert1Trans = transform.mult(vert1);
-        Vector3f vert2Trans = transform.mult(vert2);
-        Vector3f vert3Trans = transform.mult(vert3);
-        
-        addAllVertices(vert1Trans,vert2Trans,vert3Trans);
-    }
-    
     public MeshTriangle(Vector3f vertex1, Vector3f vertex2, Vector3f vertex3){
         addAllVertices(vertex1,vertex2,vertex3);
     }
