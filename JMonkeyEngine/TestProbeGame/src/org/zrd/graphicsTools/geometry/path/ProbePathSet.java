@@ -118,7 +118,7 @@ public class ProbePathSet {
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint
-            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
+            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(getCurrentPath().getVertices(),endPoint);
             
             //find the rotated path
             currentRotatedPath = MeshHelper.getTransformedVertices(
@@ -156,7 +156,7 @@ public class ProbePathSet {
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint 
-            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
+            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(getCurrentPath().getVertices(),endPoint);
             AngleAxisRotation rotToEndptAngAxis = 
                     new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
             currentRotationAngle = rotToEndptAngAxis.getAngle();
