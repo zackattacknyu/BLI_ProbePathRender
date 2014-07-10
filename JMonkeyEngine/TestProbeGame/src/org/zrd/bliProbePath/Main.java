@@ -85,7 +85,7 @@ public class Main extends SimpleApplication {
     private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
     private Vector3f lastPointClicked;
-    private Triangle startingTriangle;
+    private MeshTriangle startingTriangle;
     
     //this is if we are using the sphere for testing 
     //      instead of lola
@@ -679,7 +679,7 @@ public class Main extends SimpleApplication {
                                         lastPointClicked = endPoint;
                                         System.out.println("---------------Above here is line start data------------");
                                         ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        startingTriangle = point.getTriangle();
+                                        startingTriangle = MeshHelper.convertInputToTriangleToMeshTriangle(point.getTriangle(), meshInfo.getTransform());
                                         Vector3f startPoint = oldPath.get(0);
                                         Vector3f moveVector = endPoint.subtract(startPoint);
                                         Matrix4f moveTransform = new Matrix4f();

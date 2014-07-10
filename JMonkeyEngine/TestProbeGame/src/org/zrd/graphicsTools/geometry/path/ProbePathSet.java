@@ -98,7 +98,7 @@ public class ProbePathSet {
         }
     }
     
-    public void rotateAndProjectCurrentPath(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
+    public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();
         transformCurrentPathEndpoint(endPoint);

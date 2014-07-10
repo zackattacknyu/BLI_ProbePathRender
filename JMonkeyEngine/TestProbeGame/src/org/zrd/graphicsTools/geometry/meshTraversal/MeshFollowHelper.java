@@ -78,7 +78,7 @@ public class MeshFollowHelper {
      *      Project the curve onto the surface
      *      After projection, change actualEndPoint to the end point of the projected curve
      */
-    public static ArrayList<Vector3f> makePathFollowMesh2(ArrayList<Vector3f> path, Triangle initTriangle, TriangleSet triangleSet) {
+    public static ArrayList<Vector3f> makePathFollowMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
         ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
         Vector3f initPoint;
@@ -86,7 +86,7 @@ public class MeshFollowHelper {
         Vector3f initEndPointMod;
         Vector3f currentNormal;
         Matrix4f currentTransform;
-        MeshTriangle currentTriangle = MeshHelper.convertInputToTriangleToMeshTriangle(initTriangle, triangleSet.getTransform());
+        MeshTriangle currentTriangle = initTriangle;
         TriangleLineSegmentIntersection intersection;
         MeshEdge intersectingEdge = null;
         Vector3f newPoint;
