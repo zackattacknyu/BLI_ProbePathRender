@@ -7,8 +7,8 @@ package org.zrd.probeTracking;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import org.zrd.util.dataWriting.DataWriterHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 
 /**
@@ -42,13 +42,19 @@ public class PathRecorder {
     }
 
     public static String getPositionOutputText(Vector3f position){
-        return position.getX() + "," + position.getY() + "," + position.getZ();
+        return DataWriterHelper.getPositionOutputText(
+                position.getX(), 
+                position.getY(), 
+                position.getZ());
     }
     public static String getPositionOutputText(Vector2f position){
-        return position.getX() + "," + position.getY();
+        return DataWriterHelper.getPositionOutputText(
+                position.getX(), 
+                position.getY());
     }
     public static String getOrientationOutputString(float yaw, float pitch, float roll){
-        return yaw + "," + pitch + "," + roll;
+        return DataWriterHelper.getOrientationOutputText(
+                yaw, pitch, roll);
     }
     public ArrayList<Vector3f> getVertices() {
         return vertices;

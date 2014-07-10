@@ -21,42 +21,52 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
         dataInterpreter = new SerialDataInterpreter(trackerProps);
     }
     
+    @Override
     public void updateData(){
         dataInterpreter.updateData();
     }
 
+    @Override
     public float getCurrentYawRadians() {
         return dataInterpreter.getOutputYawRadians();
     }
 
+    @Override
     public float getCurrentPitchRadians() {
         return dataInterpreter.getOutputPitchRadians();
     }
 
+    @Override
     public float getCurrentRollRadians() {
         return dataInterpreter.getOutputRollRadians();
     }
 
+    @Override
     public float getDeltaX() {
         return dataInterpreter.getDeltaX();
     }
 
+    @Override
     public float getDeltaY() {
         return dataInterpreter.getDeltaY();
     }
 
+    @Override
     public boolean canBeginTracking() {
         return dataInterpreter.isCalibrated() && mode>0;
     }
 
+    @Override
     public boolean isCalibrating() {
         return dataInterpreter.isCalibrating();
     }
 
+    @Override
     public void startStopCalibration() {
         dataInterpreter.startStopCalibration();
     }
 
+    @Override
     public void setFilterMode(int mode) {
         this.mode = mode;
         dataInterpreter.setFilterMode(mode);

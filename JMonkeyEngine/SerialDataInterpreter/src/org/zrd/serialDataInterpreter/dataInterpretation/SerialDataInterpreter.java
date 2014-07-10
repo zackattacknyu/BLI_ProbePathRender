@@ -4,12 +4,9 @@
  */
 package org.zrd.serialDataInterpreter.dataInterpretation;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
-import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.serialDataInterpreter.dataFilter.SerialDataFilter;
-import org.zrd.util.timeTools.TimeHelper;
 
 /**
  * 
@@ -26,8 +23,7 @@ public class SerialDataInterpreter {
     private float outputYawRadians,outputPitchRadians,outputRollRadians;
     
     private boolean recording = false;
-    private ProbeDataWriter currentXYRecording;
-    private ProbeDataWriter currentYawPitchRollRecording,currentPathOutputWriter;
+    private SerialDataRecorder currentDataRecorder;
 
 
     public SerialDataInterpreter(Properties props) {
@@ -36,31 +32,14 @@ public class SerialDataInterpreter {
     }
     
     public void startStopRecording(Path filePath){
-        try {
-            
-            if(recording){
-                currentPathOutputWriter.closeWriter();
-                currentXYRecording.closeWriter();
-                currentYawPitchRollRecording.closeWriter();
-                currentXYRecording = null;
-                currentYawPitchRollRecording = null;
-                currentPathOutputWriter = null;
-                recording = false;
+        if(recording){
+            currentDataRecorder.closeRecording();
+            recording = false;
                 
-            }else{   
-                String currentTimestamp = TimeHelper.getTimestampSuffix();
-                currentXYRecording = new ProbeDataWriter(
-                        filePath,"pathXYdata",currentTimestamp);
-                currentYawPitchRollRecording = new ProbeDataWriter(
-                        filePath,"pathYawPitchRollData",currentTimestamp);
-                currentPathOutputWriter = new ProbeDataWriter(
-                        filePath,"pathOutput",currentTimestamp);
-                recording = true;
-                
-            }
-            
-        } catch (IOException ex) {
-            System.out.println(ex);
+        }else{   
+            currentDataRecorder = new SerialDataRecorder(filePath);
+            recording = true;
+
         }
     }
 
@@ -68,14 +47,11 @@ public class SerialDataInterpreter {
         serial.updateData();
         processYawPitchRoll();
         processXYdata();
-        try {
-            if(recording){
-                currentPathOutputWriter.writeLine(outputYawRadians + "," + 
-                    outputRollRadians + "," + outputPitchRadians +
-                    "," + deltaX + "," + deltaY );
-            }
-        } catch (IOException ex) {
-            System.out.println(ex);
+        if(recording){
+            currentDataRecorder.addLineToFiles(deltaX, deltaY, 
+                    outputYawRadians, 
+                    outputPitchRadians, 
+                    outputRollRadians);
         }
     }
     
@@ -85,28 +61,12 @@ public class SerialDataInterpreter {
         
         deltaX = getOutputDisp(deltaX);
         deltaY = getOutputDisp(deltaY);
-        
-        if(recording){
-            try {
-                currentXYRecording.writeLine(deltaX + "," + deltaY);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        }
     }
     
     private void processYawPitchRoll(){
         outputYawRadians = getOutputAngle(serial.getCurrentYaw());
         outputRollRadians = getOutputAngle(serial.getCurrentRoll());
         outputPitchRadians = getOutputAngle(serial.getCurrentPitch());
-        
-        if(recording){
-            try {
-                currentYawPitchRollRecording.writeLine(outputYawRadians + "," + outputPitchRadians + "," + outputRollRadians);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        }
     }
     
     /**
