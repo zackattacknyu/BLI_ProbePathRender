@@ -9,7 +9,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import org.zrd.graphicsToolsImpl.pathImpl.PathHelper;
+import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.utilImpl.general.ProgramConstants;
 
 /**
@@ -20,12 +20,10 @@ public class ProbePath {
 
     private ArrayList<Vector3f> vertices;
     private Spatial probePath;
-    private Material lineMaterial;
     
     public ProbePath(ArrayList<Vector3f> vertices, Material lineMaterial){
         this.vertices = vertices;
-        this.lineMaterial = lineMaterial;
-        probePath = PathHelper.createLineFromVertices(vertices, lineMaterial);
+        probePath = PathRenderHelper.createLineFromVertices(vertices, lineMaterial);
     }
 
     public ArrayList<Vector3f> getVertices() {

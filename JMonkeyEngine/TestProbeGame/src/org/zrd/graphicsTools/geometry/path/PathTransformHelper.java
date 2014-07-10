@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshHelper;
 import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
-import org.zrd.utilImpl.general.ProgramConstants;
 
 /**
  *

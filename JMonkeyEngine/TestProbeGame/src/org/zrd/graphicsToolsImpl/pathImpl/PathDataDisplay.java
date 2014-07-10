@@ -39,7 +39,7 @@ public abstract class PathDataDisplay {
     }
     
     public Spatial generateSpatial(Material mat){
-        return PathHelper.createLineFromVertices(displayVertices, mat);
+        return PathRenderHelper.createLineFromVertices(displayVertices, mat);
     }
     
     protected void importFromFile(File selectedFile){
