@@ -27,10 +27,11 @@ public class SerialDataRecorder {
         final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties,filePath);
         
         Thread t = new Thread(){
+            @Override
             public void run(){
                 while(true){
                     try {
-                        Thread.sleep(30);
+                        sleep(30);
                         serialData.updateData();
                     } catch (InterruptedException ex) {
                         break;
@@ -40,15 +41,15 @@ public class SerialDataRecorder {
         };
                 
         Scanner sc = new Scanner(System.in);
-        System.out.println("Press Enter to Begin Reading");
+        System.out.println("Press Enter to Begin");
         sc.nextLine();
         t.start();
         
         while(true){
-            System.out.println("Press Enter to begin path recording");
+            System.out.println("Press Enter to begin recording");
             sc.nextLine();
             serialData.startStopRecording();
-            System.out.println("Press Enter to end path recording");
+            System.out.println("Press Enter to end recording");
             sc.nextLine();
             serialData.startStopRecording();
         }
