@@ -110,7 +110,7 @@ public class ProbePathSet {
         
         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
         
-        float numberTries = 4;
+        float numberTries = 10;
         
         Matrix4f rotationToEndpoint;
         currentRotatedPath = getCurrentPath().getVertices();
@@ -128,9 +128,16 @@ public class ProbePathSet {
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                     currentRotatedPath,startingTriangle,meshInfo);
             
+            displayDistance(currentPathOnSurface.get(currentPathOnSurface.size()-1),endPoint);
+            
             //saves the path for later display
             addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
+    }
+    
+    public static void displayDistance(Vector3f actualEndpoint, Vector3f targetEndpoint){
+        float distance = actualEndpoint.distance(targetEndpoint);
+        System.out.println("Distance from target endpoint to actual endpoint: " + distance);
     }
     
     private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
