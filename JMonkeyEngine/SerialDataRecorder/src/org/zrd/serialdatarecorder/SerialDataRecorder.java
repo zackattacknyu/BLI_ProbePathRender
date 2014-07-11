@@ -4,14 +4,11 @@
  */
 package org.zrd.serialdatarecorder;
 
-import static java.lang.Thread.sleep;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.Scanner;
 import org.zrd.util.dataStreaming.DataStreamRecorder;
-import org.zrd.util.dataStreaming.ProbeDataStream;
 /**
  *
  * @author BLI
