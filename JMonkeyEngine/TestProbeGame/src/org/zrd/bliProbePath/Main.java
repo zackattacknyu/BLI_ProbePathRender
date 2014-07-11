@@ -56,8 +56,7 @@ public class Main extends SimpleApplication {
     private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
     private Material redLineMaterial,orangeLineMaterial;
     
-    private BitmapText yawPitchRollText, xyzText, scaleXtext, scaleYtext, 
-            readModeText, recordingText, resetProbeText, probeMoveModeText;
+    private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     private boolean onStartPoint = true;
     
     private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
@@ -473,20 +472,6 @@ public class Main extends SimpleApplication {
         resetProbeText.setText("Press H to reset probe to (0,0)");
         currentStartY = currentStartY + resetProbeText.getLineHeight();
         
-        readModeText = initializeNewText(currentStartY);
-        currentStartY = currentStartY + readModeText.getLineHeight();
-        readModeText.setText("Probe B to start calibrating the probe");
-        
-        scaleYtext = initializeNewText(currentStartY);
-        currentStartY = currentStartY + scaleYtext.getLineHeight();
-        scaleYtext.setText("Virtual Y to real Y scale factor "
-                + "(Press Y to recalibrate): " + probeTracker.getScaleFactorY());
-        
-        scaleXtext = initializeNewText(currentStartY);
-        currentStartY = currentStartY + scaleXtext.getLineHeight();
-        scaleXtext.setText("Virtual X to real X scale factor "
-                + "(Press X to recalibrate): " + probeTracker.getScaleFactorX());
-        
         yawPitchRollText = initializeNewText(currentStartY);
         currentStartY = currentStartY + yawPitchRollText.getLineHeight();
         
@@ -507,12 +492,6 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(newText);
         return newText;
         
-    }
-    
-    private void displayReadMode(){
-        
-        readModeText.setText(probeTracker.getReadModeText());
-                
     }
     
     private void displayCurrentPath(){
@@ -570,14 +549,7 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
-        inputManager.addMapping("recalibrateX", new KeyTrigger(KeyInput.KEY_X));
-        inputManager.addMapping("recalibrateY", new KeyTrigger(KeyInput.KEY_Y));
-        
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
-        
-        inputManager.addMapping("readModeChange", new KeyTrigger(KeyInput.KEY_V));
-
-        inputManager.addMapping("recalibrateProbe", new KeyTrigger(KeyInput.KEY_B));
         
         inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
@@ -588,9 +560,6 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
         inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
-        inputManager.addMapping("exportLine", new KeyTrigger(KeyInput.KEY_E));
-        inputManager.addMapping("deleteLine", new KeyTrigger(KeyInput.KEY_O));
-        inputManager.addMapping("selectLine", new KeyTrigger(KeyInput.KEY_P));
         
         inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
@@ -617,19 +586,6 @@ public class Main extends SimpleApplication {
                 if(name.equals("importLine") && keyPressed){
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
                     if(chosen) displayCurrentPath();
-                }
-                
-                if(name.equals("exportLine") && keyPressed){
-                    System.out.println("Export Line Chosen");
-                    
-                }
-                
-                if(name.equals("deleteLine") && keyPressed){
-                    System.out.println("Delete Line Chosen");
-                }
-                
-                if(name.equals("selectLine") && keyPressed){
-                    System.out.println("Select Line Chosen");
                 }
                 
                 if(name.equals("changeMoveableObject") && keyPressed){
@@ -741,27 +697,6 @@ public class Main extends SimpleApplication {
                 if(name.equals("resetProbe") && keyPressed){
                     probeTracker.resetProbe();
                 }
-                
-                
-                if(name.equals("recalibrateX") && keyPressed){
-                    //probeTracker.updateXcalibration();
-                    scaleXtext.setText(probeTracker.getScaleXtext());
-                }
-                
-                if(name.equals("recalibrateY") && keyPressed){
-                    //probeTracker.updateYcalibration();
-                    scaleYtext.setText(probeTracker.getScaleYtext());
-                }
-                
-                if(name.equals("readModeChange") && keyPressed){
-                    //probeTracker.incrementReadMode();
-                    //displayReadMode();
-                }
-                
-                if(name.equals("recalibrateProbe") && keyPressed){
-                    //probeTracker.updateProbeCalibration();
-                    //displayReadMode();
-                }
             }
 
             
@@ -770,18 +705,11 @@ public class Main extends SimpleApplication {
         inputManager.addListener(acl,
                 "pickControlPoint",
                 "startStopNewPath",
-                "recalibrateX",
-                "recalibrateY",
-                "readModeChange",
                 "resetProbe",
-                "recalibrateProbe",
                 "changeProbeMoveMode",
                 "changeMoveableObject",
                 "changeLineMoveMode",
                 "importLine",
-                "exportLine",
-                "deleteLine",
-                "selectLine",
                 "rawXYdisplay",
                 "rawYawPitchRollDisplay");
 
