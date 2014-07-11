@@ -15,6 +15,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldC
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
+import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -26,7 +27,7 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  * 
  * @author BLI
  */
-public class ProbeTracker {
+public class ProbeTracker implements ProbeDataStream{
 
     private final Vector3f startingPosition;
     
@@ -90,7 +91,8 @@ public class ProbeTracker {
         
     }
     
-    public void updateValues(){
+    @Override
+    public void updateData(){
         
         currentSourceTracker.updateData();
         
@@ -129,6 +131,7 @@ public class ProbeTracker {
         return coordConverter.getCurrentNormal();
     }
     
+    @Override
     public void startStopRecording(){
         
         if(recordingPath){

@@ -445,7 +445,7 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        probeTracker.updateValues();
+        probeTracker.updateData();
         
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         

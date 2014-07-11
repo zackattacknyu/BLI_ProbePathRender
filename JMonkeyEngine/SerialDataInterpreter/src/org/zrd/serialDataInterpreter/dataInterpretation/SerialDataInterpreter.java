@@ -7,12 +7,13 @@ package org.zrd.serialDataInterpreter.dataInterpretation;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
+import org.zrd.util.dataStreaming.ProbeDataStream;
 
 /**
  * 
  * @author BLI
  */
-public class SerialDataInterpreter {
+public class SerialDataInterpreter implements ProbeDataStream{
     
     public static final float DEG_TO_RAD_FACTOR = (float) (Math.PI/180.0);
     
@@ -37,6 +38,7 @@ public class SerialDataInterpreter {
         dataRecordingFilePath = filePath;
     }
     
+    @Override
     public void startStopRecording(){
         if(recording){
             currentDataRecorder.closeRecording();
@@ -49,6 +51,7 @@ public class SerialDataInterpreter {
         }
     }
 
+    @Override
     public void updateData(){
         serial.updateData();
         processYawPitchRoll();
