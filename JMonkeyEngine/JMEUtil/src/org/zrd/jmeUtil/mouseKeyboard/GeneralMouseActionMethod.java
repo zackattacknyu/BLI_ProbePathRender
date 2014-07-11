@@ -2,25 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.renderUtil.mouseKeyboard;
+package org.zrd.jmeUtil.mouseKeyboard;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 
 /**
  *
  * @author BLI
  */
-public abstract class GeneralKeyboardActionMethod {
+public abstract class GeneralMouseActionMethod {
 
-    public GeneralKeyboardActionMethod(InputManager manager, String name, int keyCode){
-        manager.addMapping(name, new KeyTrigger(keyCode));
+    public GeneralMouseActionMethod(InputManager manager, String name, int keyCode){
+        manager.addMapping(name, new MouseButtonTrigger(keyCode));
         
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
-                if(keyPressed) actionMethod();
+                actionMethod();
             } 
         };
         

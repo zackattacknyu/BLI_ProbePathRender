@@ -4,14 +4,14 @@
  */
 package org.zrd.cameraTracker.cameraMoveImpl;
 
-import org.zrd.renderUtil.mouseKeyboard.MouseClickImpl;
+import org.zrd.jmeUtil.mouseKeyboard.MouseClickImpl;
 import org.zrd.cameraTracker.cameraMoves.CameraHelper;
 import org.zrd.cameraTracker.cameraMoves.CameraRotate;
 import com.jme3.input.InputManager;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import org.zrd.renderUtil.mouseKeyboard.GeneralMouseAnalogMethod;
+import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseAnalogMethod;
 
 /**This rotates the whole camera about a center point
  *  and ensures that it is still looking at that center point

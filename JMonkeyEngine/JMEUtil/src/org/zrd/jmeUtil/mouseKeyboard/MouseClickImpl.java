@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.renderUtil.mouseKeyboard;
+package org.zrd.jmeUtil.mouseKeyboard;
 
-import org.zrd.renderUtil.mouseKeyboard.GeneralMouseActionMethod;
+import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 

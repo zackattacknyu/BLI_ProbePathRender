@@ -9,7 +9,7 @@ import org.zrd.cameraTracker.cameraMoves.CameraRadialMovement;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import org.zrd.renderUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
  * This is used to implement camera radial movment in
