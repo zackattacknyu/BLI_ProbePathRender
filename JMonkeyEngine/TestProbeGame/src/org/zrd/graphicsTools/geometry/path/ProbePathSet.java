@@ -8,6 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
@@ -16,6 +17,7 @@ import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
 import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshFollowHelper;
 import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
+import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
 import org.zrd.probeTracking.ProbeDataHelper;
 import org.zrd.utilImpl.general.ProgramConstants;
 
@@ -101,7 +103,7 @@ public class ProbePathSet {
             return true;
         }
     }
-    
+    /*
     public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();
@@ -129,18 +131,19 @@ public class ProbePathSet {
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                     currentRotatedPath,startingTriangle,meshInfo);
             
-            /*currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
+            currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
             
             if(currentDistance < 0.1){
                 break;
-            }*/
+            }
             
             //saves the path for later display
             //addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
         addPath(currentPathOnSurface);
     }
+    */
     
     public static float currentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint){
         Vector3f actualEndpoint = path.get(path.size()-1);
@@ -154,8 +157,8 @@ public class ProbePathSet {
         return outputMaterial;
     }
     
-    /*
-    public void rotateAndProjectCurrentPath2(Vector3f endPoint, Triangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
+    
+    public void rotateAndProjectCurrentPath2(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();
         //displayCurrentPath();
@@ -170,14 +173,16 @@ public class ProbePathSet {
         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
         Vector3f rotToEndptAxis;
         float totalAngle = 0;
+        float currentDistance;
         
         float numberTries = 4;
         
         currentRotatedPath = getCurrentPath().getVertices();
+        currentPathOnSurface = getCurrentPath().getVertices();
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint 
-            rotationToEndpoint = getCurrentPath().getTransformOfEndpoint(endPoint);
+            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPathOnSurface, endPoint);
             AngleAxisRotation rotToEndptAngAxis = 
                     new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
             currentRotationAngle = rotToEndptAngAxis.getAngle();
@@ -198,12 +203,12 @@ public class ProbePathSet {
             //      of the starting Triangle
             currentRotationAngAxis = 
                     new AngleAxisRotation(rotationAxis,currentRotationAngle);
-            currentRotationTransform = MeshHelper.getRotationAroundPoint(
+            currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(
                     getCurrentPath().getVertices().get(0), 
                     currentRotationAngAxis.getQuat());
             
             //find the rotated path
-            currentRotatedPath = MeshHelper.getTransformedVertices(
+            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
                     currentRotatedPath, 
                     currentRotationTransform);
             
@@ -211,8 +216,16 @@ public class ProbePathSet {
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
                     currentRotatedPath,startingTriangle,meshInfo);
             
+            currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
+            System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
+            
+            if(currentDistance < 0.1){
+                break;
+            }
+            
             //saves the path for later display
-            addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
+            //addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
-    }*/
+        addPath(currentPathOnSurface);
+    }
 }

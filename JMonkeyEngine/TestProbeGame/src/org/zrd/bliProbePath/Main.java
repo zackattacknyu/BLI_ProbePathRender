@@ -696,7 +696,7 @@ public class Main extends SimpleApplication {
                                         addBoxAtPoint(endPoint);
                                         
                                         lastPointClicked = endPoint;
-                                        probePathSet.rotateAndProjectCurrentPath(endPoint, startingTriangle, meshInfo,assetManager);
+                                        probePathSet.rotateAndProjectCurrentPath2(endPoint, startingTriangle, meshInfo,assetManager);
                                         
                                         displayCurrentPath();
 
