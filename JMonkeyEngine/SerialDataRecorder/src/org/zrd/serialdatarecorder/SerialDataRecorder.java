@@ -24,7 +24,6 @@ public class SerialDataRecorder {
         
         Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
         Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
-        int filterMode = Integer.parseInt(dataRecorderProperties.getProperty("dataInterpretation.filterMode"));
         final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
         
         Thread t = new Thread(){
@@ -40,15 +39,10 @@ public class SerialDataRecorder {
             }
         };
                 
-        System.out.println("Press Enter to begin calibration:");
         Scanner sc = new Scanner(System.in);
+        System.out.println("Press Enter to Begin Reading");
         sc.nextLine();
         t.start();
-        serialData.startStopCalibration();
-        System.out.println("Press Enter to end calibration:");
-        sc.nextLine();
-        serialData.startStopCalibration();
-        serialData.setFilterMode(filterMode);
         
         while(true){
             System.out.println("Press Enter to begin path recording");

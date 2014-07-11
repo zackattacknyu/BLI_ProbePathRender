@@ -155,18 +155,6 @@ public class ProbeTracker {
     public float getCurrentRoll() {
         return currentRoll;
     }
-
-    public void setFilterMode(int filterMode){
-        currentSourceTracker.setFilterMode(filterMode);
-    }
-    
-    public void startStopCalibration(){
-        currentSourceTracker.startStopCalibration();
-    }
-    
-    public boolean isCalibrating(){
-        return currentSourceTracker.isCalibrating();
-    }
     
     public boolean isNewPathExists() {
         return newPathExists;

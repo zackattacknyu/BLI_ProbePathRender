@@ -20,9 +20,4 @@ public interface AbstractInputSourceTracker {
     boolean canBeginTracking();
     
     void updateData();
-    
-    boolean isCalibrating();
-    void startStopCalibration();
-    void setFilterMode(int mode);
-    
 }

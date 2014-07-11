@@ -53,23 +53,7 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
 
     @Override
     public boolean canBeginTracking() {
-        return dataInterpreter.isCalibrated() && mode>0;
-    }
-
-    @Override
-    public boolean isCalibrating() {
-        return dataInterpreter.isCalibrating();
-    }
-
-    @Override
-    public void startStopCalibration() {
-        dataInterpreter.startStopCalibration();
-    }
-
-    @Override
-    public void setFilterMode(int mode) {
-        this.mode = mode;
-        dataInterpreter.setFilterMode(mode);
+        return true;
     }
     
 }

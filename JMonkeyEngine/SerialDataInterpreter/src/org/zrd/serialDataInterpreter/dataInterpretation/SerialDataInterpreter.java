@@ -6,7 +6,7 @@ package org.zrd.serialDataInterpreter.dataInterpretation;
 
 import java.nio.file.Path;
 import java.util.Properties;
-import org.zrd.serialDataInterpreter.dataFilter.SerialDataFilter;
+import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 
 /**
  * 
@@ -16,7 +16,7 @@ public class SerialDataInterpreter {
     
     public static final float DEG_TO_RAD_FACTOR = (float) (Math.PI/180.0);
     
-    private SerialDataFilter serial;
+    private SerialDataReader serial;
 
     float deltaX = 0;
     float deltaY = 0;
@@ -27,7 +27,7 @@ public class SerialDataInterpreter {
 
 
     public SerialDataInterpreter(Properties props) {
-        serial = new SerialDataFilter(props);
+        serial = new SerialDataReader(props);
         System.out.println("Waiting to receive input...");
     }
     
@@ -94,10 +94,6 @@ public class SerialDataInterpreter {
         return disp;
     }
 
-    public boolean isCalibrated() {
-        return serial.isCalibrated();
-    }
-
     public float getOutputYawRadians() {
         return outputYawRadians;
     }
@@ -108,20 +104,6 @@ public class SerialDataInterpreter {
 
     public float getOutputRollRadians() {
         return outputRollRadians;
-    }
-    
-    
-    public void startStopCalibration(){
-        serial.startStopCalibration();
-    }
-    
-    public void setFilterMode(int mode){
-        serial.setFilterMode(mode);
-    }
-    
-
-    public boolean isCalibrating() {
-        return serial.isCalibrating();
     }
     
     public float getDeltaX() {

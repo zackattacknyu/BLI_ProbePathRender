@@ -103,50 +103,6 @@ public class ProbeTrackerClient{
         return recordingText;
     }
     
-    public void updateProbeCalibration(){
-        
-        if(currentTracker.isCalibrating()){
-            setReadMode();
-        }else{
-            readModeText = "Now Recalibrating. Press B again to stop.";
-        }
-        currentTracker.startStopCalibration();
-    }
-    
-    private void setReadMode(){
-        
-        switch(filterMode){
-            case 0:
-                readModeText = "Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Only Show Output";
-                currentTracker.setFilterMode(0);
-                break;
-            case 1:
-                readModeText = "Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Raw Output Mode";
-                currentTracker.setFilterMode(1);
-                break;
-
-            case 2:
-                readModeText = "Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Low-Pass Filter Mode";
-                currentTracker.setFilterMode(3);
-                break;
-
-            case 3:
-                readModeText = "Probe Output Reading "
-                        + "(Press V to change): "
-                        + "Mean Error as Threshold Mode";
-                currentTracker.setFilterMode(2);
-                break;
-        }
-        
-        
-    }
-    
     public String getXYZtext(){
         return "(X,Y,Z) = (" + currentTracker.getCurrentPosition();
     }
@@ -163,15 +119,6 @@ public class ProbeTrackerClient{
 
     public ArrayList<Vector3f> getCurrentPathVertices() {
         return currentTracker.getCurrentPathVertices();
-    }
-    
-    public void incrementReadMode(){
-        
-        filterMode++;
-        filterMode = (short) (filterMode%4);
-        
-        setReadMode();  
-        
     }
 
     public String getScaleYtext() {

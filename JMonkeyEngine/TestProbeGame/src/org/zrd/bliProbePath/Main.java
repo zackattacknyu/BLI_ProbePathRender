@@ -754,13 +754,13 @@ public class Main extends SimpleApplication {
                 }
                 
                 if(name.equals("readModeChange") && keyPressed){
-                    probeTracker.incrementReadMode();
-                    displayReadMode();
+                    //probeTracker.incrementReadMode();
+                    //displayReadMode();
                 }
                 
                 if(name.equals("recalibrateProbe") && keyPressed){
-                    probeTracker.updateProbeCalibration();
-                    displayReadMode();
+                    //probeTracker.updateProbeCalibration();
+                    //displayReadMode();
                 }
             }
 
