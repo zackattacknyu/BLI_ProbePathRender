@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsTools.geometry.meshTraversal;
+package org.zrd.geometryToolkit.meshTraversal;
 
-import org.zrd.graphicsTools.geometry.mesh.MeshEdge;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import org.zrd.utilImpl.general.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 
 /**
  *

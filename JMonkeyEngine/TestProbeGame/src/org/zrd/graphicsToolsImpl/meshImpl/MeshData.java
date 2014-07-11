@@ -4,7 +4,7 @@
  */
 package org.zrd.graphicsToolsImpl.meshImpl;
 
-import org.zrd.graphicsTools.geometry.mesh.TriangleTexture;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;

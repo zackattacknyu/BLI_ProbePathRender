@@ -8,8 +8,8 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
-import org.zrd.graphicsTools.geometry.util.AngleAxisRotation;
+import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
+import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 
 /**
  *

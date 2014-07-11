@@ -1,7 +1,7 @@
 package org.zrd.bliProbePath;
 
 import org.zrd.utilImpl.general.CollisionPoint;
-import org.zrd.utilImpl.general.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
@@ -32,12 +32,12 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
-import org.zrd.graphicsTools.geometry.mesh.ConnectedComponent;
-import org.zrd.graphicsTools.geometry.meshTraversal.MeshTraverseHelper;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.modelVerifier.ModelVerification;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
-import org.zrd.graphicsTools.geometry.modelVerifier.ModelCorrection;
+import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
+import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.modelTesting.ModelVerification;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;

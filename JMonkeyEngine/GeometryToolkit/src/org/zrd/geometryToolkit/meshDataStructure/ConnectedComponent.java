@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsTools.geometry.mesh;
+package org.zrd.geometryToolkit.meshDataStructure;
 
 import java.util.HashSet;
 import java.util.Set;

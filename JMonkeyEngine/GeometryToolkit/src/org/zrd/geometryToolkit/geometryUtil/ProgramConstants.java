@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.utilImpl.general;
+package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.ColorRGBA;
 

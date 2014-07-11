@@ -16,8 +16,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 
 /**
  *

@@ -10,8 +10,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathDataDisplay;
 

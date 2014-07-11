@@ -2,16 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsTools.geometry.meshTraversal;
+package org.zrd.geometryToolkit.meshTraversal;
 
 import com.jme3.math.Matrix4f;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.graphicsTools.geometry.mesh.MeshEdge;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
+import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 
 /**
  *

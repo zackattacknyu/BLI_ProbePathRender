@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsTools.geometry.modelVerifier;
+package org.zrd.geometryToolkit.modelTesting;
 
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import org.zrd.graphicsTools.geometry.mesh.ConnectedComponent;
-import org.zrd.graphicsTools.geometry.mesh.MeshTriangle;
-import org.zrd.graphicsTools.geometry.mesh.TriangleSet;
+import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 
 /**
  *

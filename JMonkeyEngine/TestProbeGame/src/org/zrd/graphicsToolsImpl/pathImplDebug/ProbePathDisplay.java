@@ -14,9 +14,12 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import org.zrd.utilImpl.general.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 
 /**
+ * 
+ * UNUSED CODE:
+ * This is old test code that is no longer used
  *
  * @author BLI
  */

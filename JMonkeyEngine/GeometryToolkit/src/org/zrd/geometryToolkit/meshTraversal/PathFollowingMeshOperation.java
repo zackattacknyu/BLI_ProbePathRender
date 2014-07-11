@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsTools.geometry.meshTraversal;
+package org.zrd.geometryToolkit.meshTraversal;
 
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
