@@ -15,6 +15,12 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 /*
+ * This is the class that interfaces with the Arduino.
+ * It only reads from the arduino and returns the string.
+ * Any interpretation is done in later classes
+ * 
+ * Most of this code comes from the RXTX sample code
+ * 
  * 
  * Info on setup was found here:
  * 
@@ -22,15 +28,14 @@ import java.util.Properties;
  * 
  * The RXTX library was found here
  * http://mfizz.com/oss/rxtx-for-java
- * 
- * This is to be used solely for reading from the serial device.
- *      Any interpretation of the reading should be done in other classes. 
+ *
  * 
  */
 
 
 public class SerialReader implements SerialPortEventListener {
 	SerialPort serialPort;
+        
         /** The port we're normally going to use. */
 	/*private static final String PORT_NAMES[] = { 
                     "/dev/tty.usbserial-A9007UX1", // Mac OS X
@@ -38,25 +43,40 @@ public class SerialReader implements SerialPortEventListener {
                     "COM3", // Windows
 	};*/
         private static String PORT_NAME;
-	/**
+	
+        /**
 	* A BufferedReader which will be fed by a InputStreamReader 
 	* converting the bytes into characters 
 	* making the displayed results codepage independent
 	*/
 	private BufferedReader input;
+        
 	/** The output stream to the port */
 	private OutputStream output;
-	/** Milliseconds to block while waiting for port open */
+	
+        /** Milliseconds to block while waiting for port open */
 	private static int TIME_OUT;
-	/** Default bits per second for COM port. */
+	
+        /** Default bits per second for COM port. */
 	private static int DATA_RATE;
         
+        /**
+         * This string is the current output from the arduino
+         */
         private String currentArdOutput;
         
+        /**
+         * These are the properties to be used to instantiate the arduino reading
+         */
         private Properties serialProperties;
 
+        /**
+         * This is all the code that initializes the reader
+         *      once the thread is started
+         */
 	public void initialize() {
             
+            //retrieves the required properties
             TIME_OUT = Integer.parseInt(serialProperties.getProperty("serial.time_out"));
             DATA_RATE = Integer.parseInt(serialProperties.getProperty("serial.data_rate"));
             PORT_NAME = serialProperties.getProperty("serial.port_name");
@@ -123,6 +143,7 @@ public class SerialReader implements SerialPortEventListener {
 	/**
 	 * Handle an event on the serial port. Read the data and print it.
 	 */
+        @Override
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
             if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
                 try {
@@ -138,10 +159,15 @@ public class SerialReader implements SerialPortEventListener {
             this.serialProperties = serialProperties;
         }
         
+        /**
+         * This starts the thread and initializes the reader
+         * @param props     serial properties to be used
+         */
         public void beginExecution(Properties props){
             setSerialProperties(props);
             initialize();
             Thread t=new Thread() {
+                @Override
                 public void run() {
                         //the following line will keep this app alive for 1000 seconds,
                         //waiting for events to occur and responding to them (printing incoming messages to console).
@@ -155,6 +181,10 @@ public class SerialReader implements SerialPortEventListener {
             System.out.println("Started");
         }
 
+    /**
+     * This returns the current string being read from Arduino
+     * @return      current string from arduino
+     */
     public String getCurrentOutput() {
         return currentArdOutput;
     }
