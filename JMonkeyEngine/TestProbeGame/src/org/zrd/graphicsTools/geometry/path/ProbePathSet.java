@@ -108,7 +108,8 @@ public class ProbePathSet {
         compressCurrentPath();
         transformCurrentPathEndpoint(endPoint);
         
-        ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
+        ArrayList<Vector3f> currentRotatedPath;
+        ArrayList<Vector3f> currentPathOnSurface = new ArrayList<Vector3f>();
         
         float numberTries = 10;
         
@@ -131,8 +132,9 @@ public class ProbePathSet {
             displayDistance(currentPathOnSurface.get(currentPathOnSurface.size()-1),endPoint);
             
             //saves the path for later display
-            addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
+            //addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
+        addPath(currentPathOnSurface);
     }
     
     public static void displayDistance(Vector3f actualEndpoint, Vector3f targetEndpoint){

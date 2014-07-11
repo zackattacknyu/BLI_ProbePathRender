@@ -698,7 +698,7 @@ public class Main extends SimpleApplication {
                                         lastPointClicked = endPoint;
                                         probePathSet.rotateAndProjectCurrentPath(endPoint, startingTriangle, meshInfo,assetManager);
                                         
-                                        displayCurrentPaths();
+                                        displayCurrentPath();
 
                                         moveLine = false;
                                         onStartPoint = true;
