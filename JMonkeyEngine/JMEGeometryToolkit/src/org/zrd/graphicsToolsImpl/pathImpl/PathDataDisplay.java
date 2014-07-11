@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
+import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
  *
@@ -22,7 +23,7 @@ public abstract class PathDataDisplay {
     protected boolean nullReturn = false;
     
     protected PathDataDisplay(File initDir){
-        File startingFile = ProbeDataHelper.importPathUsingFileSelector(initDir);
+        File startingFile = FileDataHelper.importPathUsingFileSelector(initDir);
         if(startingFile == null){
             nullReturn = true;
         }else{
@@ -43,7 +44,7 @@ public abstract class PathDataDisplay {
     }
     
     protected void importFromFile(File selectedFile){
-        ArrayList<String> lines = ProbeDataHelper.getLinesFromFile(selectedFile);
+        ArrayList<String> lines = FileDataHelper.getLinesFromFile(selectedFile);
         for(String line: lines){
             String[] parts = line.split(",");
             addParts(parts);

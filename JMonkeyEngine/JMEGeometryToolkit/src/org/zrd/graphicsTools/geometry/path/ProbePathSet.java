@@ -21,6 +21,7 @@ import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
  *
@@ -96,7 +97,7 @@ public class ProbePathSet {
     }
     
     public boolean importPathUsingFileSelector(File initialImportDirectory){
-        File selectedFile = ProbeDataHelper.importPathUsingFileSelector(initialImportDirectory);
+        File selectedFile = FileDataHelper.importPathUsingFileSelector(initialImportDirectory);
         if(selectedFile == null){
             return false;
         }else{
