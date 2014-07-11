@@ -62,14 +62,12 @@ public class ProbeTracker {
         
         currentSourceTracker.updateData();
         
-        if(currentSourceTracker.canBeginTracking()){
-            currentYaw = currentSourceTracker.getCurrentYawRadians();
-            currentPitch = currentSourceTracker.getCurrentPitchRadians();
-            currentRoll = currentSourceTracker.getCurrentRollRadians();
-            
-            currentDeltaX = currentSourceTracker.getDeltaX();
-            currentDeltaY = currentSourceTracker.getDeltaY();
-        }
+        currentYaw = currentSourceTracker.getCurrentYawRadians();
+        currentPitch = currentSourceTracker.getCurrentPitchRadians();
+        currentRoll = currentSourceTracker.getCurrentRollRadians();
+
+        currentDeltaX = currentSourceTracker.getDeltaX();
+        currentDeltaY = currentSourceTracker.getDeltaY();
         
         localRotation = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         

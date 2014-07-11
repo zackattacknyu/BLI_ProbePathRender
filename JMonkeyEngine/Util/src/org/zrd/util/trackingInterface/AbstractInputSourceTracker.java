@@ -17,7 +17,5 @@ public interface AbstractInputSourceTracker {
     float getDeltaX();
     float getDeltaY();
     
-    boolean canBeginTracking();
-    
     void updateData();
 }

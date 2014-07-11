@@ -20,41 +20,33 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
         keyboardInputTracker = new KeyboardTrackingImpl(manager);
     }
 
+    @Override
     public float getCurrentYawRadians() {
         return keyboardInputTracker.getCurrentAngles().getCurrentYaw();
     }
 
+    @Override
     public float getCurrentPitchRadians() {
         return keyboardInputTracker.getCurrentAngles().getCurrentPitch();
     }
 
+    @Override
     public float getCurrentRollRadians() {
         return keyboardInputTracker.getCurrentAngles().getCurrentRoll();
     }
 
+    @Override
     public float getDeltaX() {
         return keyboardInputTracker.getCurrentPosChange().getXDisp();
     }
 
+    @Override
     public float getDeltaY() {
         return keyboardInputTracker.getCurrentPosChange().getYDisp();
     }
 
-    public boolean canBeginTracking() {
-        return true;
-    }
-
+    @Override
     public void updateData() {
-    }
-
-    public boolean isCalibrating() {
-        return false;
-    }
-
-    public void startStopCalibration() {
-    }
-
-    public void setFilterMode(int mode) {
     }
     
 }
