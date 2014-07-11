@@ -4,6 +4,7 @@
  */
 package org.zrd.probeTracking;
 
+import com.jme3.math.FastMath;
 import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -11,6 +12,9 @@ import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
+import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -41,6 +45,34 @@ public class ProbeTracker {
     private float currentDeltaX=0,currentDeltaY=0;
     private AbstractInputSourceTracker currentSourceTracker;
     private AbstractSerialInputToWorldConverter coordConverter;
+    private String recordingText;
+    
+    public static ProbeTracker initializeProbeTracker(
+            AbstractInputSourceTracker currentSourceTracker, 
+            short displacementMode, Path filePath,
+            float scaleFactorX, float scaleFactorY, Vector3f startPosition){
+        AbstractSerialInputToWorldConverter coordConverter;
+        
+        //default option for coord conversion
+        coordConverter = new SerialInputTo3DConverter();
+        
+        //other options if specified
+        switch(displacementMode){
+            case 0:
+                coordConverter = new SerialInputTo2DConverter();
+                break;
+                
+            case 1:
+                coordConverter = new SerialInputToRotated2DConverter();
+                break;
+        }
+        
+        coordConverter.setScaleFactorX(scaleFactorX);
+        coordConverter.setScaleFactorY(scaleFactorY);
+        
+        return new ProbeTracker(coordConverter,currentSourceTracker,
+                startPosition,filePath);
+    }
     
     public ProbeTracker(AbstractSerialInputToWorldConverter coordConvertor, 
             AbstractInputSourceTracker currentSourceTracker,
@@ -100,16 +132,24 @@ public class ProbeTracker {
     public void updatePathRecording(){
         
         if(recordingPath){
+            System.out.println("Recording New Path Stopped");
+            recordingText = "Press N to record a new path";
             currentRecordingPath.closeRecording();
             newPathExists = true;
             recordingPath = false;
         }else{
+            recordingText = "Now recording new path (Press N to stop recording)";
+            System.out.println("Now Recording new path");
             newPathExists = false;
             currentRecordingPath = makeNewRecorder();
             recordingPath = true;
         }
         
         
+    }
+
+    public String getRecordingText() {
+        return recordingText;
     }
     
     private PathRecorder makeNewRecorder(){
@@ -145,6 +185,20 @@ public class ProbeTracker {
         currentPitch = pitch;
         currentRoll = roll;
     }
+    
+    public String getXYZtext(){
+        return "(X,Y,Z) = " + currentPosition;
+    }
+    
+    public String getYawPitchRollText(){
+        return "(Yaw,Pitch,Roll) = (" + currentYaw*FastMath.RAD_TO_DEG + "," + 
+                currentPitch*FastMath.RAD_TO_DEG + "," + 
+                currentRoll*FastMath.RAD_TO_DEG + ")";
+    }
+    
+    public float getCurrentYaw() {
+        return currentYaw;
+    }
 
     public float getCurrentPitch() {
         return currentPitch;
@@ -170,9 +224,7 @@ public class ProbeTracker {
         return coordConverter.getScaleFactorY();
     }
 
-    public float getCurrentYaw() {
-        return currentYaw;
-    }
+    
 
     public Quaternion getLocalRotation() {
         return localRotation;

@@ -43,6 +43,7 @@ import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
+import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTracking.ProbeTrackerClient;
 
 
@@ -61,7 +62,7 @@ public class Main extends SimpleApplication {
     
     private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
     
-    private ProbeTrackerClient probeTracker;
+    private ProbeTracker probeTracker;
     
     private CameraTracker cameraTracker;
     
@@ -213,7 +214,7 @@ public class Main extends SimpleApplication {
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
-        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTrackerClient(inputManager);
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         //displayAxisLines();
         
         probeRep = new Node("probeRep");
