@@ -4,6 +4,7 @@
  */
 package org.zrd.graphicsTools.geometry.path;
 
+import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
