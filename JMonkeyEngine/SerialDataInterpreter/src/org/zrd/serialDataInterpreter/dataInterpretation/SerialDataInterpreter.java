@@ -17,6 +17,7 @@ public class SerialDataInterpreter {
     public static final float DEG_TO_RAD_FACTOR = (float) (Math.PI/180.0);
     
     private SerialDataReader serial;
+    private Path dataRecordingFilePath;
 
     float deltaX = 0;
     float deltaY = 0;
@@ -31,13 +32,18 @@ public class SerialDataInterpreter {
         System.out.println("Waiting to receive input...");
     }
     
-    public void startStopRecording(Path filePath){
+    public SerialDataInterpreter(Properties props, Path filePath){
+        this(props);
+        dataRecordingFilePath = filePath;
+    }
+    
+    public void startStopRecording(){
         if(recording){
             currentDataRecorder.closeRecording();
             recording = false;
                 
         }else{   
-            currentDataRecorder = new SerialDataRecorder(filePath);
+            currentDataRecorder = new SerialDataRecorder(dataRecordingFilePath);
             recording = true;
 
         }

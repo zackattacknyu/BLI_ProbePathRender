@@ -685,7 +685,7 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("startStopNewPath") && keyPressed){
                      
-                     probeTracker.updatePathRecording();
+                     probeTracker.startStopRecording();
                      recordingText.setText(probeTracker.getRecordingText());
                      if(probeTracker.isNewPathExists()){
                          probePathSet.addPath(probeTracker.getCurrentPathVertices());

@@ -129,7 +129,7 @@ public class ProbeTracker {
         return coordConverter.getCurrentNormal();
     }
     
-    public void updatePathRecording(){
+    public void startStopRecording(){
         
         if(recordingPath){
             System.out.println("Recording New Path Stopped");

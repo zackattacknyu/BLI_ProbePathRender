@@ -24,7 +24,7 @@ public class SerialDataRecorder {
         
         Properties dataRecorderProperties = Properties_SerialDataRecorder.getProperties();
         Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
-        final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties);
+        final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties,filePath);
         
         Thread t = new Thread(){
             public void run(){
@@ -47,10 +47,10 @@ public class SerialDataRecorder {
         while(true){
             System.out.println("Press Enter to begin path recording");
             sc.nextLine();
-            serialData.startStopRecording(filePath);
+            serialData.startStopRecording();
             System.out.println("Press Enter to end path recording");
             sc.nextLine();
-            serialData.startStopRecording(filePath);
+            serialData.startStopRecording();
         }
     }
     
