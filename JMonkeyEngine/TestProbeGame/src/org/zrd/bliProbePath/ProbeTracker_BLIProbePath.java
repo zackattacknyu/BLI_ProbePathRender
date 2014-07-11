@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.probeTracking.ProbeTrackerClient;
 import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 

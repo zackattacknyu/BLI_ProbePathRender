@@ -44,7 +44,6 @@ import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.probeTracking.ProbeTrackerClient;
 
 
 /**
