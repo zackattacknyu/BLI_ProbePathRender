@@ -4,11 +4,13 @@
  */
 package org.zrd.serialdatarecorder;
 
+import static java.lang.Thread.sleep;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Scanner;
+import org.zrd.util.dataStreaming.ProbeDataStream;
 /**
  *
  * @author BLI
@@ -26,13 +28,18 @@ public class SerialDataRecorder {
         Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
         final SerialDataInterpreter serialData = new SerialDataInterpreter(dataRecorderProperties,filePath);
         
+        beginStreaming(serialData);
+    }
+    
+    public static void beginStreaming(final ProbeDataStream dataStream){
+        
         Thread t = new Thread(){
             @Override
             public void run(){
                 while(true){
                     try {
                         sleep(30);
-                        serialData.updateData();
+                        dataStream.updateData();
                     } catch (InterruptedException ex) {
                         break;
                     }
@@ -48,10 +55,10 @@ public class SerialDataRecorder {
         while(true){
             System.out.println("Press Enter to begin recording");
             sc.nextLine();
-            serialData.startStopRecording();
+            dataStream.startStopRecording();
             System.out.println("Press Enter to end recording");
             sc.nextLine();
-            serialData.startStopRecording();
+            dataStream.startStopRecording();
         }
     }
     
