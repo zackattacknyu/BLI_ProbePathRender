@@ -24,6 +24,9 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
  */
 public class RotationCalibration {
     
+    public static final int MAX_ROTATION_ATTEMPTS = 10;
+    public static final float DESIRED_MAX_DISTANCE = 0.001F;
+    
     /*
      * This is meant to be path that is to be rotated
      *      It must be scaled and moved beforehand
@@ -82,9 +85,8 @@ public class RotationCalibration {
         
         Vector3f rotToEndptAxis;
         float currentDistance;
-        float numberTries = 10;
         
-        for (float tryNum = 0; tryNum <= numberTries; tryNum++) {
+        for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
             //finds the rotation angle
             rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPathOnSurface, endPoint);
             AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
@@ -105,9 +107,9 @@ public class RotationCalibration {
             
             //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
-            System.out.println("After Attempt Number: " + (tryNum + 1));
+            System.out.println("After Attempt Number: " + tryNum);
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
-            if (currentDistance < 0.1) {
+            if (currentDistance < DESIRED_MAX_DISTANCE) {
                 break;
             }
         }
