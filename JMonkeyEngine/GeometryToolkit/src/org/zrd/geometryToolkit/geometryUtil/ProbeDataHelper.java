@@ -6,11 +6,9 @@ package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.Vector3f;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
+import org.zrd.util.dataWriting.DataWriterHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -18,6 +16,15 @@ import org.zrd.util.fileHelper.FileDataHelper;
  * @author Zach
  */
 public class ProbeDataHelper {
+    
+    public static void writeVerticesToFile(ArrayList<Vector3f> vertices, Path filePath){
+        ArrayList<String> vertexStrings = new ArrayList<String>(vertices.size());
+        for(Vector3f vertex: vertices){
+            vertexStrings.add(DataWriterHelper.getPositionOutputText(
+                    vertex.getX(), vertex.getY(), vertex.getZ()));
+        }
+        FileDataHelper.exportLinesToFile(vertexStrings, filePath);
+    }
 
     public static ArrayList<Vector3f> getVerticesFromFile(File dataFile){
         ArrayList<String> lines = FileDataHelper.getLinesFromFile(dataFile);

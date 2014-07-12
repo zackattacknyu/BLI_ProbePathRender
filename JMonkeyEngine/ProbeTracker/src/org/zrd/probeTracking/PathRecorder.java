@@ -6,8 +6,12 @@ package org.zrd.probeTracking;
 
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.util.dataWriting.DataWriterHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 
@@ -22,6 +26,7 @@ public class PathRecorder {
     private ProbeDataWriter xyzVertexWriter;
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
+    private Path pathRecordingFilePath;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
@@ -31,6 +36,7 @@ public class PathRecorder {
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath){
         this(startingPosition);
+        this.pathRecordingFilePath = pathRecordingFilePath;
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, "pathVertices");
         xyVertexWriter = ProbeDataWriter.getNewWriter(
@@ -64,6 +70,16 @@ public class PathRecorder {
         ProbeDataWriter.closeWriter(xyzVertexWriter);
         ProbeDataWriter.closeWriter(xyVertexWriter);
         ProbeDataWriter.closeWriter(yawPitchRollWriter);
+        
+        //write the compressed path
+        try {
+            ArrayList<Vector3f> compressedVertices = PathCompression.
+                getCompressedPath(vertices,ProgramConstants.MIN_SEGMENT_LENGTH);
+            Path compressedPathFile = ProbeDataWriter.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
+            ProbeDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
+        } catch (IOException ex) {
+            System.out.println("Exception thrown trying to write compressed file: " + ex);
+        }
     }
 
     void addToPath(Vector3f currentPosition, 
