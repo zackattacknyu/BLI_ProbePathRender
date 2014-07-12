@@ -21,6 +21,7 @@ import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -91,7 +92,7 @@ public class ProbePathSet {
     }
     
     public void compressCurrentPath(){
-        addPath(PathTransformHelper.getCompressedPath(
+        addPath(PathCompression.getCompressedPath(
                 currentPath.getVertices(), 
                 ProgramConstants.MIN_SEGMENT_LENGTH));
     }
