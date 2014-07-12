@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 
@@ -16,6 +17,14 @@ import javax.swing.JFileChooser;
  * @author BLI
  */
 public class FileDataHelper {
+    
+    public static void exportLinesToFile(ArrayList<String> lines, Path dataFile){
+        try {
+            Files.write(dataFile, lines, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            System.out.println("Error writing lines to file: " + ex);
+        }
+    }
 
     public static File importPathUsingFileSelector(File initialImportDirectory) {
         JFileChooser selector = new JFileChooser(initialImportDirectory);

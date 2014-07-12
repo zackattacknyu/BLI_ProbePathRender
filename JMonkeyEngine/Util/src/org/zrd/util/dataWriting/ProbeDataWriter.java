@@ -17,16 +17,14 @@ import org.zrd.util.timeTools.TimeHelper;
  * @author BLI
  */
 public class ProbeDataWriter {
-    
-    private String fileName;
+
     private File outputFile;
     private FileWriter outputFileWriter;
     private BufferedWriter outputWriter;
     
     public static ProbeDataWriter getNewWriter(Path folderPath, String prefix){
-        String currentTimestamp = TimeHelper.getTimestampSuffix();
         try {
-            ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath,prefix,currentTimestamp);
+            ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath,prefix);
             return currentWriter;
         } catch (IOException ex) {
             System.out.println("Exception thrown try to instantiate writer: " + ex);
@@ -34,12 +32,17 @@ public class ProbeDataWriter {
         }
     }
     
-    public ProbeDataWriter(Path folderPath, String fileNamePrefix, String timestampSuffix) throws IOException{
-        this.fileName = fileNamePrefix + "_" + timestampSuffix + ".txt";
+    public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix) throws IOException{
+        String currentTimestamp = TimeHelper.getTimestampSuffix();
+        String fileName = fileNamePrefix + "_" + currentTimestamp + ".txt";
         if(!Files.exists(folderPath)){
             Files.createDirectories(folderPath);
         }
-        outputFile = folderPath.resolve(fileName).toFile();
+        return folderPath.resolve(fileName);
+    }
+    
+    public ProbeDataWriter(Path folderPath, String fileNamePrefix) throws IOException{
+        outputFile = getNewDataFilePath(folderPath,fileNamePrefix).toFile();
         outputFileWriter = new FileWriter(outputFile);
         outputWriter = new BufferedWriter(outputFileWriter);
     }
