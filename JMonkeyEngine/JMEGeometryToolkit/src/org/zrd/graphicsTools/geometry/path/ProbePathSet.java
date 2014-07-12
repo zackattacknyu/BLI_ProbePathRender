@@ -174,11 +174,14 @@ public class ProbePathSet {
         float currentRotationAngle;
         AngleAxisRotation currentRotationAngAxis;
         ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
+        Matrix4f aggregateTransform = new Matrix4f();
         Vector3f rotToEndptAxis;
         float totalAngle = 0;
         float currentDistance;
         
         float numberTries = 4;
+        
+        final ArrayList<Vector3f> originalPath = getCurrentPath().getVertices();
         
         currentRotatedPath = getCurrentPath().getVertices();
         currentPathOnSurface = getCurrentPath().getVertices();
@@ -207,13 +210,14 @@ public class ProbePathSet {
             currentRotationAngAxis = 
                     new AngleAxisRotation(rotationAxis,currentRotationAngle);
             currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(
-                    getCurrentPath().getVertices().get(0), 
+                    currentPathOnSurface.get(0), 
                     currentRotationAngAxis.getQuat());
             
             //find the rotated path
+            aggregateTransform = currentRotationTransform.mult(aggregateTransform);
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    currentRotatedPath, 
-                    currentRotationTransform);
+                    originalPath, 
+                    aggregateTransform);
             
             //projects the rotated path on the surface
             currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
