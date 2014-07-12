@@ -8,7 +8,22 @@ import org.zrd.serialInterface.arduinoReading.SerialReader;
 import java.util.HashMap;
 import java.util.Properties;
 
-/**
+/**This class is meant to be used to initialize and run the serial reader and
+ *      then parse the string that it is returned. 
+ * 
+ * The SerialReader class initializes a thread that constantly checks
+ *      the probe data. This class peeks at that thread to see the string.
+ * In practice, we ended up peeking at the thread much more often than new
+ *      values were being generated, so there is a check in here to make sure
+ *      the current output is different from the last output.
+ * 
+ * This class only parses the String and any manipulations and interpretations
+ *      of the values in that string should be done in later classes.
+ * 
+ * TODO: Make layer diagram for probe data interpretation
+ *      classes
+ * 
+ * 
  * 
  * @author BLI
  */
