@@ -15,7 +15,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  *
  * @author BLI
  */
-public class MeshFollowHelper {
+public class PathProjectionOntoMesh {
 
     /* Here will be the code for following the surface using Triangles:
      *
@@ -69,7 +69,7 @@ public class MeshFollowHelper {
      *      Project the curve onto the surface
      *      After projection, change actualEndPoint to the end point of the projected curve
      */
-    public static ArrayList<Vector3f> makePathFollowMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
+    public static ArrayList<Vector3f> findPathProjectionOntoMesh(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
         ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
         Vector3f initPoint;

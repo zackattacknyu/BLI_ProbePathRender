@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author BLI
  */
-public class PathFollowingMeshOperation {
+public class RotationCalibration {
     
     //first path inputted
     private ArrayList<Vector3f> originalPath;

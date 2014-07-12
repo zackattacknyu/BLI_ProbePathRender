@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshTraversal.MeshFollowHelper;
+import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
@@ -132,7 +132,7 @@ public class ProbePathSet {
                     rotationToEndpoint);
             
             //projects the rotated path on the surface
-            currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
+            currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(
                     currentRotatedPath,startingTriangle,meshInfo);
             
             currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
@@ -162,11 +162,11 @@ public class ProbePathSet {
     }
     
     public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        addPath(rotateAndProjectPath(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
+        addPath(performRotationCalibration(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
     }
     
     
-    public static ArrayList<Vector3f> rotateAndProjectPath(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+    public static ArrayList<Vector3f> performRotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         Vector3f initPoint = initPath.get(0);
         Vector3f initEndPoint = initPath.get(1);
         Matrix4f aggregateTransform = new Matrix4f();
@@ -223,7 +223,7 @@ public class ProbePathSet {
                     aggregateTransform);
             
             //projects the rotated path on the surface
-            currentPathOnSurface = MeshFollowHelper.makePathFollowMesh2(
+            currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(
                     currentRotatedPath,startingTriangle,meshInfo);
             
             currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
