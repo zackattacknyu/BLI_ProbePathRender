@@ -161,20 +161,20 @@ public class ProbePathSet {
         return outputMaterial;
     }
     
+    public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+        addPath(rotateAndProjectPath(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
+    }
     
-    public void rotateAndProjectCurrentPath2(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
-        scaleCurrentPathEndpoint(endPoint);
-        compressCurrentPath();
-        //displayCurrentPath();
-        ArrayList<Vector3f> initScaledPath = getCurrentPath().getVertices();
-        Vector3f initPoint = initScaledPath.get(0);
-        Vector3f initEndPoint = initScaledPath.get(1);
+    
+    public static ArrayList<Vector3f> rotateAndProjectPath(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+        Vector3f initPoint = initPath.get(0);
+        Vector3f initEndPoint = initPath.get(1);
         Matrix4f aggregateTransform = new Matrix4f();
         Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(
                 startingTriangle.getNormal(), initPoint, initEndPoint);
         aggregateTransform = currentTransform.mult(aggregateTransform);
         
-        ArrayList<Vector3f> currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initScaledPath, aggregateTransform);
+        ArrayList<Vector3f> currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
         Vector3f rotationAxis = startingTriangle.getNormal();
 
         
@@ -219,7 +219,7 @@ public class ProbePathSet {
             //find the rotated path
             aggregateTransform = currentRotationTransform.mult(aggregateTransform);
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    initScaledPath, 
+                    initPath, 
                     aggregateTransform);
             
             //projects the rotated path on the surface
@@ -234,6 +234,6 @@ public class ProbePathSet {
                 break;
             }
         }
-        addPath(currentPathOnSurface);
+        return currentPathOnSurface;
     }
 }
