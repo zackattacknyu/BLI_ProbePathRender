@@ -19,6 +19,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshFollowHelper;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -166,25 +167,27 @@ public class ProbePathSet {
         compressCurrentPath();
         //displayCurrentPath();
         ArrayList<Vector3f> initScaledPath = getCurrentPath().getVertices();
-        ArrayList<Vector3f> initProjectedPath = MeshFollowHelper.projectPathOntoPlane(initScaledPath, startingTriangle.getNormal());
-        addPath(initProjectedPath);
+        Vector3f initPoint = initScaledPath.get(0);
+        Vector3f initEndPoint = initScaledPath.get(1);
+        Matrix4f aggregateTransform = new Matrix4f();
+        Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(
+                startingTriangle.getNormal(), initPoint, initEndPoint);
+        aggregateTransform = currentTransform.mult(aggregateTransform);
+        
+        ArrayList<Vector3f> currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initScaledPath, aggregateTransform);
         Vector3f rotationAxis = startingTriangle.getNormal();
 
+        
         Matrix4f rotationToEndpoint,currentRotationTransform;
         float currentRotationAngle;
         AngleAxisRotation currentRotationAngAxis;
-        ArrayList<Vector3f> currentRotatedPath,currentPathOnSurface;
-        Matrix4f aggregateTransform = new Matrix4f();
+        ArrayList<Vector3f> currentPathOnSurface = GeneralHelper.getCopyOfPath(currentRotatedPath);
+        
         Vector3f rotToEndptAxis;
         float totalAngle = 0;
         float currentDistance;
         
-        float numberTries = 4;
-        
-        final ArrayList<Vector3f> originalPath = getCurrentPath().getVertices();
-        
-        currentRotatedPath = getCurrentPath().getVertices();
-        currentPathOnSurface = getCurrentPath().getVertices();
+        float numberTries = 10;
 
         for(float tryNum = 0; tryNum <= numberTries; tryNum++){
             //rotatation of current path to endpoint 
@@ -216,7 +219,7 @@ public class ProbePathSet {
             //find the rotated path
             aggregateTransform = currentRotationTransform.mult(aggregateTransform);
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    originalPath, 
+                    initScaledPath, 
                     aggregateTransform);
             
             //projects the rotated path on the surface
@@ -224,14 +227,12 @@ public class ProbePathSet {
                     currentRotatedPath,startingTriangle,meshInfo);
             
             currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
+            System.out.println("After Attempt Number: " + (tryNum+1));
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
             
             if(currentDistance < 0.1){
                 break;
             }
-            
-            //saves the path for later display
-            //addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
         }
         addPath(currentPathOnSurface);
     }

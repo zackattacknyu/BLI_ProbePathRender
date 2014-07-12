@@ -17,13 +17,6 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  */
 public class MeshFollowHelper {
 
-    public static ArrayList<Vector3f> projectPathOntoPlane(ArrayList<Vector3f> path, Vector3f normal) {
-        Vector3f initPoint = path.get(0);
-        Vector3f initEndPoint = path.get(1);
-        Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(normal, initPoint, initEndPoint);
-        return MeshTraverseHelper.getTransformedVertices(path, currentTransform);
-    }
-
     /* Here will be the code for following the surface using Triangles:
      *
      * At each triangle, we will have a normal and a line segment.
