@@ -16,6 +16,7 @@ public class PathCompression {
     public static ArrayList<Vector3f> getCompressedPath(ArrayList<Vector3f> inputPath, float minSegmentLength) {
         Vector3f lastPointAdded = inputPath.get(0);
         ArrayList<Vector3f> newPath = new ArrayList<Vector3f>(inputPath.size());
+        newPath.add(lastPointAdded);
         float currentLength;
         for (Vector3f vertex : inputPath) {
             currentLength = vertex.distance(lastPointAdded);
