@@ -22,6 +22,7 @@ import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -107,52 +108,9 @@ public class ProbePathSet {
             return true;
         }
     }
-    /*
-    public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
-        scaleCurrentPathEndpoint(endPoint);
-        compressCurrentPath();
-        transformCurrentPathEndpoint(endPoint);
-        
-        ArrayList<Vector3f> currentRotatedPath;
-        ArrayList<Vector3f> currentPathOnSurface = new ArrayList<Vector3f>();
-        
-        float numberTries = 10;
-        float currentDistance;
-        
-        Matrix4f rotationToEndpoint;
-        currentRotatedPath = getCurrentPath().getVertices();
-
-        for(float tryNum = 0; tryNum <= numberTries; tryNum++){
-            //rotatation of current path to endpoint
-            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(getCurrentPath().getVertices(),endPoint);
-            
-            //find the rotated path
-            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    currentRotatedPath, 
-                    rotationToEndpoint);
-            
-            //projects the rotated path on the surface
-            currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(
-                    currentRotatedPath,startingTriangle,meshInfo);
-            
-            currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
-            System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
-            
-            if(currentDistance < 0.1){
-                break;
-            }
-            
-            //saves the path for later display
-            //addPathToSaveList(currentPathOnSurface,getGrayscaleMaterial(tryNum/numberTries,assetManager));
-        }
-        addPath(currentPathOnSurface);
-    }
-    */
     
-    public static float currentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint){
-        Vector3f actualEndpoint = path.get(path.size()-1);
-        return actualEndpoint.clone().distance(targetEndpoint.clone());
-    }
+    
+    
     
     private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
         Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
@@ -162,78 +120,6 @@ public class ProbePathSet {
     }
     
     public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        addPath(performRotationCalibration(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
-    }
-    
-    
-    public static ArrayList<Vector3f> performRotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        Vector3f initPoint = initPath.get(0);
-        Vector3f initEndPoint = initPath.get(1);
-        Matrix4f aggregateTransform = new Matrix4f();
-        Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(
-                startingTriangle.getNormal(), initPoint, initEndPoint);
-        aggregateTransform = currentTransform.mult(aggregateTransform);
-        
-        ArrayList<Vector3f> currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
-        Vector3f rotationAxis = startingTriangle.getNormal();
-
-        
-        Matrix4f rotationToEndpoint,currentRotationTransform;
-        float currentRotationAngle;
-        AngleAxisRotation currentRotationAngAxis;
-        ArrayList<Vector3f> currentPathOnSurface = GeneralHelper.getCopyOfPath(currentRotatedPath);
-        
-        Vector3f rotToEndptAxis;
-        float totalAngle = 0;
-        float currentDistance;
-        
-        float numberTries = 10;
-
-        for(float tryNum = 0; tryNum <= numberTries; tryNum++){
-            //rotatation of current path to endpoint 
-            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPathOnSurface, endPoint);
-            AngleAxisRotation rotToEndptAngAxis = 
-                    new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
-            currentRotationAngle = rotToEndptAngAxis.getAngle();
-            rotToEndptAxis = rotToEndptAngAxis.getAxis();
-
-            //in case they point in opposite directions, does the negation of angle
-            if(rotationAxis.dot(rotToEndptAxis) < 0){
-                //the axes normals could be flipped
-                currentRotationAngle = -1*currentRotationAngle;
-            }
-            totalAngle += currentRotationAngle;
-            
-            //DEBUG code
-            System.out.println("Try: " + tryNum + ", Angle: " + 
-                    currentRotationAngle + ", TotalAngle: " + totalAngle);
-            
-            //gets the rotation we will actually do which is on the surface
-            //      of the starting Triangle
-            currentRotationAngAxis = 
-                    new AngleAxisRotation(rotationAxis,currentRotationAngle);
-            currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(
-                    currentPathOnSurface.get(0), 
-                    currentRotationAngAxis.getQuat());
-            
-            //find the rotated path
-            aggregateTransform = currentRotationTransform.mult(aggregateTransform);
-            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(
-                    initPath, 
-                    aggregateTransform);
-            
-            //projects the rotated path on the surface
-            currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(
-                    currentRotatedPath,startingTriangle,meshInfo);
-            
-            currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
-            System.out.println("After Attempt Number: " + (tryNum+1));
-            System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
-            
-            if(currentDistance < 0.1){
-                break;
-            }
-        }
-        return currentPathOnSurface;
+        addPath(RotationCalibration.performRotationCalibration(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
     }
 }
