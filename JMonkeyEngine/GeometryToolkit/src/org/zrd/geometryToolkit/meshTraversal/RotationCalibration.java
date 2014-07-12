@@ -5,6 +5,7 @@
 package org.zrd.geometryToolkit.meshTraversal;
 
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
@@ -22,39 +23,87 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
  * @author BLI
  */
 public class RotationCalibration {
-
-    public static ArrayList<Vector3f> performRotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo) {
+    
+    /*
+     * This is meant to be path that is to be rotated
+     *      It must be scaled and moved beforehand
+     *      so that it's start point matches the desired
+     *      start point.
+     */
+    private ArrayList<Vector3f> initPath;
+    
+    /*
+     * This is the aggregate transformation to be done on the vertices of the
+     *      original path before the path is projected onto the plane
+     */
+    private Matrix4f aggregateTransform;
+    private Quaternion aggregateRotation;
+    
+    private ArrayList<Vector3f> finalRotatedPath;
+    private ArrayList<Vector3f> finalPathOnSurface;
+    
+    private Vector3f initTriangleNormal;
+    private MeshTriangle startingTriangle;
+    private TriangleSet meshInfo;
+    private Vector3f endPoint;
+    
+    public RotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+        aggregateTransform = new Matrix4f();
+        this.initPath = initPath;
+        initTriangleNormal = startingTriangle.getNormal();
+        this.startingTriangle = startingTriangle;
+        this.endPoint = endPoint;
+        this.meshInfo = meshInfo;
+        
+        performRotationCalibration();
+    }
+    
+    private void performRotationOntoInitialPlane(){
+        //this does the initial transformation onto the plane of the first triangle
         Vector3f initPoint = initPath.get(0);
         Vector3f initEndPoint = initPath.get(1);
-        Matrix4f aggregateTransform = new Matrix4f();
-        Matrix4f currentTransform = MeshTraverseHelper.getRotationOntoPlane(startingTriangle.getNormal(), initPoint, initEndPoint);
-        aggregateTransform = currentTransform.mult(aggregateTransform);
-        ArrayList<Vector3f> currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
-        Vector3f rotationAxis = startingTriangle.getNormal();
+        Matrix4f initTransform = MeshTraverseHelper.getRotationOntoPlane(
+                initTriangleNormal, initPoint, initEndPoint);
+        aggregateTransform = initTransform.mult(aggregateTransform);
+    }
+
+    private void performRotationCalibration() {
+        
+        performRotationOntoInitialPlane();
+        
+        ArrayList<Vector3f> currentRotatedPath = 
+                MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
+        ArrayList<Vector3f> currentPathOnSurface = 
+                GeneralHelper.getCopyOfPath(currentRotatedPath);
         Matrix4f rotationToEndpoint;
         Matrix4f currentRotationTransform;
         float currentRotationAngle;
         AngleAxisRotation currentRotationAngAxis;
-        ArrayList<Vector3f> currentPathOnSurface = GeneralHelper.getCopyOfPath(currentRotatedPath);
+        
         Vector3f rotToEndptAxis;
-        float totalAngle = 0;
         float currentDistance;
         float numberTries = 10;
+        
         for (float tryNum = 0; tryNum <= numberTries; tryNum++) {
+            //finds the rotation angle
             rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPathOnSurface, endPoint);
             AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
             currentRotationAngle = rotToEndptAngAxis.getAngle();
             rotToEndptAxis = rotToEndptAngAxis.getAxis();
-            if (rotationAxis.dot(rotToEndptAxis) < 0) {
+            if (initTriangleNormal.dot(rotToEndptAxis) < 0) {
                 currentRotationAngle = -1 * currentRotationAngle;
             }
-            totalAngle += currentRotationAngle;
-            System.out.println("Try: " + tryNum + ", Angle: " + currentRotationAngle + ", TotalAngle: " + totalAngle);
-            currentRotationAngAxis = new AngleAxisRotation(rotationAxis, currentRotationAngle);
+            
+            //does the rotation using the desired axis but with the angle found above
+            currentRotationAngAxis = new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
             currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(currentPathOnSurface.get(0), currentRotationAngAxis.getQuat());
             aggregateTransform = currentRotationTransform.mult(aggregateTransform);
             currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
+            
+            //projects the rotated path on the surface
             currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(currentRotatedPath, startingTriangle, meshInfo);
+            
+            //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
             System.out.println("After Attempt Number: " + (tryNum + 1));
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
@@ -62,7 +111,8 @@ public class RotationCalibration {
                 break;
             }
         }
-        return currentPathOnSurface;
+        finalRotatedPath = GeneralHelper.getCopyOfPath(currentRotatedPath);
+        finalPathOnSurface = GeneralHelper.getCopyOfPath(currentPathOnSurface);
     }
     
     public static float currentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint){
@@ -70,11 +120,7 @@ public class RotationCalibration {
         return actualEndpoint.clone().distance(targetEndpoint.clone());
     }
     
-    //first path inputted
-    private ArrayList<Vector3f> originalPath;
     
-    //path moved so that its start point is the same as target start point
-    private ArrayList<Vector3f> initiallyMovedPath;
     
     
     /*
@@ -118,4 +164,12 @@ public class RotationCalibration {
         addPath(currentPathOnSurface);
     }
     */
+
+    public ArrayList<Vector3f> getFinalRotatedPath() {
+        return finalRotatedPath;
+    }
+
+    public ArrayList<Vector3f> getFinalPathOnSurface() {
+        return finalPathOnSurface;
+    }
 }

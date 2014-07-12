@@ -8,18 +8,12 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
-import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
-import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
@@ -120,6 +114,8 @@ public class ProbePathSet {
     }
     
     public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        addPath(RotationCalibration.performRotationCalibration(getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo));
+        RotationCalibration newCalibration = new RotationCalibration(
+                getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo);
+        addPath(newCalibration.getFinalPathOnSurface());
     }
 }
