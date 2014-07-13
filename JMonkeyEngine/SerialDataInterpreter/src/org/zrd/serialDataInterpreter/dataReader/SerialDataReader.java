@@ -155,6 +155,9 @@ public class SerialDataReader implements ProbeDataStream{
         }
     }
     
+    /**
+     * This starts and stops the recording of the raw data
+     */
     @Override
     public void startStopRecording() {
         if(recordingRawData){
@@ -166,26 +169,50 @@ public class SerialDataReader implements ProbeDataStream{
         }
     }
     
+    /**
+     * This returns the current serial data from the probe
+     * @return  the SerialDataPoint object for the current data from the probe
+     */
     public SerialDataPoint getCurrentSerialData() {
         return currentSerialData;
     }
 
+    /**
+     * This gets the current raw x displacement from the probe
+     * @return  raw x displacement
+     */
     public float getDeltaX() {
         return deltaX;
     }
 
+    /**
+     * This gets the current raw y displacement the probe
+     * @return   raw y displacement
+     */
     public float getDeltaY() {
         return deltaY;
     }
 
+    /**
+     * This gets the current yaw reading from the probe
+     * @return      current yaw on the probe
+     */
     public float getCurrentYaw() {
         return currentYaw;
     }
 
+    /**
+     * This gets the current pitch from the probe
+     * @return      current pitch on the probe
+     */
     public float getCurrentPitch() {
         return currentPitch;
     }
 
+    /**
+     * This gets the current roll from the probe
+     * @return      current roll on the probe
+     */
     public float getCurrentRoll() {
         return currentRoll;
     }
