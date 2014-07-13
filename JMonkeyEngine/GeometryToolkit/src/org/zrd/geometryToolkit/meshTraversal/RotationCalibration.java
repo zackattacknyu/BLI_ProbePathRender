@@ -26,7 +26,6 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 public class RotationCalibration {
     
     public static final int MAX_ROTATION_ATTEMPTS = 100;
-    public static final float DESIRED_MAX_DISTANCE = 0.001F;
     
     /*
      * This is meant to be path that is to be rotated
