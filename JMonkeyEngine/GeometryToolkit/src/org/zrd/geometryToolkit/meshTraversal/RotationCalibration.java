@@ -67,23 +67,35 @@ public class RotationCalibration {
         Vector3f initEndPoint = initPath.get(1);
         Matrix4f initTransform = MeshTraverseHelper.getRotationOntoPlane(
                 initTriangleNormal, initPoint, initEndPoint);
-        aggregateTransform = initTransform.mult(aggregateTransform);
+        postMultiplyNewTransform(initTransform);
+    }
+    
+    private void postMultiplyNewTransform(Matrix4f transform){
+        aggregateTransform = transform.mult(aggregateTransform);
+    }
+    
+    private ArrayList<Vector3f> obtainCurrentRotatedPath(){
+        return MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
+    }
+    
+    private ArrayList<Vector3f> obtainCurrentPathOnSurface(){
+        ArrayList<Vector3f> currentRotatedPath = obtainCurrentRotatedPath();
+        return PathProjectionOntoMesh.findPathProjectionOntoMesh(currentRotatedPath, startingTriangle, meshInfo);
     }
 
     private void performRotationCalibration() {
         
         performRotationOntoInitialPlane();
         
-        ArrayList<Vector3f> currentRotatedPath = 
-                MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
-        ArrayList<Vector3f> currentPathOnSurface = 
-                GeneralHelper.getCopyOfPath(currentRotatedPath);
-        Matrix4f rotationToEndpoint;
+        ArrayList<Vector3f> currentRotatedPath = obtainCurrentRotatedPath();
+        
+        //this does NOT follow the surface yet
+        ArrayList<Vector3f> currentPathOnSurface = GeneralHelper.getCopyOfPath(currentRotatedPath);
+
         Matrix4f currentRotationTransform;
         float currentRotationAngle;
         AngleAxisRotation currentRotationAngAxis;
-        
-        Vector3f rotToEndptAxis;
+
         float currentDistance,previousDistance = 0;
         
         for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
@@ -94,11 +106,10 @@ public class RotationCalibration {
             //does the rotation using the desired axis but with the angle found above
             currentRotationAngAxis = new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
             currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(currentPathOnSurface.get(0), currentRotationAngAxis.getQuat());
-            aggregateTransform = currentRotationTransform.mult(aggregateTransform);
-            currentRotatedPath = MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
+            postMultiplyNewTransform(currentRotationTransform);
             
             //projects the rotated path on the surface
-            currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(currentRotatedPath, startingTriangle, meshInfo);
+            currentPathOnSurface = obtainCurrentPathOnSurface();
             
             //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
