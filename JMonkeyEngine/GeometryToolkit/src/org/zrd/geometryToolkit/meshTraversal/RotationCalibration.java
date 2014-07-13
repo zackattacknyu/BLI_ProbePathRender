@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
@@ -24,7 +25,7 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
  */
 public class RotationCalibration {
     
-    public static final int MAX_ROTATION_ATTEMPTS = 10;
+    public static final int MAX_ROTATION_ATTEMPTS = 100;
     public static final float DESIRED_MAX_DISTANCE = 0.001F;
     
     /*
@@ -84,7 +85,7 @@ public class RotationCalibration {
         AngleAxisRotation currentRotationAngAxis;
         
         Vector3f rotToEndptAxis;
-        float currentDistance;
+        float currentDistance,previousDistance = 0;
         
         for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
             //finds the rotation angle
@@ -109,9 +110,13 @@ public class RotationCalibration {
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
             System.out.println("After Attempt Number: " + tryNum);
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
-            if (currentDistance < DESIRED_MAX_DISTANCE) {
+            
+            //uses Cauchy convergence to stop when the distance has converged
+            if (Math.abs(currentDistance-previousDistance) < ProgramConstants.EPSILON) {
                 break;
             }
+            
+            previousDistance = currentDistance;
         }
         finalRotatedPath = GeneralHelper.getCopyOfPath(currentRotatedPath);
         finalPathOnSurface = GeneralHelper.getCopyOfPath(currentPathOnSurface);
