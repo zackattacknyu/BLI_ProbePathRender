@@ -87,14 +87,9 @@ public class RotationCalibration {
         float currentDistance,previousDistance = 0;
         
         for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
+            
             //finds the rotation angle
-            rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPathOnSurface, endPoint);
-            AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
-            currentRotationAngle = rotToEndptAngAxis.getAngle();
-            rotToEndptAxis = rotToEndptAngAxis.getAxis();
-            if (initTriangleNormal.dot(rotToEndptAxis) < 0) {
-                currentRotationAngle = -1 * currentRotationAngle;
-            }
+            currentRotationAngle = getRotationAlongSurface(currentPathOnSurface);
             
             //does the rotation using the desired axis but with the angle found above
             currentRotationAngAxis = new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
@@ -119,6 +114,18 @@ public class RotationCalibration {
         }
         finalRotatedPath = GeneralHelper.getCopyOfPath(currentRotatedPath);
         finalPathOnSurface = GeneralHelper.getCopyOfPath(currentPathOnSurface);
+    }
+    
+    private float getRotationAlongSurface(ArrayList<Vector3f> currentPath){
+        //finds the rotation angle
+        Matrix4f rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPath, endPoint);
+        AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotationToEndpoint.toRotationQuat());
+        float currentRotationAngle = rotToEndptAngAxis.getAngle();
+        Vector3f rotToEndptAxis = rotToEndptAngAxis.getAxis();
+        if (initTriangleNormal.dot(rotToEndptAxis) < 0) {
+            currentRotationAngle = -1 * currentRotationAngle;
+        }
+        return currentRotationAngle;
     }
     
     public static float currentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint){
