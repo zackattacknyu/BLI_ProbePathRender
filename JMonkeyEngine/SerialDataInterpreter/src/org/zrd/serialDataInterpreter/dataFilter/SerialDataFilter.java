@@ -50,14 +50,10 @@ public class SerialDataFilter {
     
     private void processArdData(){
         
-        if(serial.isUpdateExists()){
-            
-            if(calibrating){
-                processCurrentCalibrationPoint();
-            }
-            processObjectUpdate();
-            
+        if(calibrating){
+            processCurrentCalibrationPoint();
         }
+        processObjectUpdate();
         
         
         

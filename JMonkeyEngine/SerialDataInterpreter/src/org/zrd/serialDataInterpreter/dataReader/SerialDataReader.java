@@ -33,23 +33,22 @@ import org.zrd.util.dataStreaming.ProbeDataStream;
  */
 public class SerialDataReader implements ProbeDataStream{
     
-    //the raw reader
+    /**the raw reader
+     * 
+     */
     private SerialReader serial;
     
     private SerialDataPoint currentSerialData;
     private String currentSerialOutput, previousSerialOutput;
     private float deltaX,deltaY,currentYaw,currentPitch,currentRoll;
     
-    //flag for whether or not to parse the output. If not parsed, raw string is shown
+    /**flag for whether or not to parse the output. If not parsed, raw string is shown*/
     private boolean parseOutput;
     
-    //flag for whether or not to show each line of the output to the user
+    /**flag for whether or not to show each line of the output to the user*/
     private boolean showOutput;
     
-    //internal variable used to say whether a new reading has been found
-    private boolean updateExists = false;
-    
-    //the data locations hashmap used to go from string to data
+    /**the data locations hashmap used to go from string to data*/
     private HashMap<String,Integer> dataLocations;
     
     //variables used for recording the raw data
@@ -109,8 +108,6 @@ public class SerialDataReader implements ProbeDataStream{
      */
     @Override
     public void updateData(){
-        //starts by assuming there is no new update
-        updateExists = false;
         
         try{
             
@@ -123,23 +120,23 @@ public class SerialDataReader implements ProbeDataStream{
                 
                 //parses the string if that is specified
                 if(parseOutput){
-                    currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
-                    processObjectUpdate();
-                }
-                
-                //shows the current output
-                if(showOutput){
                     
-                    if(parseOutput){
-                        
-                        //if parsing, show the fields and their values
-                        System.out.println(currentSerialData);
-                    }else{
-                        
-                        //if no parsing, just show raw output
-                        System.out.println(currentSerialOutput);
-                        
-                    }
+                    currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
+                    
+                    deltaX = currentSerialData.getX();
+                    deltaY = currentSerialData.getY();
+
+                    currentPitch = currentSerialData.getPitch();
+                    currentRoll = currentSerialData.getRoll();
+                    currentYaw = currentSerialData.getYaw();
+                    
+                    //prints the parsed output if desired
+                    if(showOutput) System.out.println(currentSerialData);
+                    
+                }else if(showOutput){
+                    
+                    //if no parsing but printing of output is desired, then print raw output
+                    System.out.println(currentSerialOutput);
                     
                 }
                 
@@ -147,9 +144,6 @@ public class SerialDataReader implements ProbeDataStream{
                 if(recordingRawData){
                     currentRecorder.addLineToFiles(currentSerialOutput);
                 }
-                
-                //informs other things that an update has indeed occured
-                updateExists = true;
                 
                 previousSerialOutput = currentSerialOutput;
             }
@@ -172,26 +166,6 @@ public class SerialDataReader implements ProbeDataStream{
         }
     }
     
-    private void processObjectUpdate(){
-        
-        processYawPitchRoll();
-        processXYdata();
-
-    }
-    
-    private void processXYdata(){
-        deltaX = currentSerialData.getX();
-        deltaY = currentSerialData.getY();
-    }
-    
-    private void processYawPitchRoll(){
-        
-        currentPitch = currentSerialData.getPitch();
-        currentRoll = currentSerialData.getRoll();
-        currentYaw = currentSerialData.getYaw();
-        
-    }
-
     public SerialDataPoint getCurrentSerialData() {
         return currentSerialData;
     }
@@ -214,10 +188,6 @@ public class SerialDataReader implements ProbeDataStream{
 
     public float getCurrentRoll() {
         return currentRoll;
-    }
-
-    public boolean isUpdateExists() {
-        return updateExists;
     }
 
     
