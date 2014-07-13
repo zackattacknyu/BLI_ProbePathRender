@@ -87,14 +87,11 @@ public class RotationCalibration {
         
         performRotationOntoInitialPlane();
         
-        ArrayList<Vector3f> currentRotatedPath = obtainCurrentRotatedPath();
-        
         //this does NOT follow the surface yet
-        ArrayList<Vector3f> currentPathOnSurface = GeneralHelper.getCopyOfPath(currentRotatedPath);
+        ArrayList<Vector3f> currentPathOnSurface = obtainCurrentRotatedPath();
 
         Matrix4f currentRotationTransform;
         float currentRotationAngle;
-        AngleAxisRotation currentRotationAngAxis;
 
         float currentDistance,previousDistance = 0;
         
@@ -103,9 +100,8 @@ public class RotationCalibration {
             //finds the rotation angle
             currentRotationAngle = getRotationAlongSurface(currentPathOnSurface);
             
-            //does the rotation using the desired axis but with the angle found above
-            currentRotationAngAxis = new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
-            currentRotationTransform = MeshTraverseHelper.getRotationAroundPoint(currentPathOnSurface.get(0), currentRotationAngAxis.getQuat());
+            //gets the transform
+            currentRotationTransform = obtainTransformFromAngle(currentRotationAngle);
             postMultiplyNewTransform(currentRotationTransform);
             
             //projects the rotated path on the surface
@@ -113,18 +109,35 @@ public class RotationCalibration {
             
             //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
-            System.out.println("After Attempt Number: " + tryNum);
-            System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
+            
+            //displays the results
+            displayAttemptResults(tryNum,currentDistance);
             
             //uses Cauchy convergence to stop when the distance has converged
-            if (Math.abs(currentDistance-previousDistance) < ProgramConstants.EPSILON) {
+            if (hasConverged(previousDistance,currentDistance)) {
                 break;
             }
             
             previousDistance = currentDistance;
         }
-        finalRotatedPath = GeneralHelper.getCopyOfPath(currentRotatedPath);
+        finalRotatedPath = GeneralHelper.getCopyOfPath(obtainCurrentRotatedPath());
         finalPathOnSurface = GeneralHelper.getCopyOfPath(currentPathOnSurface);
+    }
+    
+    private boolean hasConverged(float currentDistance, float previousDistance){
+        return (Math.abs(currentDistance-previousDistance) < ProgramConstants.EPSILON);
+    }
+    
+    private void displayAttemptResults(int tryNum, float currentDistance){
+        System.out.println("After Attempt Number: " + tryNum);
+        System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
+    }
+    
+    private Matrix4f obtainTransformFromAngle(float currentRotationAngle){
+        AngleAxisRotation currentRotationAngAxis = 
+                new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
+        return MeshTraverseHelper.getRotationAroundPoint(
+                initPath.get(0), currentRotationAngAxis.getQuat());
     }
     
     private float getRotationAlongSurface(ArrayList<Vector3f> currentPath){
