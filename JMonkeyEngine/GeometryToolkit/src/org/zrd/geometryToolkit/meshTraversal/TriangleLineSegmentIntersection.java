@@ -146,9 +146,17 @@ public class TriangleLineSegmentIntersection {
     }
     
     public Vector3f getBreakpoint(float breakpoint){
-        Vector3f lineDir = lineEnd.subtract(lineStart);
-        Vector3f deltaVector = lineDir.mult(breakpoint);
+        Vector3f deltaVector = getDeltaVector(breakpoint);
         return lineStart.add(deltaVector);
+    }
+    
+    public Vector3f getDeltaVector(){
+        return getDeltaVector(breakpointMag);
+    }
+    
+    public Vector3f getDeltaVector(float breakpoint){
+        Vector3f lineDir = lineEnd.subtract(lineStart);
+        return lineDir.mult(breakpoint);
     }
     
     private boolean isGoodEdge(float edgeIntersectScaler,MeshEdge originalEdge){

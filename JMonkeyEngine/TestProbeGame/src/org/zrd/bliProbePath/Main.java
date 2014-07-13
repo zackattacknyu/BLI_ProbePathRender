@@ -284,6 +284,7 @@ public class Main extends SimpleApplication {
         }
         probePathSet = new ProbePathSet(lineMaterial);
         
+        //RotationTesting.doRotationTesting();
         
         //displayNormals(correctedMesh);
         

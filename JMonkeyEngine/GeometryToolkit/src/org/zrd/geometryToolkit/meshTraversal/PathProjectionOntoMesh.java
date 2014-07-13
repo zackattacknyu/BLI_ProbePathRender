@@ -4,9 +4,12 @@
  */
 package org.zrd.geometryToolkit.meshTraversal;
 
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -132,54 +135,96 @@ public class PathProjectionOntoMesh {
      *      4. Move the origin point based on the vector projection
      *      5. Back to step 1 with the next entry
      */
-    /*public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
-        ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
+    public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
-        Vector3f initPoint;
-        Vector3f initEndPoint;
-        Vector3f initEndPointMod;
+        
+        //gets the diff vector array
+        ArrayList<Vector3f> pathAsVectors = new ArrayList<Vector3f>(path.size());
+        Vector3f startingPoint = path.get(0);
+        Vector3f diffVector;
+        for(int index = 1; index < path.size(); index++){
+            diffVector = path.get(index).subtract(path.get(index-1));
+            pathAsVectors.add(diffVector);
+        }
+        ArrayList<Vector3f> remainingPath = GeneralHelper.getCopyOfPath(pathAsVectors);
+
+        Vector3f currentEndPoint;
         Vector3f currentNormal;
-        Matrix4f currentTransform;
         MeshTriangle currentTriangle = initTriangle;
         TriangleLineSegmentIntersection intersection;
         MeshEdge intersectingEdge = null;
         Vector3f newPoint;
         Vector3f oldNormal = new Vector3f();
+        Vector3f currentVector;
+        Vector3f currentRotatedVector;
+        Vector3f nextVector;
+        Vector3f currentStartPoint = startingPoint.clone();
+        Quaternion currentRotation;
+        Vector3f newDeltaVector;
         while (remainingPath.size() > 1) {
-            initPoint = remainingPath.get(0);
-            initEndPoint = remainingPath.get(1);
+            
+            //this shouldn't happen since we have a smooth surface
             currentNormal = currentTriangle.getNormal();
-            currentTransform = MeshTraverseHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
             if (oldNormal.dot(currentNormal) < 0) {
                 System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
                 break;
             }
             oldNormal = currentNormal;
-            if (!MeshTraverseHelper.hasNaN(currentTransform)) {
-                remainingPath = MeshTraverseHelper.getTransformedVertices(remainingPath, currentTransform);
-                initEndPoint = remainingPath.get(1);
-            }
-            intersection = new TriangleLineSegmentIntersection(currentTriangle, initPoint, initEndPoint);
+            
+            currentVector = remainingPath.get(0).clone();
+            currentRotation = MeshTraverseHelper.getRotationOntoPlane(currentNormal, currentVector);
+            currentRotatedVector = currentRotation.mult(currentVector);
+            
+            currentEndPoint = currentStartPoint.add(currentRotatedVector);
+            
+            intersection = new TriangleLineSegmentIntersection(currentTriangle, currentStartPoint, currentEndPoint);
+            
             if (intersection.isSegDegenerate()) {
+                
+                //if segment is degenerate, combine the first two vectors
+                nextVector = remainingPath.get(1).clone();
                 remainingPath.remove(1);
+                remainingPath.remove(0);
+                remainingPath.add(0,currentVector.add(nextVector));
                 continue;
             } else {
-                finalPath.add(initPoint);
+                
+                //if not degenerate, then start point can be added to final list
+                //      and the first vector can be removed
+                finalPath.add(currentStartPoint);
                 remainingPath.remove(0);
             }
+            
+            /*
+             * Now we figure out if the segment is in the whole triangle or not
+             *      and deal with the cases
+             */
             intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
             if (intersectingEdge != null) {
+                
+                //segment will go to adjacent triangle
                 currentTriangle = triangleSet.getEdgeNeighbor(intersectingEdge, currentTriangle);
                 newPoint = intersection.getBreakpoint();
-                remainingPath.add(0, newPoint);
+                newDeltaVector = intersection.getDeltaVector();
+                currentStartPoint = newPoint.clone();
+                
+                //the current vector is the part of the first segment that is not in the current triangle
+                remainingPath.add(0, currentVector.subtract(newDeltaVector));
+                
                 if (currentTriangle == null) {
                     System.out.println("CURRENT TRIANGLE WAS NULL");
                     break;
                 }
+                
+            }else{
+                
+                //whole segment is in triangle
+                currentStartPoint = currentEndPoint.clone();
+                
             }
         }
-        finalPath.addAll(remainingPath);
+        //finalPath.addAll(remainingPath);
         return finalPath;
-    }*/
+    }
     
 }

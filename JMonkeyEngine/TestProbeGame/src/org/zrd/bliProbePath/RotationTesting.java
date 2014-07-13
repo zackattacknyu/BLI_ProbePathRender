@@ -37,5 +37,24 @@ public class RotationTesting {
         System.out.println("(Yaw,Pitch,Roll)=(" + yaw + "," + pitch + "," + roll + ")");
         System.out.println("Rotation Matrix with quat " + quatMat);
         System.out.println("Rotation Matrix without quat: " + rotMat);
+        
+        float x,y,z,xAng,yAng,zAng;
+        Vector3f vec;
+        for(int tryNum = 1; tryNum <= 10; tryNum++){
+            x = (float) (Math.random()*5);
+            y = (float) (Math.random()*5);
+            z = (float) (Math.random()*5);
+            xAng = (float) (Math.random()*Math.PI);
+            yAng = (float) (Math.random()*Math.PI);
+            zAng = (float) (Math.random()*Math.PI);
+            vec = new Vector3f(x,y,z);
+            quat = new Quaternion();
+            quat.fromAngles(xAng, yAng, zAng);
+            System.out.println("Original Vector: " + vec);
+            System.out.println("New Vector from Quat Mult: " + quat.mult(vec));
+            System.out.println("New Vector using Rotation Matrix: " + quat.toRotationMatrix().mult(vec));
+        }
+        
+        
     }
 }
