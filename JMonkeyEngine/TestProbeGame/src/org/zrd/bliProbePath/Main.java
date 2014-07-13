@@ -652,12 +652,9 @@ public class Main extends SimpleApplication {
                                         RotationCalibration newCalibration = new RotationCalibration(
                                             probePathSet.getCurrentPath().getVertices(),
                                             endPoint,startingTriangle,meshInfo);
-                                        
-                                        probePathSet.addPath(newCalibration.getCurrentRotatedPath(), lineMaterial);
-                                        displayCurrentPath();
-                                        
+
                                         probePathSet.addPath(newCalibration.getCurrentPathOnSurface(), redLineMaterial);
-                                        //displayCurrentPath();
+                                        displayCurrentPath();
                                         
                                         moveLine = false;
                                         onStartPoint = true;
