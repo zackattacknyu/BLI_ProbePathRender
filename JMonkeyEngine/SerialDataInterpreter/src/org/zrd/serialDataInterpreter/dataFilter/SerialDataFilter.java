@@ -47,10 +47,6 @@ public class SerialDataFilter {
     public void setFilterMode(int filterMode) {
         this.filterMode = filterMode;
     }
-
-    public String getCurrentSerialOutput() {
-        return serial.getCurrentSerialOutput();
-    }
     
     private void processArdData(){
         

@@ -122,9 +122,5 @@ public class SerialDataInterpreter implements ProbeDataStream{
     public float getDeltaY() {
         return deltaY;
     }
-
-    public String getCurrentSerialOutput() {
-        return serial.getCurrentSerialOutput();
-    }
    
 }
