@@ -36,9 +36,6 @@ public class SerialDataReader {
     
     private float deltaX,deltaY,currentYaw,currentPitch,currentRoll;
     
-    //flag for only showing output and not processing it
-    private boolean onlyDoOutput;
-    
     //flag for whether or not to parse the output. If not parsed, raw string is shown
     private boolean parseOutput;
     
@@ -46,30 +43,22 @@ public class SerialDataReader {
     private boolean showOutput;
     
     private static HashMap<String,Integer> dataLocations;
-    private Properties trackerProps;
 
-    public SerialDataReader(Properties trackerProps) {
-        this.trackerProps = trackerProps;
+    public SerialDataReader(Properties trackerProps, boolean parseOutput) {
+        this.parseOutput = parseOutput;
         
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
         serial = SerialReader.startNewReader(trackerProps);
         
         System.out.println("Waiting to receive input...");
         
-        onlyDoOutput = Boolean.parseBoolean(
-                trackerProps.getProperty(
-                "arduinoData.onlyDoOutput"));
-        
-        parseOutput = Boolean.parseBoolean(
-                trackerProps.getProperty(
-                "arduinoData.parseOutput"));
-        
         showOutput = Boolean.parseBoolean(
                 trackerProps.getProperty(
                 "arduinoData.showOutput"));
-        
-        
-        
+    }
+    
+    public SerialDataReader(Properties trackerProps){
+        this(trackerProps,true);
     }
     
     private void readSerialData(){
@@ -120,7 +109,7 @@ public class SerialDataReader {
         
         readSerialData();
 
-        if(!onlyDoOutput){
+        if(parseOutput){
             processArdData();
         }
     }
