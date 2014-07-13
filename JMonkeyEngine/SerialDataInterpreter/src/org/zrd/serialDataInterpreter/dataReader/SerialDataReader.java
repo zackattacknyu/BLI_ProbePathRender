@@ -4,9 +4,11 @@
  */
 package org.zrd.serialDataInterpreter.dataReader;
 
+import java.nio.file.Path;
 import org.zrd.serialInterface.arduinoReading.SerialReader;
 import java.util.HashMap;
 import java.util.Properties;
+import org.zrd.util.dataStreaming.ProbeDataStream;
 
 /**This class is meant to be used to initialize and run the serial reader and
  *      then parse the string that it is returned. 
@@ -27,7 +29,7 @@ import java.util.Properties;
  * 
  * @author BLI
  */
-public class SerialDataReader {
+public class SerialDataReader implements ProbeDataStream{
     
     private SerialReader serial;
     private SerialDataPoint currentSerialData;
@@ -43,6 +45,10 @@ public class SerialDataReader {
     private boolean showOutput;
     
     private static HashMap<String,Integer> dataLocations;
+    
+    private boolean recordingRawData = false;
+    private RawSerialRecorder currentRecorder;
+    private Path recordingFilePath;
 
     public SerialDataReader(Properties trackerProps, boolean parseOutput) {
         this.parseOutput = parseOutput;
@@ -55,6 +61,11 @@ public class SerialDataReader {
         showOutput = Boolean.parseBoolean(
                 trackerProps.getProperty(
                 "arduinoData.showOutput"));
+    }
+    
+    public SerialDataReader(Properties trackerProps,Path recordingFilePath){
+        this(trackerProps,false);
+        this.recordingFilePath = recordingFilePath;
     }
     
     public SerialDataReader(Properties trackerProps){
@@ -86,6 +97,10 @@ public class SerialDataReader {
                     
                 }
                 
+                if(recordingRawData){
+                    currentRecorder.addLineToFiles(currentSerialOutput);
+                }
+                
                 updateExists = true;
                 previousSerialOutput = currentSerialOutput;
             }
@@ -105,12 +120,24 @@ public class SerialDataReader {
         }
     }
 
+    @Override
     public void updateData(){
         
         readSerialData();
 
         if(parseOutput){
             processArdData();
+        }
+    }
+    
+    @Override
+    public void startStopRecording() {
+        if(recordingRawData){
+            currentRecorder.closeRecording();
+            recordingRawData = false;
+        }else{
+            currentRecorder = new RawSerialRecorder(recordingFilePath);
+            recordingRawData = true;
         }
     }
     
@@ -161,6 +188,8 @@ public class SerialDataReader {
     public boolean isUpdateExists() {
         return updateExists;
     }
+
+    
     
     
    
