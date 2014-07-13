@@ -18,7 +18,7 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  */
 public class ProbeTracker_ProbeTrackingRecorder {
     
-    public static final Vector3f STARTING_POSITION = new Vector3f(-0.4f,-0.97f,-15.35f);
+    public static final Vector3f STARTING_POSITION = new Vector3f(0,0,0);
     
     public static final float INIT_SCALE_X = 0.00001f,INIT_SCALE_Y = 0.00001f;
     
