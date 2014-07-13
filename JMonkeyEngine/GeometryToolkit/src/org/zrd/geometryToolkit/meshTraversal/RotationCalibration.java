@@ -42,9 +42,6 @@ public class RotationCalibration {
     private Matrix4f aggregateTransform;
     private Quaternion aggregateRotation;
     
-    private ArrayList<Vector3f> finalRotatedPath;
-    private ArrayList<Vector3f> finalPathOnSurface;
-    
     private Vector3f initTriangleNormal;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
@@ -74,13 +71,14 @@ public class RotationCalibration {
         aggregateTransform = transform.mult(aggregateTransform);
     }
     
-    private ArrayList<Vector3f> obtainCurrentRotatedPath(){
-        return MeshTraverseHelper.getTransformedVertices(initPath, aggregateTransform);
+    public ArrayList<Vector3f> getCurrentRotatedPath(){
+        return MeshTraverseHelper.getTransformedVertices(
+                GeneralHelper.getCopyOfPath(initPath), aggregateTransform);
     }
     
-    private ArrayList<Vector3f> obtainCurrentPathOnSurface(){
-        ArrayList<Vector3f> currentRotatedPath = obtainCurrentRotatedPath();
-        return PathProjectionOntoMesh.findPathProjectionOntoMesh(currentRotatedPath, startingTriangle, meshInfo);
+    public ArrayList<Vector3f> getCurrentPathOnSurface(){
+        return PathProjectionOntoMesh.findPathProjectionOntoMesh(
+                getCurrentRotatedPath(), startingTriangle, meshInfo);
     }
 
     private void performRotationCalibration() {
@@ -88,7 +86,7 @@ public class RotationCalibration {
         performRotationOntoInitialPlane();
         
         //this does NOT follow the surface yet
-        ArrayList<Vector3f> currentPathOnSurface = obtainCurrentRotatedPath();
+        ArrayList<Vector3f> currentPathOnSurface = getCurrentRotatedPath();
 
         Matrix4f currentRotationTransform;
         float currentRotationAngle;
@@ -105,7 +103,7 @@ public class RotationCalibration {
             postMultiplyNewTransform(currentRotationTransform);
             
             //projects the rotated path on the surface
-            currentPathOnSurface = obtainCurrentPathOnSurface();
+            currentPathOnSurface = getCurrentPathOnSurface();
             
             //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
@@ -120,8 +118,6 @@ public class RotationCalibration {
             
             previousDistance = currentDistance;
         }
-        finalRotatedPath = GeneralHelper.getCopyOfPath(obtainCurrentRotatedPath());
-        finalPathOnSurface = GeneralHelper.getCopyOfPath(currentPathOnSurface);
     }
     
     private boolean hasConverged(float currentDistance, float previousDistance){
@@ -205,12 +201,6 @@ public class RotationCalibration {
         addPath(currentPathOnSurface);
     }
     */
-
-    public ArrayList<Vector3f> getFinalRotatedPath() {
-        return finalRotatedPath;
-    }
-
-    public ArrayList<Vector3f> getFinalPathOnSurface() {
-        return finalPathOnSurface;
-    }
+    
+    
 }

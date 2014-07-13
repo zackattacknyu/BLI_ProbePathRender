@@ -102,20 +102,11 @@ public class ProbePathSet {
             return true;
         }
     }
-    
-    
-    
-    
+
     private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
         Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         ColorRGBA grayColor = new ColorRGBA(brightness,brightness,brightness,1.0f);
         outputMaterial.setColor("Color", grayColor);
         return outputMaterial;
-    }
-    
-    public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        RotationCalibration newCalibration = new RotationCalibration(
-                getCurrentPath().getVertices(),endPoint,startingTriangle,meshInfo);
-        addPath(newCalibration.getFinalPathOnSurface());
     }
 }

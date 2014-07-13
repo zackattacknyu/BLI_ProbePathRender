@@ -37,6 +37,7 @@ import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
@@ -502,13 +503,6 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(path);
     }
     
-    private void displayCurrentPaths(){
-        ArrayList<ProbePath> paths = probePathSet.getPathsToSave();
-        for(ProbePath currentPath: paths){
-            displayPath(currentPath.getProbePath());
-        }
-    }
-    
     private void displayAxisLines() {
         xAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentXAxis(),xMat);
         yAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentYAxis(),yMat);
@@ -654,10 +648,17 @@ public class Main extends SimpleApplication {
                                         lastPointClicked = endPoint;
                                         probePathSet.scaleCurrentPathEndpoint(endPoint);
                                         probePathSet.compressCurrentPath();
-                                        probePathSet.rotateAndProjectCurrentPath(endPoint, startingTriangle, meshInfo);
                                         
+                                        RotationCalibration newCalibration = new RotationCalibration(
+                                            probePathSet.getCurrentPath().getVertices(),
+                                            endPoint,startingTriangle,meshInfo);
+                                        
+                                        probePathSet.addPath(newCalibration.getCurrentRotatedPath(), lineMaterial);
                                         displayCurrentPath();
-
+                                        
+                                        probePathSet.addPath(newCalibration.getCurrentPathOnSurface(), redLineMaterial);
+                                        //displayCurrentPath();
+                                        
                                         moveLine = false;
                                         onStartPoint = true;
                                     }
