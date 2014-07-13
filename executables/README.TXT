@@ -54,5 +54,10 @@ Specific Installation
 -----------------------------
 Running the programs
 -----------------------------
-Click on Run.bat and follow the prompts
+1. Double click on Run.bat
+2. Press enter when prompted and it will begin receiving data from the probe
+3. Press enter to being recording
+4. Press enter to end the current recording
+5. Repeat steps 3-4 until you are done recording
+6. Press Ctrl-C and then y to end the process
 
