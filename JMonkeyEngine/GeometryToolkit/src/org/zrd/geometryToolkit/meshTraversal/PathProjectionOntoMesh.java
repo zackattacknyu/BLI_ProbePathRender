@@ -119,4 +119,67 @@ public class PathProjectionOntoMesh {
         return finalPath;
     }
     
+    /*
+     * TODO: Rewrite above method so that it is using the difference vectors
+     *      at each step.
+     * In other words, it will keep track of the current origin point and
+     *      and then next entry will be the vector that will move the origin point
+     * 
+     * The algorithm will be:
+     *      1. Take the origin point
+     *      2. Look at the vector to move the point
+     *      3. Project the vector onto the incident triangles
+     *      4. Move the origin point based on the vector projection
+     *      5. Back to step 1 with the next entry
+     */
+    /*public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
+        ArrayList<Vector3f> remainingPath = (ArrayList<Vector3f>) path.clone();
+        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
+        Vector3f initPoint;
+        Vector3f initEndPoint;
+        Vector3f initEndPointMod;
+        Vector3f currentNormal;
+        Matrix4f currentTransform;
+        MeshTriangle currentTriangle = initTriangle;
+        TriangleLineSegmentIntersection intersection;
+        MeshEdge intersectingEdge = null;
+        Vector3f newPoint;
+        Vector3f oldNormal = new Vector3f();
+        while (remainingPath.size() > 1) {
+            initPoint = remainingPath.get(0);
+            initEndPoint = remainingPath.get(1);
+            currentNormal = currentTriangle.getNormal();
+            currentTransform = MeshTraverseHelper.getRotationOntoPlane(currentNormal, initPoint, initEndPoint);
+            if (oldNormal.dot(currentNormal) < 0) {
+                System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
+                break;
+            }
+            oldNormal = currentNormal;
+            if (!MeshTraverseHelper.hasNaN(currentTransform)) {
+                remainingPath = MeshTraverseHelper.getTransformedVertices(remainingPath, currentTransform);
+                initEndPoint = remainingPath.get(1);
+            }
+            intersection = new TriangleLineSegmentIntersection(currentTriangle, initPoint, initEndPoint);
+            if (intersection.isSegDegenerate()) {
+                remainingPath.remove(1);
+                continue;
+            } else {
+                finalPath.add(initPoint);
+                remainingPath.remove(0);
+            }
+            intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
+            if (intersectingEdge != null) {
+                currentTriangle = triangleSet.getEdgeNeighbor(intersectingEdge, currentTriangle);
+                newPoint = intersection.getBreakpoint();
+                remainingPath.add(0, newPoint);
+                if (currentTriangle == null) {
+                    System.out.println("CURRENT TRIANGLE WAS NULL");
+                    break;
+                }
+            }
+        }
+        finalPath.addAll(remainingPath);
+        return finalPath;
+    }*/
+    
 }
