@@ -52,13 +52,7 @@ public class SerialDataReader {
         this.trackerProps = trackerProps;
         
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
-        try{
-            serial = new SerialReader();
-            serial.beginExecution(trackerProps);
-        }catch(Throwable t){
-            System.out.println("CANNOT USE SERIAL DEVICE. INSTALL RXTX.");
-            System.out.println(t);
-        }
+        serial = SerialReader.startNewReader(trackerProps);
         
         System.out.println("Waiting to receive input...");
         

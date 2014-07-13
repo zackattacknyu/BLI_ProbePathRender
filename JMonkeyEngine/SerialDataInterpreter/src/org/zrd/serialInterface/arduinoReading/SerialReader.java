@@ -180,14 +180,25 @@ public class SerialReader implements SerialPortEventListener {
             t.start();
             System.out.println("Started");
         }
+        
+        public static SerialReader startNewReader(Properties props){
+            SerialReader serial = new SerialReader();
+            try{
+                serial.beginExecution(props);
+            }catch(Throwable t){
+                System.out.println("CANNOT USE SERIAL DEVICE. INSTALL RXTX.");
+                System.out.println(t); 
+            }
+            return serial;
+        }
 
-    /**
-     * This returns the current string being read from Arduino
-     * @return      current string from arduino
-     */
-    public String getCurrentOutput() {
-        return currentArdOutput;
-    }
+        /**
+         * This returns the current string being read from Arduino
+         * @return      current string from arduino
+         */
+        public String getCurrentOutput() {
+            return currentArdOutput;
+        }
         
         
 }
