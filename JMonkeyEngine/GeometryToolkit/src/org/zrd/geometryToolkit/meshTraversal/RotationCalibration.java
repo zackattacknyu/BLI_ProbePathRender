@@ -26,6 +26,7 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 public class RotationCalibration {
     
     public static final int MAX_ROTATION_ATTEMPTS = 100;
+    public static final float DIFF_FOR_CONVERGENCE = 0.00001f;
     
     /*
      * This is meant to be path that is to be rotated
@@ -121,7 +122,7 @@ public class RotationCalibration {
     }
     
     private boolean hasConverged(float currentDistance, float previousDistance){
-        return (Math.abs(currentDistance-previousDistance) < ProgramConstants.EPSILON);
+        return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
     }
     
     private void displayAttemptResults(int tryNum, float currentDistance){

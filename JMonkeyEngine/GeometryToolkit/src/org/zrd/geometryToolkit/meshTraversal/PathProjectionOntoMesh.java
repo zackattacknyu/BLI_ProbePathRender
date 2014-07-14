@@ -42,11 +42,22 @@ public class PathProjectionOntoMesh {
         
         ArrayList<Vector3f> currentProjectedPath;
         for(Vector3f segmentVec: pathAsVectors){
-            currentProjectedPath = newProjection.findCurrentSegmentProjectionOntoMesh(segmentVec);
+            if(newProjection.currentTriangle == null){
+                currentProjectedPath = newProjection.getPathPoints(segmentVec);
+            }else{
+                currentProjectedPath = newProjection.findCurrentSegmentProjectionOntoMesh(segmentVec);
+            }
             finalPath.addAll(currentProjectedPath);
         }
         finalPath.add(newProjection.currentStartPoint);
         
+        return finalPath;
+    }
+    
+    private ArrayList<Vector3f> getPathPoints(Vector3f segmentVector){
+        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
+        finalPath.add(currentStartPoint);
+        finalPath.add(currentStartPoint.add(segmentVector));
         return finalPath;
     }
     
