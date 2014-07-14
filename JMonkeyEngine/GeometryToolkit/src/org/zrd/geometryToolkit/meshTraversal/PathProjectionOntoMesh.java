@@ -34,7 +34,7 @@ public class PathProjectionOntoMesh {
      *      4. Move the origin point based on the vector projection
      *      5. Back to step 1 with the next entry
      */
-    public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
+    public static ArrayList<Vector3f> findPathProjectionOntoMesh(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
         
         //gets the diff vector array
