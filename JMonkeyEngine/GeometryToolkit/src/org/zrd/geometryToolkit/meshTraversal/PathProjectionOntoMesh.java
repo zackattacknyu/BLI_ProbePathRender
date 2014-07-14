@@ -10,6 +10,7 @@ import java.util.Stack;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 
 /**
  *
@@ -29,17 +30,10 @@ public class PathProjectionOntoMesh {
     
     public ArrayList<Vector3f> findCurrentPathProjectionOntoMesh(ArrayList<Vector3f> path){
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
-        
-        //gets the diff vector array
-        ArrayList<Vector3f> pathAsVectors = new ArrayList<Vector3f>(path.size());
-        Vector3f diffVector;
-        for(int index = 1; index < path.size(); index++){
-            diffVector = path.get(index).subtract(path.get(index-1));
-            pathAsVectors.add(diffVector);
-        }
+        SegmentSet currentPath = new SegmentSet(path);
         
         ArrayList<Vector3f> currentProjectedPath;
-        for(Vector3f segmentVec: pathAsVectors){
+        for(Vector3f segmentVec: currentPath.getSegmentVectors()){
             if(currentTriangle == null){
                 currentProjectedPath = getPathPoints(segmentVec);
             }else{
