@@ -78,7 +78,7 @@ public class RotationCalibration {
     }
     
     public ArrayList<Vector3f> getCurrentPathOnSurface(){
-        return PathProjectionOntoMesh.findPathProjectionOntoMesh2(
+        return PathProjectionOntoMesh.getPathProjectedOntoMesh(
                 getCurrentRotatedPath(), startingTriangle, meshInfo);
     }
 
