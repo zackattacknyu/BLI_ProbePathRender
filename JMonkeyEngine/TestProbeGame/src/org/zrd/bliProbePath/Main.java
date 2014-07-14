@@ -95,7 +95,7 @@ public class Main extends SimpleApplication {
     private boolean displayRawDataMode = false;
     
     //to be used if we are only testing using recorded paths
-    private boolean showProbeRepLines = true;
+    private boolean showProbeRepLines = false;
     
     public static void main(String[] args) {
         

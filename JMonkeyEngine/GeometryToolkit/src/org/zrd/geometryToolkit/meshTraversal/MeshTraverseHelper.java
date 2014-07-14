@@ -195,7 +195,7 @@ public class MeshTraverseHelper {
      *      thus T + D = S, hence T = S - D
      * @param normal            the normal vector
      * @param startVector       the vector to get the projection for
-     * @return 
+     * @return      the unit vector that is the start vector on the plane
      */
     public static Vector3f getVectorProjOnPlane(Vector3f normal, Vector3f startVector){
         Vector3f newNorm = normal.normalize();
@@ -210,6 +210,21 @@ public class MeshTraverseHelper {
         //does step 3, uses the projection onto Normal to get projection onto plane
         return newStartVec.subtract(diffVector);
         
+    }
+    
+    /**
+     * This gets the vector that is the input vector rotated onto the plane
+     *      described by the normal.
+     * The difference between this method and getVectorProjOnPlane is that
+     *      this one preserves the length of the vector
+     * @param normal        normal to the plane
+     * @param vector        vector to rotate onto the plane
+     * @return              the vector rotated onto the plane with length preserved
+     */
+    public static Vector3f getVectorRotatedOntoPlane(Vector3f normal, Vector3f vector){
+        Vector3f unitVectorOnPlane = getVectorProjOnPlane(normal,vector);
+        float length = vector.length();
+        return unitVectorOnPlane.mult(length);
     }
     
     /**

@@ -156,15 +156,15 @@ public class PathProjectionOntoMesh {
         Vector3f newPoint;
         Vector3f oldNormal = new Vector3f();
         Vector3f currentVector;
-        Vector3f currentRotatedVector;
+        Vector3f currentVectorOnPlane;
         Vector3f nextVector;
         Vector3f currentStartPoint = startingPoint.clone();
         Quaternion currentRotation;
         Vector3f newDeltaVector;
         while (remainingPath.size() > 1) {
+            currentNormal = currentTriangle.getNormal();
             
             //this shouldn't happen since we have a smooth surface
-            currentNormal = currentTriangle.getNormal();
             if (oldNormal.dot(currentNormal) < 0) {
                 System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
                 break;
@@ -172,20 +172,19 @@ public class PathProjectionOntoMesh {
             oldNormal = currentNormal;
             
             currentVector = remainingPath.get(0).clone();
-            currentRotation = MeshTraverseHelper.getRotationOntoPlane(currentNormal, currentVector);
-            currentRotatedVector = currentRotation.mult(currentVector);
+            currentVectorOnPlane = MeshTraverseHelper.getVectorRotatedOntoPlane(currentNormal, currentVector);
             
-            currentEndPoint = currentStartPoint.add(currentRotatedVector);
+            currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
             
             intersection = new TriangleLineSegmentIntersection(currentTriangle, currentStartPoint, currentEndPoint);
             
             if (intersection.isSegDegenerate()) {
                 
                 //if segment is degenerate, combine the first two vectors
-                nextVector = remainingPath.get(1).clone();
-                remainingPath.remove(1);
+                //nextVector = remainingPath.get(1).clone();
+                //remainingPath.remove(1);
                 remainingPath.remove(0);
-                remainingPath.add(0,currentVector.add(nextVector));
+                //remainingPath.add(0,currentVector.add(nextVector));
                 continue;
             } else {
                 
