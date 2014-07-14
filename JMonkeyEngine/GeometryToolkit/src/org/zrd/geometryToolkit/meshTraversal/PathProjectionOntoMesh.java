@@ -4,13 +4,9 @@
  */
 package org.zrd.geometryToolkit.meshTraversal;
 
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.Stack;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -20,7 +16,122 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  * @author BLI
  */
 public class PathProjectionOntoMesh {
-
+    
+    private MeshTriangle currentTriangle;
+    private TriangleSet triangleSet;
+    private Vector3f currentStartPoint;
+    
+    private PathProjectionOntoMesh(MeshTriangle initTriangle, Vector3f startPoint, TriangleSet triangleSet){
+        this.triangleSet = triangleSet;
+        this.currentStartPoint = startPoint;
+        this.currentTriangle = initTriangle;
+    }
+    
+    public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
+        PathProjectionOntoMesh newProjection = new PathProjectionOntoMesh(initTriangle,path.get(0),triangleSet);
+        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
+        
+        //gets the diff vector array
+        ArrayList<Vector3f> pathAsVectors = new ArrayList<Vector3f>(path.size());
+        Vector3f startingPoint = path.get(0);
+        Vector3f diffVector;
+        for(int index = 1; index < path.size(); index++){
+            diffVector = path.get(index).subtract(path.get(index-1));
+            pathAsVectors.add(diffVector);
+        }
+        
+        ArrayList<Vector3f> currentProjectedPath;
+        for(Vector3f segmentVec: pathAsVectors){
+            currentProjectedPath = newProjection.findCurrentSegmentProjectionOntoMesh(segmentVec);
+            finalPath.addAll(currentProjectedPath);
+        }
+        finalPath.add(newProjection.currentStartPoint);
+        
+        return finalPath;
+    }
+    
+    /*
+     * This takes an individual segment and finds its projection along
+     *      the mesh, meaning the matching line segments that go along
+     *      the triangles of the mesh
+     */
+    private ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
+        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
+        Stack<Vector3f> remainingPath = new Stack<Vector3f>();
+        remainingPath.add(segmentVector);
+        
+        Vector3f currentEndPoint;
+        Vector3f currentNormal;
+        TriangleLineSegmentIntersection intersection;
+        MeshEdge intersectingEdge = null;
+        Vector3f oldNormal = new Vector3f();
+        Vector3f currentVector;
+        Vector3f currentVectorOnPlane;
+        Vector3f newDeltaVector;
+        finalPath.add(currentStartPoint);
+        while (!remainingPath.empty()) {
+            currentNormal = currentTriangle.getNormal();
+            
+            //this shouldn't happen since we have a smooth surface
+            if (oldNormal.dot(currentNormal) < 0) {
+                System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
+                break;
+            }
+            oldNormal = currentNormal;
+            
+            currentVector = remainingPath.peek().clone();
+            currentVectorOnPlane = MeshTraverseHelper.getVectorRotatedOntoPlane(currentNormal, currentVector);
+            
+            currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
+            
+            intersection = new TriangleLineSegmentIntersection(currentTriangle, currentStartPoint, currentEndPoint);
+            
+            if (intersection.isSegDegenerate()) {
+                
+                //if segment is degenerate, remove it
+                remainingPath.pop();
+                continue;
+            } else {
+                
+                //if not degenerate, then start point can be added to final list
+                //      and the first vector can be removed
+                //finalPath.add(currentStartPoint);
+                remainingPath.pop();
+            }
+            
+            /*
+             * Now we figure out if the segment is in the whole triangle or not
+             *      and deal with the cases
+             */
+            intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
+            if (intersectingEdge != null) {
+                
+                //segment will go to adjacent triangle
+                currentTriangle = triangleSet.getEdgeNeighbor(intersectingEdge, currentTriangle);
+                newDeltaVector = intersection.getDeltaVector();
+                currentStartPoint = intersection.getBreakpoint().clone();
+                
+                
+                //the current vector is the part of the first segment that is not in the current triangle
+                remainingPath.push(currentVector.subtract(newDeltaVector));
+                
+                if (currentTriangle == null) {
+                    System.out.println("CURRENT TRIANGLE WAS NULL");
+                    break;
+                }
+                
+            }else{
+                
+                //whole segment is in triangle
+                currentStartPoint = currentEndPoint.clone();
+                
+            }
+            finalPath.add(currentStartPoint);
+        }
+        //finalPath.addAll(remainingPath);
+        return finalPath;
+    }
+    
     /*
      * TODO: Rewrite above method so that it is using the difference vectors
      *      at each step.
@@ -120,119 +231,6 @@ public class PathProjectionOntoMesh {
                 currentStartPoint = currentEndPoint.clone();
                 
             }
-        }
-        //finalPath.addAll(remainingPath);
-        return finalPath;
-    }
-    
-    
-    /*This class will call the method below for each of the segments
-     *      in the path
-     * 
-     */ 
-    /*public static ArrayList<Vector3f> findPathProjectionOntoMesh2(ArrayList<Vector3f> path, MeshTriangle initTriangle, TriangleSet triangleSet) {
-        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
-        
-        //gets the diff vector array
-        ArrayList<Vector3f> pathAsVectors = new ArrayList<Vector3f>(path.size());
-        Vector3f startingPoint = path.get(0);
-        Vector3f diffVector;
-        for(int index = 1; index < path.size(); index++){
-            diffVector = path.get(index).subtract(path.get(index-1));
-            pathAsVectors.add(diffVector);
-        }
-        
-        for(Vector3f diffVector: pathAsVectors){
-            
-        }
-        
-        
-        return finalPath;
-    }*/
-    
-    /*
-     * This takes an individual segment and finds its projection along
-     *      the mesh, meaning the matching line segments that go along
-     *      the triangles of the mesh
-     */
-    public static ArrayList<Vector3f> findSegmentProjectionOntoMesh(
-            Vector3f startingPoint,
-            Vector3f segmentVector, 
-            MeshTriangle initTriangle, 
-            TriangleSet triangleSet) {
-        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
-        Stack<Vector3f> remainingPath = new Stack<Vector3f>();
-        remainingPath.add(segmentVector);
-        
-        Vector3f currentEndPoint;
-        Vector3f currentNormal;
-        MeshTriangle currentTriangle = initTriangle;
-        TriangleLineSegmentIntersection intersection;
-        MeshEdge intersectingEdge = null;
-        Vector3f oldNormal = new Vector3f();
-        Vector3f currentVector;
-        Vector3f currentVectorOnPlane;
-        Vector3f currentStartPoint = startingPoint.clone();
-        Vector3f newDeltaVector;
-        finalPath.add(currentStartPoint);
-        while (!remainingPath.empty()) {
-            currentNormal = currentTriangle.getNormal();
-            
-            //this shouldn't happen since we have a smooth surface
-            if (oldNormal.dot(currentNormal) < 0) {
-                System.out.println("DOT PRODUCT WAS LESS THAN ZERO!!");
-                break;
-            }
-            oldNormal = currentNormal;
-            
-            currentVector = remainingPath.peek().clone();
-            currentVectorOnPlane = MeshTraverseHelper.getVectorRotatedOntoPlane(currentNormal, currentVector);
-            
-            currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
-            
-            intersection = new TriangleLineSegmentIntersection(currentTriangle, currentStartPoint, currentEndPoint);
-            
-            if (intersection.isSegDegenerate()) {
-                
-                //if segment is degenerate, remove it
-                remainingPath.pop();
-                continue;
-            } else {
-                
-                //if not degenerate, then start point can be added to final list
-                //      and the first vector can be removed
-                //finalPath.add(currentStartPoint);
-                remainingPath.pop();
-            }
-            
-            /*
-             * Now we figure out if the segment is in the whole triangle or not
-             *      and deal with the cases
-             */
-            intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
-            if (intersectingEdge != null) {
-                
-                //segment will go to adjacent triangle
-                currentTriangle = triangleSet.getEdgeNeighbor(intersectingEdge, currentTriangle);
-                newDeltaVector = intersection.getDeltaVector();
-                currentStartPoint = intersection.getBreakpoint().clone();
-                
-                
-                //the current vector is the part of the first segment that is not in the current triangle
-                remainingPath.push(currentVector.subtract(newDeltaVector));
-                
-                if (currentTriangle == null) {
-                    System.out.println("CURRENT TRIANGLE WAS NULL");
-                    break;
-                }
-                
-            }else{
-                
-                //whole segment is in triangle
-                currentStartPoint = currentEndPoint.clone();
-                
-            }
-            finalPath.add(currentStartPoint);
         }
         //finalPath.addAll(remainingPath);
         return finalPath;
