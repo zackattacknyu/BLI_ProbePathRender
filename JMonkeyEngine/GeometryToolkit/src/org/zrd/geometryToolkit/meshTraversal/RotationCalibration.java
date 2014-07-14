@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
@@ -26,7 +25,7 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 public class RotationCalibration {
     
     public static final int MAX_ROTATION_ATTEMPTS = 100;
-    public static final float DIFF_FOR_CONVERGENCE = 0.00001f;
+    public static final float DIFF_FOR_CONVERGENCE = 0.0001f;
     
     /*
      * This is meant to be path that is to be rotated
@@ -162,6 +161,14 @@ public class RotationCalibration {
     
     
     /*
+     * * ********IMPORTANT NOTE*****************
+     * UNUSED CODE BELOW HERE
+     * PLEASE KEEP THOUGH FOR POTENTIAL
+     *      FUTURE USES
+     * ***************************************
+     *
+     * 
+     * 
     public void rotateAndProjectCurrentPath(Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo, AssetManager assetManager){
         scaleCurrentPathEndpoint(endPoint);
         compressCurrentPath();

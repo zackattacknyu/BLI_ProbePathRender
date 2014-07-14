@@ -28,17 +28,14 @@ public class PathProjectionOntoMesh {
         this.currentTriangle = initTriangle;
     }
     
+    
     public ArrayList<Vector3f> findCurrentPathProjectionOntoMesh(ArrayList<Vector3f> path){
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
         SegmentSet currentPath = new SegmentSet(path);
         
         ArrayList<Vector3f> currentProjectedPath;
         for(Vector3f segmentVec: currentPath.getSegmentVectors()){
-            if(currentTriangle == null){
-                currentProjectedPath = getPathPoints(segmentVec);
-            }else{
-                currentProjectedPath = findCurrentSegmentProjectionOntoMesh(segmentVec);
-            }
+            currentProjectedPath = getCurrentProjectedPath(segmentVec);
             finalPath.addAll(currentProjectedPath);
         }
         finalPath.add(currentStartPoint);
@@ -51,7 +48,15 @@ public class PathProjectionOntoMesh {
         return newProjection.findCurrentPathProjectionOntoMesh(path);
     }
     
-    private ArrayList<Vector3f> getPathPoints(Vector3f segmentVector){
+    public ArrayList<Vector3f> getCurrentProjectedPath(Vector3f segmentVector){
+        if(currentTriangle == null){
+            return getPathPoints(segmentVector);
+        }else{
+            return findCurrentSegmentProjectionOntoMesh(segmentVector);
+        }
+    }
+    
+    public ArrayList<Vector3f> getPathPoints(Vector3f segmentVector){
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
         finalPath.add(currentStartPoint);
         finalPath.add(currentStartPoint.add(segmentVector));
@@ -63,7 +68,7 @@ public class PathProjectionOntoMesh {
      *      the mesh, meaning the matching line segments that go along
      *      the triangles of the mesh
      */
-    private ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
+    public ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
         Stack<Vector3f> remainingPath = new Stack<Vector3f>();
         remainingPath.add(segmentVector);
@@ -139,34 +144,14 @@ public class PathProjectionOntoMesh {
         //finalPath.addAll(remainingPath);
         return finalPath;
     }
-    
-    /*
-     * TODO: Rewrite above method so that it is using the difference vectors
-     *      at each step.
-     * In other words, it will keep track of the current origin point and
-     *      and then next entry will be the vector that will move the origin point
-     * 
-     * The algorithm will be:
-     *      1. Take the origin point
-     *      2. Look at the vector to move the point
-     *      3. Project the vector onto the incident triangles
-     *      4. Move the origin point based on the vector projection
-     *      5. Back to step 1 with the next entry
-     */
-    
-    
+
     /* 
      * ********IMPORTANT NOTE*****************
      * UNUSED CODE BELOW HERE
-     *  KEPT HERE IN CASE IT WILL BE USEFUL 
-     *  IN THE FUTURE
+     * PLEASE KEEP THOUGH FOR POTENTIAL
+     *      FUTURE USES
      * ***************************************
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
+     *
      * Here will be the code for following the surface using Triangles:
      *
      * At each triangle, we will have a normal and a line segment.
