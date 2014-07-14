@@ -9,6 +9,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import java.util.Stack;
 import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
@@ -146,8 +147,13 @@ public class PathProjectionOntoMesh {
             diffVector = path.get(index).subtract(path.get(index-1));
             pathAsVectors.add(diffVector);
         }
-        ArrayList<Vector3f> remainingPath = GeneralHelper.getCopyOfPath(pathAsVectors);
+        
+        Stack<Vector3f> remainingPath = new Stack<Vector3f>();
+        for(int index = pathAsVectors.size()-1; index >= 0; index--){
+            remainingPath.add(pathAsVectors.get(index));
+        }
 
+        
         Vector3f currentEndPoint;
         Vector3f currentNormal;
         MeshTriangle currentTriangle = initTriangle;
@@ -157,11 +163,9 @@ public class PathProjectionOntoMesh {
         Vector3f oldNormal = new Vector3f();
         Vector3f currentVector;
         Vector3f currentVectorOnPlane;
-        Vector3f nextVector;
         Vector3f currentStartPoint = startingPoint.clone();
-        Quaternion currentRotation;
         Vector3f newDeltaVector;
-        while (remainingPath.size() > 1) {
+        while (!remainingPath.empty()) {
             currentNormal = currentTriangle.getNormal();
             
             //this shouldn't happen since we have a smooth surface
@@ -171,7 +175,7 @@ public class PathProjectionOntoMesh {
             }
             oldNormal = currentNormal;
             
-            currentVector = remainingPath.get(0).clone();
+            currentVector = remainingPath.peek().clone();
             currentVectorOnPlane = MeshTraverseHelper.getVectorRotatedOntoPlane(currentNormal, currentVector);
             
             currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
@@ -180,18 +184,15 @@ public class PathProjectionOntoMesh {
             
             if (intersection.isSegDegenerate()) {
                 
-                //if segment is degenerate, combine the first two vectors
-                //nextVector = remainingPath.get(1).clone();
-                //remainingPath.remove(1);
-                remainingPath.remove(0);
-                //remainingPath.add(0,currentVector.add(nextVector));
+                //if segment is degenerate, remove it
+                remainingPath.pop();
                 continue;
             } else {
                 
                 //if not degenerate, then start point can be added to final list
                 //      and the first vector can be removed
                 finalPath.add(currentStartPoint);
-                remainingPath.remove(0);
+                remainingPath.pop();
             }
             
             /*
@@ -208,7 +209,7 @@ public class PathProjectionOntoMesh {
                 currentStartPoint = newPoint.clone();
                 
                 //the current vector is the part of the first segment that is not in the current triangle
-                remainingPath.add(0, currentVector.subtract(newDeltaVector));
+                remainingPath.push(currentVector.subtract(newDeltaVector));
                 
                 if (currentTriangle == null) {
                     System.out.println("CURRENT TRIANGLE WAS NULL");
