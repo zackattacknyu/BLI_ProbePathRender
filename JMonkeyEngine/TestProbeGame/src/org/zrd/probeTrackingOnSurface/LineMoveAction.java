@@ -12,10 +12,13 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
+import org.zrd.geometryToolkit.pathTools.PathCompression;
+import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
@@ -60,12 +63,12 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
             if(onStartPoint){
 
                 Vector3f endPoint = pointOnMesh.clone();
+                currentPath = probePathSet.getCurrentPath().getVertices();
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
                     startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
-                    probePathSet.addPath(MeshTraverseHelper.movePathStartPoint(
-                            probePathSet.getCurrentPath().getVertices(), endPoint));
+                    currentPath = MeshTraverseHelper.movePathStartPoint(currentPath, endPoint);
                     onStartPoint = false;
                 }
 
@@ -75,15 +78,12 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
-                    probePathSet.scaleCurrentPathEndpoint(endPoint);
-                    probePathSet.compressCurrentPath();
-
-                    RotationCalibration newCalibration = new RotationCalibration(
-                        probePathSet.getCurrentPath().getVertices(),
-                        endPoint,startingTriangle,meshInfo);
-
-                    probePathSet.addPath(newCalibration.getCurrentPathOnSurface());
-
+                    currentPath = PathTransformHelper.scalePathForNewEndpoint(currentPath, endPoint);
+                    currentPath = PathCompression.getCompressedPath(currentPath,ProgramConstants.MIN_SEGMENT_LENGTH);
+                    RotationCalibration newCalibration = 
+                            new RotationCalibration(currentPath,endPoint,startingTriangle,meshInfo);
+                    currentPath = newCalibration.getCurrentPathOnSurface();
+                    
                     moveLineEnabled = false;
                     onStartPoint = true;
                     newLineConstructed = true;
@@ -92,6 +92,12 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
             }
         }
     }
+
+    public ArrayList<Vector3f> getCurrentPath() {
+        return currentPath;
+    }
+    
+    
     
     public boolean hasNewLine(){
         if(newLineConstructed){

@@ -461,7 +461,7 @@ public class Main extends SimpleApplication {
         yawPitchRollText.setText(probeTracker.getYawPitchRollText());
         
         if(lineMoveAction.hasNewLine()){
-            displayCurrentPath();
+            displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
         }
     }
 
