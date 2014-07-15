@@ -2,7 +2,6 @@ package org.zrd.bliProbePath;
 
 import org.zrd.utilImpl.general.CollisionPoint;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
-import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
@@ -73,7 +72,6 @@ public class Main extends SimpleApplication {
     private boolean lightVisible;
     private Node shootables,probeRep;
     private File initialImportDirectory;
-    private ProbePathSet probePathSet;
     private RecordedPathSet recordedPathSet;
     
     private Quaternion surfaceRotation;
@@ -284,7 +282,6 @@ public class Main extends SimpleApplication {
         if(!displayRawDataMode){
             rootNode.attachChild(shootables);
         }
-        probePathSet = new ProbePathSet(lineMaterial);
         recordedPathSet = new RecordedPathSet();
         
         //RotationTesting.doRotationTesting();
@@ -512,10 +509,6 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(newText);
         return newText;
         
-    }
-    
-    private void displayCurrentPath(){
-        displayPath(probePathSet.getCurrentPathSpatial());
     }
     
     private void displayPath(Spatial path){
