@@ -78,7 +78,7 @@ public class LolaMesh {
         return surfaceMesh;
     }
 
-    public TriangleSet getLolaMeshInfo() {
+    public TriangleSet getActiveMeshInfo() {
         return lolaMeshInfo;
     }
     

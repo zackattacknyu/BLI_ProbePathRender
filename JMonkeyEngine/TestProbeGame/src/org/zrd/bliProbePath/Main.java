@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.renderedObjects.LolaMesh;
+import org.zrd.bliProbePath.renderedObjects.SphereMesh;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -130,7 +131,8 @@ public class Main extends SimpleApplication {
             cameraTracker.setDefaultCamera((short)1);
         }
         
-        LolaMesh lolaMesh = new LolaMesh(assetManager);
+        //LolaMesh activeMesh = new LolaMesh(assetManager);
+        SphereMesh activeMesh = new SphereMesh(assetManager);
         
         
         //String objFileLocation = "Models/lola_mesh.obj";
@@ -154,7 +156,7 @@ public class Main extends SimpleApplication {
         orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
 
         if(sphereOn){
-            surface = MeshHelper.generateModel(sphereLocation, lolaMaterial, assetManager);
+            //surface = MeshHelper.generateModel(sphereLocation, lolaMaterial, assetManager);
         }else{
             //surface = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         }
@@ -180,9 +182,9 @@ public class Main extends SimpleApplication {
         
         if(sphereOn){
             //surface.setLocalTranslation(0, 0, 0);
-            surface.scale(20f);
-            sphereTransform = new Matrix4f();
-            sphereTransform.setScale(20f, 20f, 20f);
+            //surface.scale(20f);
+            //sphereTransform = new Matrix4f();
+            //sphereTransform.setScale(20f, 20f, 20f);
         }else{
             //surface.setLocalRotation(surfaceRotation);
             //surface.scale(surfaceScale);
@@ -216,13 +218,13 @@ public class Main extends SimpleApplication {
         }
         
         if(sphereOn){
-            obtainSphereTriangleData();
+            //obtainSphereTriangleData();
         }else{
             //obtainSurfaceTriangleData();
         }
         
-        meshInfo = lolaMesh.getLolaMeshInfo();
-        surface = lolaMesh.getSurfaceMesh();
+        meshInfo = activeMesh.getActiveMeshInfo();
+        surface = activeMesh.getSurfaceMesh();
         
         
         initKeyboardInputs();
