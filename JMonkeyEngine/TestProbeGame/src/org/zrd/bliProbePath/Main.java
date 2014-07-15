@@ -20,6 +20,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.bliProbePath.renderedObjects.BackgroundBox;
 import org.zrd.bliProbePath.renderedObjects.LolaMesh;
 import org.zrd.bliProbePath.renderedObjects.ProbeRepresentation;
 import org.zrd.bliProbePath.renderedObjects.RenderedMesh;
@@ -44,8 +45,8 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial background,surface,moveableObject;
-    private Material backgroundBoxMaterial,lineMaterial,redMaterial,orangeMaterial,greenMaterial;
+    private Spatial surface,moveableObject;
+    private Material lineMaterial,redMaterial,orangeMaterial,greenMaterial;
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     
@@ -128,9 +129,6 @@ public class Main extends SimpleApplication {
             activeMesh = new LolaMesh(assetManager);
         }
         
-        backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
-        
         redMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
         orangeMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
         greenMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
@@ -143,10 +141,8 @@ public class Main extends SimpleApplication {
             rootNode.attachChild(moveableObject);
         }
         
-        background = initBackgroundBox(backgroundBoxMaterial, "background");
-        
         if(!sphereOn && !displayRawDataMode){
-            rootNode.attachChild(background);
+            rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
         }
 
         meshInfo = activeMesh.getActiveMeshInfo();
@@ -171,16 +167,7 @@ public class Main extends SimpleApplication {
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
     }
     
-    private Spatial initBackgroundBox(Material ballMat, String name){
-        Box b = new Box(30f, 30f, 2f);
-        Spatial sampleBox = new Geometry("Background", b);
-        sampleBox.setCullHint(Spatial.CullHint.Never);
-        sampleBox.setName(name);
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(10.0f, -10.0f, 0.0f);
-        return sampleBox;
-    }
+    
     
     
     
