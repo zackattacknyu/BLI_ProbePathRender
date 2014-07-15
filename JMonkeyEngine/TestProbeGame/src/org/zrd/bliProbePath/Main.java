@@ -63,7 +63,7 @@ public class Main extends SimpleApplication {
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
     //      the above setting.
-    private boolean displayRawDataMode = false;
+    private boolean displayRawDataMode = true;
     
     //to be used if we are only testing using recorded paths
     private boolean showProbeRepLines = true;
