@@ -40,6 +40,7 @@ import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
+import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.pathInteractions.PathImport;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
@@ -158,12 +159,12 @@ public class Main extends SimpleApplication {
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         boxMat.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
         
-        xMat = makeColorMaterial(ColorRGBA.Red);
-        yMat = makeColorMaterial(ColorRGBA.Orange);
-        zMat = makeColorMaterial(ColorRGBA.Green);
-        lineMaterial = makeColorMaterial(ColorRGBA.Black);
-        redLineMaterial = makeColorMaterial(ColorRGBA.Red);
-        orangeLineMaterial = makeColorMaterial(ColorRGBA.Orange);
+        xMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
+        yMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
+        zMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
+        lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
+        redLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
+        orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
         
         Material lightedSphere = boxMat.clone();
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
@@ -286,12 +287,6 @@ public class Main extends SimpleApplication {
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
-    }
-    
-    private Material makeColorMaterial(ColorRGBA color){
-        Material returnMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        returnMat.setColor("Color", color);
-        return returnMat;
     }
     
     /*
@@ -471,13 +466,6 @@ public class Main extends SimpleApplication {
         xAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentXAxis(),xMat);
         yAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentYAxis(),yMat);
         zAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentNormal(),zMat);
-    }
-    
-    private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
-        Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        ColorRGBA grayColor = new ColorRGBA(brightness,brightness,brightness,1.0f);
-        outputMaterial.setColor("Color", grayColor);
-        return outputMaterial;
     }
     
     private CollisionResults getCollisionResults(){
