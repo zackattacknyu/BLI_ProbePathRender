@@ -47,6 +47,7 @@ import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
+import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 
 
 /**
@@ -97,9 +98,10 @@ public class Main extends SimpleApplication {
     private boolean displayRawDataMode = false;
     
     //to be used if we are only testing using recorded paths
-    private boolean showProbeRepLines = false;
+    private boolean showProbeRepLines = true;
     
     private LineMoveAction lineMoveAction;
+    private ProbeMoveAction probeMoveAction;
     
     public static void main(String[] args) {
         
@@ -293,6 +295,7 @@ public class Main extends SimpleApplication {
         //displayNormals(correctedMesh);
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, probePathSet, meshInfo);
+        probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
     }
     
     private Material makeColorMaterial(ColorRGBA color){
@@ -463,6 +466,8 @@ public class Main extends SimpleApplication {
         if(lineMoveAction.hasNewLine()){
             displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
         }
+        
+        probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
     }
 
     @Override
@@ -554,11 +559,11 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
         
-        inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        //inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
         inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
         
-        inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
+        //inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
         
         //inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
