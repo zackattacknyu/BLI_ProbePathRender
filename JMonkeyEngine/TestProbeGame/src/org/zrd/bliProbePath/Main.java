@@ -8,12 +8,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
@@ -24,7 +21,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -36,11 +32,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
-import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
@@ -52,6 +46,7 @@ import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
+import org.zrd.probeTrackingOnSurface.ResetTracker;
 
 
 /**
@@ -300,6 +295,7 @@ public class Main extends SimpleApplication {
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
+        ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
     }
     
     private Material makeColorMaterial(ColorRGBA color){
@@ -567,8 +563,6 @@ public class Main extends SimpleApplication {
     private void initKeyboardInputs() {
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
-        inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
-        
         inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
 
@@ -587,17 +581,12 @@ public class Main extends SimpleApplication {
                     rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
                     rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
-                
-                if(name.equals("resetProbe") && keyPressed){
-                    probeTracker.resetProbe();
-                }
             }
 
             
         };
 
         inputManager.addListener(acl,
-                "resetProbe",
                 "rawXYdisplay",
                 "rawYawPitchRollDisplay");
 
