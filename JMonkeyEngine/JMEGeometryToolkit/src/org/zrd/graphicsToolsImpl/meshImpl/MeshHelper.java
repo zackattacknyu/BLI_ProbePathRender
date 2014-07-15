@@ -12,6 +12,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
@@ -88,6 +89,22 @@ public class MeshHelper {
         Spatial sampleMesh = assetManager.loadModel(objFileLocation);
         sampleMesh.setMaterial(ballMat);
         return sampleMesh;
+    }
+
+    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Spatial surface, Matrix4f transform) {
+        if (surface instanceof Node) {
+            Node surfaceNode = (Node) surface;
+            for (Spatial child : surfaceNode.getChildren()) {
+                meshInfo = addToTriangleSet(meshInfo, child, transform);
+            }
+        } else if (surface instanceof Geometry) {
+            meshInfo = addToTriangleSet(meshInfo, (Geometry) surface, transform);
+        }
+        return meshInfo;
+    }
+
+    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Geometry surfaceGeom, Matrix4f transform) {
+        return MeshHelper.addMeshToTriangleSet(surfaceGeom.getMesh(), transform, meshInfo);
     }
     
 }

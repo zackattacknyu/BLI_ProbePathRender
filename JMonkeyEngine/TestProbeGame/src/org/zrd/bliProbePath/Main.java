@@ -24,6 +24,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.bliProbePath.renderedObjects.LolaMesh;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -129,6 +130,8 @@ public class Main extends SimpleApplication {
             cameraTracker.setDefaultCamera((short)1);
         }
         
+        LolaMesh lolaMesh = new LolaMesh(assetManager);
+        
         
         //String objFileLocation = "Models/lola_mesh.obj";
         //String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
@@ -153,7 +156,7 @@ public class Main extends SimpleApplication {
         if(sphereOn){
             surface = MeshHelper.generateModel(sphereLocation, lolaMaterial, assetManager);
         }else{
-            surface = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
+            //surface = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         }
         
         
@@ -181,9 +184,9 @@ public class Main extends SimpleApplication {
             sphereTransform = new Matrix4f();
             sphereTransform.setScale(20f, 20f, 20f);
         }else{
-            surface.setLocalRotation(surfaceRotation);
-            surface.scale(surfaceScale);
-            surface.move(surfaceLoc);
+            //surface.setLocalRotation(surfaceRotation);
+            //surface.scale(surfaceScale);
+            //surface.move(surfaceLoc);
         }
         
         
@@ -215,17 +218,11 @@ public class Main extends SimpleApplication {
         if(sphereOn){
             obtainSphereTriangleData();
         }else{
-            obtainSurfaceTriangleData();
+            //obtainSurfaceTriangleData();
         }
         
-        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(meshInfo);
-        TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
-        correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
-        System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surface = MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
-        meshInfo = correctedMesh;
-        
-        ModelVerification.performModelVerification(correctedMesh);
+        meshInfo = lolaMesh.getLolaMeshInfo();
+        surface = lolaMesh.getSurfaceMesh();
         
         
         initKeyboardInputs();
@@ -250,28 +247,10 @@ public class Main extends SimpleApplication {
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
     }
     
-    
-    
-    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Spatial surface, Matrix4f transform){
-        if(surface instanceof Node){
-            Node surfaceNode = (Node)surface;
-            for(Spatial child: surfaceNode.getChildren()){
-                meshInfo = addToTriangleSet(meshInfo,child,transform);
-            }
-        }else if(surface instanceof Geometry){
-            meshInfo = addToTriangleSet(meshInfo,(Geometry)surface,transform);
-        }
-        return meshInfo;
-    }
-    
-    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Geometry surfaceGeom, Matrix4f transform){
-        return MeshHelper.addMeshToTriangleSet(surfaceGeom.getMesh(),transform,meshInfo);
-    }
-    
     private void obtainTriangleData(Matrix4f transform){
         meshInfo = new TriangleSet();
         meshInfo.setTransform(transform);
-        meshInfo = addToTriangleSet(meshInfo,surface,transform);
+        meshInfo = MeshHelper.addToTriangleSet(meshInfo,surface,transform);
     }
     
     private void obtainSurfaceTriangleData(){
