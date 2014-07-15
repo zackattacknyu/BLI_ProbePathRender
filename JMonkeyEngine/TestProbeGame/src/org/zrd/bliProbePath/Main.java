@@ -51,6 +51,7 @@ import org.zrd.pathInteractions.PathImport;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
+import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 
 
 /**
@@ -101,6 +102,7 @@ public class Main extends SimpleApplication {
     private LineMoveAction lineMoveAction;
     private ProbeMoveAction probeMoveAction;
     private PathImport pathImport;
+    private ProbeTrackerRecording probeRecording;
     
     public static void main(String[] args) {
         
@@ -297,6 +299,7 @@ public class Main extends SimpleApplication {
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
+        probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
     }
     
     private Material makeColorMaterial(ColorRGBA color){
@@ -470,9 +473,10 @@ public class Main extends SimpleApplication {
         
         probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
         
-        if(pathImport.isNewPathExists()){
+        if(pathImport.isNewPathExists() || probeRecording.isNewPathExists()){
             displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
         }
+        
     }
 
     @Override
@@ -562,8 +566,6 @@ public class Main extends SimpleApplication {
 
     private void initKeyboardInputs() {
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-
-        inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
         
@@ -588,7 +590,7 @@ public class Main extends SimpleApplication {
                     rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
 
-                if(name.equals("startStopNewPath") && keyPressed){
+                /*if(name.equals("startStopNewPath") && keyPressed){
                      
                      probeTracker.startStopRecording();
                      recordingText.setText(probeTracker.getRecordingText());
@@ -597,7 +599,7 @@ public class Main extends SimpleApplication {
                          displayCurrentPath();
                      }
                      
-                 }
+                 }*/
                 
                 if(name.equals("resetProbe") && keyPressed){
                     probeTracker.resetProbe();
@@ -608,7 +610,6 @@ public class Main extends SimpleApplication {
         };
 
         inputManager.addListener(acl,
-                "startStopNewPath",
                 "resetProbe",
                 "rawXYdisplay",
                 "rawYawPitchRollDisplay");
