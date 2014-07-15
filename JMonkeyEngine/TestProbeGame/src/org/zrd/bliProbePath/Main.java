@@ -12,6 +12,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -24,7 +25,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
-import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
@@ -54,23 +54,16 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     
-    private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
+    private final boolean wireframeOn=false;
     
     private ProbeTracker probeTracker;
     
     private CameraTracker cameraTracker;
-    
-    //private Spatial lastLine;
-    
-    private Properties trackerProps;
-    private boolean lightVisible;
+
     private Node shootables,probeRep;
     private File initialImportDirectory;
     private RecordedPathSet recordedPathSet;
-    
-    private Quaternion surfaceRotation;
-    private float surfaceScale;
-    private Vector3f surfaceLoc;
+
     private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
     
@@ -143,11 +136,9 @@ public class Main extends SimpleApplication {
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
         
-        trackerProps = Properties_BLIProbePath.getProperties();
-        
         lolaMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
-        if(lolaWireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
+        if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
         
         backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
@@ -158,14 +149,11 @@ public class Main extends SimpleApplication {
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
         redLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
         orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-        
-        Material lightedSphere = backgroundBoxMaterial.clone();
-        if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
+
         if(sphereOn){
-            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.generateModel(sphereLocation, lightedSphere, assetManager);
+            surface = MeshHelper.generateModel(sphereLocation, lolaMaterial, assetManager);
         }else{
-            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.generateModel(
-                objFileLocation, lolaMaterial, assetManager);
+            surface = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         }
         
         
@@ -174,9 +162,9 @@ public class Main extends SimpleApplication {
         Quaternion pitch = new Quaternion();
         pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
         
-        surfaceRotation = yaw.mult(pitch);
-        surfaceScale = 80f;
-        surfaceLoc = new Vector3f(0,22,-53);
+        Quaternion surfaceRotation = yaw.mult(pitch);
+        float surfaceScale = 80f;
+        Vector3f surfaceLoc = new Vector3f(0,22,-53);
         
         Matrix4f surfaceRot = new Matrix4f();
         Matrix4f scaleMat = new Matrix4f();
@@ -234,11 +222,7 @@ public class Main extends SimpleApplication {
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        if(sphereOn){
-            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, lightedSphere);
-        }else{
-            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
-        }
+        surface = MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
         meshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
@@ -266,31 +250,7 @@ public class Main extends SimpleApplication {
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
     }
     
-    /*
-     * This displays each of the normals for all the triangles.
-     * It is meant to be used to visually verify that all the normals
-     *      point outside the surface
-     */
-    private void displayNormals(TriangleSet triangles){
-        Node normals = new Node();
-        Vector3f startPt;
-        Vector3f endPt;
-        float scaleFactor = 5.0f;
-        Spatial currentNormal;
-        ArrayList<Vector3f> currentNormalVerts;
-        
-        for(MeshTriangle tri: triangles.getTriangleList()){
-            startPt = tri.getCenter();
-            endPt = startPt.add(tri.getNormal().mult(scaleFactor));
-            currentNormalVerts = new ArrayList<Vector3f>(2);
-            currentNormalVerts.add(startPt); 
-            currentNormalVerts.add(endPt);
-            currentNormal = PathRenderHelper.createLineFromVertices(currentNormalVerts, lineMaterial);
-            normals.attachChild(currentNormal);
-        }
-        
-        rootNode.attachChild(normals);
-    }
+    
     
     public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Spatial surface, Matrix4f transform){
         if(surface instanceof Node){
@@ -335,20 +295,9 @@ public class Main extends SimpleApplication {
         return sampleBox;
     }
     
-    private Spatial initBox(Material boxMat){
-        Box b = new Box(0.1f, 0.1f, 0.1f);
-        Spatial sampleBox = new Geometry("Box", b);
-        sampleBox.setName("locationBox");
-        sampleBox.setLocalScale(1);
-        sampleBox.setMaterial(boxMat);
-        return sampleBox;
-    }
     
-    private void addBoxAtPoint(Vector3f point){
-        Spatial currentBox = initBox(redLineMaterial);
-        currentBox.setLocalTranslation(point);
-        rootNode.attachChild(currentBox);
-    }
+    
+    
     
     private Spatial initXLine(Material ballMat){
         ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
