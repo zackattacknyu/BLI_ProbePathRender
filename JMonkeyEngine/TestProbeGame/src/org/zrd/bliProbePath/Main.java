@@ -56,7 +56,7 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
 public class Main extends SimpleApplication {
     
     private Spatial background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
-    private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
+    private Material lolaMaterial,backgroundBoxMaterial,probeMat,lineMaterial,xMat,yMat,zMat;
     private Material redLineMaterial,orangeLineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
@@ -152,12 +152,12 @@ public class Main extends SimpleApplication {
         
         trackerProps = Properties_BLIProbePath.getProperties();
         
-        ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
-        if(lolaWireframeOn) ballMat.getAdditionalRenderState().setWireframe(true);
+        lolaMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
+        if(lolaWireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
         
-        boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        boxMat.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
+        backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
         
         xMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
         yMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
@@ -166,13 +166,13 @@ public class Main extends SimpleApplication {
         redLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
         orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
         
-        Material lightedSphere = boxMat.clone();
+        Material lightedSphere = backgroundBoxMaterial.clone();
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
         if(sphereOn){
             surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.generateModel(sphereLocation, lightedSphere, assetManager);
         }else{
             surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.generateModel(
-                objFileLocation, ballMat, assetManager);
+                objFileLocation, lolaMaterial, assetManager);
         }
         
         
@@ -225,21 +225,7 @@ public class Main extends SimpleApplication {
                 "Common/MatDefs/Misc/Unshaded.j3md");
         probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
         
-        
-        
-        /* This is a code block to illustrate
-         *      lines with varying color
-        probeMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
-        probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/table_texture.jpg"));
-        addLineLights();
-        */
-        
-        //littleObject = initLittleBox(probeMat);
-        //rootNode.attachChild(littleObject);
-        //littleObject = surface;
-        //rootNode.attachChild(initLittleBox(probeMat));
-        
-        background = initBackgroundBox(boxMat, "background");
+        background = initBackgroundBox(backgroundBoxMaterial, "background");
         
         if(!sphereOn && !displayRawDataMode){
             rootNode.attachChild(background);
@@ -258,11 +244,9 @@ public class Main extends SimpleApplication {
         if(sphereOn){
             surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, lightedSphere);
         }else{
-            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, ballMat);
+            surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
         }
         meshInfo = correctedMesh;
-        //Spatial testSurface = ObjectHelper.createMeshFromTriangles(meshInfo, ballMat);
-        //rootNode.attachChild(testSurface);
         
         ModelVerification.performModelVerification(correctedMesh);
         
@@ -462,37 +446,6 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(path);
     }
     
-    private void displayAxisLines() {
-        xAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentXAxis(),xMat);
-        yAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentYAxis(),yMat);
-        zAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentNormal(),zMat);
-    }
-    
-    private CollisionResults getCollisionResults(){
-        Vector2f click2d = inputManager.getCursorPosition();
-        System.out.println("Mouse Point:" + click2d);
-
-        CollisionResults results = new CollisionResults();
-        Vector3f click3d = cam.getWorldCoordinates(
-            new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = cam.getWorldCoordinates(
-            new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-        Ray ray = new Ray(click3d, dir);
-        shootables.collideWith(ray, results);
-        return results;
-    }
-    
-    private void addLineForNormal(CollisionPoint point){
-        rootNode.attachChild(makeLineForVector(point.getContactPoint(),point.getNormal(),lineMaterial));
-    }
-    
-    private Spatial makeLineForVector(Vector3f contactPoint, Vector3f vector,Material mat){
-        ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
-        vertices.add(contactPoint.clone().add(vector.mult(-0.2f)));
-        vertices.add(contactPoint.clone().add(vector.mult(3)));
-        return PathRenderHelper.createLineFromVertices(vertices, mat);
-    }
-
     private void initKeyboardInputs() {
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         
