@@ -82,7 +82,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = false;
+    private boolean sphereOn = true;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
@@ -129,6 +129,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
+        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
+        
         initialImportDirectory = Paths.get("textFiles").toFile();
         
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
@@ -146,20 +148,12 @@ public class Main extends SimpleApplication {
         String objFileLocation = "Models/lola_mesh_simplePatch2_simplified.obj";
         String sphereLocation = "Models/sphere2.obj";
         //String sphereLocation = "Models/simpleCube.obj";
-        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
-        trackerProps = Properties_BLIProbePath.getProperties();
-        lightVisible = Boolean.parseBoolean(
-                trackerProps.getProperty("lighting.visible"));
         
-        if(lightVisible){
-            ballMat = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
-            ballMat.setTexture("DiffuseMap",assetManager.loadTexture("Textures/lola_texture.png"));
-        }else{
-            //ballMat = new Material(assetManager,"Common/MatDefs/Misc/ShowNormals.j3md");
-            ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-            ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
-            if(lolaWireframeOn) ballMat.getAdditionalRenderState().setWireframe(true);
-        }
+        trackerProps = Properties_BLIProbePath.getProperties();
+        
+        ballMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        ballMat.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
+        if(lolaWireframeOn) ballMat.getAdditionalRenderState().setWireframe(true);
         
         boxMat = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         boxMat.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
@@ -171,7 +165,7 @@ public class Main extends SimpleApplication {
         redLineMaterial = makeColorMaterial(ColorRGBA.Red);
         orangeLineMaterial = makeColorMaterial(ColorRGBA.Orange);
         
-        Material lightedSphere = new Material(assetManager,"Common/MatDefs/Light/Lighting.j3md");
+        Material lightedSphere = boxMat.clone();
         if(sphereWireframeOn) lightedSphere.getAdditionalRenderState().setWireframe(true);
         if(sphereOn){
             surface = org.zrd.graphicsToolsImpl.meshImpl.MeshHelper.generateModel(sphereLocation, lightedSphere, assetManager);
@@ -251,7 +245,6 @@ public class Main extends SimpleApplication {
         }
         
         if(sphereOn){
-            addSphereLights();
             obtainSphereTriangleData();
         }else{
             obtainSurfaceTriangleData();
@@ -355,47 +348,6 @@ public class Main extends SimpleApplication {
     private void obtainSphereTriangleData(){
         obtainTriangleData(sphereTransform);
         
-    }
-    
-    
-    
-    private void addLineLights(){
-        PointLight ballLight = new PointLight();
-        ballLight.setColor(ColorRGBA.Blue);
-        ballLight.setRadius(100f);
-        ballLight.setPosition(new Vector3f(-4f,-2.7f,-14f));
-        
-        PointLight probeLight = new PointLight();
-        probeLight.setColor(ColorRGBA.Red);
-        probeLight.setRadius(50f);
-        probeLight.setPosition(new Vector3f(-0.4f,-2f,-15f));
-        
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.Green.mult(2.0f));
-        
-        rootNode.addLight(al);
-        
-        rootNode.addLight(ballLight);
-        rootNode.addLight(probeLight);
-    }
-    private void addSphereLights(){
-        PointLight ballLight = new PointLight();
-        ballLight.setColor(ColorRGBA.Blue);
-        ballLight.setRadius(100f);
-        ballLight.setPosition(probeRep.getLocalTranslation());
-        
-        PointLight probeLight = new PointLight();
-        probeLight.setColor(ColorRGBA.Red);
-        probeLight.setRadius(50f);
-        probeLight.setPosition(new Vector3f(-0.4f,-1f,-15.5f));
-        
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.Green.mult(2.0f));
-        
-        rootNode.addLight(al);
-        
-        rootNode.addLight(ballLight);
-        rootNode.addLight(probeLight);
     }
     
     private Spatial initBackgroundBox(Material ballMat, String name){
