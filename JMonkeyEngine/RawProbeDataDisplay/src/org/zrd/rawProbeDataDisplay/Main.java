@@ -1,18 +1,14 @@
 package org.zrd.rawProbeDataDisplay;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
-import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
+import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
 
 /**
  * test
@@ -53,12 +49,11 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
-        initialImportDirectory = Paths.get("textFiles").toFile();
+        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         
-        CameraTrackerImpl cameraTracker = 
-                new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
-        
-        RawXYDataImport rawXYimport = new RawXYDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
+        new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
+        new RawXYDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
+        new RawYawPitchRollDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
     }
 
     @Override

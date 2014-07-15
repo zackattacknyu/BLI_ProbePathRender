@@ -107,7 +107,7 @@ public class Main extends SimpleApplication {
         
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
         
-        initialImportDirectory = Paths.get("textFiles").toFile();
+        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
         if(displayRawDataMode){
