@@ -571,9 +571,7 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
-        
-   
-        
+
         ActionListener acl = new ActionListener() {
 
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -589,17 +587,6 @@ public class Main extends SimpleApplication {
                     rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
                     rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
-
-                /*if(name.equals("startStopNewPath") && keyPressed){
-                     
-                     probeTracker.startStopRecording();
-                     recordingText.setText(probeTracker.getRecordingText());
-                     if(probeTracker.isNewPathExists()){
-                         probePathSet.addPath(probeTracker.getCurrentPathVertices());
-                         displayCurrentPath();
-                     }
-                     
-                 }*/
                 
                 if(name.equals("resetProbe") && keyPressed){
                     probeTracker.resetProbe();
