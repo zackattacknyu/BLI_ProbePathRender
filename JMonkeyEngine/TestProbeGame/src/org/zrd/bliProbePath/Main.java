@@ -7,6 +7,7 @@ import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -22,6 +23,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -39,12 +41,12 @@ import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
-import org.zrd.graphicsTools.geometry.path.ProbePath;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
 import org.zrd.probeTracking.ProbeTracker;
+import org.zrd.probeTrackingOnSurface.LineMoveAction;
 
 
 /**
@@ -96,6 +98,8 @@ public class Main extends SimpleApplication {
     
     //to be used if we are only testing using recorded paths
     private boolean showProbeRepLines = false;
+    
+    private LineMoveAction lineMoveAction;
     
     public static void main(String[] args) {
         
@@ -288,7 +292,7 @@ public class Main extends SimpleApplication {
         
         //displayNormals(correctedMesh);
         
-        
+        lineMoveAction = new LineMoveAction(inputManager, cam, shootables, probePathSet, meshInfo);
     }
     
     private Material makeColorMaterial(ColorRGBA color){
@@ -455,6 +459,10 @@ public class Main extends SimpleApplication {
         
         xyzText.setText(probeTracker.getXYZtext());
         yawPitchRollText.setText(probeTracker.getYawPitchRollText());
+        
+        if(lineMoveAction.hasNewLine()){
+            displayCurrentPath();
+        }
     }
 
     @Override
@@ -552,7 +560,7 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
         
-        inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
+        //inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
         inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
         
