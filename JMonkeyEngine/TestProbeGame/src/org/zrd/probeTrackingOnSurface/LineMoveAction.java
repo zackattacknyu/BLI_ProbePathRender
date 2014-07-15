@@ -6,7 +6,6 @@ package org.zrd.probeTrackingOnSurface;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -17,9 +16,9 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
+import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
-import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
@@ -32,17 +31,17 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
     private boolean moveLineEnabled = false;
     private boolean onStartPoint = true;
     private Vector3f lastPointClicked;
-    private ProbePathSet probePathSet;
+    private RecordedPathSet recordedPathSet;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
     private ArrayList<Vector3f> currentPath;
     
     private boolean newLineConstructed = false;
     
-    public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, ProbePathSet probePathSet, TriangleSet meshInfo){
+    public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
         super(inputManager,"lineMoveAction",KeyInput.KEY_L);
         new PickPointOnMesh(inputManager,cam,this,shootableMesh);
-        this.probePathSet = probePathSet;
+        this.recordedPathSet = recordedPathSet;
         this.meshInfo = meshInfo;
     }
     
@@ -63,7 +62,7 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
             if(onStartPoint){
 
                 Vector3f endPoint = pointOnMesh.clone();
-                currentPath = probePathSet.getCurrentPath().getVertices();
+                currentPath = recordedPathSet.getCurrentPath();
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;

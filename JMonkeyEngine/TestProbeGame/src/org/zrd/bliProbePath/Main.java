@@ -294,7 +294,7 @@ public class Main extends SimpleApplication {
         
         //displayNormals(correctedMesh);
         
-        lineMoveAction = new LineMoveAction(inputManager, cam, shootables, probePathSet, meshInfo);
+        lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
     }
@@ -567,8 +567,6 @@ public class Main extends SimpleApplication {
         
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
         
-        //inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
-        
         inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
         
@@ -589,12 +587,6 @@ public class Main extends SimpleApplication {
                     rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
                     rootNode.attachChild(probeData.generateReferenceObject(zMat));
                 }
-                
-                
-                /*if(name.equals("importLine") && keyPressed){
-                    boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
-                    if(chosen) displayCurrentPath();
-                }*/
 
                 if(name.equals("startStopNewPath") && keyPressed){
                      
