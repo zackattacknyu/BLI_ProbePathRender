@@ -26,6 +26,7 @@ import org.zrd.pathInteractions.PathImport;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
+import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
 
@@ -144,6 +145,7 @@ public class Main extends SimpleApplication {
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
+        ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
     }
 
     @Override

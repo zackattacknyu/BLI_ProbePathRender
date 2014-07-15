@@ -40,7 +40,6 @@ public class RotationCalibration {
      *      original path before the path is projected onto the plane
      */
     private Matrix4f aggregateTransform;
-    private Quaternion aggregateRotation;
     
     private Vector3f initTriangleNormal;
     private MeshTriangle startingTriangle;
@@ -65,6 +64,10 @@ public class RotationCalibration {
         Matrix4f initTransform = MeshTraverseHelper.getRotationOntoPlane(
                 initTriangleNormal, initPoint, initEndPoint);
         postMultiplyNewTransform(initTransform);
+    }
+    
+    public Quaternion getAggregateRotation(){
+        return aggregateTransform.toRotationQuat();
     }
     
     private void postMultiplyNewTransform(Matrix4f transform){

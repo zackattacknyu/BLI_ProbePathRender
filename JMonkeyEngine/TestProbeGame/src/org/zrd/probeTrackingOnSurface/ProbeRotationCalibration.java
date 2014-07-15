@@ -14,61 +14,57 @@ import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
-import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
-import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.probeTracking.ProbeTracker;
 
 /**
  *
  * @author BLI
  */
-public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshPointHandler{
+public class ProbeRotationCalibration extends GeneralKeyboardActionMethod implements MeshPointHandler{
 
-    private boolean moveLineEnabled = false;
+    private boolean calibrationEnabled = false;
     private boolean onStartPoint = true;
     private Vector3f lastPointClicked;
-    private RecordedPathSet recordedPathSet;
+    private ProbeTracker probeTracker;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
     private ArrayList<Vector3f> currentPath;
     
-    private boolean newLineConstructed = false;
-    
-    public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
-        super(inputManager,"lineMoveAction",KeyInput.KEY_L);
-        new PickPointOnMesh("pickPointForLineMove",inputManager,cam,this,shootableMesh);
-        this.recordedPathSet = recordedPathSet;
+    public ProbeRotationCalibration(InputManager inputManager, Camera cam, Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo){
+        super(inputManager,"calibrationAction",KeyInput.KEY_B);
+        new PickPointOnMesh("pickPointForRotCalibration",inputManager,cam,this,shootableMesh);
+        this.probeTracker = probeTracker;
         this.meshInfo = meshInfo;
     }
     
     @Override
     public void actionMethod() {
-        if(!moveLineEnabled){
-            System.out.println("Last Line will be moved to next 2 points clicked");
-            moveLineEnabled = true;
+        if(!calibrationEnabled){
+            System.out.println("Calibration enabled. Click on position of probe, then click again.");
+            calibrationEnabled = true;
         }else{
-            System.out.println("Line Moving Cancelled");
-            moveLineEnabled = false;
+            System.out.println("Calibration Cancelled");
+            calibrationEnabled = false;
         }
     }
 
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
-        if(moveLineEnabled){
+        if(calibrationEnabled){
                                 
             if(onStartPoint){
 
-                Vector3f endPoint = pointOnMesh.clone();
-                currentPath = recordedPathSet.getCurrentPath();
-                if(!endPoint.equals(lastPointClicked)){
+                Vector3f startPoint = pointOnMesh.clone();
+                if(!startPoint.equals(lastPointClicked)){
 
-                    lastPointClicked = endPoint;
+                    lastPointClicked = startPoint;
+                    probeTracker.setCurrentPosition(startPoint);
+                    probeTracker.startStopRecording();
                     startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
-                    currentPath = MeshTraverseHelper.movePathStartPoint(currentPath, endPoint);
                     onStartPoint = false;
                 }
 
@@ -78,15 +74,20 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
-                    currentPath = ScaleCalibration.scalePathForNewEndpoint(currentPath, endPoint);
+                    probeTracker.startStopRecording();
+                    currentPath = probeTracker.getCurrentPathVertices();
+                    ScaleCalibration currentScaleCalib = new ScaleCalibration(currentPath,endPoint);
+                    currentPath = currentScaleCalib.getScaledPath();
+                    probeTracker.rescaleCoordinates(currentScaleCalib.getUniformScaleFactor());
                     currentPath = PathCompression.getCompressedPath(currentPath,ProgramConstants.MIN_SEGMENT_LENGTH);
                     RotationCalibration newCalibration = 
                             new RotationCalibration(currentPath,endPoint,startingTriangle,meshInfo);
+                    probeTracker.setRotationCalibration(newCalibration.getAggregateRotation());
                     currentPath = newCalibration.getCurrentPathOnSurface();
+                    probeTracker.setCurrentPosition(currentPath.get(currentPath.size()-1));
                     
-                    moveLineEnabled = false;
+                    calibrationEnabled = false;
                     onStartPoint = true;
-                    newLineConstructed = true;
                 }
 
             }
@@ -95,17 +96,6 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
 
     public ArrayList<Vector3f> getCurrentPath() {
         return currentPath;
-    }
-    
-    
-    
-    public boolean hasNewLine(){
-        if(newLineConstructed){
-            newLineConstructed = false;
-            return true;
-        }else{
-            return false;
-        }        
     }
     
 }

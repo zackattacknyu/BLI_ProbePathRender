@@ -91,6 +91,7 @@ public class ProbeTracker implements ProbeDataStream{
         
     }
     
+    
     @Override
     public void updateData(){
         
@@ -127,6 +128,22 @@ public class ProbeTracker implements ProbeDataStream{
         
     }
     
+    /**
+     * This multiplies the given scale factor by the current ones
+     *      and uses the result as the operant scale factor
+     * @param scaleFactor 
+     */
+    public void rescaleCoordinates(float scaleFactor){
+        float scaleX = coordConverter.getScaleFactorX();
+        float scaleY = coordConverter.getScaleFactorY();
+        coordConverter.setScaleFactorX(scaleFactor*scaleX);
+        coordConverter.setScaleFactorY(scaleFactor*scaleY);
+    }
+    
+    public void setRotationCalibration(Quaternion rotation){
+        coordConverter.setRotationCalibrationMatrix(rotation.toRotationMatrix());
+    }
+    
     public Vector3f getCurrentNormal(){
         return coordConverter.getCurrentNormal();
     }
@@ -149,6 +166,10 @@ public class ProbeTracker implements ProbeDataStream{
         }
         
         
+    }
+    
+    public ArrayList<Vector3f> lastRecordedPathVertices(){
+        return currentRecordingPath.getVertices();
     }
 
     public String getRecordingText() {

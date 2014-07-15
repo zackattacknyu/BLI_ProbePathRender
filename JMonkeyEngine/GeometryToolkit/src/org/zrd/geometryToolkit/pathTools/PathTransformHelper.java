@@ -44,19 +44,4 @@ public class PathTransformHelper {
         System.out.println("Axis of Rotation is: " + rot.getAxis());
     }
     
-    public static ArrayList<Vector3f> scalePathForNewEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
-        Vector3f startPoint = inputPath.get(0);
-        Vector3f oldEndpoint = inputPath.get(inputPath.size()-1);
-        float currentLength = oldEndpoint.subtract(startPoint).length();
-        float desiredLength = newEndpoint.subtract(startPoint).length();
-        float scaleFactor = desiredLength/currentLength;
-        displayScaleFactor(scaleFactor);
-        Matrix4f transform = MeshTraverseHelper.getScaleAroundPoint(startPoint, scaleFactor);
-        return MeshTraverseHelper.getTransformedVertices(inputPath, transform);
-    }
-    
-    public static void displayScaleFactor(float scaleFactor){
-        System.out.println("Scale Factor was: " + scaleFactor);
-    }
-    
 }
