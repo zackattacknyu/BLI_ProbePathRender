@@ -25,7 +25,7 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, ProbeTracker probeTracker){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);
-        new PickPointOnMesh(inputManager,cam,this,shootableMesh);
+        new PickPointOnMesh("pickPointForProbeMove",inputManager,cam,this,shootableMesh);
         this.probeTracker = probeTracker;
     }
     

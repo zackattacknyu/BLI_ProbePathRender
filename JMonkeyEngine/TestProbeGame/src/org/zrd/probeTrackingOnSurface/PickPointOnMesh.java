@@ -27,7 +27,11 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
     private MeshPointHandler pointHandler;
     
     public PickPointOnMesh(InputManager inputManager, Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
-        super(inputManager,"pickPointOnMesh",MouseInput.BUTTON_LEFT);
+        this("pickPointOnMesh",inputManager,cam,pointHandler,shootableMesh);
+    }
+    
+    public PickPointOnMesh(String name, InputManager inputManager, Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
+        super(inputManager,name,MouseInput.BUTTON_LEFT);
         this.inputManager = inputManager;
         this.cam = cam;
         this.pointHandler = pointHandler;

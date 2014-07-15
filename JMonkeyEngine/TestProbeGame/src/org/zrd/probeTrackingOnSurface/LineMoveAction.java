@@ -40,7 +40,7 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
     
     public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
         super(inputManager,"lineMoveAction",KeyInput.KEY_L);
-        new PickPointOnMesh(inputManager,cam,this,shootableMesh);
+        new PickPointOnMesh("pickPointForLineMove",inputManager,cam,this,shootableMesh);
         this.recordedPathSet = recordedPathSet;
         this.meshInfo = meshInfo;
     }
