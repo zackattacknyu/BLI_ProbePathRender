@@ -21,11 +21,8 @@ import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
  *
  * @author Zach
  */
-public class SphereMesh {
-    
-    private Spatial surfaceMesh;
-    private TriangleSet sphereMeshInfo;
-    
+public class SphereMesh extends RenderedMesh{
+
     public SphereMesh(AssetManager assetManager){
         
         String sphereLocation = "Models/sphere2.obj";
@@ -43,17 +40,9 @@ public class SphereMesh {
 
         surfaceMesh.scale(surfaceScale);
         
-        sphereMeshInfo = new TriangleSet();
-        sphereMeshInfo.setTransform(sphereTransform);
-        sphereMeshInfo = MeshHelper.addToTriangleSet(sphereMeshInfo,surfaceMesh,sphereTransform);
-    }
-
-    public Spatial getSurfaceMesh() {
-        return surfaceMesh;
-    }
-
-    public TriangleSet getActiveMeshInfo() {
-        return sphereMeshInfo;
+        activeMeshInfo = new TriangleSet();
+        activeMeshInfo.setTransform(sphereTransform);
+        activeMeshInfo = MeshHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,sphereTransform);
     }
     
     

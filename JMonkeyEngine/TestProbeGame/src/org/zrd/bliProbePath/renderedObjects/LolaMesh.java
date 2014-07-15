@@ -10,7 +10,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
@@ -21,11 +20,8 @@ import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
  *
  * @author Zach
  */
-public class LolaMesh {
-    
-    private Spatial surfaceMesh;
-    private TriangleSet lolaMeshInfo;
-    
+public class LolaMesh extends RenderedMesh{
+
     public LolaMesh(AssetManager assetManager){
         
         //String objFileLocation = "Models/lola_mesh.obj";
@@ -60,26 +56,18 @@ public class LolaMesh {
         surfaceMesh.scale(surfaceScale);
         surfaceMesh.move(surfaceLoc);
         
-        lolaMeshInfo = new TriangleSet();
-        lolaMeshInfo.setTransform(surfaceTransform);
-        lolaMeshInfo = MeshHelper.addToTriangleSet(lolaMeshInfo,surfaceMesh,surfaceTransform);
+        activeMeshInfo = new TriangleSet();
+        activeMeshInfo.setTransform(surfaceTransform);
+        activeMeshInfo = MeshHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,surfaceTransform);
         
-        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(lolaMeshInfo);
+        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(activeMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         surfaceMesh = MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
-        lolaMeshInfo = correctedMesh;
+        activeMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
-    }
-
-    public Spatial getSurfaceMesh() {
-        return surfaceMesh;
-    }
-
-    public TriangleSet getActiveMeshInfo() {
-        return lolaMeshInfo;
     }
     
     

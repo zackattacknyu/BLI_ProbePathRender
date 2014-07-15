@@ -20,6 +20,8 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.bliProbePath.renderedObjects.LolaMesh;
+import org.zrd.bliProbePath.renderedObjects.RenderedMesh;
 import org.zrd.bliProbePath.renderedObjects.SphereMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
@@ -119,8 +121,12 @@ public class Main extends SimpleApplication {
             cameraTracker.setDefaultCamera((short)1);
         }
         
-        //LolaMesh activeMesh = new LolaMesh(assetManager);
-        SphereMesh activeMesh = new SphereMesh(assetManager);
+        RenderedMesh activeMesh;
+        if(sphereOn){
+            activeMesh = new SphereMesh(assetManager);
+        }else{
+            activeMesh = new LolaMesh(assetManager);
+        }
         
         backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
