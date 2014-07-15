@@ -1,24 +1,17 @@
 package org.zrd.bliProbePath;
 
-import org.zrd.utilImpl.general.CollisionPoint;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetManager;
-import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -83,7 +76,7 @@ public class Main extends SimpleApplication {
     
     //this is if we are using the sphere for testing 
     //      instead of lola
-    private boolean sphereOn = true;
+    private boolean sphereOn = false;
     
     //if we want to display the raw data instead of 
     //      the sphere or lola mesh. This overrides
@@ -299,24 +292,26 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(normals);
     }
     
+    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Spatial surface, Matrix4f transform){
+        if(surface instanceof Node){
+            Node surfaceNode = (Node)surface;
+            for(Spatial child: surfaceNode.getChildren()){
+                meshInfo = addToTriangleSet(meshInfo,child,transform);
+            }
+        }else if(surface instanceof Geometry){
+            meshInfo = addToTriangleSet(meshInfo,(Geometry)surface,transform);
+        }
+        return meshInfo;
+    }
+    
+    public static TriangleSet addToTriangleSet(TriangleSet meshInfo, Geometry surfaceGeom, Matrix4f transform){
+        return MeshHelper.addMeshToTriangleSet(surfaceGeom.getMesh(),transform,meshInfo);
+    }
+    
     private void obtainTriangleData(Matrix4f transform){
         meshInfo = new TriangleSet();
         meshInfo.setTransform(transform);
-        if(surface instanceof Node){
-            System.out.println("**NOTE: Node Triangle Data generated**");
-            Node surfaceNode = (Node)surface;
-            for(Spatial child: surfaceNode.getChildren()){
-                Geometry surfaceGeom = (Geometry)child;
-                meshInfo = MeshHelper.addMeshToTriangleSet(
-                        surfaceGeom.getMesh(),transform,meshInfo);
-            }
-        }else if(surface instanceof Geometry){
-            System.out.println("**NOTE: Geometry Triangle Data generated**");
-            Geometry surfaceGeom = (Geometry)surface;
-            meshInfo = MeshHelper.addMeshToTriangleSet(
-                    surfaceGeom.getMesh(),transform,meshInfo);
-            meshInfo.setBoundaryTriangles();
-        }
+        meshInfo = addToTriangleSet(meshInfo,surface,transform);
     }
     
     private void obtainSurfaceTriangleData(){
