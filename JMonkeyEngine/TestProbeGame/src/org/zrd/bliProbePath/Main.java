@@ -56,12 +56,11 @@ import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial littleObject,background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
+    private Spatial background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
     private Material ballMat,boxMat,probeMat,lineMaterial,xMat,yMat,zMat;
     private Material redLineMaterial,orangeLineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
-    private boolean onStartPoint = true;
     
     private final boolean sphereWireframeOn=false, lolaWireframeOn=false;
     
@@ -73,9 +72,6 @@ public class Main extends SimpleApplication {
     
     private Properties trackerProps;
     private boolean lightVisible;
-    private boolean moveProbe = false;
-    private boolean moveableObjectIsProbe = true;
-    private boolean moveLine = false;
     private Node shootables,probeRep;
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
@@ -85,8 +81,6 @@ public class Main extends SimpleApplication {
     private Vector3f surfaceLoc;
     private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
-    private Vector3f lastPointClicked;
-    private MeshTriangle startingTriangle;
     
     //this is if we are using the sphere for testing 
     //      instead of lola
@@ -549,23 +543,13 @@ public class Main extends SimpleApplication {
     }
 
     private void initKeyboardInputs() {
-        //ChaseCamera chaser = new ChaseCamera(cam, littleObject);
-        //chaser.registerWithInput(inputManager);
-        
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        
-        
+
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
-        
-        //inputManager.addMapping("pickControlPoint", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
         inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
-        
-        //inputManager.addMapping("changeProbeMoveMode", new KeyTrigger(KeyInput.KEY_J));
-        
-        //inputManager.addMapping("changeLineMoveMode", new KeyTrigger(KeyInput.KEY_L));
         
         inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
         
@@ -595,108 +579,7 @@ public class Main extends SimpleApplication {
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
                     if(chosen) displayCurrentPath();
                 }
-                
-                if(name.equals("changeMoveableObject") && keyPressed){
-                    moveableObjectIsProbe = !moveableObjectIsProbe;
-                    if(moveableObjectIsProbe){
-                        moveableObject = probeRep;
-                    }else{
-                        //moveableObject = currentLineNode;
-                        //moveableObject = currentLine;
-                    }
-                }
-                
-                if(name.equals("changeProbeMoveMode") && keyPressed){
-                    moveProbe = !moveProbe;
-                    if(moveProbe){
-                        probeMoveModeText.setText("Press J to Disable Clicking Probe Movement");
-                    }else{
-                        probeMoveModeText.setText("Press J to Enable Clicking Probe Movement");
-                    }
-                }
-                
-                
-                
-                if(name.equals("pickControlPoint")){
-                    
-                    if(moveLine || moveProbe){
-                        CollisionResults results = getCollisionResults();
-                        if(results.size() > 0){
-                            CollisionPoint point = new CollisionPoint(results.getClosestCollision());
-                            System.out.println("Contact Point:" + point.getContactPoint());
-                            System.out.println("Contact Triangle: " + point.getTriangleInfo());
-                            System.out.println("Contact Normal: " + point.getNormal());
-                            //meshInfo.displayEdgeNeighbors(point.getTriangle());
-                            //meshInfo.displayVertexNeighbors(point.getTriangle());
 
-                            if(moveLine){
-                                
-                                if(onStartPoint){
-                                    
-                                    Vector3f endPoint = point.getContactPoint().clone();
-                                    if(!endPoint.equals(lastPointClicked)){
-                                        
-                                        addBoxAtPoint(endPoint);
-                                        
-                                        lastPointClicked = endPoint;
-                                        System.out.println("---------------Above here is line start data------------");
-                                        ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                                        startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(point.getTriangle(), meshInfo.getTransform());
-                                        Vector3f startPoint = oldPath.get(0);
-                                        Vector3f moveVector = endPoint.subtract(startPoint);
-                                        Matrix4f moveTransform = new Matrix4f();
-                                        moveTransform.setTranslation(moveVector);
-                                        ArrayList<Vector3f> newPath = MeshTraverseHelper.getTransformedVertices(oldPath, moveTransform);
-                                        probePathSet.addPath(newPath);
-                                        displayCurrentPath();
-                                        onStartPoint = false;
-                                    }
-
-                                }else{
-                                    
-                                    Vector3f endPoint = point.getContactPoint().clone();
-                                    if(!endPoint.equals(lastPointClicked)){
-                                        
-                                        addBoxAtPoint(endPoint);
-                                        
-                                        lastPointClicked = endPoint;
-                                        probePathSet.scaleCurrentPathEndpoint(endPoint);
-                                        probePathSet.compressCurrentPath();
-                                        
-                                        RotationCalibration newCalibration = new RotationCalibration(
-                                            probePathSet.getCurrentPath().getVertices(),
-                                            endPoint,startingTriangle,meshInfo);
-
-                                        probePathSet.addPath(newCalibration.getCurrentPathOnSurface(), redLineMaterial);
-                                        displayCurrentPath();
-                                        
-                                        moveLine = false;
-                                        onStartPoint = true;
-                                    }
-                                    
-                                }
-                                
-                                
-                            }else if(moveProbe){
-                                addLineForNormal(point);
-                                probeTracker.setCurrentPosition(point.getContactPoint());
-                                displayAxisLines();
-                            }
-                        }
-                    }
-                }
-                
-                if(name.equals("changeLineMoveMode") && keyPressed){
-                    if(!moveLine){
-                        System.out.println("Last Line will be moved "
-                            + "to next 2 points clicked");
-                        moveLine = true;
-                    }else{
-                        System.out.println("Line Moving Cancelled");
-                        moveLine = false;
-                    }
-                }
-                
                 if(name.equals("startStopNewPath") && keyPressed){
                      
                      probeTracker.startStopRecording();
@@ -717,12 +600,8 @@ public class Main extends SimpleApplication {
         };
 
         inputManager.addListener(acl,
-                "pickControlPoint",
                 "startStopNewPath",
                 "resetProbe",
-                "changeProbeMoveMode",
-                "changeMoveableObject",
-                "changeLineMoveMode",
                 "importLine",
                 "rawXYdisplay",
                 "rawYawPitchRollDisplay");
