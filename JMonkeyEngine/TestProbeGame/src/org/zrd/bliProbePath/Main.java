@@ -9,16 +9,12 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.renderedObjects.BackgroundBox;
 import org.zrd.bliProbePath.renderedObjects.LolaMesh;
@@ -166,14 +162,6 @@ public class Main extends SimpleApplication {
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
     @Override
     public void simpleUpdate(float tpf) {
