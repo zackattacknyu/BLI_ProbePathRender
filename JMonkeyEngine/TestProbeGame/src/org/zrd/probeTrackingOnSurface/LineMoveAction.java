@@ -32,6 +32,7 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
     private ProbePathSet probePathSet;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
+    private ArrayList<Vector3f> currentPath;
     
     private boolean newLineConstructed = false;
     
@@ -62,15 +63,9 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
-                    System.out.println("---------------Above here is line start data------------");
-                    ArrayList<Vector3f> oldPath = probePathSet.getCurrentPath().getVertices();
-                    startingTriangle = MeshHelper.convertInputToTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
-                    Vector3f startPoint = oldPath.get(0);
-                    Vector3f moveVector = endPoint.subtract(startPoint);
-                    Matrix4f moveTransform = new Matrix4f();
-                    moveTransform.setTranslation(moveVector);
-                    ArrayList<Vector3f> newPath = MeshTraverseHelper.getTransformedVertices(oldPath, moveTransform);
-                    probePathSet.addPath(newPath);
+                    startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    probePathSet.addPath(MeshTraverseHelper.movePathStartPoint(
+                            probePathSet.getCurrentPath().getVertices(), endPoint));
                     onStartPoint = false;
                 }
 

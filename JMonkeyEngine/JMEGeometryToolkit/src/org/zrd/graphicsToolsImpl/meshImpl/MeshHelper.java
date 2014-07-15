@@ -34,7 +34,7 @@ public class MeshHelper {
         for(int index = 0; index < mesh.getTriangleCount(); index++){
             currentTri = new Triangle();
             mesh.getTriangle(index, currentTri);
-            newTri = convertInputToTriangleToMeshTriangle(currentTri,meshTransform);
+            newTri = convertInputTriangleToMeshTriangle(currentTri,meshTransform);
             newTri.setTextureCoords(meshData.getTriangleTextCoords(index));
             inputSet.addTriangle(newTri);
 
@@ -42,7 +42,7 @@ public class MeshHelper {
         return inputSet;
     }
     
-    public static MeshTriangle convertInputToTriangleToMeshTriangle(Triangle triangle, Matrix4f transform){
+    public static MeshTriangle convertInputTriangleToMeshTriangle(Triangle triangle, Matrix4f transform){
         Vector3f vert1 = triangle.get1();
         Vector3f vert2 = triangle.get2();
         Vector3f vert3 = triangle.get3();

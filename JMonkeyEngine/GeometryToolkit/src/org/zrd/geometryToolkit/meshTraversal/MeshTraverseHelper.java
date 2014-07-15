@@ -19,6 +19,14 @@ import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
  */
 public class MeshTraverseHelper {
     
+    public static ArrayList<Vector3f> movePathStartPoint(ArrayList<Vector3f> oldPath, Vector3f targetStartPoint){
+        Vector3f startPoint = oldPath.get(0);
+        Vector3f moveVector = targetStartPoint.subtract(startPoint);
+        Matrix4f moveTransform = new Matrix4f();
+        moveTransform.setTranslation(moveVector);
+        return MeshTraverseHelper.getTransformedVertices(oldPath, moveTransform);
+    }
+    
     public static String getTriangleInfo(Triangle triangle){
         return triangle.get(0).toString() + "," 
                 + triangle.get(1).toString() + 
