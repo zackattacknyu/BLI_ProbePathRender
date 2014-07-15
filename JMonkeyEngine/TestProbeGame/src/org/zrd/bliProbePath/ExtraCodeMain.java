@@ -15,6 +15,8 @@ package org.zrd.bliProbePath;
  */
 public class ExtraCodeMain {
     
+    //probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
+    
     /*private void addBoxAtPoint(Vector3f point){
         Spatial currentBox = initBox(redLineMaterial);
         currentBox.setLocalTranslation(point);

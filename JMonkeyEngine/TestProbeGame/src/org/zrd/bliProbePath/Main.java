@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.bliProbePath.renderedObjects.LolaMesh;
+import org.zrd.bliProbePath.renderedObjects.ProbeRepresentation;
 import org.zrd.bliProbePath.renderedObjects.RenderedMesh;
 import org.zrd.bliProbePath.renderedObjects.SphereMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -43,9 +44,8 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
  */
 public class Main extends SimpleApplication {
     
-    private Spatial background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
-    private Material backgroundBoxMaterial,probeMat,lineMaterial,xMat,yMat,zMat;
-    private Material redLineMaterial,orangeLineMaterial;
+    private Spatial background,surface,moveableObject;
+    private Material backgroundBoxMaterial,lineMaterial,redMaterial,orangeMaterial,greenMaterial;
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     
@@ -53,7 +53,7 @@ public class Main extends SimpleApplication {
     
     private CameraTracker cameraTracker;
 
-    private Node shootables,probeRep;
+    private Node shootables;
     private File initialImportDirectory;
     private RecordedPathSet recordedPathSet;
 
@@ -131,31 +131,17 @@ public class Main extends SimpleApplication {
         backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
         
-        xMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
-        yMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-        zMat = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
+        redMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
+        orangeMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
+        greenMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
-        redLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
-        orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-        
-        
-        xAxisLine = initXLine(xMat);
-        yAxisLine = initYLine(yMat);
-        zAxisLine = initZLine(zMat);
+
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
-        probeRep = new Node("probeRep");
-        probeRep.attachChild(xAxisLine);
-        probeRep.attachChild(yAxisLine);
-        probeRep.attachChild(zAxisLine);
+        moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         if(!displayRawDataMode && showProbeRepLines){
-            rootNode.attachChild(probeRep);
+            rootNode.attachChild(moveableObject);
         }
-        moveableObject = probeRep;
-        
-        probeMat = new Material(assetManager, 
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        probeMat.setTexture("ColorMap", assetManager.loadTexture("Textures/plastic_texture.jpg"));
         
         background = initBackgroundBox(backgroundBoxMaterial, "background");
         
@@ -200,26 +186,7 @@ public class Main extends SimpleApplication {
     
     
     
-    private Spatial initXLine(Material ballMat){
-        ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
-        xLineVertices.add(new Vector3f(4f,0,0));
-        xLineVertices.add(new Vector3f(-4f,0,0));
-        return PathRenderHelper.createLineFromVertices(xLineVertices,ballMat);
-    }
     
-    private Spatial initYLine(Material ballMat){
-        ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
-        yLineVertices.add(new Vector3f(0,4f,0));
-        yLineVertices.add(new Vector3f(0,-4f,0));
-        return PathRenderHelper.createLineFromVertices(yLineVertices,ballMat);
-    }
-    
-    private Spatial initZLine(Material ballMat){
-        ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
-        zLineVertices.add(new Vector3f(0,0,-4f));
-        zLineVertices.add(new Vector3f(0,0,2f));
-        return PathRenderHelper.createLineFromVertices(zLineVertices,ballMat);
-    }
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -303,14 +270,14 @@ public class Main extends SimpleApplication {
                 
                 if(name.equals("rawXYdisplay") && keyPressed){
                     PathXYDataDisplay probeData = PathXYDataDisplay.obtainXYProbeData(initialImportDirectory);
-                    rootNode.attachChild(probeData.generateSpatial(orangeLineMaterial));
-                    rootNode.attachChild(probeData.generateReferenceObject(zMat));
+                    rootNode.attachChild(probeData.generateSpatial(orangeMaterial));
+                    rootNode.attachChild(probeData.generateReferenceObject(greenMaterial));
                 }
                 
                 if(name.equals("rawYawPitchRollDisplay") && keyPressed){
                     PathYawPitchRollDataDisplay probeData = PathYawPitchRollDataDisplay.obtainYawPitchRollProbeData(initialImportDirectory);
-                    rootNode.attachChild(probeData.generateSpatial(redLineMaterial));
-                    rootNode.attachChild(probeData.generateReferenceObject(zMat));
+                    rootNode.attachChild(probeData.generateSpatial(redMaterial));
+                    rootNode.attachChild(probeData.generateReferenceObject(greenMaterial));
                 }
             }
 
