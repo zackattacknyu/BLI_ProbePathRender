@@ -5,6 +5,7 @@ import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.graphicsTools.geometry.path.ProbePathSet;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
@@ -41,10 +42,12 @@ import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
+import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
+import org.zrd.pathInteractions.PathImport;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.LineMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
@@ -75,6 +78,7 @@ public class Main extends SimpleApplication {
     private Node shootables,probeRep;
     private File initialImportDirectory;
     private ProbePathSet probePathSet;
+    private RecordedPathSet recordedPathSet;
     
     private Quaternion surfaceRotation;
     private float surfaceScale;
@@ -96,6 +100,7 @@ public class Main extends SimpleApplication {
     
     private LineMoveAction lineMoveAction;
     private ProbeMoveAction probeMoveAction;
+    private PathImport pathImport;
     
     public static void main(String[] args) {
         
@@ -283,6 +288,7 @@ public class Main extends SimpleApplication {
             rootNode.attachChild(shootables);
         }
         probePathSet = new ProbePathSet(lineMaterial);
+        recordedPathSet = new RecordedPathSet();
         
         //RotationTesting.doRotationTesting();
         
@@ -290,6 +296,7 @@ public class Main extends SimpleApplication {
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, probePathSet, meshInfo);
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
+        pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
     }
     
     private Material makeColorMaterial(ColorRGBA color){
@@ -462,6 +469,10 @@ public class Main extends SimpleApplication {
         }
         
         probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
+        
+        if(pathImport.isNewPathExists()){
+            displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
+        }
     }
 
     @Override
@@ -517,6 +528,13 @@ public class Main extends SimpleApplication {
         zAxisLine = makeLineForVector(probeTracker.getCurrentPosition(),probeTracker.getCurrentNormal(),zMat);
     }
     
+    private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
+        Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        ColorRGBA grayColor = new ColorRGBA(brightness,brightness,brightness,1.0f);
+        outputMaterial.setColor("Color", grayColor);
+        return outputMaterial;
+    }
+    
     private CollisionResults getCollisionResults(){
         Vector2f click2d = inputManager.getCursorPosition();
         System.out.println("Mouse Point:" + click2d);
@@ -548,10 +566,8 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("startStopNewPath", new KeyTrigger(KeyInput.KEY_N));
         
         inputManager.addMapping("resetProbe", new KeyTrigger(KeyInput.KEY_H));
-
-        inputManager.addMapping("changeMoveableObject", new KeyTrigger(KeyInput.KEY_U));
         
-        inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
+        //inputManager.addMapping("importLine", new KeyTrigger(KeyInput.KEY_I));
         
         inputManager.addMapping("rawXYdisplay", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addMapping("rawYawPitchRollDisplay", new KeyTrigger(KeyInput.KEY_G));
@@ -575,10 +591,10 @@ public class Main extends SimpleApplication {
                 }
                 
                 
-                if(name.equals("importLine") && keyPressed){
+                /*if(name.equals("importLine") && keyPressed){
                     boolean chosen = probePathSet.importPathUsingFileSelector(initialImportDirectory);
                     if(chosen) displayCurrentPath();
-                }
+                }*/
 
                 if(name.equals("startStopNewPath") && keyPressed){
                      
@@ -602,7 +618,6 @@ public class Main extends SimpleApplication {
         inputManager.addListener(acl,
                 "startStopNewPath",
                 "resetProbe",
-                "importLine",
                 "rawXYdisplay",
                 "rawYawPitchRollDisplay");
 

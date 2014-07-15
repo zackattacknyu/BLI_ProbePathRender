@@ -12,11 +12,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
-import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
-import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -64,35 +61,6 @@ public class ProbePathSet {
         currentIndex++;
     }
     
-    public void addPathToSaveList(ArrayList<Vector3f> vertices, Material mat){
-        addPath(vertices,mat);
-        pathsToSave.add(currentPath);
-    }
-    
-    public void transformCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
-        addPath(PathTransformHelper.transformPathEndpoint(
-                currentPath.getVertices(), newEndpoint),mat);
-    }
-    
-    public void scaleCurrentPathEndpoint(Vector3f newEndpoint, Material mat){
-        addPath(PathTransformHelper.scalePathForNewEndpoint(
-                currentPath.getVertices(), newEndpoint),mat);
-    }
-    
-    public void transformCurrentPathEndpoint(Vector3f newEndpoint){
-       transformCurrentPathEndpoint(newEndpoint,lineMaterial);
-    }
-    
-    public void scaleCurrentPathEndpoint(Vector3f newEndpoint){
-        scaleCurrentPathEndpoint(newEndpoint,lineMaterial);
-    }
-    
-    public void compressCurrentPath(){
-        addPath(PathCompression.getCompressedPath(
-                currentPath.getVertices(), 
-                ProgramConstants.MIN_SEGMENT_LENGTH));
-    }
-    
     public boolean importPathUsingFileSelector(File initialImportDirectory){
         File selectedFile = FileDataHelper.importPathUsingFileSelector(initialImportDirectory);
         if(selectedFile == null){
@@ -103,10 +71,5 @@ public class ProbePathSet {
         }
     }
 
-    private Material getGrayscaleMaterial(float brightness, AssetManager assetManager){
-        Material outputMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        ColorRGBA grayColor = new ColorRGBA(brightness,brightness,brightness,1.0f);
-        outputMaterial.setColor("Color", grayColor);
-        return outputMaterial;
-    }
+    
 }
