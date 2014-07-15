@@ -9,10 +9,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
@@ -24,14 +20,9 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
-import org.zrd.bliProbePath.renderedObjects.LolaMesh;
 import org.zrd.bliProbePath.renderedObjects.SphereMesh;
-import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
-import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
 import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
@@ -51,12 +42,10 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
 public class Main extends SimpleApplication {
     
     private Spatial background,surface,moveableObject,xAxisLine,yAxisLine,zAxisLine;
-    private Material lolaMaterial,backgroundBoxMaterial,probeMat,lineMaterial,xMat,yMat,zMat;
+    private Material backgroundBoxMaterial,probeMat,lineMaterial,xMat,yMat,zMat;
     private Material redLineMaterial,orangeLineMaterial;
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
-    
-    private final boolean wireframeOn=false;
     
     private ProbeTracker probeTracker;
     
@@ -66,7 +55,6 @@ public class Main extends SimpleApplication {
     private File initialImportDirectory;
     private RecordedPathSet recordedPathSet;
 
-    private Matrix4f surfaceTransform, sphereTransform;
     private TriangleSet meshInfo;
     
     //this is if we are using the sphere for testing 
@@ -134,17 +122,6 @@ public class Main extends SimpleApplication {
         //LolaMesh activeMesh = new LolaMesh(assetManager);
         SphereMesh activeMesh = new SphereMesh(assetManager);
         
-        
-        //String objFileLocation = "Models/lola_mesh.obj";
-        //String objFileLocation = "Models/lola_mesh_simplified_connected.obj";
-        String objFileLocation = "Models/lola_mesh_simplePatch2_simplified.obj";
-        String sphereLocation = "Models/sphere2.obj";
-        //String sphereLocation = "Models/simpleCube.obj";
-        
-        lolaMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
-        if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
-        
         backgroundBoxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         backgroundBoxMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/table_texture.jpg"));
         
@@ -154,49 +131,12 @@ public class Main extends SimpleApplication {
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
         redLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
         orangeLineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-
-        if(sphereOn){
-            //surface = MeshHelper.generateModel(sphereLocation, lolaMaterial, assetManager);
-        }else{
-            //surface = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
-        }
-        
-        
-        Quaternion yaw = new Quaternion();
-        yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
-        Quaternion pitch = new Quaternion();
-        pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
-        
-        Quaternion surfaceRotation = yaw.mult(pitch);
-        float surfaceScale = 80f;
-        Vector3f surfaceLoc = new Vector3f(0,22,-53);
-        
-        Matrix4f surfaceRot = new Matrix4f();
-        Matrix4f scaleMat = new Matrix4f();
-        Matrix4f moveMatrix = new Matrix4f();
-        
-        scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
-        surfaceRotation.toRotationMatrix(surfaceRot);
-        moveMatrix.setTranslation(surfaceLoc);
-        surfaceTransform = moveMatrix.mult(scaleMat).mult(surfaceRot);
-        
-        if(sphereOn){
-            //surface.setLocalTranslation(0, 0, 0);
-            //surface.scale(20f);
-            //sphereTransform = new Matrix4f();
-            //sphereTransform.setScale(20f, 20f, 20f);
-        }else{
-            //surface.setLocalRotation(surfaceRotation);
-            //surface.scale(surfaceScale);
-            //surface.move(surfaceLoc);
-        }
         
         
         xAxisLine = initXLine(xMat);
         yAxisLine = initYLine(yMat);
         zAxisLine = initZLine(zMat);
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
-        //displayAxisLines();
         
         probeRep = new Node("probeRep");
         probeRep.attachChild(xAxisLine);
@@ -216,13 +156,7 @@ public class Main extends SimpleApplication {
         if(!sphereOn && !displayRawDataMode){
             rootNode.attachChild(background);
         }
-        
-        if(sphereOn){
-            //obtainSphereTriangleData();
-        }else{
-            //obtainSurfaceTriangleData();
-        }
-        
+
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
         
@@ -238,31 +172,11 @@ public class Main extends SimpleApplication {
         }
         recordedPathSet = new RecordedPathSet();
         
-        //RotationTesting.doRotationTesting();
-        
-        //displayNormals(correctedMesh);
-        
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
-    }
-    
-    private void obtainTriangleData(Matrix4f transform){
-        meshInfo = new TriangleSet();
-        meshInfo.setTransform(transform);
-        meshInfo = MeshHelper.addToTriangleSet(meshInfo,surface,transform);
-    }
-    
-    private void obtainSurfaceTriangleData(){
-        obtainTriangleData(surfaceTransform);
-        
-    }
-    
-    private void obtainSphereTriangleData(){
-        obtainTriangleData(sphereTransform);
-        
     }
     
     private Spatial initBackgroundBox(Material ballMat, String name){
