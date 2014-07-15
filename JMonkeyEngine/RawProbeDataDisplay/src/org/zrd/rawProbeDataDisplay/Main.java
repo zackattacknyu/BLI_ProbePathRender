@@ -3,12 +3,16 @@ package org.zrd.rawProbeDataDisplay;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.Properties;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 
 /**
  * test
@@ -43,17 +47,18 @@ public class Main extends SimpleApplication {
         app.setDisplayStatView(false); //makes sure the stat view is not displayed
         app.start();
     }
+    private File initialImportDirectory;
 
     @Override
     public void simpleInitApp() {
-        Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-
-        rootNode.attachChild(geom);
+        
+        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
+        initialImportDirectory = Paths.get("textFiles").toFile();
+        
+        CameraTrackerImpl cameraTracker = 
+                new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
+        
+        RawXYDataImport rawXYimport = new RawXYDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
     }
 
     @Override
