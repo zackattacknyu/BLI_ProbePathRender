@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.pathInteractions;
+package org.zrd.jmeGeometry.meshPathInteractions;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;

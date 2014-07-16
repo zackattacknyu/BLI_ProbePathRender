@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTrackingOnSurface;
+package org.zrd.jmeGeometry.meshPathInteractions;
 
+import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Triangle;

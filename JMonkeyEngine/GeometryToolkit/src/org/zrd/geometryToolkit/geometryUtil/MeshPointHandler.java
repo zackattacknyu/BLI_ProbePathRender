@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTrackingOnSurface;
+package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
