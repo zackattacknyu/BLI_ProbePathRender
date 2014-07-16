@@ -23,6 +23,7 @@ import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
+import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
 
@@ -49,6 +50,7 @@ public class Main extends SimpleApplication {
 
     private ProbeMoveAction probeMoveAction;
     private ProbeTrackerRecording probeRecording;
+    private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
@@ -89,6 +91,7 @@ public class Main extends SimpleApplication {
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib);
     }
 
     @Override
@@ -97,7 +100,7 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        probeTracker.updateData();
+        probeTrackerOnSurface.updateData();
         
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         

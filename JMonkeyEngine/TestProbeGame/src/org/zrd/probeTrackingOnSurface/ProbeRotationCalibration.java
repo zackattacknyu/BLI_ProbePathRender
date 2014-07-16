@@ -31,9 +31,11 @@ public class ProbeRotationCalibration extends GeneralKeyboardActionMethod implem
 
     private boolean calibrationEnabled = false;
     private boolean onStartPoint = true;
+    private boolean rotationCalibrationDone = false;
+    private boolean newRotCalibExists = false;
     private Vector3f lastPointClicked;
     private ProbeTracker probeTracker;
-    private MeshTriangle startingTriangle;
+    private MeshTriangle currentTriangle;
     private TriangleSet meshInfo;
     private ArrayList<Vector3f> currentPath;
     
@@ -66,7 +68,7 @@ public class ProbeRotationCalibration extends GeneralKeyboardActionMethod implem
                     lastPointClicked = startPoint;
                     probeTracker.setCurrentPosition(startPoint);
                     probeTracker.startStopRecording();
-                    startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    currentTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
                     onStartPoint = false;
                 }
 
@@ -83,17 +85,40 @@ public class ProbeRotationCalibration extends GeneralKeyboardActionMethod implem
                     probeTracker.rescaleCoordinates(currentScaleCalib.getUniformScaleFactor());
                     currentPath = PathCompression.getCompressedPath(currentPath,ProgramConstants.MIN_SEGMENT_LENGTH);
                     RotationCalibration newCalibration = 
-                            new RotationCalibration(currentPath,endPoint,startingTriangle,meshInfo);
+                            new RotationCalibration(currentPath,endPoint,currentTriangle,meshInfo);
                     probeTracker.setRotationCalibration(newCalibration.getAggregateRotation());
                     currentPath = newCalibration.getCurrentPathOnSurface();
                     probeTracker.setCurrentPosition(currentPath.get(currentPath.size()-1));
                     
+                    rotationCalibrationDone = true;
+                    newRotCalibExists = true;
                     calibrationEnabled = false;
                     onStartPoint = true;
                 }
 
             }
         }
+    }
+    
+    public boolean doesNewRotCalibExists(){
+        if(newRotCalibExists){
+            newRotCalibExists = false;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean isRotationCalibrationDone() {
+        return rotationCalibrationDone;
+    }
+
+    public MeshTriangle getCurrentTriangle() {
+        return currentTriangle;
+    }
+
+    public TriangleSet getMeshInfo() {
+        return meshInfo;
     }
 
     public ArrayList<Vector3f> getCurrentPath() {

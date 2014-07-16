@@ -144,6 +144,10 @@ public class PathProjectionOntoMesh {
         //finalPath.addAll(remainingPath);
         return finalPath;
     }
+    
+    public Vector3f getCurrentStartPoint() {
+        return currentStartPoint;
+    }
 
     /* 
      * ********IMPORTANT NOTE*****************
@@ -253,5 +257,7 @@ public class PathProjectionOntoMesh {
         finalPath.addAll(remainingPath);
         return finalPath;
     }*/
+
+    
     
 }
