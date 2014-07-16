@@ -30,7 +30,7 @@ public class ProbeTrackerOnSurface {
     public void updateData(){
         probeTracker.updateData();
         
-        if(probeRotCalib.doesNewRotCalibExists()){
+        if(probeRotCalib.arePointsNewlyPicked()){
             
             pathProj = new PathProjectionOntoMesh(probeRotCalib.getCurrentTriangle(),
                     probeTracker.getCurrentPosition(),probeRotCalib.getMeshInfo());
