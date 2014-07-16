@@ -56,10 +56,10 @@ public class PathProjectionOntoMesh {
         }
     }
     
-    public ArrayList<Vector3f> getPathPoints(Vector3f segmentVector){
+    private ArrayList<Vector3f> getPathPoints(Vector3f segmentVector){
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
-        finalPath.add(currentStartPoint);
-        finalPath.add(currentStartPoint.add(segmentVector));
+        finalPath.add(currentStartPoint.clone());
+        finalPath.add(currentStartPoint.addLocal(segmentVector).clone());
         return finalPath;
     }
     
@@ -68,7 +68,7 @@ public class PathProjectionOntoMesh {
      *      the mesh, meaning the matching line segments that go along
      *      the triangles of the mesh
      */
-    public ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
+    private ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
         Stack<Vector3f> remainingPath = new Stack<Vector3f>();
         remainingPath.add(segmentVector);
@@ -149,6 +149,10 @@ public class PathProjectionOntoMesh {
         return currentStartPoint;
     }
 
+    public MeshTriangle getCurrentTriangle() {
+        return currentTriangle;
+    }
+    
     /* 
      * ********IMPORTANT NOTE*****************
      * UNUSED CODE BELOW HERE
@@ -257,6 +261,8 @@ public class PathProjectionOntoMesh {
         finalPath.addAll(remainingPath);
         return finalPath;
     }*/
+
+    
 
     
     

@@ -38,13 +38,16 @@ public class ProbeTrackerOnSurface {
             
         }else if(probeRotCalib.isRotationCalibrationDone()){
             
-            Vector3f currentProbePosition = probeTracker.getCurrentPosition();
+            Vector3f currentProbePosition = probeTracker.getCurrentPosition().clone();
             float distance = currentProbePosition.distance(lastPosition);
             if(distance > ProgramConstants.MIN_SEGMENT_LENGTH){
                 Vector3f segmentVec = currentProbePosition.subtract(lastPosition);
-                pathProj.findCurrentSegmentProjectionOntoMesh(segmentVec);
+                pathProj.getCurrentProjectedPath(segmentVec);
                 lastPosition = pathProj.getCurrentStartPoint().clone();
                 probeTracker.setCurrentPosition(pathProj.getCurrentStartPoint());
+                System.out.println("Last Position: " + currentProbePosition);
+                System.out.println("Position Now: " + lastPosition);
+                System.out.println("Current Triangle: " + pathProj.getCurrentTriangle());
             }
             
         }
