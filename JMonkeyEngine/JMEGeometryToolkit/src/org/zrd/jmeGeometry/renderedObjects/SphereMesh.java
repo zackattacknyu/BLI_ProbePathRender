@@ -6,15 +6,8 @@ package org.zrd.jmeGeometry.renderedObjects;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
-import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
-import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 
 /**
