@@ -10,23 +10,17 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.system.AppSettings;
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.jmeGeometry.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometry.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometry.renderedObjects.ProbeRepresentation;
 import org.zrd.jmeGeometry.renderedObjects.RenderedMesh;
-import org.zrd.jmeGeometry.renderedObjects.SphereMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
-import org.zrd.jmeGeometry.meshPathInteractions.PathImport;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.jmeGeometry.meshPathInteractions.LineMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
@@ -49,21 +43,11 @@ public class Main extends SimpleApplication {
     private CameraTracker cameraTracker;
 
     private Node shootables;
-    private File initialImportDirectory;
     private RecordedPathSet recordedPathSet;
 
     private TriangleSet meshInfo;
-    
-    //this is if we are using the sphere for testing 
-    //      instead of lola
-    private boolean sphereOn = false;
-    
-    //to be used if we are only testing using recorded paths
-    private boolean showProbeRepLines = true;
-    
-    private LineMoveAction lineMoveAction;
+
     private ProbeMoveAction probeMoveAction;
-    private PathImport pathImport;
     private ProbeTrackerRecording probeRecording;
     
     public static void main(String[] args) {
@@ -75,35 +59,18 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
-        
-        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
-        
+                
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        if(sphereOn){
-            cameraTracker.setDefaultCamera((short)0);
-        }else{
-            cameraTracker.setDefaultCamera((short)1);
-        }
+        cameraTracker.setDefaultCamera((short)1);
         
-        RenderedMesh activeMesh;
-        if(sphereOn){
-            activeMesh = new SphereMesh(assetManager);
-        }else{
-            activeMesh = new LolaMesh(assetManager);
-        }
-
+        RenderedMesh activeMesh = new LolaMesh(assetManager);
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
-        if(showProbeRepLines){
-            rootNode.attachChild(moveableObject);
-        }
-        
-        if(!sphereOn){
-            rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
-        }
+        rootNode.attachChild(moveableObject);
+        rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
@@ -117,10 +84,8 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         
         recordedPathSet = new RecordedPathSet();
-        
-        lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
+
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
-        pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
@@ -141,13 +106,9 @@ public class Main extends SimpleApplication {
         xyzText.setText(probeTracker.getXYZtext());
         yawPitchRollText.setText(probeTracker.getYawPitchRollText());
         
-        if(lineMoveAction.hasNewLine()){
-            displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
-        }
-        
         probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
         
-        if(pathImport.isNewPathExists() || probeRecording.isNewPathExists()){
+        if(probeRecording.isNewPathExists()){
             displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
         }
         
