@@ -11,8 +11,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
+import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
+import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
@@ -27,7 +31,6 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     private Vector3f lastPointClicked;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
-    private ArrayList<Vector3f> currentPath;
     
     private boolean pointsNewlyPicked = false;
     
@@ -51,8 +54,9 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     protected abstract String messageUponEnabling();
     protected abstract String messageUponCancelling();
 
-    protected abstract void handleStartPoint();
-    protected abstract void handleEndPoint();
+    protected abstract void handleStartPoint(Vector3f startPoint);
+    protected abstract void handleEndPointResult(ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath);
+    protected abstract ArrayList<Vector3f> getActivePathAtEndpoint();
 
     @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
@@ -60,12 +64,12 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                                 
             if(onStartPoint){
 
-                Vector3f endPoint = pointOnMesh.clone();
-                if(!endPoint.equals(lastPointClicked)){
+                Vector3f startPoint = pointOnMesh.clone();
+                if(!startPoint.equals(lastPointClicked)){
 
-                    lastPointClicked = endPoint;
+                    lastPointClicked = startPoint;
                     startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
-                    handleStartPoint();
+                    handleStartPoint(startPoint);
                     onStartPoint = false;
                 }
 
@@ -75,7 +79,17 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
-                    handleEndPoint();
+                    
+                    ArrayList<Vector3f> activePath = getActivePathAtEndpoint();
+                    
+                    ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
+                    activePath = currentScaleCalib.getScaledPath();
+                    activePath = PathCompression.getCompressedPath(activePath,ProgramConstants.MIN_SEGMENT_LENGTH);
+                    RotationCalibration currentRotCalib = 
+                            new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);
+                    activePath = currentRotCalib.getCurrentPathOnSurface();
+                    
+                    handleEndPointResult(currentScaleCalib,currentRotCalib,activePath);
                     
                     twoPointPickEnabled = false;
                     onStartPoint = true;
