@@ -120,9 +120,5 @@ public class ProbeRotationCalibration extends GeneralKeyboardActionMethod implem
     public TriangleSet getMeshInfo() {
         return meshInfo;
     }
-
-    public ArrayList<Vector3f> getCurrentPath() {
-        return currentPath;
-    }
     
 }

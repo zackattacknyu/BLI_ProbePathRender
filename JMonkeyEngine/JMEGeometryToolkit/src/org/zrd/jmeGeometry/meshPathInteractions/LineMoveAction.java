@@ -79,7 +79,9 @@ public class LineMoveAction extends GeneralKeyboardActionMethod implements MeshP
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
-                    currentPath = ScaleCalibration.scalePathForNewEndpoint(currentPath, endPoint);
+                    
+                    ScaleCalibration currentScaleCalib = new ScaleCalibration(currentPath,endPoint);
+                    currentPath = currentScaleCalib.getScaledPath();
                     currentPath = PathCompression.getCompressedPath(currentPath,ProgramConstants.MIN_SEGMENT_LENGTH);
                     RotationCalibration newCalibration = 
                             new RotationCalibration(currentPath,endPoint,startingTriangle,meshInfo);
