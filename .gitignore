@@ -71,3 +71,9 @@
 /JMonkeyEngine/LibJME_JMEUtil/build/
 /JMonkeyEngine/LibJME_JMEUtil/dist/
 /JMonkeyEngine/LibGeneral_GeometryToolkit/nbproject/private/
+/JMonkeyEngine/LibGeneral_ProbeTracker/nbproject/private/
+/JMonkeyEngine/LibGeneral_GeometryToolkit/build/
+/JMonkeyEngine/LibGeneral_GeometryToolkit/dist/
+/JMonkeyEngine/LibGeneral_ProbeTracker/dist/
+/JMonkeyEngine/LibGeneral_ProbeTracker/build/
+/JMonkeyEngine/JMEApplication_LiveProbeTracking/dist/
