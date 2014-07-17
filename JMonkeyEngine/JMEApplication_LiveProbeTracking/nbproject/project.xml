@@ -40,6 +40,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>LibGeneral_Util</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>LibJME_CameraTracker</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -65,14 +73,6 @@
             </reference>
             <reference>
                 <foreign-project>LibJME_KeyboardObjectTracking</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
-                <foreign-project>Util</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

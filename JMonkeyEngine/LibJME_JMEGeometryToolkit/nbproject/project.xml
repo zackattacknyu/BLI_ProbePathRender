@@ -21,7 +21,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>LibJME_JMEUtil</foreign-project>
+                <foreign-project>LibGeneral_Util</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -29,7 +29,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>Util</foreign-project>
+                <foreign-project>LibJME_JMEUtil</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
