@@ -94,7 +94,7 @@ public class RotationCalibration {
         Matrix4f currentRotationTransform;
         float currentRotationAngle;
 
-        float currentDistance,previousDistance = 0;
+        float currentDistance=0,previousDistance = 0;
         
         for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
             
@@ -110,10 +110,7 @@ public class RotationCalibration {
             
             //sees how close we are to matching endpoints
             currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
-            
-            //displays the results
-            displayAttemptResults(tryNum,currentDistance);
-            
+
             //uses Cauchy convergence to stop when the distance has converged
             if (hasConverged(previousDistance,currentDistance)) {
                 break;
@@ -121,14 +118,16 @@ public class RotationCalibration {
             
             previousDistance = currentDistance;
         }
+        
+        //displays the results
+        displayDistResult(currentDistance);
     }
     
     private boolean hasConverged(float currentDistance, float previousDistance){
         return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
     }
     
-    private void displayAttemptResults(int tryNum, float currentDistance){
-        System.out.println("After Attempt Number: " + tryNum);
+    private void displayDistResult(float currentDistance){
         System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
     }
     
