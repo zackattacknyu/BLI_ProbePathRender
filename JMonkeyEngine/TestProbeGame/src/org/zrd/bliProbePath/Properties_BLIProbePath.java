@@ -14,7 +14,7 @@ import org.zrd.util.properties.PropertiesHelper;
 public class Properties_BLIProbePath {
 
     public static final String FILE_PATH=
-            "src\\org\\zrd\\bliProbePath\\tracker.properties";
+            "tracker.properties";
     
     public static Properties getProperties(){
            return PropertiesHelper.getProperties(FILE_PATH);
