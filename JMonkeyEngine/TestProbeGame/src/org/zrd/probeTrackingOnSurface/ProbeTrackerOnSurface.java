@@ -25,26 +25,32 @@ public class ProbeTrackerOnSurface {
     private Vector3f lastPosition;
     private PathProjectionOntoMesh pathProj;
     
-    private Node rootNode;
+    private Node currentRecordedSegments;
     private Material lineMaterial;
 
-    public ProbeTrackerOnSurface(ProbeTracker probeTracker, ProbeRotationCalibration probeRotCalib, Node rootNode, Material lineMaterial){
+    public ProbeTrackerOnSurface(ProbeTracker probeTracker, ProbeRotationCalibration probeRotCalib, Material lineMaterial){
         this.probeRotCalib = probeRotCalib;
         this.probeTracker = probeTracker;
         lastPosition = probeTracker.getCurrentPosition();
-        this.rootNode = rootNode;
         this.lineMaterial = lineMaterial;
+        this.currentRecordedSegments = new Node();
+    }
+    
+    public Node getCurrentSegments(){
+        Node returnSegs = currentRecordedSegments.clone(true);
+        currentRecordedSegments = new Node();
+        return returnSegs;
     }
     
     public void updateData(){
         probeTracker.updateData();
         
-        /*if(probeTracker.isRecordingPath()){
+        if(probeTracker.isRecordingPath()){
             ArrayList<Vector3f> recentVertices = probeTracker.getMostRecentPathVertices();
-            if(!recentVertices.isEmpty()){
-                rootNode.attachChild(PathRenderHelper.createLineFromVertices(recentVertices, lineMaterial));
+            if(recentVertices != null && !recentVertices.isEmpty()){
+                currentRecordedSegments.attachChild(PathRenderHelper.createLineFromVertices(recentVertices, lineMaterial));
             }
-        }*/
+        }
         
         if(probeRotCalib.arePointsNewlyPicked()){
             

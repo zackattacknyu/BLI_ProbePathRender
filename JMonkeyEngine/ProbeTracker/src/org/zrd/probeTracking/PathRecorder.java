@@ -29,6 +29,8 @@ public class PathRecorder {
     private ProbeDataWriter yawPitchRollWriter;
     private Path pathRecordingFilePath;
     private ArrayList<Vector3f> mostRecentVertices;
+    private Vector3f lastVertexOutputted;
+    private Vector3f currentVertex;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
@@ -36,6 +38,8 @@ public class PathRecorder {
         mostRecentVertices = new ArrayList<Vector3f>(100);
         mostRecentVertices.add(startingPosition.clone());
         pathSpecified = false;
+        currentVertex = new Vector3f();
+        lastVertexOutputted = new Vector3f();
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath){
@@ -87,9 +91,16 @@ public class PathRecorder {
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){
-        ArrayList<Vector3f> verticesToReturn = GeneralHelper.getCopyOfPath(mostRecentVertices);
-        mostRecentVertices.clear();
-        return verticesToReturn;
+        if(currentVertex.distance(lastVertexOutputted) > ProgramConstants.MIN_SEGMENT_LENGTH){
+            ArrayList<Vector3f> verticesToReturn = GeneralHelper.getCopyOfPath(mostRecentVertices);
+            mostRecentVertices.clear();
+            lastVertexOutputted = currentVertex.clone();
+            mostRecentVertices.add(currentVertex.clone());
+            return verticesToReturn;
+        }else{
+            return null;
+        }
+        
     }
 
     void addToPath(Vector3f currentPosition, 
@@ -109,6 +120,7 @@ public class PathRecorder {
                     getOrientationOutputString(currentYaw,currentPitch,currentRoll));
         }
         
+        currentVertex = currentPosition.clone();
         mostRecentVertices.add(currentPosition.clone());
         vertices.add(currentPosition.clone());
     }
