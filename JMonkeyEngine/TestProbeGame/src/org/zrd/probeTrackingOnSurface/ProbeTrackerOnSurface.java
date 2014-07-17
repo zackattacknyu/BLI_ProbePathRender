@@ -39,12 +39,12 @@ public class ProbeTrackerOnSurface {
     public void updateData(){
         probeTracker.updateData();
         
-        if(probeTracker.isRecordingPath()){
+        /*if(probeTracker.isRecordingPath()){
             ArrayList<Vector3f> recentVertices = probeTracker.getMostRecentPathVertices();
             if(!recentVertices.isEmpty()){
                 rootNode.attachChild(PathRenderHelper.createLineFromVertices(recentVertices, lineMaterial));
             }
-        }
+        }*/
         
         if(probeRotCalib.arePointsNewlyPicked()){
             
