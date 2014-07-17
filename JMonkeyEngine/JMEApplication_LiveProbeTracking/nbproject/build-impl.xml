@@ -903,6 +903,13 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-jar.properties}"/>
+            <param location="${project.LibGeneral_SerialDataInterpreter}" name="call.subproject"/>
+            <param location="${project.LibGeneral_SerialDataInterpreter}/build.xml" name="call.script"/>
+            <param name="call.target" value="jar"/>
+            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-jar.properties}"/>
             <param location="${project.LibJME_CameraTracker}" name="call.subproject"/>
             <param location="${project.LibJME_CameraTracker}/build.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
@@ -926,13 +933,6 @@ is divided into following sections:
             <param name="call.built.properties" value="${built-jar.properties}"/>
             <param location="${project.LibJME_KeyboardObjectTracking}" name="call.subproject"/>
             <param location="${project.LibJME_KeyboardObjectTracking}/build.xml" name="call.script"/>
-            <param name="call.target" value="jar"/>
-            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-jar.properties}"/>
-            <param location="${project.SerialDataInterpreter}" name="call.subproject"/>
-            <param location="${project.SerialDataInterpreter}/build.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
             <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
         </antcall>
@@ -1435,6 +1435,13 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-clean.properties}"/>
+            <param location="${project.LibGeneral_SerialDataInterpreter}" name="call.subproject"/>
+            <param location="${project.LibGeneral_SerialDataInterpreter}/build.xml" name="call.script"/>
+            <param name="call.target" value="clean"/>
+            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
+        </antcall>
+        <antcall target="-maybe-call-dep">
+            <param name="call.built.properties" value="${built-clean.properties}"/>
             <param location="${project.LibJME_CameraTracker}" name="call.subproject"/>
             <param location="${project.LibJME_CameraTracker}/build.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
@@ -1458,13 +1465,6 @@ is divided into following sections:
             <param name="call.built.properties" value="${built-clean.properties}"/>
             <param location="${project.LibJME_KeyboardObjectTracking}" name="call.subproject"/>
             <param location="${project.LibJME_KeyboardObjectTracking}/build.xml" name="call.script"/>
-            <param name="call.target" value="clean"/>
-            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-clean.properties}"/>
-            <param location="${project.SerialDataInterpreter}" name="call.subproject"/>
-            <param location="${project.SerialDataInterpreter}/build.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
             <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
         </antcall>

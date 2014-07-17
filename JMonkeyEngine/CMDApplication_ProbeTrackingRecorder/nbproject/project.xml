@@ -34,7 +34,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>SerialDataInterpreter</foreign-project>
+                <foreign-project>LibGeneral_SerialDataInterpreter</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
