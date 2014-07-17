@@ -91,7 +91,7 @@ public class Main extends SimpleApplication {
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
-        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,lineMaterial);
+        //probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,lineMaterial);
     }
 
     @Override
@@ -100,8 +100,8 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        probeTrackerOnSurface.updateData();
-        rootNode.attachChild(probeTrackerOnSurface.getCurrentSegments());
+        probeTracker.updateData();
+        //rootNode.attachChild(probeTrackerOnSurface.getCurrentSegments());
         
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         

@@ -62,13 +62,13 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
     }
 
     @Override
-    protected void handleEndPointResult(ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
+    protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
         rotationCalibrationDone = true;
         
         probeTracker.startStopRecording();
-        probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
+        //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         probeTracker.setRotationCalibration(rotCalib.getAggregateRotation());
-        probeTracker.setCurrentPosition(scaledAndRotatedPath.get(scaledAndRotatedPath.size()-1));
+        probeTracker.setCurrentPosition(endPoint);
     }
 
     @Override

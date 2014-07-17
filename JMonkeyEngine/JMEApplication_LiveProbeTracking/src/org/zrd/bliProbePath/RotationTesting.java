@@ -13,7 +13,16 @@ import com.jme3.math.Vector3f;
  * @author BLI
  */
 public class RotationTesting {
+    
+    public static void rotTesting2(){
+        Quaternion emptyQuat = new Quaternion();
+       System.out.println(emptyQuat.toRotationMatrix());
+    }
+    
     public static void doRotationTesting(){
+        
+       
+        
         float yaw = (float)(Math.random()*(Math.PI/2.0));
         float pitch = (float)(Math.random()*(Math.PI/2.0));
         float roll = (float)(Math.random()*(Math.PI/2.0));

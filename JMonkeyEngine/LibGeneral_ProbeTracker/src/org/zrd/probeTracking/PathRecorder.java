@@ -9,7 +9,6 @@ import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -28,18 +27,11 @@ public class PathRecorder {
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     private Path pathRecordingFilePath;
-    private ArrayList<Vector3f> mostRecentVertices;
-    private Vector3f lastVertexOutputted;
-    private Vector3f currentVertex;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
         vertices.add(startingPosition.clone());
-        mostRecentVertices = new ArrayList<Vector3f>(100);
-        mostRecentVertices.add(startingPosition.clone());
         pathSpecified = false;
-        currentVertex = new Vector3f();
-        lastVertexOutputted = new Vector3f();
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath){
@@ -89,19 +81,6 @@ public class PathRecorder {
             System.out.println("Exception thrown trying to write compressed file: " + ex);
         }
     }
-    
-    public ArrayList<Vector3f> getMostRecentVertices(){
-        if(currentVertex.distance(lastVertexOutputted) > ProgramConstants.MIN_SEGMENT_LENGTH){
-            ArrayList<Vector3f> verticesToReturn = GeneralHelper.getCopyOfPath(mostRecentVertices);
-            mostRecentVertices.clear();
-            lastVertexOutputted = currentVertex.clone();
-            mostRecentVertices.add(currentVertex.clone());
-            return verticesToReturn;
-        }else{
-            return null;
-        }
-        
-    }
 
     void addToPath(Vector3f currentPosition, 
             Vector2f currentXYPosition, 
@@ -119,9 +98,7 @@ public class PathRecorder {
             ProbeDataWriter.writeLineInWriter(yawPitchRollWriter, 
                     getOrientationOutputString(currentYaw,currentPitch,currentRoll));
         }
-        
-        currentVertex = currentPosition.clone();
-        mostRecentVertices.add(currentPosition.clone());
+
         vertices.add(currentPosition.clone());
     }
     

@@ -37,42 +37,22 @@ public abstract class AbstractSerialInputToWorldConverter {
     //scale factor for y coordinate. should be same as one for x coordinate
     protected float scaleFactorY = 1.0f;
     
-    /*
-     * These vectors are the initial x and y displacement vectors.
-     *      The subclasses of this one are in charge of manipulating
-     *      these vectors based on rotation to get the actual
-     *      x, y, and z displacment
-     */
-    
-    //vector for x displacement
-    public static final Vector3f INIT_X_VECTOR = new Vector3f(1,0,0);
-    
-    //vector for y displacement
-    public static final Vector3f INIT_Y_VECTOR = new Vector3f(0,1,0);
-    
-    //vector for normal to displacement
-    public static final Vector3f INIT_NORMAL_VECTOR = new Vector3f(0,0,-1);
-    
-    //rotation matrix for most recent yaw, pitch, roll numbers
-    private Matrix3f currentRotationMatrix = new Matrix3f();
-    
     public Vector3f getXYZDisplacement(float deltaX, float deltaY, 
             float yaw, float pitch, float roll){
         
         float xChangeMagnitude = deltaX*scaleFactorX;
         float yChangeMagnitude = deltaY*scaleFactorY;
         
-        currentRotationMatrix = getRotationMatrix(yaw,pitch,roll);
+        Vector3f initDisplacementVector = new Vector3f(xChangeMagnitude,yChangeMagnitude,0);
         
-        Vector3f xDispVector = currentRotationMatrix.mult(INIT_X_VECTOR);
-        Vector3f yDispVector = currentRotationMatrix.mult(INIT_Y_VECTOR);
+        /*rotation matrix for most recent yaw, pitch, roll numbers
+         *  or other numbers if a different subclass is being used
+         */ 
+        Matrix3f rotMatrixFromData = getRotationMatrix(yaw,pitch,roll);
         
-        Vector3f xDisplacement = xDispVector.mult(xChangeMagnitude);
-        Vector3f yDisplacement = yDispVector.mult(yChangeMagnitude);
+        Matrix3f currentRotation = rotationCalibrationMatrix.mult(rotMatrixFromData);
         
-        Vector3f initDisplacement = xDisplacement.add(yDisplacement);
-        
-        return rotationCalibrationMatrix.mult(initDisplacement);
+        return currentRotation.mult(initDisplacementVector);
     }
     
     public Vector2f getXYDisplacement(float deltaX, float deltaY){
@@ -91,22 +71,6 @@ public abstract class AbstractSerialInputToWorldConverter {
 
     public void setScaleFactorY(float scaleFactorY) {
         this.scaleFactorY = scaleFactorY;
-    }
-    
-    private Vector3f getManipulatedVector(Vector3f inputVector){
-        return rotationCalibrationMatrix.mult(currentRotationMatrix).mult(inputVector);
-    }
-    
-    public Vector3f getCurrentXAxis(){
-        return getManipulatedVector(INIT_X_VECTOR);
-    }
-    
-    public Vector3f getCurrentYAxis(){
-        return getManipulatedVector(INIT_Y_VECTOR);
-    }
-    
-    public Vector3f getCurrentNormal(){
-        return getManipulatedVector(INIT_NORMAL_VECTOR);
     }
 
     public float getScaleFactorX() {

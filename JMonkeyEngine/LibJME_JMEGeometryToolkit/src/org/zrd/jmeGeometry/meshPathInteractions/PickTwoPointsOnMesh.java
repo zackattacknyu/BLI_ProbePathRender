@@ -55,7 +55,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     protected abstract String messageUponCancelling();
 
     protected abstract void handleStartPoint(Vector3f startPoint);
-    protected abstract void handleEndPointResult(ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath);
+    protected abstract void handleEndPointResult(Vector3f endPoint,ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath);
     protected abstract ArrayList<Vector3f> getActivePathAtEndpoint();
 
     @Override
@@ -89,7 +89,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                             new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);
                     activePath = currentRotCalib.getCurrentPathOnSurface();
                     
-                    handleEndPointResult(currentScaleCalib,currentRotCalib,activePath);
+                    handleEndPointResult(endPoint,currentScaleCalib,currentRotCalib,activePath);
                     
                     twoPointPickEnabled = false;
                     onStartPoint = true;

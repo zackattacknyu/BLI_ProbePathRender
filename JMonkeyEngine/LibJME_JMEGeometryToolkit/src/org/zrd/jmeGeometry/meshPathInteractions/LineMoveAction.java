@@ -47,7 +47,7 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     }
 
     @Override
-    protected void handleEndPointResult(ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
+    protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
         currentPath = scaledAndRotatedPath;
     }
 

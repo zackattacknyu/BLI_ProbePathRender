@@ -33,7 +33,9 @@ public class ProbeTracker implements ProbeDataStream{
     
     private float currentYaw=0,currentPitch = 0,currentRoll = 0;
     
-    private Quaternion localRotation;
+    private Quaternion rotationFromData;
+    private Quaternion rotationCalibration = new Quaternion();
+    
     private Vector3f currentPosition;
     private Vector2f currentXYPosition;
     
@@ -107,7 +109,7 @@ public class ProbeTracker implements ProbeDataStream{
         currentDeltaX = currentSourceTracker.getDeltaX();
         currentDeltaY = currentSourceTracker.getDeltaY();
         
-        localRotation = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
+        rotationFromData = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
         //gets the current displacement vector
         Vector3f currentDisp = coordConverter.getXYZDisplacement(
@@ -144,15 +146,8 @@ public class ProbeTracker implements ProbeDataStream{
     }
     
     public void setRotationCalibration(Quaternion rotation){
+        rotationCalibration = rotation.clone();
         coordConverter.setRotationCalibrationMatrix(rotation.toRotationMatrix());
-    }
-    
-    public Vector3f getCurrentNormal(){
-        return coordConverter.getCurrentNormal();
-    }
-    
-    public ArrayList<Vector3f> getMostRecentPathVertices(){
-        return currentRecordingPath.getMostRecentVertices();
     }
     
     @Override
@@ -255,18 +250,8 @@ public class ProbeTracker implements ProbeDataStream{
         return coordConverter.getScaleFactorY();
     }
 
-    
-
     public Quaternion getLocalRotation() {
-        return localRotation;
-    }
-
-    public Vector3f getCurrentXAxis() {
-        return coordConverter.getCurrentXAxis();
-    }
-
-    public Vector3f getCurrentYAxis() {
-        return coordConverter.getCurrentYAxis();
+        return rotationCalibration.mult(rotationFromData);
     }
     
     
