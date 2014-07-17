@@ -87,11 +87,15 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         
         if(lineMoveAction.arePointsNewlyPicked()){
-            displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
+            rootNode.attachChild(PathWithData.getPathSpatialWithSampleData(lineMoveAction.getCurrentPath(), assetManager));
+            //displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
         }
         
         if(pathImport.isNewPathExists()){
             displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
+            
+            rootNode.attachChild(PathWithData.getPathSpatialWithSampleData(recordedPathSet.getCurrentPath(), assetManager));
+            
         }
         
     }
