@@ -1,5 +1,7 @@
 package org.zrd.bliProbePath;
 
+import com.aurellem.capture.Capture;
+import com.aurellem.capture.IsoTimer;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
@@ -10,14 +12,19 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zrd.jmeGeometry.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometry.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometry.renderedObjects.ProbeRepresentation;
 import org.zrd.jmeGeometry.renderedObjects.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
-import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
@@ -26,6 +33,7 @@ import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
+import org.zrd.util.timeTools.TimeHelper;
 
 
 /**
@@ -59,6 +67,26 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
+        /*
+         * This has details on capturing video:
+         *  http://www.aurellem.com/cortex/html/capture-video.html
+         * 
+         * Blog Entries:
+         *  http://www.aurellem.com/
+         * 
+         * Javadoc for the below class:
+         *  http://www.aurellem.com/jmeCapture/docs/
+         * 
+         * 
+        Path videoFilePath = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\videoFiles");
+        File recordedVideoFile = videoFilePath.resolve("LiveTrackingRun_" + TimeHelper.getTimestampSuffix()).toFile();
+        this.setTimer(new IsoTimer(30));
+        try {
+            Capture.captureVideo(this, recordedVideoFile);
+        } catch (IOException ex) {
+            System.out.println("Error trying to capture video: " + ex);
+        }*/
         
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
