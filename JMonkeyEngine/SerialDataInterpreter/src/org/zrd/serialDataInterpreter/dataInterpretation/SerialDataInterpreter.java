@@ -38,6 +38,10 @@ public class SerialDataInterpreter implements ProbeDataStream{
         dataRecordingFilePath = filePath;
     }
     
+    public SerialDataReader getReader(){
+        return serial;
+    }
+    
     @Override
     public void startStopRecording(){
         if(recording){

@@ -91,6 +91,9 @@ public class ProbeTracker implements ProbeDataStream{
         
     }
     
+    public void resetProbeReader(){
+        currentSourceTracker.resetProbeReader();
+    }
     
     @Override
     public void updateData(){

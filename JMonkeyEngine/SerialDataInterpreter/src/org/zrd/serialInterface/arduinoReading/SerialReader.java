@@ -11,8 +11,11 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This is the class that interfaces with the Arduino.
@@ -154,6 +157,15 @@ public class SerialReader implements SerialPortEventListener {
             }
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
+        
+        public void reset(){
+            int rInt = 'r';
+            try {
+                output.write(rInt);
+            } catch (IOException ex) {
+                System.out.println("Error trying to reset probe: " + ex);
+            }
+        }
 
         private void setSerialProperties(Properties serialProperties){
             this.serialProperties = serialProperties;

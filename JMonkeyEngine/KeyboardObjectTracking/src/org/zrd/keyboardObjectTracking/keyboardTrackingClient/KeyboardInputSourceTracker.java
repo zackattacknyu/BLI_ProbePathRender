@@ -48,5 +48,10 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
     @Override
     public void updateData() {
     }
+
+    @Override
+    public void resetProbeReader() {
+        
+    }
     
 }

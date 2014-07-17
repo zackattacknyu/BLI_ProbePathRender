@@ -18,4 +18,6 @@ public interface AbstractInputSourceTracker {
     float getDeltaY();
     
     void updateData();
+
+    void resetProbeReader();
 }

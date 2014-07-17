@@ -24,7 +24,9 @@ public class ResetTracker extends GeneralKeyboardActionMethod{
 
     @Override
     public void actionMethod() {
+        probeTracker.resetProbeReader();
         probeTracker.resetProbe();
+        
     }
     
 }

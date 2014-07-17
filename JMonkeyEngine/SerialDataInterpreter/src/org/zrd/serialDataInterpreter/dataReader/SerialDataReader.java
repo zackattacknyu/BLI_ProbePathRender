@@ -76,6 +76,10 @@ public class SerialDataReader implements ProbeDataStream{
                 "arduinoData.showOutput"));
     }
     
+    public SerialReader getSerialInterface(){
+        return serial;
+    }
+    
     /**
      * This initializes the reader and is designed to be used by a program
      *      that will record the raw data from the reader. 

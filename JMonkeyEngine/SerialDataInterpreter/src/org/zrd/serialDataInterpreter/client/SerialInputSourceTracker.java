@@ -50,5 +50,10 @@ public class SerialInputSourceTracker implements AbstractInputSourceTracker{
     public float getDeltaY() {
         return dataInterpreter.getDeltaY();
     }
+
+    @Override
+    public void resetProbeReader() {
+        dataInterpreter.getReader().getSerialInterface().reset();
+    }
     
 }
