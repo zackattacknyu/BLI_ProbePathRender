@@ -5,36 +5,30 @@
 package org.zrd.recordedPathRendering;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
-import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**
  *
  * @author BLI
  */
-public class PathWithData {
+public class TestPathWithData {
     
     public static Node getPathSpatialWithSampleData(ArrayList<Vector3f> pathVertices, AssetManager assetManager){
-        Node outputNode = new Node();
-        Spatial currentSeg;
-        Material currentMaterial;
         
-        ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
-        currentPath.add(pathVertices.get(0).clone());
+        ArrayList<Float> dataAtVertices = new ArrayList<Float>(pathVertices.size());
+        dataAtVertices.add(0f);
+      
         for(int index = 1; index < pathVertices.size()-1;index++){
-            currentPath.add(pathVertices.get(index));
-            currentMaterial = MaterialHelper.getGrayscaleMaterial(getBrightness(index,pathVertices.size()), assetManager);
-            currentSeg = PathRenderHelper.createLineFromVertices(currentPath, currentMaterial);
-            outputNode.attachChild(currentSeg);
-            currentPath.remove(0);
+            dataAtVertices.add(getBrightness(index,pathVertices.size()));
         }
         
-        return outputNode;
+        SegmentSet pathSegment = new SegmentSet(pathVertices,dataAtVertices);
+        
+        return PathRenderHelper.createLineFromVerticesWithData(pathSegment, assetManager);
     }
     
     public static float getBrightness(float index, float totalLength){

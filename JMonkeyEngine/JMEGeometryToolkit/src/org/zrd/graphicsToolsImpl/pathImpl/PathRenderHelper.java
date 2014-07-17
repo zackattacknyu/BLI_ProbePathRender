@@ -4,23 +4,49 @@
  */
 package org.zrd.graphicsToolsImpl.pathImpl;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
+import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**
  *
  * @author BLI
  */
 public class PathRenderHelper {
+    
+    public static Node createLineFromVerticesWithData(SegmentSet lineWithData, AssetManager assetManager){
+        Node outputNode = new Node();
+        Spatial currentSeg;
+        Material currentMaterial;
+        
+        ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
+        ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
+        ArrayList<Float> dataAtVertices = lineWithData.getDataAtVertices();
+        
+        currentPath.add(pathVertices.get(0).clone());
+        for(int index = 1; index < pathVertices.size()-1;index++){
+            currentPath.add(pathVertices.get(index));
+            currentMaterial = MaterialHelper.getGrayscaleMaterial(dataAtVertices.get(index-1), assetManager);
+            currentSeg = createLineFromVertices(currentPath, currentMaterial);
+            outputNode.attachChild(currentSeg);
+            currentPath.remove(0);
+        }
+        
+        return outputNode;
+        
+    }
 
     public static Spatial createLineFromVertices(ArrayList<Vector3f> lineVertices, Material material) {
         short[] indices = new short[lineVertices.size() * 2];
