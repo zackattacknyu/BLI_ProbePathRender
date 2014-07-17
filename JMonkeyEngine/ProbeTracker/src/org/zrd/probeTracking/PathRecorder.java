@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -27,10 +28,13 @@ public class PathRecorder {
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     private Path pathRecordingFilePath;
+    private ArrayList<Vector3f> mostRecentVertices;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
         vertices.add(startingPosition.clone());
+        mostRecentVertices = new ArrayList<Vector3f>(100);
+        mostRecentVertices.add(startingPosition.clone());
         pathSpecified = false;
     }
     
@@ -81,6 +85,12 @@ public class PathRecorder {
             System.out.println("Exception thrown trying to write compressed file: " + ex);
         }
     }
+    
+    public ArrayList<Vector3f> getMostRecentVertices(){
+        ArrayList<Vector3f> verticesToReturn = GeneralHelper.getCopyOfPath(mostRecentVertices);
+        mostRecentVertices.clear();
+        return verticesToReturn;
+    }
 
     void addToPath(Vector3f currentPosition, 
             Vector2f currentXYPosition, 
@@ -99,7 +109,7 @@ public class PathRecorder {
                     getOrientationOutputString(currentYaw,currentPitch,currentRoll));
         }
         
-        
+        mostRecentVertices.add(currentPosition.clone());
         vertices.add(currentPosition.clone());
     }
     

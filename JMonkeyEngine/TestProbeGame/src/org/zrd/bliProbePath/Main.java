@@ -91,7 +91,7 @@ public class Main extends SimpleApplication {
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
-        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,rootNode,lineMaterial);
     }
 
     @Override

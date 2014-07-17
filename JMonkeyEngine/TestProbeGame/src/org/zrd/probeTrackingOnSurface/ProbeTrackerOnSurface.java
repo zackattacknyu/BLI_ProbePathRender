@@ -4,9 +4,13 @@
  */
 package org.zrd.probeTrackingOnSurface;
 
+import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
+import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
 import org.zrd.probeTracking.ProbeTracker;
 
 /**
@@ -21,14 +25,26 @@ public class ProbeTrackerOnSurface {
     private Vector3f lastPosition;
     private PathProjectionOntoMesh pathProj;
     
-    public ProbeTrackerOnSurface(ProbeTracker probeTracker, ProbeRotationCalibration probeRotCalib){
+    private Node rootNode;
+    private Material lineMaterial;
+
+    public ProbeTrackerOnSurface(ProbeTracker probeTracker, ProbeRotationCalibration probeRotCalib, Node rootNode, Material lineMaterial){
         this.probeRotCalib = probeRotCalib;
         this.probeTracker = probeTracker;
         lastPosition = probeTracker.getCurrentPosition();
+        this.rootNode = rootNode;
+        this.lineMaterial = lineMaterial;
     }
     
     public void updateData(){
         probeTracker.updateData();
+        
+        if(probeTracker.isRecordingPath()){
+            ArrayList<Vector3f> recentVertices = probeTracker.getMostRecentPathVertices();
+            if(!recentVertices.isEmpty()){
+                rootNode.attachChild(PathRenderHelper.createLineFromVertices(recentVertices, lineMaterial));
+            }
+        }
         
         if(probeRotCalib.arePointsNewlyPicked()){
             

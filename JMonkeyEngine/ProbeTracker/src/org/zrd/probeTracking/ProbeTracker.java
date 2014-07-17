@@ -151,6 +151,10 @@ public class ProbeTracker implements ProbeDataStream{
         return coordConverter.getCurrentNormal();
     }
     
+    public ArrayList<Vector3f> getMostRecentPathVertices(){
+        return currentRecordingPath.getMostRecentVertices();
+    }
+    
     @Override
     public void startStopRecording(){
         
