@@ -60,3 +60,7 @@
 /JMonkeyEngine/CMDApplication_RawSerialRecorder/build/
 /JMonkeyEngine/JMEApplication_RecordedPathRendering/nbproject/private/
 /JMonkeyEngine/JMEApplication_RecordedPathRendering/build/
+/JMonkeyEngine/LibJME_CameraTracker/nbproject/private/
+/JMonkeyEngine/LibJME_CameraTracker/dist/
+/JMonkeyEngine/LibJME_CameraTracker/build/
+/JMonkeyEngine/JMEApplication_RecordedPathRendering/dist/
