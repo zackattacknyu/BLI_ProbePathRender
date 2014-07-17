@@ -40,7 +40,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>KeyboardObjectTracking</foreign-project>
+                <foreign-project>LibJME_CameraTracker</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -48,7 +48,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>LibJME_CameraTracker</foreign-project>
+                <foreign-project>LibJME_KeyboardObjectTracking</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
