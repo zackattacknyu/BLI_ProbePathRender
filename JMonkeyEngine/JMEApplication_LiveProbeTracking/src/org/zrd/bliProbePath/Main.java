@@ -17,6 +17,7 @@ import org.zrd.jmeGeometry.renderedObjects.ProbeRepresentation;
 import org.zrd.jmeGeometry.renderedObjects.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.jmeGeometry.renderedObjects.BallMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
@@ -84,16 +85,17 @@ public class Main extends SimpleApplication {
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        cameraTracker.setDefaultCamera((short)1);
+        cameraTracker.setDefaultCamera((short)3);
         
-        RenderedMesh activeMesh = new LolaMesh(assetManager);
+        //RenderedMesh activeMesh = new LolaMesh(assetManager);
+        RenderedMesh activeMesh = new BallMesh(assetManager);
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
-        rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
+        //rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();

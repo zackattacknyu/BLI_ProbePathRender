@@ -28,6 +28,12 @@ public class CameraTrackerImpl_ProbePathRender extends CameraTrackerImpl{
             new Vector3f(-16.928802f, 23.251862f, -54.489124f);
     public static final Quaternion LOLA_MODE_DEFAULT_ROTATION = 
             new Quaternion(0.20308718f, 0.20007013f, -0.042432234f, 0.9575631f);
+
+    //default camera when viewing ball
+    public static final Vector3f BALL_MODE_DEFAULT_LOCATION = 
+            new Vector3f(9.057041f, 0.40602827f, 10.088496f);
+    public static final Quaternion BALL_MODE_DEFAULT_ROTATION = 
+            new Quaternion(-0.28912917f, -0.122892424f, 0.91898036f, 0.23827894f);
     
     //default camera when viewing raw data
     public static final Vector3f RAW_DATA_MODE_DEFAULT_LOCATION = 
@@ -68,6 +74,10 @@ public class CameraTrackerImpl_ProbePathRender extends CameraTrackerImpl{
                 //when viewing raw data
                 setDefaultCamera(RAW_DATA_MODE_DEFAULT_LOCATION,RAW_DATA_MODE_DEFAULT_ROTATION);
                 break;
+                
+            case 3:
+                //when viewing ball
+                setDefaultCamera(BALL_MODE_DEFAULT_LOCATION,BALL_MODE_DEFAULT_ROTATION);
         }
     }
     
