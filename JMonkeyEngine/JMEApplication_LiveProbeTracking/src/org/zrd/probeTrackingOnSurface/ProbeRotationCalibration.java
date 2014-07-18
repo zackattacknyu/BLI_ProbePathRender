@@ -66,7 +66,7 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
         rotationCalibrationDone = true;
         
         probeTracker.startStopRecording();
-        //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
+        probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         probeTracker.setRotationCalibration(rotCalib.getAggregateRotation());
         probeTracker.setCurrentPosition(endPoint);
     }

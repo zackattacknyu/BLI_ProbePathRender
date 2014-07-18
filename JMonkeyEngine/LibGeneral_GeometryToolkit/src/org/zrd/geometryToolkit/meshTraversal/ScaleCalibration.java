@@ -23,8 +23,8 @@ public class ScaleCalibration {
     public ScaleCalibration(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
         Vector3f startPoint = inputPath.get(0);
         Vector3f oldEndpoint = inputPath.get(inputPath.size() - 1);
-        float currentLength = oldEndpoint.subtract(startPoint).length();
-        float desiredLength = newEndpoint.subtract(startPoint).length();
+        float currentLength = oldEndpoint.distance(startPoint);
+        float desiredLength = newEndpoint.distance(startPoint);
         uniformScaleFactor = desiredLength / currentLength;
         displayScaleFactor(uniformScaleFactor);
         Matrix4f transform = MeshTraverseHelper.getScaleAroundPoint(startPoint, uniformScaleFactor);
