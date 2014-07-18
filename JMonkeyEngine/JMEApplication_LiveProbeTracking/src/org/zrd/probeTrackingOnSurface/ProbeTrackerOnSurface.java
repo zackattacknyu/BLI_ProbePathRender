@@ -4,14 +4,14 @@
  */
 package org.zrd.probeTrackingOnSurface;
 
-import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.locationTracking.LocationTracker;
+import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
-import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
-import org.zrd.probeTracking.ProbeTracker;
 
 /**
  *
@@ -20,57 +20,63 @@ import org.zrd.probeTracking.ProbeTracker;
 public class ProbeTrackerOnSurface {
     
     
-    private ProbeTracker probeTracker;
-    private ProbeRotationCalibration probeRotCalib;
-    private Vector3f lastPosition;
+    private LocationTracker locationTracker;
+    private RotationCalibrationTool rotCalibrationTool;
+    private Vector3f currentPositionOnMesh;
     private PathProjectionOntoMesh pathProj;
+    private TriangleSet surfaceToTrackOn;
     
-    private Node currentRecordedSegments;
-    private Material lineMaterial;
+    private MeshTriangle currentTriangle;
+    private MeshTriangle lastTriangle;
 
-    public ProbeTrackerOnSurface(ProbeTracker probeTracker, ProbeRotationCalibration probeRotCalib, Material lineMaterial){
-        this.probeRotCalib = probeRotCalib;
-        this.probeTracker = probeTracker;
-        lastPosition = probeTracker.getCurrentPosition();
-        this.lineMaterial = lineMaterial;
-        this.currentRecordedSegments = new Node();
+    public ProbeTrackerOnSurface(LocationTracker probeTracker, RotationCalibrationTool probeRotCalib, TriangleSet surfaceToTrackOn){
+        this.rotCalibrationTool = probeRotCalib;
+        this.locationTracker = probeTracker;
+        this.surfaceToTrackOn = surfaceToTrackOn;
+        currentPositionOnMesh = probeTracker.getCurrentPosition();
     }
-    
-    public Node getCurrentSegments(){
-        Node returnSegs = currentRecordedSegments.clone(true);
-        currentRecordedSegments = new Node();
-        return returnSegs;
+
+    public Vector3f getCurrentPositionOnMesh() {
+        return currentPositionOnMesh;
     }
     
     public void updateData(){
-        probeTracker.updateData();
+        locationTracker.updateData();
         
-        /*if(probeTracker.isRecordingPath()){
-            ArrayList<Vector3f> recentVertices = probeTracker.getMostRecentPathVertices();
-            if(recentVertices != null && !recentVertices.isEmpty()){
-                currentRecordedSegments.attachChild(PathRenderHelper.createLineFromVertices(recentVertices, lineMaterial));
+        if(rotCalibrationTool.isCalibrationNewlyFinished()){
+            
+            pathProj = new PathProjectionOntoMesh(rotCalibrationTool.getTriangleAtEndPoint(),
+                    rotCalibrationTool.getCalibEndPoint().clone(),surfaceToTrackOn);
+            currentPositionOnMesh = rotCalibrationTool.getCalibEndPoint().clone();
+            locationTracker.resetDisplacementSinceLastPoint();
+            lastTriangle = rotCalibrationTool.getTriangleAtEndPoint();
+            
+            System.out.println("Triangle at end point: " + lastTriangle);
+            
+        }else if(rotCalibrationTool.isCalibrationDone()){
+            
+            Vector3f currentSegment = locationTracker.getDisplacementSinceLastPoint();
+            if(currentSegment.length() > ProgramConstants.MIN_SEGMENT_LENGTH){
+                
+                ArrayList<Vector3f> segmentsOnMesh = pathProj.getCurrentProjectedPath(currentSegment);
+                currentPositionOnMesh = segmentsOnMesh.get(segmentsOnMesh.size()-1);
+                locationTracker.resetDisplacementSinceLastPoint();
+                
+                currentTriangle = pathProj.getCurrentTriangle();
+                if(currentTriangle == null){
+                    System.out.println("CurrentTriangle is null");
+                }
+                else if(!currentTriangle.equals(lastTriangle)){
+                    System.out.println("Current Triangle: " + currentTriangle);
+                    lastTriangle = currentTriangle;
+                }
+                
             }
-        }*/
-        
-        if(probeRotCalib.arePointsNewlyPicked()){
             
-            pathProj = new PathProjectionOntoMesh(probeRotCalib.getCurrentTriangle(),
-                    probeTracker.getCurrentPosition(),probeRotCalib.getMeshInfo());
-            lastPosition = probeTracker.getCurrentPosition().clone();
             
-        }else if(probeRotCalib.isRotationCalibrationDone()){
+        }else{
             
-            Vector3f currentProbePosition = probeTracker.getCurrentPosition().clone();
-            float distance = currentProbePosition.distance(lastPosition);
-            if(distance > ProgramConstants.MIN_SEGMENT_LENGTH){
-                Vector3f segmentVec = currentProbePosition.subtract(lastPosition);
-                pathProj.getCurrentProjectedPath(segmentVec);
-                lastPosition = pathProj.getCurrentStartPoint().clone();
-                probeTracker.setCurrentPosition(pathProj.getCurrentStartPoint());
-                System.out.println("Last Position: " + currentProbePosition);
-                System.out.println("Position Now: " + lastPosition);
-                System.out.println("Current Triangle: " + pathProj.getCurrentTriangle());
-            }
+            currentPositionOnMesh = locationTracker.getCurrentPosition();
             
         }
         

@@ -30,6 +30,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     private boolean onStartPoint = true;
     private Vector3f lastPointClicked;
     private MeshTriangle startingTriangle;
+    private MeshTriangle endingTriangle;
     private TriangleSet meshInfo;
     
     private boolean pointsNewlyPicked = false;
@@ -57,6 +58,10 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     protected abstract void handleStartPoint(Vector3f startPoint);
     protected abstract void handleEndPointResult(Vector3f endPoint,ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath);
     protected abstract ArrayList<Vector3f> getActivePathAtEndpoint();
+    
+    public MeshTriangle getEndingTriangle(){
+        return endingTriangle;
+    }
 
     @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
@@ -79,6 +84,8 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                 if(!endPoint.equals(lastPointClicked)){
 
                     lastPointClicked = endPoint;
+                    
+                    endingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
                     
                     ArrayList<Vector3f> activePath = getActivePathAtEndpoint();
                     

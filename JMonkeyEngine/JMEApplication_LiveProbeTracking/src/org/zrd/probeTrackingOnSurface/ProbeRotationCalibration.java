@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
@@ -21,12 +22,12 @@ import org.zrd.probeTracking.ProbeTracker;
  *
  * @author BLI
  */
-public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
+public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements RotationCalibrationTool{
 
     private boolean rotationCalibrationDone = false;
     private ProbeTracker probeTracker;
-    private MeshTriangle currentTriangle;
     private TriangleSet meshInfo;
+    private Vector3f calibEndPoint;
     
     public ProbeRotationCalibration(InputManager inputManager, Camera cam, Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo){
         super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo);
@@ -35,10 +36,6 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
 
     public boolean isRotationCalibrationDone() {
         return rotationCalibrationDone;
-    }
-
-    public MeshTriangle getCurrentTriangle() {
-        return currentTriangle;
     }
 
     public TriangleSet getMeshInfo() {
@@ -65,6 +62,8 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
     protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
         rotationCalibrationDone = true;
         
+        calibEndPoint = endPoint.clone();
+        
         probeTracker.startStopRecording();
         probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         probeTracker.setRotationCalibration(rotCalib.getAggregateRotation());
@@ -74,6 +73,22 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh{
     @Override
     protected ArrayList<Vector3f> getActivePathAtEndpoint() {
         return probeTracker.getCurrentPathVertices();
+    }
+
+    public boolean isCalibrationDone() {
+        return rotationCalibrationDone;
+    }
+
+    public boolean isCalibrationNewlyFinished() {
+        return arePointsNewlyPicked();
+    }
+
+    public MeshTriangle getTriangleAtEndPoint() {
+        return getEndingTriangle();
+    }
+
+    public Vector3f getCalibEndPoint() {
+        return calibEndPoint;
     }
     
 }

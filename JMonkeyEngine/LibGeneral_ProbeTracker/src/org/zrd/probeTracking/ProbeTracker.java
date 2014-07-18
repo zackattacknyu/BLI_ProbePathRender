@@ -11,6 +11,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
@@ -27,7 +28,7 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  * 
  * @author BLI
  */
-public class ProbeTracker implements ProbeDataStream{
+public class ProbeTracker implements ProbeDataStream, LocationTracker{
 
     private final Vector3f startingPosition;
     
@@ -37,6 +38,8 @@ public class ProbeTracker implements ProbeDataStream{
     private Quaternion rotationCalibration = new Quaternion();
     
     private Vector3f currentPosition;
+    private Vector3f currentDisplacement;
+    private Vector3f displacementSinceLastPoint = new Vector3f();
     private Vector2f currentXYPosition;
     
     private boolean recordingPath = false;
@@ -112,12 +115,13 @@ public class ProbeTracker implements ProbeDataStream{
         rotationFromData = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
         //gets the current displacement vector
-        Vector3f currentDisp = coordConverter.getXYZDisplacement(
+        currentDisplacement = coordConverter.getXYZDisplacement(
                 currentDeltaX, currentDeltaY, 
                 currentYaw, currentPitch, currentRoll);
         
         //adds the displacement to current position
-        currentPosition.addLocal(currentDisp);
+        currentPosition.addLocal(currentDisplacement.clone());
+        displacementSinceLastPoint.addLocal(currentDisplacement.clone());
         
         //gets the xy displacement vector
         Vector2f currentXYDisp = coordConverter.getXYDisplacement(
@@ -131,6 +135,15 @@ public class ProbeTracker implements ProbeDataStream{
                     currentYaw, currentPitch, currentRoll);
         }
         
+    }
+    
+    @Override
+    public Vector3f getDisplacementSinceLastPoint(){
+        return displacementSinceLastPoint;
+    }
+    @Override
+    public void resetDisplacementSinceLastPoint(){
+        displacementSinceLastPoint = new Vector3f();
     }
     
     /**
@@ -197,6 +210,7 @@ public class ProbeTracker implements ProbeDataStream{
         return recordingPath;
     }
     
+    @Override
     public Vector3f getCurrentPosition(){
         return currentPosition;
     }
@@ -253,6 +267,12 @@ public class ProbeTracker implements ProbeDataStream{
     public Quaternion getLocalRotation() {
         return rotationCalibration.mult(rotationFromData);
     }
+
+    @Override
+    public Vector3f getCurrentDisplacement() {
+        return currentDisplacement;
+    }
+
     
     
     

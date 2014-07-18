@@ -1,7 +1,5 @@
 package org.zrd.bliProbePath;
 
-import com.aurellem.capture.Capture;
-import com.aurellem.capture.IsoTimer;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
@@ -12,13 +10,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.zrd.jmeGeometry.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometry.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometry.renderedObjects.ProbeRepresentation;
@@ -33,7 +25,6 @@ import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
-import org.zrd.util.timeTools.TimeHelper;
 
 
 /**
@@ -59,6 +50,8 @@ public class Main extends SimpleApplication {
     private ProbeMoveAction probeMoveAction;
     private ProbeTrackerRecording probeRecording;
     private ProbeTrackerOnSurface probeTrackerOnSurface;
+    
+    public static final boolean SURFACE_TRACKING_ON = false;
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
@@ -119,7 +112,7 @@ public class Main extends SimpleApplication {
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
-        //probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,lineMaterial);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
     }
 
     @Override
@@ -128,14 +121,21 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        probeTracker.updateData();
+        if(SURFACE_TRACKING_ON){
+            probeTrackerOnSurface.updateData();
+            moveableObject.setLocalTranslation(probeTrackerOnSurface.getCurrentPositionOnMesh());
+        }else{
+            probeTracker.updateData();
+            moveableObject.setLocalTranslation(probeTracker.getCurrentPosition());
+        }
+        
         //rootNode.attachChild(probeTrackerOnSurface.getCurrentSegments());
         
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         
-        moveableObject.setLocalTranslation(probeTracker.getCurrentPosition());
         
-        xyzText.setText(probeTracker.getXYZtext());
+        
+        xyzText.setText(probeTrackerOnSurface.getCurrentPositionOnMesh().toString());
         yawPitchRollText.setText(probeTracker.getYawPitchRollText());
         
         probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
