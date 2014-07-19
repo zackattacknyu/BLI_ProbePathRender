@@ -26,6 +26,7 @@ import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
+import org.zrd.probeTrackingOnSurface.ProbeTrackerRender;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
 
 
@@ -40,6 +41,7 @@ public class Main extends SimpleApplication {
     
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     
+    private ProbeTrackerRender probeTrackerRender;
     private ProbeTracker probeTracker;
     private LocationTracker activeTracker;
     
@@ -124,6 +126,8 @@ public class Main extends SimpleApplication {
             activeTracker = probeTracker;
         }
         
+        probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
+        
     }
 
     @Override
@@ -132,12 +136,15 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        activeTracker.updateData();
-        
-        //rootNode.attachChild(probeTrackerOnSurface.getCurrentSegments());
+        /*activeTracker.updateData();
+
         moveableObject.setLocalTranslation(activeTracker.getCurrentPosition());
-        moveableObject.setLocalRotation(probeTracker.getLocalRotation());
+        moveableObject.setLocalRotation(probeTracker.getLocalRotation());*/
         
+        probeTrackerRender.updateInfo();
+        if(probeTrackerRender.isNewRenderedPathsExist()){
+            rootNode.attachChild(probeTrackerRender.getRenderedPaths());
+        }
         
         
         xyzText.setText(activeTracker.getXYZtext());

@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.locationTracking;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 
 /**
@@ -22,5 +23,7 @@ public interface LocationTracker {
     String getYawPitchRollText();
     
     boolean isRecordingPath();
+    
+    Quaternion getLocalRotation();
     
 }
