@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.geometryUtil;
 
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -27,6 +28,17 @@ public class GeneralHelper {
             returnPath.add(vertex.clone());
         }
         return returnPath;
+    }
+    
+    public static String getXYZDisplayString(Vector3f position){
+        return "(X,Y,Z) = " + position;
+    }
+    
+    public static String getYawPitchRollDisplayString(float yawInRadians, float pitchInRadians, float rollInRadians){
+        return "(Yaw,Pitch,Roll) = (" + 
+                yawInRadians*FastMath.RAD_TO_DEG + "," + 
+                pitchInRadians*FastMath.RAD_TO_DEG + "," + 
+                rollInRadians*FastMath.RAD_TO_DEG + ")";
     }
     
 }

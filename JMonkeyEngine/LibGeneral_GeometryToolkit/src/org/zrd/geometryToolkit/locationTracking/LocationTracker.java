@@ -18,4 +18,9 @@ public interface LocationTracker {
     void resetDisplacementSinceLastPoint();
     void updateData();
     
+    String getXYZtext();
+    String getYawPitchRollText();
+    
+    boolean isRecordingPath();
+    
 }

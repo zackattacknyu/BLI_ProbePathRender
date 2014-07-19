@@ -6,6 +6,7 @@ package org.zrd.probeTrackingOnSurface;
 
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
@@ -17,7 +18,7 @@ import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
  *
  * @author BLI
  */
-public class ProbeTrackerOnSurface {
+public class ProbeTrackerOnSurface implements LocationTracker{
     
     
     private LocationTracker locationTracker;
@@ -36,7 +37,7 @@ public class ProbeTrackerOnSurface {
         currentPositionOnMesh = probeTracker.getCurrentPosition();
     }
 
-    public Vector3f getCurrentPositionOnMesh() {
+    public Vector3f getCurrentPosition() {
         return currentPositionOnMesh;
     }
     
@@ -81,6 +82,30 @@ public class ProbeTrackerOnSurface {
         }
         
         
+    }
+
+    public Vector3f getCurrentDisplacement() {
+        return locationTracker.getCurrentDisplacement();
+    }
+
+    public Vector3f getDisplacementSinceLastPoint() {
+        return locationTracker.getDisplacementSinceLastPoint();
+    }
+
+    public void resetDisplacementSinceLastPoint() {
+        locationTracker.resetDisplacementSinceLastPoint();
+    }
+
+    public String getXYZtext() {
+        return GeneralHelper.getXYZDisplayString(currentPositionOnMesh);
+    }
+
+    public String getYawPitchRollText() {
+        return locationTracker.getYawPitchRollText();
+    }
+
+    public boolean isRecordingPath() {
+        return locationTracker.isRecordingPath();
     }
     
 }

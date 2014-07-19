@@ -11,6 +11,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Properties;
+import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometry.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometry.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometry.renderedObjects.ProbeRepresentation;
@@ -40,6 +41,7 @@ public class Main extends SimpleApplication {
     private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
     
     private ProbeTracker probeTracker;
+    private LocationTracker activeTracker;
     
     private CameraTracker cameraTracker;
 
@@ -52,7 +54,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerRecording probeRecording;
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
-    public static final boolean SURFACE_TRACKING_ON = false;
+    public static final boolean SURFACE_TRACKING_ON = true;
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
@@ -85,17 +87,17 @@ public class Main extends SimpleApplication {
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        cameraTracker.setDefaultCamera((short)3);
+        cameraTracker.setDefaultCamera((short)1);
         
-        //RenderedMesh activeMesh = new LolaMesh(assetManager);
-        RenderedMesh activeMesh = new BallMesh(assetManager);
+        RenderedMesh activeMesh = new LolaMesh(assetManager);
+        //RenderedMesh activeMesh = new BallMesh(assetManager);
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
-        //rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
+        rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
@@ -115,6 +117,13 @@ public class Main extends SimpleApplication {
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
+        
+        if(SURFACE_TRACKING_ON){
+            activeTracker = probeTrackerOnSurface;
+        }else{
+            activeTracker = probeTracker;
+        }
+        
     }
 
     @Override
@@ -123,22 +132,16 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        if(SURFACE_TRACKING_ON){
-            probeTrackerOnSurface.updateData();
-            moveableObject.setLocalTranslation(probeTrackerOnSurface.getCurrentPositionOnMesh());
-        }else{
-            probeTracker.updateData();
-            moveableObject.setLocalTranslation(probeTracker.getCurrentPosition());
-        }
+        activeTracker.updateData();
         
         //rootNode.attachChild(probeTrackerOnSurface.getCurrentSegments());
-        
+        moveableObject.setLocalTranslation(activeTracker.getCurrentPosition());
         moveableObject.setLocalRotation(probeTracker.getLocalRotation());
         
         
         
-        xyzText.setText(probeTrackerOnSurface.getCurrentPositionOnMesh().toString());
-        yawPitchRollText.setText(probeTracker.getYawPitchRollText());
+        xyzText.setText(activeTracker.getXYZtext());
+        yawPitchRollText.setText(activeTracker.getYawPitchRollText());
         
         probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
         
