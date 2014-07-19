@@ -207,6 +207,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         
     }
 
+    @Override
     public boolean isRecordingPath() {
         return recordingPath;
     }

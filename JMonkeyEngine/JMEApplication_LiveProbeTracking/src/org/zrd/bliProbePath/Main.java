@@ -56,7 +56,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerRecording probeRecording;
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
-    public static final boolean SURFACE_TRACKING_ON = true;
+    public static final boolean SURFACE_TRACKING_ON = false;
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();

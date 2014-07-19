@@ -29,7 +29,7 @@ public class ProbeTrackerRender {
     public ProbeTrackerRender(LocationTracker activeTracker, Spatial probeObject, Material lineMaterial){
         this.activeTracker = activeTracker;
         this.probeObject = probeObject;
-        lastPosition = activeTracker.getCurrentPosition();
+        lastPosition = activeTracker.getCurrentPosition().clone();
         this.renderedPaths = new Node();
         this.lineMaterial = lineMaterial;
     }
@@ -38,13 +38,12 @@ public class ProbeTrackerRender {
         activeTracker.updateData();
         
         Vector3f currentPosition = activeTracker.getCurrentPosition().clone();
-        if(currentPosition.distance(lastPosition) > ProgramConstants.MIN_SEGMENT_LENGTH){
+        /*if(currentPosition.distance(lastPosition) > ProgramConstants.MIN_SEGMENT_LENGTH){
             if(activeTracker.isRecordingPath()){
                 addSegment(currentPosition,lastPosition);
             }
-            
             lastPosition = currentPosition.clone();
-        }
+        }*/
 
         probeObject.setLocalTranslation(currentPosition);
         probeObject.setLocalRotation(activeTracker.getLocalRotation());
