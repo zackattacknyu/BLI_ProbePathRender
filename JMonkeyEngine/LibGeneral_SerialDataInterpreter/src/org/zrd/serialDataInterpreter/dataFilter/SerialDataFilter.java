@@ -8,7 +8,10 @@ import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 
 /**
- * 
+ *  * UNUSED CODE:
+ * KEEP IN CASE IT WILL BE USEFUL
+ *      IN THE FUTURE
+ *
  * @author BLI
  */
 public class SerialDataFilter {

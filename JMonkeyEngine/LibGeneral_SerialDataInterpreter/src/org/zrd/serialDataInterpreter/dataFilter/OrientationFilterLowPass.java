@@ -7,6 +7,9 @@ package org.zrd.serialDataInterpreter.dataFilter;
 import org.zrd.util.stats.LowPassFilterData;
 
 /**
+ * * UNUSED CODE:
+ * KEEP IN CASE IT WILL BE USEFUL
+ *      IN THE FUTURE
  *
  * @author BLI
  */
