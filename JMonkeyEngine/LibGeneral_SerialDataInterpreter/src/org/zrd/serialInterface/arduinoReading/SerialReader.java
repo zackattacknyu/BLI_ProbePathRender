@@ -14,8 +14,6 @@ import gnu.io.SerialPortEventListener;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * This is the class that interfaces with the Arduino.
@@ -158,6 +156,11 @@ public class SerialReader implements SerialPortEventListener {
             // Ignore all the other eventTypes, but you should consider the other ones.
 	}
         
+        /**
+         * This class resets the reading of the probe. When the probe is
+         *      sent the 'r' command, it resets. This simply sends
+         *      that command to the probe through its output stream.
+         */
         public void reset(){
             int rInt = 'r';
             try {
@@ -167,16 +170,12 @@ public class SerialReader implements SerialPortEventListener {
             }
         }
 
-        private void setSerialProperties(Properties serialProperties){
-            this.serialProperties = serialProperties;
-        }
-        
         /**
          * This starts the thread and initializes the reader
          * @param props     serial properties to be used
          */
         public void beginExecution(Properties props){
-            setSerialProperties(props);
+            this.serialProperties = props;
             initialize();
             Thread t=new Thread() {
                 @Override
@@ -193,6 +192,12 @@ public class SerialReader implements SerialPortEventListener {
             System.out.println("Started");
         }
         
+        /**This is a static method that starts the reader
+         *      and returns the reader object
+         * 
+         * @param props     properties used to initialize the reader
+         * @return          SerialReader object for getting data from probe
+         */
         public static SerialReader startNewReader(Properties props){
             SerialReader serial = new SerialReader();
             try{

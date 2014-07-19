@@ -32,10 +32,7 @@ import org.zrd.util.dataStreaming.ProbeDataStream;
  * @author BLI
  */
 public class SerialDataReader implements ProbeDataStream{
-    
-    /**the raw reader
-     * 
-     */
+
     private SerialReader serial;
     
     private SerialDataPoint currentSerialData;
