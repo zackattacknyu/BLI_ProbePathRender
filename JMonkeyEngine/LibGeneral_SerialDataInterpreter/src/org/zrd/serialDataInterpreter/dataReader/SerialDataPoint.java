@@ -5,6 +5,7 @@
 package org.zrd.serialDataInterpreter.dataReader;
 
 import java.util.HashMap;
+import org.zrd.util.debugOutput.OutputHelper;
 
 /**
  * This class represents a single point in the serial data
@@ -18,11 +19,20 @@ import java.util.HashMap;
  * @author BLI
  */
 public class SerialDataPoint {
+    //says the delimiter used to separate parts of the serial data string
+    public static final String SERIAL_DATA_STRING_DELIMITER = ",";
     
-    private float timestamp,x,y,yaw,pitch,roll,datafield;
-
+    /**
+     *Min number of data parts before it parses the string.
+     *      This prevents small strings from the serial reading
+     *      being parsed and causing errors
+     */
     public static final int MIN_NUM_DATA_PARTS = 6;
     
+    //default field value if not specified by data string
+    public static final float DEFAULT_FIELD_VALUE = Float.NaN;
+    
+    private float timestamp,x,y,yaw,pitch,roll,datafield;
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
@@ -34,7 +44,7 @@ public class SerialDataPoint {
     public SerialDataPoint(String data, HashMap<String,Integer> dataLocations){
         this.dataLocations = dataLocations;
         
-        dataParts = data.split(DataLocationConstants.SERIAL_DATA_STRING_DELIMITER);
+        dataParts = data.split(SERIAL_DATA_STRING_DELIMITER);
         
         //make sure we currently have enough data
         if(dataParts.length >= MIN_NUM_DATA_PARTS){
@@ -52,20 +62,22 @@ public class SerialDataPoint {
         if(dataLocations.containsKey(partName)){
             return Float.parseFloat(dataParts[dataLocations.get(partName)]);
         }else{
-            return 0;
+            return DEFAULT_FIELD_VALUE;
         }
     }
 
     @Override
     public String toString() {
-        return DataLocationConstants.TIMESTAMP_KEY + "= " + timestamp +
-                DataLocationConstants.YAW_KEY + "= " + yaw +
-                DataLocationConstants.PITCH_KEY + "= " + pitch +
-                DataLocationConstants.ROLL_KEY + "= " + roll +
-                DataLocationConstants.X_KEY + "= " + x +
-                DataLocationConstants.Y_KEY + "= " + y +
-                DataLocationConstants.DATAFIELD_KEY + "= " + datafield;
+        return OutputHelper.makeNameValueDisplay(DataLocationConstants.TIMESTAMP_KEY,timestamp) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.YAW_KEY,yaw) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.PITCH_KEY,pitch) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.ROLL_KEY,roll) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.X_KEY,x) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.Y_KEY,y) +
+                OutputHelper.makeNameValueDisplay(DataLocationConstants.DATAFIELD_KEY,datafield);
     }
+    
+    
     
     public float getTimestamp() {
         return timestamp;

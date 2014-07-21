@@ -9,14 +9,11 @@ package org.zrd.serialDataInterpreter.dataReader;
  * @author BLI
  */
 public class DataLocationConstants {
-    
-    //says the delimiter used to separate parts of the serial data string
-    public static final String SERIAL_DATA_STRING_DELIMITER = ",";
-    
-    
-    //this is the prefix for all the data location property names
-    //      in the config file. This should include the period
-    //      or other mark used as a delimiter in the property name
+
+    /**this is the prefix for all the data location property names
+    *      in the config file. This should include the period
+    *      or other mark used as a delimiter in the property name
+    */
     public static final String DATA_LOCATION_PROPERTIES_PREFIX = "dataLocation.";
     
     /*

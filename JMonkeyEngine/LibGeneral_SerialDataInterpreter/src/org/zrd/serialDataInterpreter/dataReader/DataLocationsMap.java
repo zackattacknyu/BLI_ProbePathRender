@@ -57,11 +57,22 @@ public class DataLocationsMap {
      * @param name      the suffix of the property name in the config file
      */
     private void putLocationIntoMap(String name){
-        int location = 
-                Integer.parseInt(
-                propsMap.getProperty(
-                DataLocationConstants.DATA_LOCATION_PROPERTIES_PREFIX + name));
-        dataLocations.put(name, location);
+        
+        //gets the field name in the properties object
+        String propertyInConfigFileName = DataLocationConstants.DATA_LOCATION_PROPERTIES_PREFIX + name;
+        
+        //retrieves the value in the properties filed
+        String propertyValue = propsMap.getProperty(propertyInConfigFileName);
+        
+        //if the property value was there then get the number and put it into the map
+        if(propertyValue != null){
+            
+            //index of data
+            int location = Integer.parseInt(propertyValue);
+            
+            //put index into map
+            dataLocations.put(name, location);
+        }
     }
     
     
