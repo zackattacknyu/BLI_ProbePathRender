@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.zrd.util.timeTools.TimeHelper;
 
 /**
  * This is a class for writing probe data. It is meant to do the work
@@ -69,6 +68,25 @@ public class ProbeDataWriter {
     }
     
     /**
+     * This takes in the folder path and prefix and constructs the Path object
+     *      for the file to be used. Specifically, it constructs a text file
+     *      with the format {prefix}_{timestamp}.txt
+     * @param folderPath            path to put file
+     * @param fileNamePrefix        prefix of file name
+     * @return                      Path object for file
+     * @throws IOException          if there is a problem writing the file
+     */
+    public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix) throws IOException{
+        String currentTimestamp = TimeHelper.getTimestampSuffix();
+        String fileName = fileNamePrefix + DataWritingConstants.PREFIX_TO_SUFFIX_SEPARATOR + 
+                currentTimestamp + DataWritingConstants.OUTPUT_FILE_FORMAT;
+        if(!Files.exists(folderPath)){
+            Files.createDirectories(folderPath);
+        }
+        return folderPath.resolve(fileName);
+    }
+    
+    /**
      * This takes in the folder path and prefix and returns the data writer
      *      object from this class
      * @param folderPath        path to put file into
@@ -84,25 +102,7 @@ public class ProbeDataWriter {
             return null;
         }
     }
-    
-    /**
-     * This takes in the folder path and prefix and constructs the Path object
-     *      for the file to be used. Specifically, it constructs a text file
-     *      with the format {prefix}_{timestamp}.txt
-     * @param folderPath            path to put file
-     * @param fileNamePrefix        prefix of file name
-     * @return                      Path object for file
-     * @throws IOException          if there is a problem writing the file
-     */
-    public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix) throws IOException{
-        String currentTimestamp = TimeHelper.getTimestampSuffix();
-        String fileName = fileNamePrefix + "_" + currentTimestamp + ".txt";
-        if(!Files.exists(folderPath)){
-            Files.createDirectories(folderPath);
-        }
-        return folderPath.resolve(fileName);
-    }
-    
+
     /**
      * This is a static method that closes the writer of the probe data writer
      *      object passed in and tells the user if something went wrong
