@@ -42,4 +42,11 @@ public class DataWritingConstants {
      */
     public static final String PREFIX_TO_SUFFIX_SEPARATOR = "_";
     
+    /**
+     * Used to say the output file format for all
+     *      of the text files with data that are generated
+     * 
+     */
+    public static final String OUTPUT_FILE_FORMAT = ".txt";
+    
 }
