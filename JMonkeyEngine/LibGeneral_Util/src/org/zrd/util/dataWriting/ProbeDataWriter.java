@@ -49,20 +49,32 @@ public class ProbeDataWriter {
     }
     
     /**
-     * This writ
-     * @param line
-     * @throws IOException 
+     * This writes a line to the current writer being output writer
+     * @param line              line to writer to the text file
+     * @throws IOException      if there is a problem writing the line
      */
     public void writeLine(String line) throws IOException{
         outputWriter.write(line);
         outputWriter.newLine();
     }
     
+    /**
+     * This closes the output stream and is meant to be called once the 
+     *      writing of the file is finished
+     * @throws IOException      if there is a problem closing the output stream
+     */
     public void closeWriter() throws IOException{
         outputWriter.close();
         outputFileWriter.close();
     }
     
+    /**
+     * This takes in the folder path and prefix and returns the data writer
+     *      object from this class
+     * @param folderPath        path to put file into
+     * @param prefix            prefix of the data file name
+     * @return                  data writer object
+     */
     public static ProbeDataWriter getNewWriter(Path folderPath, String prefix){
         try {
             ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath,prefix);
@@ -73,6 +85,15 @@ public class ProbeDataWriter {
         }
     }
     
+    /**
+     * This takes in the folder path and prefix and constructs the Path object
+     *      for the file to be used. Specifically, it constructs a text file
+     *      with the format {prefix}_{timestamp}.txt
+     * @param folderPath            path to put file
+     * @param fileNamePrefix        prefix of file name
+     * @return                      Path object for file
+     * @throws IOException          if there is a problem writing the file
+     */
     public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix) throws IOException{
         String currentTimestamp = TimeHelper.getTimestampSuffix();
         String fileName = fileNamePrefix + "_" + currentTimestamp + ".txt";
@@ -82,17 +103,25 @@ public class ProbeDataWriter {
         return folderPath.resolve(fileName);
     }
     
-    
-    
-    public static ProbeDataWriter closeWriter(ProbeDataWriter currentWriter){
+    /**
+     * This is a static method that closes the writer of the probe data writer
+     *      object passed in and tells the user if something went wrong
+     * @param currentWriter     the probe data writer to close
+     */    
+    public static void closeWriter(ProbeDataWriter currentWriter){
         try {
             currentWriter.closeWriter();
         } catch (IOException ex) {
             System.out.println("Exception thrown trying to close writer: " + ex);
         }
-        return null;
     }
     
+    /**
+     * This is a static method that takes in a data writer and writes a line
+     *      to it, only if the writer has been instantiated first. 
+     * @param writer        the probe data writer to write a line to
+     * @param line          the line to writer to the data writer
+     */
     public static void writeLineInWriter(ProbeDataWriter writer, String line){
         try {
             writer.writeLine(line);
