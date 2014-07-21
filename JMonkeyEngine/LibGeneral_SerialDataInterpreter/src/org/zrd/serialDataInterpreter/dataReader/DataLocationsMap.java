@@ -9,6 +9,11 @@ import java.util.Properties;
 
 /**This contains the code that constructs the data location map
  *      using the properties file
+ * 
+ * The data locations map consists of strings as keys which
+ *      are lower-case words representing the name of the data.
+ *      The values in the hash map are the index where the field
+ *      value occurs in the string coming from the serial data
  *
  * @author BLI
  */
@@ -18,19 +23,24 @@ public class DataLocationsMap {
     private HashMap<String,Integer> dataLocations;
     private Properties propsMap;
 
+    /**
+     * Makes the data location map using the properties object
+     * @param propsMap      properties object derived from the properties file
+     */
     public DataLocationsMap(Properties propsMap){
         dataLocations = new HashMap<String,Integer>(10);
         this.propsMap = propsMap;
         makeDataLocationsMap();
     }
     
+    /**
+     * this gets the data location map from the properties
+     * @param propsMap
+     * @return      hash map of data locations
+     */
     public static HashMap<String,Integer> getDataLocationMap(Properties propsMap){
         DataLocationsMap theMap = new DataLocationsMap(propsMap);      
-        return theMap.getDataLocations();
-    }
-
-    public HashMap<String, Integer> getDataLocations() {
-        return dataLocations;
+        return theMap.dataLocations;
     }
     
     private void makeDataLocationsMap(){
