@@ -30,7 +30,15 @@ public class DataLocationsMap {
     public DataLocationsMap(Properties propsMap){
         dataLocations = new HashMap<String,Integer>(10);
         this.propsMap = propsMap;
-        makeDataLocationsMap();
+        
+        //this makes the map
+        putLocationIntoMap(DataLocationConstants.TIMESTAMP_KEY);
+        putLocationIntoMap(DataLocationConstants.X_KEY);
+        putLocationIntoMap(DataLocationConstants.Y_KEY);
+        putLocationIntoMap(DataLocationConstants.YAW_KEY);
+        putLocationIntoMap(DataLocationConstants.PITCH_KEY);
+        putLocationIntoMap(DataLocationConstants.ROLL_KEY);
+        putLocationIntoMap(DataLocationConstants.DATAFIELD_KEY);
     }
     
     /**
@@ -43,27 +51,16 @@ public class DataLocationsMap {
         return theMap.dataLocations;
     }
     
-    private void makeDataLocationsMap(){
-        
-            putLoc(DataLocationConstants.TIMESTAMP_KEY, 
-                    getLoc(DataLocationConstants.TIMESTAMP_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(DataLocationConstants.X_KEY, 
-                    getLoc(DataLocationConstants.X_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(DataLocationConstants.Y_KEY, 
-                    getLoc(DataLocationConstants.Y_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(DataLocationConstants.YAW_KEY, 
-                    getLoc(DataLocationConstants.YAW_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(DataLocationConstants.PITCH_KEY, 
-                    getLoc(DataLocationConstants.PITCH_LOCATION_PROPERTY_NAME_SUFFIX));
-            putLoc(DataLocationConstants.ROLL_KEY, 
-                    getLoc(DataLocationConstants.ROLL_LOCATION_PROPERTY_NAME_SUFFIX));
-        }
-    
-    private int getLoc(String name){
-        return Integer.parseInt(propsMap.getProperty(DataLocationConstants.DATA_LOCATION_PROPERTIES_PREFIX + name));
-    }
-    
-    private void putLoc(String name, int location){
+    /**
+     * This retrieves the location from the properties object and puts the
+     *      integer into the data locations hashmap
+     * @param name      the suffix of the property name in the config file
+     */
+    private void putLocationIntoMap(String name){
+        int location = 
+                Integer.parseInt(
+                propsMap.getProperty(
+                DataLocationConstants.DATA_LOCATION_PROPERTIES_PREFIX + name));
         dataLocations.put(name, location);
     }
     

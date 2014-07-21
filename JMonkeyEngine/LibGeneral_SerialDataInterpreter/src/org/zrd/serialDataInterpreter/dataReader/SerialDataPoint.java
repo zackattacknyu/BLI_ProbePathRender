@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class SerialDataPoint {
     
-    private float timestamp,x,y,yaw,pitch,roll;
+    private float timestamp,x,y,yaw,pitch,roll,datafield;
 
     public static final int MIN_NUM_DATA_PARTS = 6;
     
@@ -44,6 +44,7 @@ public class SerialDataPoint {
             pitch = getPart(DataLocationConstants.PITCH_KEY);
             roll = getPart(DataLocationConstants.ROLL_KEY);
             timestamp = getPart(DataLocationConstants.TIMESTAMP_KEY);
+            datafield = getPart(DataLocationConstants.DATAFIELD_KEY);
         }
     }
     
@@ -57,12 +58,13 @@ public class SerialDataPoint {
 
     @Override
     public String toString() {
-        return "timestamp=" + timestamp 
-                + ", yaw=" + yaw
-                + ", pitch=" + pitch
-                + ", roll=" + roll
-                + ", x=" + x
-                + ", y=" + y;
+        return DataLocationConstants.TIMESTAMP_KEY + "= " + timestamp +
+                DataLocationConstants.YAW_KEY + "= " + yaw +
+                DataLocationConstants.PITCH_KEY + "= " + pitch +
+                DataLocationConstants.ROLL_KEY + "= " + roll +
+                DataLocationConstants.X_KEY + "= " + x +
+                DataLocationConstants.Y_KEY + "= " + y +
+                DataLocationConstants.DATAFIELD_KEY + "= " + datafield;
     }
     
     public float getTimestamp() {
