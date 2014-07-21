@@ -48,13 +48,13 @@ public class SerialDataPoint {
         
         //make sure we currently have enough data
         if(dataParts.length >= MIN_NUM_DATA_PARTS){
-            x = getPart(DataLocationConstants.X_KEY);
-            y = getPart(DataLocationConstants.Y_KEY);
-            yaw = getPart(DataLocationConstants.YAW_KEY);
-            pitch = getPart(DataLocationConstants.PITCH_KEY);
-            roll = getPart(DataLocationConstants.ROLL_KEY);
-            timestamp = getPart(DataLocationConstants.TIMESTAMP_KEY);
-            datafield = getPart(DataLocationConstants.DATAFIELD_KEY);
+            x = getPart(DataLocationsMap.X_KEY);
+            y = getPart(DataLocationsMap.Y_KEY);
+            yaw = getPart(DataLocationsMap.YAW_KEY);
+            pitch = getPart(DataLocationsMap.PITCH_KEY);
+            roll = getPart(DataLocationsMap.ROLL_KEY);
+            timestamp = getPart(DataLocationsMap.TIMESTAMP_KEY);
+            datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
         }
     }
     
@@ -68,13 +68,13 @@ public class SerialDataPoint {
 
     @Override
     public String toString() {
-        return OutputHelper.makeNameValueDisplay(DataLocationConstants.TIMESTAMP_KEY,timestamp) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.YAW_KEY,yaw) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.PITCH_KEY,pitch) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.ROLL_KEY,roll) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.X_KEY,x) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.Y_KEY,y) +
-                OutputHelper.makeNameValueDisplay(DataLocationConstants.DATAFIELD_KEY,datafield);
+        return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.YAW_KEY,yaw) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.PITCH_KEY,pitch) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.ROLL_KEY,roll) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.X_KEY,x) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield);
     }
     
     
