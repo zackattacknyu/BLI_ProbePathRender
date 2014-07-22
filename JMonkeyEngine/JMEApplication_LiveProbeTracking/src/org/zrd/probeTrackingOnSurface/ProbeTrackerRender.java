@@ -36,17 +36,21 @@ public class ProbeTrackerRender {
     
     public void updateInfo(){
         activeTracker.updateData();
-        
+    }
+    
+    public void updateRenderObjectInfo(){
+        probeObject.setLocalTranslation(activeTracker.getCurrentPosition().clone());
+        probeObject.setLocalRotation(activeTracker.getLocalRotation());
+    }
+    
+    public void updateRenderPathInfo(){
         Vector3f currentPosition = activeTracker.getCurrentPosition().clone();
-        /*if(currentPosition.distance(lastPosition) > ProgramConstants.MIN_SEGMENT_LENGTH){
+        if(currentPosition.distance(lastPosition) > ProgramConstants.MIN_SEGMENT_LENGTH){
             if(activeTracker.isRecordingPath()){
                 addSegment(currentPosition,lastPosition);
             }
             lastPosition = currentPosition.clone();
-        }*/
-
-        probeObject.setLocalTranslation(currentPosition);
-        probeObject.setLocalRotation(activeTracker.getLocalRotation());
+        }
     }
     
     private void addSegment(Vector3f vertex1, Vector3f vertex2){

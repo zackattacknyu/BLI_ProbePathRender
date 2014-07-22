@@ -39,8 +39,6 @@ public class Main extends SimpleApplication {
     private Spatial surface,moveableObject;
     private Material lineMaterial;
     
-    private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
-    
     private ProbeTrackerRender probeTrackerRender;
     private ProbeTracker probeTracker;
     private LocationTracker activeTracker;
@@ -55,6 +53,8 @@ public class Main extends SimpleApplication {
     private ProbeMoveAction probeMoveAction;
     private ProbeTrackerRecording probeRecording;
     private ProbeTrackerOnSurface probeTrackerOnSurface;
+    
+    private LiveTrackingText outputText;
     
     public static final boolean SURFACE_TRACKING_ON = false;
     
@@ -86,6 +86,8 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
         
+        
+        
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
@@ -103,9 +105,6 @@ public class Main extends SimpleApplication {
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
-        
-        
-        initDebugText();
         
         shootables = new Node("shootables");
         shootables.attachChild(surface);
@@ -128,6 +127,8 @@ public class Main extends SimpleApplication {
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
+        outputText = new LiveTrackingText(guiNode,assetManager);
+        
     }
 
     @Override
@@ -136,66 +137,21 @@ public class Main extends SimpleApplication {
          * http://hub.jmonkeyengine.org/wiki/doku.php/jme3:beginner:hello_main_event_loop
          */
         
-        /*activeTracker.updateData();
-
-        moveableObject.setLocalTranslation(activeTracker.getCurrentPosition());
-        moveableObject.setLocalRotation(probeTracker.getLocalRotation());*/
-        
         probeTrackerRender.updateInfo();
-        if(probeTrackerRender.isNewRenderedPathsExist()){
-            rootNode.attachChild(probeTrackerRender.getRenderedPaths());
-        }
-        
-        
-        xyzText.setText(activeTracker.getXYZtext());
-        yawPitchRollText.setText(activeTracker.getYawPitchRollText());
-        
-        probeMoveModeText.setText(probeMoveAction.getProbeMoveModeText());
-        
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
-    }
-    
-    private void initDebugText(){
+        probeTrackerRender.updateRenderObjectInfo();
         
-        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        /*probeTrackerRender.updateRenderPathInfo();
+        if(probeTrackerRender.isNewRenderedPathsExist()){
+            rootNode.attachChild(probeTrackerRender.getRenderedPaths());
+        }*/
         
-        float currentStartY = 0.0f;
+        outputText.setXyzText(activeTracker.getXYZtext());
+        outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         
-        recordingText = initializeNewText(currentStartY);
-        recordingText.setText("Press N to record a new path");
-        currentStartY = currentStartY + recordingText.getLineHeight();
-        
-        resetProbeText = initializeNewText(currentStartY);
-        resetProbeText.setText("Press H to reset probe to (0,0)");
-        currentStartY = currentStartY + resetProbeText.getLineHeight();
-        
-        yawPitchRollText = initializeNewText(currentStartY);
-        currentStartY = currentStartY + yawPitchRollText.getLineHeight();
-        
-        xyzText = initializeNewText(currentStartY);
-        currentStartY = currentStartY + xyzText.getLineHeight();
-        
-        probeMoveModeText = initializeNewText(currentStartY);
-        probeMoveModeText.setText("Press J to Enable Clicking Probe Movement");
-        
-    }
-    
-    private BitmapText initializeNewText(float currentStartY){
-        
-        BitmapText newText = new BitmapText(guiFont,false);
-        newText.setColor(ColorRGBA.Red);
-        newText.setSize(guiFont.getCharSet().getRenderedSize());
-        newText.setLocalTranslation(0,currentStartY, 0);
-        guiNode.attachChild(newText);
-        return newText;
-        
-    }
-    
-    private void displayPath(Spatial path){
-        rootNode.attachChild(path);
+        outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
     }
 }
