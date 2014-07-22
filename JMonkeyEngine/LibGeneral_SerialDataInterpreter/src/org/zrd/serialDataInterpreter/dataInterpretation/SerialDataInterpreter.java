@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataStreaming.ProbeDataStream;
+import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
  * This class takes in a reader which gives it raw orientation and 
@@ -26,7 +27,7 @@ import org.zrd.util.dataStreaming.ProbeDataStream;
  * 
  * @author BLI
  */
-public class SerialDataInterpreter implements ProbeDataStream{
+public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourceTracker{
     
     
     
@@ -132,7 +133,8 @@ public class SerialDataInterpreter implements ProbeDataStream{
      * This gets the yaw from the probe in radians
      * @return      yaw in radians from probe
      */
-    public float getOutputYawRadians() {
+    @Override
+    public float getCurrentYawRadians() {
         return outputYawRadians;
     }
 
@@ -140,7 +142,8 @@ public class SerialDataInterpreter implements ProbeDataStream{
      * This gets the pitch from the probe in radians
      * @return      pitch in radians from probe
      */
-    public float getOutputPitchRadians() {
+    @Override
+    public float getCurrentPitchRadians() {
         return outputPitchRadians;
     }
 
@@ -148,7 +151,8 @@ public class SerialDataInterpreter implements ProbeDataStream{
      * This gets the roll from the probe in radians
      * @return      roll in radians from probe
      */
-    public float getOutputRollRadians() {
+    @Override
+    public float getCurrentRollRadians() {
         return outputRollRadians;
     }
     
@@ -156,6 +160,7 @@ public class SerialDataInterpreter implements ProbeDataStream{
      * This gets the delta X from the probe
      * @return  delta X from probe
      */
+    @Override
     public float getDeltaX() {
         return deltaX;
     }
@@ -164,16 +169,17 @@ public class SerialDataInterpreter implements ProbeDataStream{
      * This gets the current delta Y from the probe
      * @return      current delta Y from probe
      */
+    @Override
     public float getDeltaY() {
         return deltaY;
     }
    
     /**
-     * This gets the reader from the layer below in case something
-     *      else needs to be accessed
-     * @return      the reader object getting the serial data
+     * This resets the probe reading by sending the character
+     *      'r' to the arduino interface
      */
-    public SerialDataReader getReader(){
-        return serial;
+    @Override
+    public void resetProbeReader(){
+        serial.getSerialInterface().reset();
     }
 }

@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
+import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -35,7 +35,7 @@ public class ProbeTracker_BLIProbePath {
         if(debugTracking){
             currentSourceTracker = new KeyboardInputSourceTracker(manager);
         }else{
-            currentSourceTracker = new SerialInputSourceTracker(trackerProps);
+            currentSourceTracker = new SerialDataInterpreter(trackerProps);
         }
 
         displacementMode = Short.parseShort(

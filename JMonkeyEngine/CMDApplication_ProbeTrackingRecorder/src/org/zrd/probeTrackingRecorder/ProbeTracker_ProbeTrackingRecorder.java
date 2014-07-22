@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.serialDataInterpreter.client.SerialInputSourceTracker;
+import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -27,7 +27,7 @@ public class ProbeTracker_ProbeTrackingRecorder {
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
         
-        currentSourceTracker = new SerialInputSourceTracker(trackerProps);
+        currentSourceTracker = new SerialDataInterpreter(trackerProps);
 
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
