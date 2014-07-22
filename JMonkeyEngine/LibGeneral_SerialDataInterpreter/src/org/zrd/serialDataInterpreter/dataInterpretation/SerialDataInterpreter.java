@@ -105,39 +105,74 @@ public class SerialDataInterpreter implements ProbeDataStream{
         }
     }
     
+    /**
+     * This starts and stops the generation of text files. If not recording,
+     *      it makes three next text files and initializes their writers. If 
+     *      recording, it stops the recording of the current text files
+     *      so that new files will be generated if this method is called again.
+     */
     @Override
     public void startStopRecording(){
         if(recording){
+            
+            //closes the current recording if recording is currently happening
             currentDataRecorder.closeRecording();
             recording = false;
                 
         }else{   
+            
+            //makes new recorder if no recording is happening
             currentDataRecorder = new SerialDataRecorder(dataRecordingFilePath);
             recording = true;
 
         }
     }
 
+    /**
+     * This gets the yaw from the probe in radians
+     * @return      yaw in radians from probe
+     */
     public float getOutputYawRadians() {
         return outputYawRadians;
     }
 
+    /**
+     * This gets the pitch from the probe in radians
+     * @return      pitch in radians from probe
+     */
     public float getOutputPitchRadians() {
         return outputPitchRadians;
     }
 
+    /**
+     * This gets the roll from the probe in radians
+     * @return      roll in radians from probe
+     */
     public float getOutputRollRadians() {
         return outputRollRadians;
     }
     
+    /**
+     * This gets the delta X from the probe
+     * @return  delta X from probe
+     */
     public float getDeltaX() {
         return deltaX;
     }
 
+    /**
+     * This gets the current delta Y from the probe
+     * @return      current delta Y from probe
+     */
     public float getDeltaY() {
         return deltaY;
     }
    
+    /**
+     * This gets the reader from the layer below in case something
+     *      else needs to be accessed
+     * @return      the reader object getting the serial data
+     */
     public SerialDataReader getReader(){
         return serial;
     }
