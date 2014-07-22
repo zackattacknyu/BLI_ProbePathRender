@@ -1,0 +1,8 @@
+Scale Factor was: 0.46429098
+Try: 0.0, Angle: -1.6451476, TotalAngle: -1.6451476
+Try: 1.0, Angle: -0.27104992, TotalAngle: -1.9161975
+Try: 2.0, Angle: 0.038584087, TotalAngle: -1.8776134
+Try: 3.0, Angle: -0.0062910663, TotalAngle: -1.8839045
+Try: 4.0, Angle: 6.9053395E-4, TotalAngle: -1.8832139
+
+**NOTE: -1.9 seems like a good angle value to use**
