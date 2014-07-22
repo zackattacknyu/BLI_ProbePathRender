@@ -42,12 +42,29 @@ public class SerialDataRecorder {
     private ProbeDataWriter yawPitchRollDataWriter;
     private ProbeDataWriter outputDataWriter;
 
+    /**
+     * This initializes the data writers for the three text files that will be
+     *      generated which have serial data in them. The three files
+     *      are detailed in the description above
+     * 
+     * @param filePath      folder to put the text files generated
+     */
     public SerialDataRecorder(Path filePath){
         xyDataWriter = ProbeDataWriter.getNewWriter(filePath, XY_DATA_FILES_PREFIX);
         yawPitchRollDataWriter = ProbeDataWriter.getNewWriter(filePath, ORIENTATION_DATA_FILES_PREFIX);
         outputDataWriter = ProbeDataWriter.getNewWriter(filePath, OUTPUT_DATA_FILES_PREFIX);
     }
     
+    /**
+     * This adds a line to each of the text files for the current data
+     *      from the serial probe
+     * 
+     * @param deltaX        the current delta x value from the probe
+     * @param deltaY        the current delta y value from the probe
+     * @param yaw           the current yaw value from the probe
+     * @param pitch         the current pitch value from the probe
+     * @param roll          the current roll value from the probe
+     */
     public void addLineToFiles(float deltaX, float deltaY, float yaw, float pitch, float roll){
         ProbeDataWriter.writeLineInWriter(xyDataWriter, 
                 OutputHelper.getPositionOutputText(deltaX, deltaY));
@@ -57,6 +74,9 @@ public class SerialDataRecorder {
                 OutputHelper.getOutputText(deltaX, deltaY, yaw, pitch, roll));
     }
     
+    /**
+     * This closes the recording of the three text files
+     */
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyDataWriter);
         ProbeDataWriter.closeWriter(yawPitchRollDataWriter);
