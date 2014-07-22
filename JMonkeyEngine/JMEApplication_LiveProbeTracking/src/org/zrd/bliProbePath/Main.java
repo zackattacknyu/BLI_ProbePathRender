@@ -36,6 +36,9 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
  */
 public class Main extends SimpleApplication {
     
+    public static final boolean SURFACE_TRACKING_ON = false;
+    public static final boolean BALL_ON = true;
+    
     private Spatial surface,moveableObject;
     private Material lineMaterial;
     
@@ -56,7 +59,7 @@ public class Main extends SimpleApplication {
     
     private LiveTrackingText outputText;
     
-    public static final boolean SURFACE_TRACKING_ON = false;
+    
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
@@ -86,22 +89,27 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
         
-        
-        
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        cameraTracker.setDefaultCamera((short)1);
         
-        RenderedMesh activeMesh = new LolaMesh(assetManager);
-        //RenderedMesh activeMesh = new BallMesh(assetManager);
+        int cameraMode = BALL_ON ? 3 : 1;
+        cameraTracker.setDefaultCamera((short)cameraMode);
+        
+        RenderedMesh activeMesh;
+        if(BALL_ON){
+            activeMesh = new BallMesh(assetManager);
+        }else{
+            activeMesh = new LolaMesh(assetManager);
+        }
         lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
-        rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
+        
+        if(!BALL_ON) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
