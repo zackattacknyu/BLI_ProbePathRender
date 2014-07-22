@@ -19,6 +19,7 @@ import org.zrd.util.dataHelp.OutputHelper;
  * @author BLI
  */
 public class SerialDataPoint {
+    
     //says the delimiter used to separate parts of the serial data string
     public static final String SERIAL_DATA_STRING_DELIMITER = ",";
     
@@ -58,6 +59,15 @@ public class SerialDataPoint {
         }
     }
     
+    /**
+     * This gets the value of the field described by the name. 
+     *      It retrieves the index from the data location map
+     *          and gets the value at the index in the array
+     *          of data values obtained from parsing the string
+     * 
+     * @param partName      the name of the field
+     * @return              value of the field
+     */
     private float getPart(String partName){
         if(dataLocations.containsKey(partName)){
             return Float.parseFloat(dataParts[dataLocations.get(partName)]);
@@ -66,6 +76,11 @@ public class SerialDataPoint {
         }
     }
 
+    /**
+     * This converts the data point to a string for the console output
+     * 
+     * @return      string showing all the data at this point
+     */
     @Override
     public String toString() {
         return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
@@ -77,27 +92,50 @@ public class SerialDataPoint {
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield);
     }
     
-    
-    
+    /**
+     * The timestamp at this particular data point
+     * @return      timestamp in the string
+     */    
     public float getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * The yaw at this particular data point
+     * @return      yaw in the string
+     */  
     public float getYaw() {
         return yaw;
     }
 
+    /**
+     * The pitch at this particular data point
+     * @return      pitch in the string
+     */  
     public float getPitch() {
         return pitch;
     }
 
+    /**
+     * The roll at this particular data point
+     * @return      roll in the string
+     */  
     public float getRoll() {
         return roll;
     }
 
+    /**
+     * The y at this particular data point
+     * @return      y in the string
+     */  
     public float getY() {
         return y;
     }
+    
+    /**
+     * The x at this particular data point
+     * @return      x in the string
+     */  
     public float getX() {
         return x;
     }
