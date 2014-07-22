@@ -183,6 +183,20 @@ public class MeshTraverseHelper {
     /**
      * Gets the rotation quaternion for rotating a vector
      *      so that it is on the plane described by the normal vector
+     * 
+     * @param normal            normal to the plane
+     * @param originPoint       start point of vector to rotate
+     * @param actualEndPt       end point of vector to rotate
+     * @return 
+     */
+    public static Quaternion getRotationOntoPlaneQuat(Vector3f normal, Vector3f originPoint, Vector3f actualEndPt){
+        Vector3f actualDir = getDirectionVector(originPoint,actualEndPt);
+        return getRotationOntoPlane(normal,actualDir);
+    }
+    
+    /**
+     * Gets the rotation quaternion for rotating a vector
+     *      so that it is on the plane described by the normal vector
      * @param normal        the normal to the plane
      * @param actualDir     the vector to rotate to be on the normal
      * @return 

@@ -159,9 +159,9 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         coordConverter.setScaleFactorY(scaleFactor*scaleY);
     }
     
-    public void setRotationCalibration(Quaternion rotation){
-        rotationCalibration = rotation.clone();
-        coordConverter.setRotationCalibrationMatrix(rotation.toRotationMatrix());
+    public void addendRotationCalibration(Quaternion rotation){
+        rotationCalibration = rotation.mult(rotationCalibration);
+        coordConverter.setRotationCalibrationMatrix(rotationCalibration.toRotationMatrix());
     }
     
     @Override
