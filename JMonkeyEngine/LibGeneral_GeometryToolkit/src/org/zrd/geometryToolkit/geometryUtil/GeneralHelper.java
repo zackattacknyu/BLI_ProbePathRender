@@ -4,13 +4,11 @@
  */
 package org.zrd.geometryToolkit.geometryUtil;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.util.dataHelp.BasicAngleHelper;
-import org.zrd.util.dataWriting.DataWriterHelper;
 
 /**
  *

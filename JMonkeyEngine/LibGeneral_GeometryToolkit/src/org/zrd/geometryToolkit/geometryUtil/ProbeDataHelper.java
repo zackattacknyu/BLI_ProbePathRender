@@ -9,7 +9,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.util.dataHelp.OutputHelper;
-import org.zrd.util.dataWriting.DataWriterHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -22,7 +21,7 @@ public class ProbeDataHelper {
         ArrayList<String> vertexStrings = new ArrayList<String>(vertices.size());
         for(Vector3f vertex: vertices){
             vertexStrings.add(OutputHelper.getPositionOutputText(
-                    com.jme3.math.Vector3f.getX(), com.jme3.math.Vector3f.getY(), com.jme3.math.Vector3f.getZ()));
+                    vertex.getX(), vertex.getY(), vertex.getZ()));
         }
         FileDataHelper.exportLinesToFile(vertexStrings, filePath);
     }
