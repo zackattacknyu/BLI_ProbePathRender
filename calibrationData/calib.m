@@ -14,9 +14,21 @@ Marker 1: (-0.45941067,-2.0322227,-14.933813)
 Marker 2: (-4.1024504,-2.726573,-13.849037)
 Marker 3: (-0.43226802,-4.228998,-17.187346)
 Marker 4: (-4.0149,-4.7278976,-16.069866)
+%}
+
+mark1=[-0.45941067,-2.0322227,-14.933813];
+mark2=[-4.1024504,-2.726573,-13.849037];
+mark3=[-0.43226802,-4.228998,-17.187346];
+mark4=[-4.0149,-4.7278976,-16.069866];
+vec12Len = norm(mark1-mark2);
+vec13Len = norm(mark1-mark3);
+vec14Len = norm(mark1-mark4);
+vec23Len = norm(mark2-mark3);
+vec24Len = norm(mark2-mark4);
+vec34Len = norm(mark3-mark4);
 
 
-
+%{
 This is the data for the Ball Mesh and its markers:
 
 Real-world distances:
