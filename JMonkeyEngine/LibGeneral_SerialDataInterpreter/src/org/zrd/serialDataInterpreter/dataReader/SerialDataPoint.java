@@ -5,7 +5,7 @@
 package org.zrd.serialDataInterpreter.dataReader;
 
 import java.util.HashMap;
-import org.zrd.util.debugOutput.OutputHelper;
+import org.zrd.util.dataHelp.OutputHelper;
 
 /**
  * This class represents a single point in the serial data

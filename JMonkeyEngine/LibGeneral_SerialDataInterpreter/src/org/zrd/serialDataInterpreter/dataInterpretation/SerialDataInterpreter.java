@@ -7,6 +7,7 @@ package org.zrd.serialDataInterpreter.dataInterpretation;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
+import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 
 /**
@@ -15,7 +16,7 @@ import org.zrd.util.dataStreaming.ProbeDataStream;
  */
 public class SerialDataInterpreter implements ProbeDataStream{
     
-    public static final float DEG_TO_RAD_FACTOR = (float) (Math.PI/180.0);
+    
     
     private SerialDataReader serial;
     private Path dataRecordingFilePath;
@@ -55,56 +56,41 @@ public class SerialDataInterpreter implements ProbeDataStream{
         }
     }
 
+    /**
+     * This is meant to be called many times in a second
+     *      and it updates the data from the serial probe
+     */
     @Override
     public void updateData(){
+        
+        //this calls the reader's update data method
         serial.updateData();
-        processYawPitchRoll();
-        processXYdata();
+        
+        /*gets the output yaw,pitch, and roll
+         *      The serial data is in degrees
+         *          but we need radians
+         *          so the method called does that conversion
+         */
+        outputYawRadians = BasicAngleHelper.convertDegreesToRadians(serial.getCurrentYaw());
+        outputRollRadians = BasicAngleHelper.convertDegreesToRadians(serial.getCurrentRoll());
+        outputPitchRadians = BasicAngleHelper.convertDegreesToRadians(serial.getCurrentPitch());
+        
+        /*
+         * This gets the output x and y.
+         *  For now, it is just the x and y values 
+         *      direct from the probe but if in the future
+         *      it should change, then this code should call
+         *      a method for that.
+         */
+        deltaX = serial.getDeltaX();
+        deltaY = serial.getDeltaY();
+
         if(recording){
             currentDataRecorder.addLineToFiles(deltaX, deltaY, 
                     outputYawRadians, 
                     outputPitchRadians, 
                     outputRollRadians);
         }
-    }
-    
-    private void processXYdata(){
-        deltaX = serial.getDeltaX();
-        deltaY = serial.getDeltaY();
-        
-        deltaX = getOutputDisp(deltaX);
-        deltaY = getOutputDisp(deltaY);
-    }
-    
-    private void processYawPitchRoll(){
-        outputYawRadians = getOutputAngle(serial.getCurrentYaw());
-        outputRollRadians = getOutputAngle(serial.getCurrentRoll());
-        outputPitchRadians = getOutputAngle(serial.getCurrentPitch());
-    }
-    
-    /**
-     * This is the method that takes in an angle from the probe
-     *      and returns the desired angle to the tracker
-     * 
-     * In this case, it takes the input which is in degrees and converts
-     *      it to radians
-     * @param angle
-     * @return 
-     */
-    private float getOutputAngle(float angle){
-        return angle*DEG_TO_RAD_FACTOR;
-    }
-    
-    /**
-     * This is the method that takes in an x or y value from the probe
-     *      and returns the desired displacement to the tracker.
-     * 
-     * 
-     * @param disp
-     * @return 
-     */
-    private float getOutputDisp(float disp){
-        return disp;
     }
 
     public float getOutputYawRadians() {

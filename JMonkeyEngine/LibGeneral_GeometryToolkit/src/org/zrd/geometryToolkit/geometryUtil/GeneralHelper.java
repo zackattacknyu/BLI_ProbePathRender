@@ -9,6 +9,8 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.util.dataHelp.BasicAngleHelper;
+import org.zrd.util.dataWriting.DataWriterHelper;
 
 /**
  *
@@ -35,10 +37,15 @@ public class GeneralHelper {
     }
     
     public static String getYawPitchRollDisplayString(float yawInRadians, float pitchInRadians, float rollInRadians){
-        return "(Yaw,Pitch,Roll) = (" + 
-                yawInRadians*FastMath.RAD_TO_DEG + "," + 
-                pitchInRadians*FastMath.RAD_TO_DEG + "," + 
-                rollInRadians*FastMath.RAD_TO_DEG + ")";
+        
+        //makes a vector out of the orientation point
+        //      to take advantage of its toString method
+        Vector3f orientationPoint = new Vector3f(
+                BasicAngleHelper.convertRadiansToDegrees(yawInRadians),
+                BasicAngleHelper.convertRadiansToDegrees(pitchInRadians),
+                BasicAngleHelper.convertRadiansToDegrees(rollInRadians));
+        
+        return "(Yaw,Pitch,Roll) = " + orientationPoint;
     }
     
 }
