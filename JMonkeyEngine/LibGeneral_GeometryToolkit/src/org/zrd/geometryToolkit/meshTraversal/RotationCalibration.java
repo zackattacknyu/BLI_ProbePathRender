@@ -19,6 +19,10 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
  *      as well as the target start and end points
  *      on the mesh and tries to make the path follow 
  *      the mesh so that the end points match
+ * 
+ * TODO: Change this code so the main output is a Quaternion
+ *      for rotation and the matrix transform is only
+ *      used to change the path and is not the main output
  *
  * @author BLI
  */
