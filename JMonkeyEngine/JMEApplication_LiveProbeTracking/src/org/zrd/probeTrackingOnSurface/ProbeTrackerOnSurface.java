@@ -112,5 +112,13 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     public Quaternion getLocalRotation() {
         return locationTracker.getLocalRotation();
     }
+
+    public ArrayList<Vector3f> getVerticesSinceLastRead() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public float getArcLengthSinceLastRead() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

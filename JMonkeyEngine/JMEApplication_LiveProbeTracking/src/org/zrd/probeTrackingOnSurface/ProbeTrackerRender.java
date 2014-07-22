@@ -26,6 +26,8 @@ public class ProbeTrackerRender {
     private Material lineMaterial;
     private boolean newRenderedPathsExist;
     
+    public static final float MIN_ARC_LENGTH_FOR_RENDER = 0.5F;
+    
     public ProbeTrackerRender(LocationTracker activeTracker, Spatial probeObject, Material lineMaterial){
         this.activeTracker = activeTracker;
         this.probeObject = probeObject;
@@ -44,21 +46,14 @@ public class ProbeTrackerRender {
     }
     
     public void updateRenderPathInfo(){
-        Vector3f currentPosition = activeTracker.getCurrentPosition().clone();
-        if(currentPosition.distance(lastPosition) > ProgramConstants.MIN_SEGMENT_LENGTH){
-            if(activeTracker.isRecordingPath()){
-                addSegment(currentPosition,lastPosition);
-            }
-            lastPosition = currentPosition.clone();
+        
+        if(activeTracker.isRecordingPath() && (activeTracker.getArcLengthSinceLastRead() > MIN_ARC_LENGTH_FOR_RENDER)){
+            renderedPaths.attachChild(
+                    PathRenderHelper.createLineFromVertices(
+                    activeTracker.getVerticesSinceLastRead(), 
+                    lineMaterial));
+            newRenderedPathsExist = true;
         }
-    }
-    
-    private void addSegment(Vector3f vertex1, Vector3f vertex2){
-        ArrayList<Vector3f> vertices = new ArrayList<Vector3f>();
-        vertices.add(vertex1.clone());
-        vertices.add(vertex2.clone());
-        renderedPaths.attachChild(PathRenderHelper.createLineFromVertices(vertices, lineMaterial));
-        newRenderedPathsExist = true;
     }
 
     public Node getRenderedPaths() {

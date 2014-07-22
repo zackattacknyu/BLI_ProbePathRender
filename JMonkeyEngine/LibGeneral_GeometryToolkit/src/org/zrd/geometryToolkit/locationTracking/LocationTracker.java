@@ -6,6 +6,7 @@ package org.zrd.geometryToolkit.locationTracking;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 
 /**
  *
@@ -25,5 +26,8 @@ public interface LocationTracker {
     boolean isRecordingPath();
     
     Quaternion getLocalRotation();
+    
+    ArrayList<Vector3f> getVerticesSinceLastRead();
+    float getArcLengthSinceLastRead();
     
 }

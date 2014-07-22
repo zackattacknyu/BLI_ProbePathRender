@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -28,9 +29,19 @@ public class PathRecorder {
     private ProbeDataWriter yawPitchRollWriter;
     private Path pathRecordingFilePath;
     
+    private float currentArcLength = 0;
+    private float arcLengthSinceLastRead = 0;
+    private Vector3f lastPosition;
+    private ArrayList<Vector3f> verticesSinceLastRead;
+    
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
+        verticesSinceLastRead = new ArrayList<Vector3f>(100);
+        
         vertices.add(startingPosition.clone());
+        verticesSinceLastRead.add(startingPosition.clone());
+        
+        lastPosition = startingPosition.clone();
         pathSpecified = false;
     }
     
@@ -81,6 +92,17 @@ public class PathRecorder {
             System.out.println("Exception thrown trying to write compressed file: " + ex);
         }
     }
+    
+    public ArrayList<Vector3f> getMostRecentVertices(){
+        arcLengthSinceLastRead = 0;
+        ArrayList<Vector3f> returnVerts = GeneralHelper.getCopyOfPath(verticesSinceLastRead);
+        verticesSinceLastRead.clear();
+        return returnVerts;
+    }
+
+    public float getArcLengthSinceLastRead() {
+        return arcLengthSinceLastRead;
+    }
 
     void addToPath(Vector3f currentPosition, 
             Vector2f currentXYPosition, 
@@ -99,7 +121,13 @@ public class PathRecorder {
                     getOrientationOutputString(currentYaw,currentPitch,currentRoll));
         }
 
+        float segLength = currentPosition.distance(lastPosition);
+        currentArcLength += segLength;
+        arcLengthSinceLastRead += segLength;
+        lastPosition = currentPosition.clone();
+        
         vertices.add(currentPosition.clone());
+        verticesSinceLastRead.add(currentPosition.clone());
     }
     
     

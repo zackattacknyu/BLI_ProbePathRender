@@ -275,6 +275,16 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         return currentDisplacement;
     }
 
+    @Override
+    public ArrayList<Vector3f> getVerticesSinceLastRead() {
+        return currentRecordingPath.getMostRecentVertices();
+    }
+
+    @Override
+    public float getArcLengthSinceLastRead() {
+        return currentRecordingPath.getArcLengthSinceLastRead();
+    }
+
     
     
     

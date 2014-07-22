@@ -144,10 +144,10 @@ public class Main extends SimpleApplication {
     public void simpleRender(RenderManager rm) {
         probeTrackerRender.updateRenderObjectInfo();
         
-        /*probeTrackerRender.updateRenderPathInfo();
+        probeTrackerRender.updateRenderPathInfo();
         if(probeTrackerRender.isNewRenderedPathsExist()){
             rootNode.attachChild(probeTrackerRender.getRenderedPaths());
-        }*/
+        }
         
         outputText.setXyzText(activeTracker.getXYZtext());
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
