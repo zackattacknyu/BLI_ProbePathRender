@@ -28,9 +28,9 @@ marker 2-4: 92 mm
 marker 3-4: 65 mm
 
 Virtual Coordinates:
-Marker 1:
-Marker 2:
-Marker 3:
-Marker 4:
+Marker 1: (-1.6921587,-3.2570353,22.765057)
+Marker 2: (1.0623746,-2.9609601,23.383495)
+Marker 3: (-1.928752,0.4531126,22.845892)
+Marker 4: (0.5929389,0.97696793,23.470764)
 
 %}
