@@ -7,7 +7,7 @@ package org.zrd.probeTrackingOnSurface;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
+import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
@@ -98,7 +98,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     }
 
     public String getXYZtext() {
-        return GeneralHelper.getXYZDisplayString(currentPositionOnMesh);
+        return MiscGeometryHelper.getXYZDisplayString(currentPositionOnMesh);
     }
 
     public String getYawPitchRollText() {

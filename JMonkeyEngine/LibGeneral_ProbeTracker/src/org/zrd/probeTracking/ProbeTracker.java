@@ -11,7 +11,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
+import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
@@ -230,12 +230,12 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     @Override
     public String getXYZtext(){
-        return GeneralHelper.getXYZDisplayString(currentPosition);
+        return MiscGeometryHelper.getXYZDisplayString(currentPosition);
     }
     
     @Override
     public String getYawPitchRollText(){
-        return GeneralHelper.getYawPitchRollDisplayString(currentYaw, currentPitch, currentRoll);
+        return MiscGeometryHelper.getYawPitchRollDisplayString(currentYaw, currentPitch, currentRoll);
     }
     
     public float getCurrentYaw() {

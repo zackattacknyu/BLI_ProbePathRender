@@ -14,7 +14,7 @@ import org.zrd.util.dataHelp.BasicAngleHelper;
  *
  * @author BLI
  */
-public class GeneralHelper {
+public class MiscGeometryHelper {
 
     public static Matrix3f getRotationMatrix(float angle, Vector3f axis) {
         Quaternion rotation = new Quaternion();

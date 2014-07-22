@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
+import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -95,7 +95,7 @@ public class PathRecorder {
     
     public ArrayList<Vector3f> getMostRecentVertices(){
         arcLengthSinceLastRead = 0;
-        ArrayList<Vector3f> returnVerts = GeneralHelper.getCopyOfPath(verticesSinceLastRead);
+        ArrayList<Vector3f> returnVerts = MiscGeometryHelper.getCopyOfPath(verticesSinceLastRead);
         verticesSinceLastRead.clear();
         return returnVerts;
     }
