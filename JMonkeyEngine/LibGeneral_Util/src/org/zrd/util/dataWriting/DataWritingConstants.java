@@ -30,12 +30,6 @@ public class DataWritingConstants {
     public static final String TIMESTAMP_SUFFIX_FORMAT = "yyyy_MM_dd__kk_mm_ss";
     
     /**
-     * In each line of the text file, this is the character
-     *      that separates each value
-     */
-    public static final String DATA_IN_TEXT_FILE_SEPARATOR = ",";
-    
-    /**
      * Used to seperate the prefix saying what the file is
      *      with the suffix saying the timestampe
      *      in the file name itself

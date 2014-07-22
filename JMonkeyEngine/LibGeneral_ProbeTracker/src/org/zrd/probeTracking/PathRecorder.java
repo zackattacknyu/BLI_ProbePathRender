@@ -13,6 +13,7 @@ import org.zrd.geometryToolkit.geometryUtil.GeneralHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
+import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.DataWriterHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 
@@ -59,18 +60,18 @@ public class PathRecorder {
     }
 
     public static String getPositionOutputText(Vector3f position){
-        return DataWriterHelper.getPositionOutputText(
-                position.getX(), 
-                position.getY(), 
-                position.getZ());
+        return OutputHelper.getPositionOutputText(
+                com.jme3.math.Vector3f.getX(), 
+                com.jme3.math.Vector3f.getY(), 
+                com.jme3.math.Vector3f.getZ());
     }
     public static String getPositionOutputText(Vector2f position){
-        return DataWriterHelper.getPositionOutputText(
-                position.getX(), 
-                position.getY());
+        return OutputHelper.getPositionOutputText(
+                com.jme3.math.Vector2f.getX(), 
+                com.jme3.math.Vector2f.getY());
     }
     public static String getOrientationOutputString(float yaw, float pitch, float roll){
-        return DataWriterHelper.getOrientationOutputText(
+        return OutputHelper.getOrientationOutputText(
                 yaw, pitch, roll);
     }
     public ArrayList<Vector3f> getVertices() {
