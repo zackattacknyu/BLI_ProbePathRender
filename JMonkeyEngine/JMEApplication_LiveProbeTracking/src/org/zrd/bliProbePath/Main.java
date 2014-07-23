@@ -37,7 +37,7 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
 public class Main extends SimpleApplication {
     
     public static final boolean SURFACE_TRACKING_ON = false;
-    public static final boolean BALL_ON = true;
+    public static final boolean BALL_ON = false;
     
     private Spatial surface,moveableObject;
     private Material lineMaterial;
