@@ -19,6 +19,11 @@ public class MaterialHelper {
         returnMat.setColor("Color", color);
         return returnMat;
     }
+    
+    public static Material getColorMaterial(float red, float green, float blue, AssetManager assetManager){
+        ColorRGBA color = new ColorRGBA(red,green,blue,1.0f);
+        return makeColorMaterial(assetManager,color);
+    }
 
     public static Material getGrayscaleMaterial(float brightness, AssetManager assetManager) {
         Material outputMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

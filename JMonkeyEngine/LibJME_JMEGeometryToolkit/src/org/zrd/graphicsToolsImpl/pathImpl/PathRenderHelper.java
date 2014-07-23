@@ -30,15 +30,20 @@ public class PathRenderHelper {
         Node outputNode = new Node();
         Spatial currentSeg;
         Material currentMaterial;
+        float currentBrightness;
         
         ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
         ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
         ArrayList<Float> dataAtVertices = lineWithData.getDataAtVertices();
         
+        
         currentPath.add(pathVertices.get(0).clone());
         for(int index = 1; index < pathVertices.size()-1;index++){
             currentPath.add(pathVertices.get(index));
-            currentMaterial = MaterialHelper.getGrayscaleMaterial(dataAtVertices.get(index-1), assetManager);
+            
+            currentBrightness = dataAtVertices.get(index-1);
+            currentMaterial = MaterialHelper.getColorMaterial(1-currentBrightness, 0, currentBrightness, assetManager);
+
             currentSeg = createLineFromVertices(currentPath, currentMaterial);
             outputNode.attachChild(currentSeg);
             currentPath.remove(0);
