@@ -44,7 +44,9 @@ public class RotationCalibration {
      *      original path before the path is projected onto the plane
      */
     private Matrix4f aggregateTransform;
+    private Quaternion aggregateRotation;
     
+    private Vector3f startingPoint;
     private Vector3f initTriangleNormal;
     private MeshTriangle startingTriangle;
     private TriangleSet meshInfo;
@@ -52,7 +54,9 @@ public class RotationCalibration {
     
     public RotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         aggregateTransform = new Matrix4f();
+        aggregateRotation = new Quaternion();
         this.initPath = initPath;
+        startingPoint = initPath.get(0);
         initTriangleNormal = startingTriangle.getNormal();
         this.startingTriangle = startingTriangle;
         this.endPoint = endPoint;
@@ -63,19 +67,18 @@ public class RotationCalibration {
     
     private void performRotationOntoInitialPlane(){
         //this does the initial transformation onto the plane of the first triangle
-        Vector3f initPoint = initPath.get(0);
         Vector3f initEndPoint = initPath.get(1);
-        Matrix4f initTransform = MeshTraverseHelper.getRotationOntoPlane(
-                initTriangleNormal, initPoint, initEndPoint);
-        postMultiplyNewTransform(initTransform);
+        postMultiplyNewRotation(MeshTraverseHelper.getRotationOntoPlaneQuat(
+                initTriangleNormal, startingPoint, initEndPoint));
     }
     
     public Quaternion getAggregateRotation(){
-        return aggregateTransform.toRotationQuat();
+        return aggregateRotation;
     }
     
-    private void postMultiplyNewTransform(Matrix4f transform){
-        aggregateTransform = transform.mult(aggregateTransform);
+    private void postMultiplyNewRotation(Quaternion rotation){
+        aggregateRotation = rotation.mult(aggregateRotation);
+        aggregateTransform = MeshTraverseHelper.getRotationAroundPoint(startingPoint, aggregateRotation);
     }
     
     public ArrayList<Vector3f> getCurrentRotatedPath(){
@@ -95,7 +98,6 @@ public class RotationCalibration {
         //this does NOT follow the surface yet
         ArrayList<Vector3f> currentPathOnSurface = getCurrentRotatedPath();
 
-        Matrix4f currentRotationTransform;
         float currentRotationAngle;
 
         float currentDistance=0,previousDistance = 0;
@@ -106,8 +108,7 @@ public class RotationCalibration {
             currentRotationAngle = getRotationAngleAlongSurface(currentPathOnSurface);
             
             //gets the transform
-            currentRotationTransform = obtainTransformFromAngle(currentRotationAngle);
-            postMultiplyNewTransform(currentRotationTransform);
+            postMultiplyNewRotation(obtainTransformFromAngle(currentRotationAngle));
             
             //projects the rotated path on the surface
             currentPathOnSurface = getCurrentPathOnSurface();
@@ -133,13 +134,13 @@ public class RotationCalibration {
     
     private void displayDistResult(float currentDistance){
         System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
+        System.out.println("Final Rotation was: " + aggregateRotation);
     }
     
-    private Matrix4f obtainTransformFromAngle(float currentRotationAngle){
+    private Quaternion obtainTransformFromAngle(float currentRotationAngle){
         AngleAxisRotation currentRotationAngAxis = 
                 new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
-        return MeshTraverseHelper.getRotationAroundPoint(
-                initPath.get(0), currentRotationAngAxis.getQuat());
+        return currentRotationAngAxis.getQuat();
     }
     
     public static float findRotationAngleAlongPlane(Matrix4f transform,Vector3f normal){
