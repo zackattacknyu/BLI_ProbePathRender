@@ -11,18 +11,31 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * This contains methods related to getting properties from a
+ *      .properties file
  *
  * @author BLI
  */
 public class PropertiesHelper {
     
-    
+    /**
+     * This takes in a properties file name and gets the properties
+     *      object for the properties in that file
+     * @param fileName      file name of .properties file
+     * @return              properties object for its properties
+     */
     public static Properties getProperties(String fileName){
         
         return getProperties(new File(fileName));
         
     }
     
+    /**
+     * This takes in a properties file and gets the properties
+     *      object for the properties in that file
+     * @param file          the .properties file object
+     * @return              properties object for its properties
+     */
     public static Properties getProperties(File file){
         FileReader reader;
         Properties trackerProps = new Properties();
