@@ -9,20 +9,20 @@ import com.jme3.system.AppSettings;
 import java.util.Properties;
 
 /**
+ * This helper code helps initialize the JME Applications.
+ *      Specifically, it sets up the default settings
+ *      and calls the methods to get the other default settings
+ *      from the .properties file
+*  Refer to these two web pages to find out about start settings:
+*      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:appsettings
+* 
+*      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:simpleapplication
+* 
  *
  * @author BLI
  */
 public class ApplicationHelper {
-    
-    /*
-    * Refer to these two web pages to find out about start settings:
-    *      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:appsettings
-    * 
-    *      http://hub.jmonkeyengine.org/wiki/doku.php/jme3:intermediate:simpleapplication
-    * 
-    * 
-    */
-    
+
     public static AppSettings getAppSettings(Properties appProps){
         AppSettings settings = new AppSettings(true);
         
@@ -49,11 +49,7 @@ public class ApplicationHelper {
     
     public static void initializeApplication(SimpleApplication app, Properties appProps){
         
-        app.setSettings(getAppSettings(appProps)); //disables the setting screen at start-up
-        app.setShowSettings(false); //shows the above settings
-        app.setDisplayFps(false); //makes sure the fps text is not displayed
-        app.setDisplayStatView(false); //makes sure the stat view is not displayed
-        app.start();
+        initializeApplication(app,getAppSettings(appProps));
         
     }
     
