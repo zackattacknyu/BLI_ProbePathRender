@@ -28,8 +28,7 @@ public class PathRecorder {
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     private Path pathRecordingFilePath;
-    
-    private float currentArcLength = 0;
+
     private float arcLengthSinceLastRead = 0;
     private Vector3f lastPosition;
     private ArrayList<Vector3f> verticesSinceLastRead;
@@ -122,7 +121,6 @@ public class PathRecorder {
         }
 
         float segLength = currentPosition.distance(lastPosition);
-        currentArcLength += segLength;
         arcLengthSinceLastRead += segLength;
         lastPosition = currentPosition.clone();
         

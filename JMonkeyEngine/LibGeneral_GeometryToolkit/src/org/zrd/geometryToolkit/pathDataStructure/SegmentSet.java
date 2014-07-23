@@ -32,6 +32,9 @@ public class SegmentSet {
     private Vector3f startPoint;
     private ArrayList<Vector3f> segmentVectors;
     
+    //arc length of segment
+    private float arcLength = 0;
+    
     public SegmentSet(ArrayList<Vector3f> pathVertices){
         this.pathVertices = pathVertices;
         constructSegmentList();
@@ -49,7 +52,12 @@ public class SegmentSet {
         for(int index = 1; index < pathVertices.size(); index++){
             diffVector = pathVertices.get(index).subtract(pathVertices.get(index-1));
             segmentVectors.add(diffVector);
+            arcLength = arcLength + diffVector.length();
         }
+    }
+
+    public float getArcLength() {
+        return arcLength;
     }
 
     public ArrayList<Vector3f> getPathVertices() {

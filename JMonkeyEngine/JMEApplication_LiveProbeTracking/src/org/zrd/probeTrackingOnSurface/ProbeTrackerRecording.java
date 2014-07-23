@@ -8,6 +8,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import java.io.File;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.probeTracking.ProbeTracker;
 
@@ -34,6 +35,10 @@ public class ProbeTrackerRecording extends GeneralKeyboardActionMethod{
         recordingText = probeTracker.getRecordingText();
         if(probeTracker.isNewPathExists()){
             recordedPathSet.addPath(probeTracker.getCurrentPathVertices());
+            
+            SegmentSet recordedPath = new SegmentSet(probeTracker.getCurrentPathVertices());
+            System.out.println("Arc Length of Recorded Path: " + recordedPath.getArcLength());
+            
             newPathExists = true;
         }
     }
