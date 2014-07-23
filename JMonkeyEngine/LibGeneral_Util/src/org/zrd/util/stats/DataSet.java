@@ -7,6 +7,9 @@ package org.zrd.util.stats;
 import java.util.ArrayList;
 
 /**
+ *  * IMPORTANT NOTE:
+ * CODE IS CURRENTLY UNUSED BUT SHOULD
+ *      BE KEPT FOR POSSIBLE LATER USE
  *
  * @author BLI
  */
