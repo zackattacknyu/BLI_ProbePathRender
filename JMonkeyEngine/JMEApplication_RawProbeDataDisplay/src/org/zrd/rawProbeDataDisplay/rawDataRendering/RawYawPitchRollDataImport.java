@@ -31,8 +31,8 @@ public class RawYawPitchRollDataImport extends GeneralKeyboardActionMethod{
         this.rootNode = rootNode;
         this.initialImportDirectory = initialImportDirectory;
         
-        redMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
-        greenMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
+        redMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Red);
+        greenMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Green);
     }
     
     @Override

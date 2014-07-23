@@ -24,9 +24,9 @@ public class ProbeRepresentation {
     
     public ProbeRepresentation(AssetManager assetManager){
         
-        Material redMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Red);
-        Material orangeMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-        Material greenMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
+        Material redMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Red);
+        Material orangeMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Orange);
+        Material greenMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Green);
         
         
         Spatial xAxisLine = initXLine(redMaterial);

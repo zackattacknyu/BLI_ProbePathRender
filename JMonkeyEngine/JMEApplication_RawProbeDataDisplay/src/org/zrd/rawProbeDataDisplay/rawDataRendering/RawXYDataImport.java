@@ -31,8 +31,8 @@ public class RawXYDataImport extends GeneralKeyboardActionMethod{
         this.rootNode = rootNode;
         this.initialImportDirectory = initialImportDirectory;
         
-        orangeMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Orange);
-        greenMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Green);
+        orangeMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Orange);
+        greenMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Green);
     }
     
     @Override

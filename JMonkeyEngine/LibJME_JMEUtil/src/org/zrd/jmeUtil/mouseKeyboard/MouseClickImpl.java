@@ -4,7 +4,6 @@
  */
 package org.zrd.jmeUtil.mouseKeyboard;
 
-import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 

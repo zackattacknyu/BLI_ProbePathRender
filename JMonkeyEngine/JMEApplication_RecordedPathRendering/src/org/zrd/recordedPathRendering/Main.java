@@ -80,7 +80,7 @@ public class Main extends SimpleApplication {
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
-        lineMaterial = MaterialHelper.makeColorMaterial(assetManager,ColorRGBA.Black);
+        lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
     }
 
     @Override
