@@ -6,12 +6,14 @@ We need to get the conversion from probe unit to virtual unit
 This means probeUnit*(mm/probeU)*(virtualU/mm)
 
 From calibProbe:
-        mm/probeU = 3.4815*10^6
+        mm/probeU = 0.00282
         virtualU/mm = 0.0823
 %}
 
-realToProbeFactor = 3481500;
+realToProbeFactor = 0.00282;
 virtualToRealFactor = 0.0823;
 
 newScaleFactor = realToProbeFactor*virtualToRealFactor
 
+%new scale Factor:
+%       0.00023209

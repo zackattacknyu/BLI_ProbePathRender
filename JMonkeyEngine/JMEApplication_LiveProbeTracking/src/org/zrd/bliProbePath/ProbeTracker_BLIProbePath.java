@@ -22,7 +22,11 @@ public class ProbeTracker_BLIProbePath {
     
     public static final Vector3f STARTING_POSITION = new Vector3f(-0.4f,-0.97f,-15.35f);
     
-    public static final float INIT_SCALE_X = 0.000009f,INIT_SCALE_Y = 0.000009f;
+    /*
+     * These were obtained through rigorous testing.
+     * TODO: Detail the testing
+     */
+    public static final float INIT_SCALE_X = 0.0002321f,INIT_SCALE_Y = 0.0002321f;
     
     public static ProbeTracker createNewProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
