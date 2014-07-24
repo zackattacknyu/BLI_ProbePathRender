@@ -27,7 +27,8 @@ public class ProbeTracker_BLIProbePath {
      * TODO: Detail the testing
      */
     public static final float INIT_SCALE_X = 0.000021118f,INIT_SCALE_Y = 0.000021118f;
-    
+    //public static final float INIT_SCALE_X = 0.000010726f,INIT_SCALE_Y = 0.000010726f;
+
     public static ProbeTracker createNewProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
         AbstractInputSourceTracker currentSourceTracker;
