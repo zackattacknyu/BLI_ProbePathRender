@@ -13,9 +13,9 @@ import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
  *
  * @author BLI
  */
-public class SerialDataInterpreter_QualityRecorder {
+public class SerialDataReader_QualityRecorder {
 
-    public static SerialDataReader createSerialInterpreter(){
+    public static SerialDataReader createSerialReader(){
         Properties dataRecorderProperties = Properties_QualityRecorder.getProperties();
         Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
         return new SerialDataReader(dataRecorderProperties,filePath);
