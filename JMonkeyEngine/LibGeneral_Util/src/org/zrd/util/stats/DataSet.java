@@ -7,9 +7,6 @@ package org.zrd.util.stats;
 import java.util.ArrayList;
 
 /**
- *  * IMPORTANT NOTE:
- * CODE IS CURRENTLY UNUSED BUT SHOULD
- *      BE KEPT FOR POSSIBLE LATER USE
  *
  * @author BLI
  */
@@ -17,7 +14,8 @@ public class DataSet {
     
     private ArrayList<Float> dataSet;
     private float mean = 0;
-    private float meanSquaredError = 0;
+    private float variance = 0;
+    private float standardDeviation = 0;
     private float meanError = 0;
 
     public DataSet(int estNumElements) {
@@ -48,9 +46,18 @@ public class DataSet {
             currentError = currentError + currentDifference;
             currentSquaredError = currentSquaredError + currentDifference*currentDifference;
         }
-        meanSquaredError = currentSquaredError/numberDataPoints;
+        variance = currentSquaredError/numberDataPoints;
+        standardDeviation = (float) Math.sqrt(variance);
         meanError = currentError/numberDataPoints;
         
+        
+    }
+    
+    public void displayResults(){
+        System.out.println("Mean: " + mean);
+        System.out.println("Mean Error: " + meanError);
+        System.out.println("Variance: " + variance);
+        System.out.println("Standard Deviation: " + standardDeviation);
         
     }
 
@@ -58,10 +65,14 @@ public class DataSet {
         return mean;
     }
 
-    public float getMeanSquaredError() {
-        return meanSquaredError;
+    public float getVariance() {
+        return variance;
     }
 
+    public float getStandardDeviation() {
+        return standardDeviation;
+    }
+    
     public float getMeanError() {
         return meanError;
     }

@@ -91,11 +91,11 @@ public class SerialDataCalibration {
             + ", y=" + initYData.getMeanError()
                 );
         System.out.println(
-            "Mean Squared Error: yaw=" + initYawData.getMeanSquaredError()
-            + ", pitch=" + initPitchData.getMeanSquaredError()
-            + ", roll=" + initRollData.getMeanSquaredError()
-            + ", x=" + initXData.getMeanSquaredError()
-            + ", y=" + initYData.getMeanSquaredError()
+            "Mean Squared Error: yaw=" + initYawData.getVariance()
+            + ", pitch=" + initPitchData.getVariance()
+            + ", roll=" + initRollData.getVariance()
+            + ", x=" + initXData.getVariance()
+            + ", y=" + initYData.getVariance()
                 );
         
     }
