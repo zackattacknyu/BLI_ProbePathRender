@@ -92,3 +92,5 @@
 /videoFiles/
 /JMonkeyEngine/CMDApplication_RawSerialRecorder/dist/
 /JMonkeyEngine/CMDApplication_SerialDataRecorder/dist/
+/JMonkeyEngine/CMDApplication_QualityRecorder/nbproject/private/
+/JMonkeyEngine/CMDApplication_QualityRecorder/build/
