@@ -4,6 +4,7 @@
  */
 package org.zrd.qualityTracker;
 
+import java.nio.file.Path;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.dataStreaming.StreamQualityTracker;
 
@@ -14,21 +15,38 @@ import org.zrd.util.dataStreaming.StreamQualityTracker;
 public class QualityReader implements ProbeDataStream{
     
     private StreamQualityTracker currentQualityTracker;
+    private QualityRecorder currentQualityRecorder;
+    private boolean recordingQuality = false;
+    private Path recordingFilePath;
     
-    public QualityReader(StreamQualityTracker currentQualityTracker){
+    
+    public QualityReader(StreamQualityTracker currentQualityTracker, Path recordingFilePath){
         this.currentQualityTracker = currentQualityTracker;
+        this.recordingFilePath = recordingFilePath;
     }
 
     @Override
     public void updateData() {
         currentQualityTracker.updateData();
         
-        System.out.println("Current Quality: " + currentQualityTracker.getCurrentQuality());
+        float qual = currentQualityTracker.getCurrentQuality();
+        if(recordingQuality){
+            currentQualityRecorder.addQualityLine(qual);
+        }
+        
+        //output quality to console
+        System.out.println(qual);
     }
 
     @Override
     public void startStopRecording() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        if(recordingQuality){
+            currentQualityRecorder.closeRecording();
+            recordingQuality = false;
+        }else{
+            currentQualityRecorder = new QualityRecorder(recordingFilePath);
+            recordingQuality = true;
+        }
     }
     
 }

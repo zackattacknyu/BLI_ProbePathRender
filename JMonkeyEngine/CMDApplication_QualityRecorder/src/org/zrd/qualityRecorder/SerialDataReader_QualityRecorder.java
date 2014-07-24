@@ -18,9 +18,9 @@ public class SerialDataReader_QualityRecorder {
 
     public static QualityReader createSerialReader(){
         Properties dataRecorderProperties = Properties_QualityRecorder.getProperties();
-        //Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
+        Path filePath = Paths.get(dataRecorderProperties.getProperty("pathRecording.filePath"));
         SerialDataReader serialReader = new SerialDataReader(dataRecorderProperties);
-        return new QualityReader(serialReader);
+        return new QualityReader(serialReader,filePath);
     }
     
     
