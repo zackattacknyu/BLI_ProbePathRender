@@ -33,7 +33,7 @@ public class SerialDataPoint {
     //default field value if not specified by data string
     public static final float DEFAULT_FIELD_VALUE = Float.NaN;
     
-    private float timestamp,x,y,yaw,pitch,roll,datafield;
+    private float timestamp,x,y,yaw,pitch,roll,datafield,quality;
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
@@ -56,6 +56,7 @@ public class SerialDataPoint {
             roll = getPart(DataLocationsMap.ROLL_KEY);
             timestamp = getPart(DataLocationsMap.TIMESTAMP_KEY);
             datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
+            quality = getPart(DataLocationsMap.QUALITY_KEY);
         }
     }
     
@@ -89,7 +90,8 @@ public class SerialDataPoint {
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.ROLL_KEY,roll) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.X_KEY,x) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
-                OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield);
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield) +
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality);
     }
     
     /**

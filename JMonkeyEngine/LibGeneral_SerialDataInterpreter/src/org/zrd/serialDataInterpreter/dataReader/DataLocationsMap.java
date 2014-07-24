@@ -38,6 +38,7 @@ public class DataLocationsMap {
     public static final String YAW_KEY = "yaw";
     public static final String TIMESTAMP_KEY = "timestamp";
     public static final String DATAFIELD_KEY = "datafield";
+    public static final String QUALITY_KEY = "quality";
     public static final String PITCH_KEY = "pitch";
     public static final String X_KEY = "x";
     
@@ -61,6 +62,7 @@ public class DataLocationsMap {
         putLocationIntoMap(PITCH_KEY);
         putLocationIntoMap(ROLL_KEY);
         putLocationIntoMap(DATAFIELD_KEY);
+        putLocationIntoMap(QUALITY_KEY);
     }
     
     /**
