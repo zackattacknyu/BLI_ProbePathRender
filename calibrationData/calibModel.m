@@ -26,7 +26,7 @@ Conversion Ratio 2 (Virtual Length/RealLength):
 Code that achieved the result is below
 %}
 
-
+%{
 %the marker coordinates
 mark1=[-0.45941067,-2.0322227,-14.933813];
 mark2=[-4.1024504,-2.726573,-13.849037];
@@ -48,8 +48,9 @@ vec14real = 56;
 vec23real = 62;
 vec24real = 37;
 vec34real = 46;
-
+%}
 %conversion ratio of real to virtual coordinates for each of the vectors
+
 %{
 vec12ratio = vec12real/vec12Len;
 vec13ratio = vec13real/vec13Len;
@@ -58,6 +59,8 @@ vec23ratio = vec23real/vec23Len;
 vec24ratio = vec24real/vec24Len;
 vec34ratio = vec34real/vec34Len;
 %}
+
+%{
 vec12ratio = vec12Len/vec12real;
 vec13ratio = vec13Len/vec13real;
 vec14ratio = vec14Len/vec14real;
@@ -69,7 +72,7 @@ vec34ratio = vec34Len/vec34real;
 ratios = [vec12ratio,vec13ratio,vec14ratio,vec23ratio,vec24ratio,vec34ratio];
 meanRatio = mean(ratios)
 stdRatio = std(ratios)
-
+%}
 
 
 %{
@@ -92,10 +95,15 @@ Marker 4: (0.5929389,0.97696793,23.470764)
 Conversion Ratio (RealLength/VirtualLength):
     Mean: 24.8281
     Standard Deviation: 1.1370
+
+Conversion Ratio 2 (Virtual Length/RealLength):
+    Mean: 0.0403
+    Standard Deviation: 0.0018
+
 Code that achieved the result is below
 %}
 
-%{
+
 %the marker coordinates
 mark1=[-1.6921587,-3.2570353,22.765057];
 mark2=[1.0623746,-2.9609601,23.383495];
@@ -119,15 +127,23 @@ vec24real = 92;
 vec34real = 65;
 
 %conversion ratio of real to virtual coordinates for each of the vectors
+%{
 vec12ratio = vec12real/vec12Len;
 vec13ratio = vec13real/vec13Len;
 vec14ratio = vec14real/vec14Len;
 vec23ratio = vec23real/vec23Len;
 vec24ratio = vec24real/vec24Len;
 vec34ratio = vec34real/vec34Len;
+%}
+
+vec12ratio = vec12Len/vec12real;
+vec13ratio = vec13Len/vec13real;
+vec14ratio = vec14Len/vec14real;
+vec23ratio = vec23Len/vec23real;
+vec24ratio = vec24Len/vec24real;
+vec34ratio = vec34Len/vec34real;
 
 %puts the data into a vector to get the mean and std
 ratios = [vec12ratio,vec13ratio,vec14ratio,vec23ratio,vec24ratio,vec34ratio];
 meanRatio = mean(ratios)
 stdRatio = std(ratios)
-%}
