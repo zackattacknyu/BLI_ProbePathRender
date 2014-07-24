@@ -141,5 +141,9 @@ public class SerialDataPoint {
     public float getX() {
         return x;
     }
+
+    float getQuality() {
+        return quality;
+    }
     
 }

@@ -9,6 +9,7 @@ import org.zrd.serialInterface.arduinoReading.SerialReader;
 import java.util.HashMap;
 import java.util.Properties;
 import org.zrd.util.dataStreaming.ProbeDataStream;
+import org.zrd.util.dataStreaming.StreamQualityTracker;
 
 /**This class is meant to be used to initialize and run the serial reader and
  *      then parse the string that it is returned. 
@@ -31,7 +32,7 @@ import org.zrd.util.dataStreaming.ProbeDataStream;
  * 
  * @author BLI
  */
-public class SerialDataReader implements ProbeDataStream{
+public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
 
     private SerialReader serial;
     
@@ -216,6 +217,11 @@ public class SerialDataReader implements ProbeDataStream{
      */
     public float getCurrentRoll() {
         return currentRoll;
+    }
+
+    @Override
+    public float getCurrentQuality() {
+        return currentSerialData.getQuality();
     }
 
     
