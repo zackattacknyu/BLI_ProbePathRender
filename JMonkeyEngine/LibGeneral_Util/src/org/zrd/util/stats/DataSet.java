@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DataSet {
     
     private ArrayList<Float> dataSet;
+    private ArrayList<String> resultStrings;
     private float mean = 0;
     private float variance = 0;
     private float standardDeviation = 0;
@@ -50,15 +51,23 @@ public class DataSet {
         standardDeviation = (float) Math.sqrt(variance);
         meanError = currentError/numberDataPoints;
         
+        resultStrings = new ArrayList<String>(4);
+        resultStrings.add("Mean: " + mean);
+        resultStrings.add("Mean Error: " + meanError);
+        resultStrings.add("Variance: " + variance);
+        resultStrings.add("Standard Deviation: " + standardDeviation);
+        
         
     }
     
     public void displayResults(){
-        System.out.println("Mean: " + mean);
-        System.out.println("Mean Error: " + meanError);
-        System.out.println("Variance: " + variance);
-        System.out.println("Standard Deviation: " + standardDeviation);
-        
+        for(String result: resultStrings){
+            System.out.println(result);
+        }
+    }
+    
+    public ArrayList<String> getResultStrings(){
+        return resultStrings;
     }
 
     public float getMean() {

@@ -4,9 +4,14 @@
  */
 package org.zrd.qualityTracker;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.dataStreaming.StreamQualityTracker;
+import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.stats.DataSet;
 
 /**
@@ -48,6 +53,13 @@ public class QualityReader implements ProbeDataStream{
             
             currentQualitySet.processData();
             currentQualitySet.displayResults();
+            
+            try {
+                Path qualityStatsFilePath = ProbeDataWriter.getNewDataFilePath(recordingFilePath, "qualityStats");
+                FileDataHelper.exportLinesToFile(currentQualitySet.getResultStrings(), qualityStatsFilePath);
+            } catch (IOException ex) {
+                System.out.println("Error trying to write stats to file: " + ex);
+            }
             
             recordingQuality = false;
         }else{
