@@ -10,7 +10,7 @@ From calibProbe:
         virtualU/mm = 0.0823
 %}
 
-realToProbeFactor = 0.00282;
+realToProbeFactor = 0.00025660;
 virtualToRealFactor = 0.0823;
 
 newScaleFactor = realToProbeFactor*virtualToRealFactor
