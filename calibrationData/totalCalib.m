@@ -16,4 +16,4 @@ virtualToRealFactor = 0.0823;
 newScaleFactor = realToProbeFactor*virtualToRealFactor
 
 %new scale Factor:
-%       0.00023209
+%       0.000021118

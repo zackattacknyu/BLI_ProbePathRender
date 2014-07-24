@@ -38,7 +38,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
     
     private SerialDataPoint currentSerialData;
     private String currentSerialOutput, previousSerialOutput;
-    private float deltaX,deltaY,currentYaw,currentPitch,currentRoll;
+    private float deltaX,deltaY,currentYaw,currentPitch,currentRoll,currentQuality;
     
     /**flag for whether or not to parse the output. If not parsed, raw string is shown*/
     private boolean parseOutput;
@@ -132,6 +132,8 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
                     currentRoll = currentSerialData.getRoll();
                     currentYaw = currentSerialData.getYaw();
                     
+                    currentQuality = currentSerialData.getQuality();
+                    
                     //prints the parsed output if desired
                     if(showOutput) System.out.println(currentSerialData);
                     
@@ -221,7 +223,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
 
     @Override
     public float getCurrentQuality() {
-        return currentSerialData.getQuality();
+        return currentQuality;
     }
 
     

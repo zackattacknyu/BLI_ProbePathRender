@@ -28,7 +28,7 @@ public class SerialDataPoint {
      *      This prevents small strings from the serial reading
      *      being parsed and causing errors
      */
-    public static final int MIN_NUM_DATA_PARTS = 6;
+    public static final int MIN_NUM_DATA_PARTS = 8;
     
     //default field value if not specified by data string
     public static final float DEFAULT_FIELD_VALUE = Float.NaN;
@@ -142,7 +142,7 @@ public class SerialDataPoint {
         return x;
     }
 
-    float getQuality() {
+    public float getQuality() {
         return quality;
     }
     
