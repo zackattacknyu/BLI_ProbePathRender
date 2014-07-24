@@ -37,6 +37,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     private Quaternion rotationFromData;
     private Quaternion rotationCalibration = new Quaternion();
+    //private Quaternion rotationCalibration = new Quaternion(0.2559f,-0.3667f,0.5326f,0.7153f);
     
     private Vector3f currentPosition;
     private Vector3f currentDisplacement;

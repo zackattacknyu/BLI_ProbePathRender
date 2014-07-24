@@ -126,10 +126,15 @@ public class RotationCalibration {
         
         //displays the results
         displayDistResult(currentDistance);
+        displayQuatResult();
     }
     
     private boolean hasConverged(float currentDistance, float previousDistance){
         return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
+    }
+    
+    private void displayQuatResult(){
+        System.out.println("Rotation Quaternion: " + aggregateRotation);
     }
     
     private void displayDistResult(float currentDistance){
