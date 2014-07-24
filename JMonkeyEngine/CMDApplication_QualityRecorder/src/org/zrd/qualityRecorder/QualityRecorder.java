@@ -17,6 +17,6 @@ public class QualityRecorder {
      */
     public static void main(String[] args) {
         DataStreamRecorder.startStreamingService(
-                SerialDataReader_QualityRecorder.createSerialReader());
+                QualityReader_QualityRecorder.createQualityReader());
     }
 }
