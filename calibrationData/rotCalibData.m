@@ -17,11 +17,3 @@ meanQuat = mean(quat12);
 
 %Result is as follows:
 %   0.2559   -0.3667    0.5326    0.7153
-
-%other quat
-%0.2654651f, -0.32326236f, 0.61058617f, 0.67246884f
-
-meanQuat2 = [0.2654651, -0.32326236, 0.61058617, 0.67246884];
-
-mult1 = quatmultiply(meanQuat,meanQuat2)
-mult2 = quatmultiply(meanQuat2,meanQuat)
