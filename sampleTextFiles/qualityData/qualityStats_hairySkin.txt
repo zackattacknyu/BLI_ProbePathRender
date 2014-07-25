@@ -1,0 +1,4 @@
+Mean: 50.604168
+Mean Error: 3.270833
+Variance: 16.259977
+Standard Deviation: 4.0323663
