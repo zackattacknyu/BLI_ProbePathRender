@@ -6,7 +6,7 @@ We need to get the conversion from probe unit to virtual unit
 This means probeUnit*(mm/probeU)*(virtualU/mm)
 
 From calibProbe:
-        mm/probeU = 0.00282
+        mm/probeU = 0.00025660
         virtualU/mm = 0.0823 (lola model)
         virtualU/mm = 0.0418 (ball Model)
 %}

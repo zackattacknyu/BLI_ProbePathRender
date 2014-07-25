@@ -54,9 +54,34 @@ public class ProbeTracker_BLIProbePath {
         Path pathRecordingFilePath = Paths.get("textFiles").
                 resolve("logs").resolve("paths");
         
+        //gets the scale factors
+        float realToProbeFactor = Float.parseFloat(
+                trackerProps.getProperty("scaleFactor.realToProbe"));
+        float virtualToRealFactor = Float.parseFloat(
+                trackerProps.getProperty("scaleFactor.virtualToReal"));
+        float finalScaleFactor = realToProbeFactor*virtualToRealFactor;
+        float finalScaleX = finalScaleFactor;
+        float finalScaleY = finalScaleFactor;
+        
+        //gets the starting position
+        float startX = Float.parseFloat(
+                trackerProps.getProperty("initLocation.x"));
+        float startY = Float.parseFloat(
+                trackerProps.getProperty("initLocation.y"));
+        float startZ = Float.parseFloat(
+                trackerProps.getProperty("initLocation.z"));
+        Vector3f startingPosition = new Vector3f(startX,startY,startZ);
+        
+        //gets the starting quaternion
+        float quatW = Float.parseFloat(trackerProps.getProperty("initQuat.w"));
+        float quatX = Float.parseFloat(trackerProps.getProperty("initQuat.x"));
+        float quatY = Float.parseFloat(trackerProps.getProperty("initQuat.y"));
+        float quatZ = Float.parseFloat(trackerProps.getProperty("initQuat.z"));
+        Quaternion initQuat = new Quaternion(quatW,quatX,quatY,quatZ);
+        
         return ProbeTracker.initializeProbeTracker(
                 currentSourceTracker, displacementMode, pathRecordingFilePath, 
-                INIT_SCALE_X, INIT_SCALE_Y, STARTING_POSITION,INIT_ROT_CALIB);
+                finalScaleX, finalScaleY, startingPosition,initQuat);
     }
     
 }
