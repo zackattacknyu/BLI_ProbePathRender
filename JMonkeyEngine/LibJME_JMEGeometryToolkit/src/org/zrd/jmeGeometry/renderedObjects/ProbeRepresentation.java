@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
+import org.zrd.jmeGeometry.pathRendering.PathRenderHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**

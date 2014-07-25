@@ -14,7 +14,7 @@ import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
-import org.zrd.graphicsToolsImpl.pathImpl.PathRenderHelper;
+import org.zrd.jmeGeometry.pathRendering.PathRenderHelper;
 import org.zrd.jmeGeometry.meshPathInteractions.LineMoveAction;
 import org.zrd.jmeGeometry.meshPathInteractions.PathImport;
 import org.zrd.jmeGeometry.renderedObjects.BackgroundBox;

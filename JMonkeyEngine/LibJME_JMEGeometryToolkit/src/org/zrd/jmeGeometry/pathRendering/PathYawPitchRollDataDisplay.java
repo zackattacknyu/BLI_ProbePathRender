@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.graphicsToolsImpl.pathImplDebug;
+package org.zrd.jmeGeometry.pathRendering;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -13,7 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
-import org.zrd.graphicsToolsImpl.pathImpl.PathDataDisplay;
+import org.zrd.jmeGeometry.pathRendering.PathDataDisplay;
 //import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**

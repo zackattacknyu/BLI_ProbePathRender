@@ -11,7 +11,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import java.io.File;
-import org.zrd.graphicsToolsImpl.pathImplDebug.PathXYDataDisplay;
+import org.zrd.jmeGeometry.pathRendering.PathXYDataDisplay;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 

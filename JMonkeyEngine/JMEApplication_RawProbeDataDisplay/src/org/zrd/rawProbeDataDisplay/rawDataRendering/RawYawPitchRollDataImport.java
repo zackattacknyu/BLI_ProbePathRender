@@ -11,7 +11,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import java.io.File;
-import org.zrd.graphicsToolsImpl.pathImplDebug.PathYawPitchRollDataDisplay;
+import org.zrd.jmeGeometry.pathRendering.PathYawPitchRollDataDisplay;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
