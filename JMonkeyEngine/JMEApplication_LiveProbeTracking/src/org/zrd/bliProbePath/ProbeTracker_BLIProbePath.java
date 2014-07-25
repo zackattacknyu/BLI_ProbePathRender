@@ -20,18 +20,6 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  * @author BLI
  */
 public class ProbeTracker_BLIProbePath {
-    
-    public static final Vector3f STARTING_POSITION = new Vector3f(-0.4f,-0.97f,-15.35f);
-    
-    /*
-     * These were obtained through rigorous testing.
-     * TODO: Detail the testing
-     */
-    public static final float INIT_SCALE_X = 0.000021118f,INIT_SCALE_Y = 0.000021118f;
-    //public static final float INIT_SCALE_X = 0.000010726f,INIT_SCALE_Y = 0.000010726f;
-    
-    //private Quaternion rotationCalibration = new Quaternion();
-    public static final Quaternion INIT_ROT_CALIB = new Quaternion(0.2559f,-0.3667f,0.5326f,0.7153f);
 
     public static ProbeTracker createNewProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
@@ -50,9 +38,6 @@ public class ProbeTracker_BLIProbePath {
 
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
-        
-        Path pathRecordingFilePath = Paths.get("textFiles").
-                resolve("logs").resolve("paths");
         
         //gets the scale factors
         float realToProbeFactor = Float.parseFloat(
@@ -80,7 +65,7 @@ public class ProbeTracker_BLIProbePath {
         Quaternion initQuat = new Quaternion(quatW,quatX,quatY,quatZ);
         
         return ProbeTracker.initializeProbeTracker(
-                currentSourceTracker, displacementMode, pathRecordingFilePath, 
+                currentSourceTracker, displacementMode, Paths_BLIProbePath.PATH_RECORDING_PATH, 
                 finalScaleX, finalScaleY, startingPosition,initQuat);
     }
     

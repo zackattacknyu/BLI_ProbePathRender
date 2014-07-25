@@ -6,10 +6,15 @@ package org.zrd.probeTrackingOnSurface;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -17,6 +22,8 @@ import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
+import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
  * 
@@ -35,12 +42,16 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
 
     private boolean rotationCalibrationDone = false;
     private ProbeTracker probeTracker;
+    private Path resultFilePath;
     private TriangleSet meshInfo;
     private Vector3f calibEndPoint;
     
-    public ProbeRotationCalibration(InputManager inputManager, Camera cam, Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo){
+    public ProbeRotationCalibration(InputManager inputManager, Camera cam, 
+            Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo,
+            Path resultFilePath){
         super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo);
         this.probeTracker = probeTracker;
+        this.resultFilePath = resultFilePath;
     }
 
     public boolean isRotationCalibrationDone() {
@@ -74,14 +85,28 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         calibEndPoint = endPoint.clone();
         
         probeTracker.startStopRecording();
-        probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
-        probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
+        //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
+        //probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
+        writeCalibrationResults(scaleCalib.getUniformScaleFactor(),rotCalib.getAggregateRotation(),resultFilePath);
         probeTracker.setCurrentPosition(endPoint);
     }
 
     @Override
     protected ArrayList<Vector3f> getActivePathAtEndpoint() {
         return probeTracker.getCurrentPathVertices();
+    }
+    
+    public static void writeCalibrationResults(float uniformScaleFactor, Quaternion rotationCalibration, Path resultFolder){
+        ArrayList<String> resultText = new ArrayList<String>(10);
+        resultText.add("Uniform Scale Factor: " + uniformScaleFactor);
+        resultText.add("Rotation Calibration Quat: " + rotationCalibration);
+        resultText.add("Rotation Calibration Matrix: " + rotationCalibration.toRotationMatrix());
+        try {
+            FileDataHelper.exportLinesToFile(resultText, 
+                    ProbeDataWriter.getNewDataFilePath(resultFolder, "CalibrationResults"));
+        } catch (IOException ex) {
+            System.out.println("Error Writing Calibration Results: " + ex);
+        }
     }
 
     public boolean isCalibrationDone() {

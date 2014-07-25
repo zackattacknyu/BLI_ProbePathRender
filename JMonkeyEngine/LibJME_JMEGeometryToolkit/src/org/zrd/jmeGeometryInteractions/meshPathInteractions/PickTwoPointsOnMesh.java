@@ -90,7 +90,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     ArrayList<Vector3f> activePath = getActivePathAtEndpoint();
                     
                     ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
-                    activePath = currentScaleCalib.getScaledPath();
+                    //activePath = currentScaleCalib.getScaledPath();
                     activePath = PathCompression.getCompressedPath(activePath,ProgramConstants.MIN_SEGMENT_LENGTH);
                     RotationCalibration currentRotCalib = 
                             new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);

@@ -36,7 +36,7 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
 public class Main extends SimpleApplication {
     
     public static final boolean SURFACE_TRACKING_ON = false;
-    public static final boolean BALL_ON = true;
+    public static final boolean BALL_ON = false;
     
     private Spatial surface,moveableObject;
     private Material lineMaterial;
@@ -118,7 +118,9 @@ public class Main extends SimpleApplication {
         probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
         probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
-        ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
+        ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(
+                inputManager, cam, shootables, probeTracker, meshInfo,
+                Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
         
         activeTracker = SURFACE_TRACKING_ON ? probeTrackerOnSurface : probeTracker;
