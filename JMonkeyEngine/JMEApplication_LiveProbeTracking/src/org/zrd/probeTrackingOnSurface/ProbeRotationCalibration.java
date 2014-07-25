@@ -19,6 +19,15 @@ import org.zrd.jmeGeometry.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
 
 /**
+ * 
+ * IMPORTANT: 
+ * Idea for future rotation calibration:
+ *      1. Do the same procedure but for the 4 paths
+ *          between calibration points.
+ *      2. Average together the Quaternions and also calculate the
+ *          standard deviation
+ *      3. If the standard deviation is too high, then order
+ *          the user to retry the calibration
  *
  * @author BLI
  */

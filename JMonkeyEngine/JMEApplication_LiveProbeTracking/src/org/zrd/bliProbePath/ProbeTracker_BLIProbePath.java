@@ -35,6 +35,7 @@ public class ProbeTracker_BLIProbePath {
 
     public static ProbeTracker createNewProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
+        
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
         boolean debugTracking;
