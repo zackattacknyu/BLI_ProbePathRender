@@ -121,11 +121,7 @@ public class Main extends SimpleApplication {
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
         
-        if(SURFACE_TRACKING_ON){
-            activeTracker = probeTrackerOnSurface;
-        }else{
-            activeTracker = probeTracker;
-        }
+        activeTracker = SURFACE_TRACKING_ON ? probeTrackerOnSurface : probeTracker;
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
