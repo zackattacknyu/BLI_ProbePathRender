@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometry.pathRendering;
+package org.zrd.jmeGeometryIO.pathIO;
 
 import com.jme3.material.Material;
 import com.jme3.math.Triangle;
@@ -12,8 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.jmeGeometry.meshRendering.MeshHelper;
-import org.zrd.jmeGeometry.pathRendering.PathDataDisplay;
+import org.zrd.jmeGeometryIO.meshIO.MeshHelper;
+import org.zrd.jmeGeometryIO.pathIO.PathDataDisplay;
 
 /**
  *

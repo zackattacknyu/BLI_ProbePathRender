@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometry.meshPathInteractions;
+package org.zrd.jmeGeometryInteractions.meshPathInteractions;
 
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
@@ -17,7 +17,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
-import org.zrd.jmeGeometry.meshRendering.MeshHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**

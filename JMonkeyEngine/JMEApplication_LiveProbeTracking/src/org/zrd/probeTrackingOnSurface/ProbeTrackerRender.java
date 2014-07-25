@@ -11,7 +11,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
-import org.zrd.jmeGeometry.pathRendering.PathRenderHelper;
+import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometry.renderedObjects;
+package org.zrd.jmeGeometryIO.renderedObjects;
 
 import com.jme3.scene.Spatial;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;

@@ -15,7 +15,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
-import org.zrd.jmeGeometry.meshPathInteractions.PickTwoPointsOnMesh;
+import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
 
 /**

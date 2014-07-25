@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometry.renderedObjects;
+package org.zrd.jmeGeometryIO.renderedObjects;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import org.zrd.jmeGeometry.pathRendering.PathRenderHelper;
+import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**

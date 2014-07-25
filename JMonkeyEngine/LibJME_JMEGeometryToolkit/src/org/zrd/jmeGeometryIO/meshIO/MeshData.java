@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometry.meshRendering;
+package org.zrd.jmeGeometryIO.meshIO;
 
 import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 import com.jme3.math.Vector2f;

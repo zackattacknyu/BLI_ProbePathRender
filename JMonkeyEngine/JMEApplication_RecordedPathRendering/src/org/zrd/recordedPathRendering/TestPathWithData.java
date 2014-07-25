@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
-import org.zrd.jmeGeometry.pathRendering.PathRenderHelper;
+import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 
 /**
  *
