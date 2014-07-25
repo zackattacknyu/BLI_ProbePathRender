@@ -17,7 +17,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
+import org.zrd.jmeGeometry.meshRendering.MeshHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**

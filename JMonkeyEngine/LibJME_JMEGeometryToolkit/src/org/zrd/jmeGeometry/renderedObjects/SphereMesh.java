@@ -8,7 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
+import org.zrd.jmeGeometry.meshRendering.MeshHelper;
 
 /**
  *

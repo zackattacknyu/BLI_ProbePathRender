@@ -14,7 +14,7 @@ import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
+import org.zrd.jmeGeometry.meshRendering.MeshHelper;
 
 /**
  *

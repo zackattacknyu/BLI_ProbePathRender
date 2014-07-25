@@ -14,7 +14,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
-import org.zrd.utilImpl.general.CollisionPoint;
+import org.zrd.jmeGeometry.meshInteraction.CollisionPoint;
 
 /**
  *

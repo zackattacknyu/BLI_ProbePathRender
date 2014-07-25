@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.graphicsToolsImpl.meshImpl.MeshHelper;
+import org.zrd.jmeGeometry.meshRendering.MeshHelper;
 import org.zrd.jmeGeometry.pathRendering.PathDataDisplay;
 
 /**
