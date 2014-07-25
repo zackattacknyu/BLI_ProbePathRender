@@ -96,3 +96,5 @@
 /JMonkeyEngine/CMDApplication_QualityRecorder/build/
 /JMonkeyEngine/LibGeneral_QualityTracker/nbproject/private/
 /JMonkeyEngine/LibGeneral_QualityTracker/build/
+/JMonkeyEngine/LibGeneral_QualityTracker/dist/
+/JMonkeyEngine/CMDApplication_QualityRecorder/dist/
