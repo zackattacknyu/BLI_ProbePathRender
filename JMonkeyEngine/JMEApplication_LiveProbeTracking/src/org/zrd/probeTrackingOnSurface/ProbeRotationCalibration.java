@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshTraversal.CalibrationHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
@@ -87,26 +88,13 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         probeTracker.startStopRecording();
         //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         //probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
-        writeCalibrationResults(scaleCalib.getUniformScaleFactor(),rotCalib.getAggregateRotation(),resultFilePath);
+        CalibrationHelper.writeCalibrationResults(scaleCalib.getUniformScaleFactor(),rotCalib.getAggregateRotation(),resultFilePath);
         probeTracker.setCurrentPosition(endPoint);
     }
 
     @Override
     protected ArrayList<Vector3f> getActivePathAtEndpoint() {
         return probeTracker.getCurrentPathVertices();
-    }
-    
-    public static void writeCalibrationResults(float uniformScaleFactor, Quaternion rotationCalibration, Path resultFolder){
-        ArrayList<String> resultText = new ArrayList<String>(10);
-        resultText.add("Uniform Scale Factor: " + uniformScaleFactor);
-        resultText.add("Rotation Calibration Quat: " + rotationCalibration);
-        resultText.add("Rotation Calibration Matrix: " + rotationCalibration.toRotationMatrix());
-        try {
-            FileDataHelper.exportLinesToFile(resultText, 
-                    ProbeDataWriter.getNewDataFilePath(resultFolder, "CalibrationResults"));
-        } catch (IOException ex) {
-            System.out.println("Error Writing Calibration Results: " + ex);
-        }
     }
 
     public boolean isCalibrationDone() {
