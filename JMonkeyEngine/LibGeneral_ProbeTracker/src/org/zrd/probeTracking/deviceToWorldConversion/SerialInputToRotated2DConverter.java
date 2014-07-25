@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTracking.deviceToWorldConversion;
 
-import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 
 /**
  *
@@ -14,8 +14,8 @@ public class SerialInputToRotated2DConverter extends AbstractSerialInputToWorldC
 
 
     @Override
-    public Matrix3f getRotationMatrix(float yaw,float pitch, float roll){
-        return TrackingHelper.getRotationMatrix(yaw);
+    protected Quaternion getRotationQuat(float yaw, float pitch, float roll) {
+        return TrackingHelper.getQuaternion(yaw);
     }
 
     

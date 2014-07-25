@@ -136,6 +136,8 @@ public class Main extends SimpleApplication {
         
         outputText = new LiveTrackingText(guiNode,assetManager);
         
+        RotationTesting.doRotationTesting();
+        
     }
 
     @Override

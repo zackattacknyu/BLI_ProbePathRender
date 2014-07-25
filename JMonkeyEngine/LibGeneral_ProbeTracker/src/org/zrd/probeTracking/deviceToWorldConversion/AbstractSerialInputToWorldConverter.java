@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTracking.deviceToWorldConversion;
 
-import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
@@ -29,7 +29,7 @@ public abstract class AbstractSerialInputToWorldConverter {
     
     //device displacement to world displacement matrix
     //      should only be called after scale factors have been applied
-    protected Matrix3f rotationCalibrationMatrix = new Matrix3f();
+    protected Quaternion rotationCalibration = new Quaternion();
     
     //scale factor for x coordinate. should be same as one for y coordinate
     protected float scaleFactorX = 1.0f;
@@ -48,9 +48,9 @@ public abstract class AbstractSerialInputToWorldConverter {
         /*rotation matrix for most recent yaw, pitch, roll numbers
          *  or other numbers if a different subclass is being used
          */ 
-        Matrix3f rotMatrixFromData = getRotationMatrix(yaw,pitch,roll);
+        Quaternion rotationFromData = getRotationQuat(yaw,pitch,roll);
         
-        Matrix3f currentRotation = rotationCalibrationMatrix.mult(rotMatrixFromData);
+        Quaternion currentRotation = rotationCalibration.mult(rotationFromData);
         
         return currentRotation.mult(initDisplacementVector);
     }
@@ -59,10 +59,14 @@ public abstract class AbstractSerialInputToWorldConverter {
         return new Vector2f(deltaX*scaleFactorX,deltaY*scaleFactorY);
     }
     
-    protected abstract Matrix3f getRotationMatrix(float yaw, float pitch, float roll);
+    protected abstract Quaternion getRotationQuat(float yaw, float pitch, float roll);
 
-    public void setRotationCalibrationMatrix(Matrix3f rotationCalibrationMatrix) {
-        this.rotationCalibrationMatrix = rotationCalibrationMatrix;
+    public void setRotationCalibration(Quaternion rotationCalibration) {
+        this.rotationCalibration = rotationCalibration;
+    }
+
+    public Quaternion getRotationCalibration() {
+        return rotationCalibration;
     }
 
     public void setScaleFactorX(float scaleFactorX) {

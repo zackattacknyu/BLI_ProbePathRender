@@ -4,7 +4,6 @@
  */
 package org.zrd.probeTracking;
 
-import com.jme3.math.FastMath;
 import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -36,8 +35,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private float currentYaw=0,currentPitch = 0,currentRoll = 0;
     
     private Quaternion rotationFromData;
-    private Quaternion rotationCalibration = new Quaternion();
-    //private Quaternion rotationCalibration = new Quaternion(0.2559f,-0.3667f,0.5326f,0.7153f);
+    
     
     private Vector3f currentPosition;
     private Vector3f currentDisplacement;
@@ -59,6 +57,17 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             AbstractInputSourceTracker currentSourceTracker, 
             short displacementMode, Path filePath,
             float scaleFactorX, float scaleFactorY, Vector3f startPosition){
+        
+        return initializeProbeTracker(currentSourceTracker,displacementMode,
+                filePath,scaleFactorX,scaleFactorY,startPosition, 
+                new Quaternion());
+    }
+    
+    public static ProbeTracker initializeProbeTracker(
+            AbstractInputSourceTracker currentSourceTracker, 
+            short displacementMode, Path filePath,
+            float scaleFactorX, float scaleFactorY, Vector3f startPosition,
+            Quaternion rotationCalibration){
         AbstractSerialInputToWorldConverter coordConverter;
         
         //default option for coord conversion
@@ -77,6 +86,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         
         coordConverter.setScaleFactorX(scaleFactorX);
         coordConverter.setScaleFactorY(scaleFactorY);
+        
+        coordConverter.setRotationCalibration(rotationCalibration);
         
         return new ProbeTracker(coordConverter,currentSourceTracker,
                 startPosition,filePath);
@@ -161,8 +172,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     }
     
     public void addendRotationCalibration(Quaternion rotation){
-        rotationCalibration = rotation.mult(rotationCalibration);
-        coordConverter.setRotationCalibrationMatrix(rotationCalibration.toRotationMatrix());
+        Quaternion newRotationCalibration = rotation.mult(coordConverter.getRotationCalibration());
+        coordConverter.setRotationCalibration(newRotationCalibration);
     }
     
     @Override
@@ -267,8 +278,9 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         return coordConverter.getScaleFactorY();
     }
 
+    @Override
     public Quaternion getLocalRotation() {
-        return rotationCalibration.mult(rotationFromData);
+        return coordConverter.getRotationCalibration().mult(rotationFromData);
     }
 
     @Override

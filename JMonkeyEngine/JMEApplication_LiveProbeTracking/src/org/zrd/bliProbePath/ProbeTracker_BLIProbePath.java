@@ -5,6 +5,7 @@
 package org.zrd.bliProbePath;
 
 import com.jme3.input.InputManager;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,9 @@ public class ProbeTracker_BLIProbePath {
      */
     public static final float INIT_SCALE_X = 0.000021118f,INIT_SCALE_Y = 0.000021118f;
     //public static final float INIT_SCALE_X = 0.000010726f,INIT_SCALE_Y = 0.000010726f;
+    
+    //private Quaternion rotationCalibration = new Quaternion();
+    public static final Quaternion INIT_ROT_CALIB = new Quaternion(0.2559f,-0.3667f,0.5326f,0.7153f);
 
     public static ProbeTracker createNewProbeTracker(InputManager manager){
         Properties trackerProps = Properties_BLIProbePath.getProperties();
@@ -51,7 +55,7 @@ public class ProbeTracker_BLIProbePath {
         
         return ProbeTracker.initializeProbeTracker(
                 currentSourceTracker, displacementMode, pathRecordingFilePath, 
-                INIT_SCALE_X, INIT_SCALE_Y, STARTING_POSITION);
+                INIT_SCALE_X, INIT_SCALE_Y, STARTING_POSITION,INIT_ROT_CALIB);
     }
     
 }
