@@ -36,7 +36,7 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
 public class Main extends SimpleApplication {
     
     public static final boolean SURFACE_TRACKING_ON = false;
-    public static final boolean BALL_ON = false;
+    public static final boolean BALL_ON = true;
     
     private Spatial surface,moveableObject;
     private Material lineMaterial;
@@ -95,12 +95,7 @@ public class Main extends SimpleApplication {
         int cameraMode = BALL_ON ? 3 : 1;
         cameraTracker.setDefaultCamera((short)cameraMode);
         
-        RenderedMesh activeMesh;
-        if(BALL_ON){
-            activeMesh = new BallMesh(assetManager);
-        }else{
-            activeMesh = new LolaMesh(assetManager);
-        }
+        RenderedMesh activeMesh = BALL_ON ? new BallMesh(assetManager) : new LolaMesh(assetManager);
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
