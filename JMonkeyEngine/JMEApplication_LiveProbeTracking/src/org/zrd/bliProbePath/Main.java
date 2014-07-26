@@ -35,8 +35,8 @@ import org.zrd.probeTrackingOnSurface.ResetTracker;
  */
 public class Main extends SimpleApplication {
     
-    public static final boolean SURFACE_TRACKING_ON = false;
-    public static final boolean BALL_ON = false;
+    private boolean surfaceTrackingOn = false;
+    private boolean ballMeshOn = false;
     
     private Spatial surface,moveableObject;
     private Material lineMaterial;
@@ -88,14 +88,21 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
         
+        ballMeshOn = Boolean.parseBoolean(
+                Properties_BLIProbePath.getProperties().
+                getProperty("ballOn"));
+        surfaceTrackingOn = Boolean.parseBoolean(
+                Properties_BLIProbePath.getProperties().
+                getProperty("surfaceTrackingOn"));
+        
         viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
         
-        int cameraMode = BALL_ON ? 3 : 1;
+        int cameraMode = ballMeshOn ? 3 : 1;
         cameraTracker.setDefaultCamera((short)cameraMode);
         
-        RenderedMesh activeMesh = BALL_ON ? new BallMesh(assetManager) : new LolaMesh(assetManager);
+        RenderedMesh activeMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
@@ -103,7 +110,7 @@ public class Main extends SimpleApplication {
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
         
-        if(!BALL_ON) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
+        if(!ballMeshOn) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         meshInfo = activeMesh.getActiveMeshInfo();
         surface = activeMesh.getSurfaceMesh();
@@ -123,7 +130,7 @@ public class Main extends SimpleApplication {
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
         
-        activeTracker = SURFACE_TRACKING_ON ? probeTrackerOnSurface : probeTracker;
+        activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         

@@ -1,0 +1,16 @@
+Uniform Scale Factor: 
+1.4654155
+ 
+Rotation Calibration Quat: 
+(-0.5012791, 0.11963619, 0.26568162, 0.81475115)
+ 
+Rotation Calibration Matrix: 
+(0.8302009, -0.5528712, -0.07141386)
+(0.31298664, 0.3562649, 0.8804059)
+(-0.46130884, -0.7532654, 0.4688127)
+ 
+Quality Statistics: 
+Mean: 96.91141
+Mean Error: 7.9068656
+Variance: 139.8058
+Standard Deviation: 11.823951
