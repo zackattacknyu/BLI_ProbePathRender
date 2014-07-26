@@ -30,6 +30,11 @@ import org.zrd.probeTracking.ProbeTracker;
  *          standard deviation
  *      3. If the standard deviation is too high, then order
  *          the user to retry the calibration
+ * 
+ * TODO: 
+ *      - Have User specify number of points to input
+ *      - User will then travel to each of those points
+ *          and with each pair will be a new calibration calculation
  *
  * @author BLI
  */
