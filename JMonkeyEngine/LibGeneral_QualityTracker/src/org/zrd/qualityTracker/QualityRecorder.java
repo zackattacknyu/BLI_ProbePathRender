@@ -4,8 +4,11 @@
  */
 package org.zrd.qualityTracker;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.stats.DataSet;
 
 /**
  *
@@ -14,13 +17,17 @@ import org.zrd.util.dataWriting.ProbeDataWriter;
 public class QualityRecorder {
 
     private ProbeDataWriter qualityWriter;
+    private DataSet currentQualitySet;
+    private Path recordingFilePath;
 
     /**
      * Initializes a quality recording to text file
      * @param filePath      path to put the text file
      */
     public QualityRecorder(Path filePath){
+        recordingFilePath = filePath;
         qualityWriter = ProbeDataWriter.getNewWriter(filePath, "qualityValues");
+        currentQualitySet = new DataSet(50);
     }
     
     /**
@@ -29,6 +36,7 @@ public class QualityRecorder {
      */
     public void addQualityLine(float currentQuality){
         ProbeDataWriter.writeLineInWriter(qualityWriter, String.valueOf(currentQuality));
+        currentQualitySet.addToDataSet(currentQuality);
     }
     
     /**
@@ -36,6 +44,16 @@ public class QualityRecorder {
      */
     public void closeRecording(){
         ProbeDataWriter.closeWriter(qualityWriter);
+        
+        currentQualitySet.processData();
+        currentQualitySet.displayResults();
+        
+        try {
+            FileDataHelper.exportLinesToFile(currentQualitySet.getResultStrings(), 
+                    ProbeDataWriter.getNewDataFilePath(recordingFilePath, "qualityStats"));
+        } catch (IOException ex) {
+            System.out.println("Error trying to write stats to file: " + ex);
+        }
     }    
     
 }
