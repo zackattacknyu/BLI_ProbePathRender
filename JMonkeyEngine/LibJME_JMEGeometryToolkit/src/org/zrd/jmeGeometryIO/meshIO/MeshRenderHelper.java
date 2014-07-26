@@ -17,11 +17,21 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 
 /**
+ * This is class that contains methods that help
+ *      with rendering meshes in JME
  *
  * @author Zach
  */
 public class MeshRenderHelper {
 
+    /**
+     * This takes in a TriangleSet object from the Geometry Toolkit
+     *      and makes a renderable jme mesh out of it. It is supposed to be
+     *      used after the toolkit has made edits to a mesh. 
+     * @param triangles     the triangleSet object
+     * @param material      the material to put onto the mesh
+     * @return              the spatial for the mesh
+     */
     public static Spatial createMeshFromTriangles(TriangleSet triangles, Material material) {
         Mesh m = new Mesh();
         ArrayList<MeshTriangle> meshTris = triangles.getTriangleList();
