@@ -8,13 +8,19 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.mesh.IndexBuffer;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 
 /**
  * This contains code that helps with taking a mesh from an OBJ file
@@ -24,6 +30,48 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  * @author BLI
  */
 public class MeshInputHelper {
+    
+    /**
+     * This takes a data buffer from the mesh and outputs the corresponding
+     *      FloatBuffer object
+     * @param mesh      the JME mesh
+     * @param type      the type of buffer
+     * @return          the FloatBuffer for that mesh corresponding to the type
+     */
+    public static FloatBuffer obtainMeshBuffer(Mesh mesh, VertexBuffer.Type type){
+        VertexBuffer pb = mesh.getBuffer(type);
+        if(pb == null) return null;
+        FloatBuffer fpb = (FloatBuffer) pb.getData();
+        return fpb;
+    }
+    
+    /**
+     * This takes in a mesh and returns the texture coordinate list
+     *      where the index in the list is the same as the index
+     *      of the vertex in the mesh
+     * @param mesh      the Mesh object
+     * @return          the corresponding texture coordinate list
+     */
+    public static ArrayList<Vector2f> constructTextureCoordList(Mesh mesh){
+        
+        //gets the texture coordinate buffer
+        FloatBuffer fb = obtainMeshBuffer(mesh,VertexBuffer.Type.TexCoord);
+        if(fb == null){
+            return null;
+        }
+        
+        ArrayList<Vector2f> textureCoordinates = 
+                new ArrayList<Vector2f>(mesh.getVertexCount());
+        fb.clear();
+        
+        //assembles the tex coord list using the buffer
+        while(fb.remaining() > 0){
+            float x = fb.get();
+            float y = fb.get();
+            textureCoordinates.add(new Vector2f(x,y));
+        }
+        return textureCoordinates;
+    }
     
     /**
      * This adds a JME mesh to a TriangleSet object form the 
