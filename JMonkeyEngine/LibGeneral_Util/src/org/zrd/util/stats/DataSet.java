@@ -15,6 +15,8 @@ public class DataSet {
     private ArrayList<Float> dataSet;
     private ArrayList<String> resultStrings;
     private float mean = 0;
+    private float min = Float.MAX_VALUE;
+    private float max = Float.MIN_VALUE;
     private float variance = 0;
     private float standardDeviation = 0;
     private float meanError = 0;
@@ -28,6 +30,10 @@ public class DataSet {
     
     public void addToDataSet(Float number){
         dataSet.add(number);
+        
+        if(number < min) min = number;
+        
+        if(number > max) max = number;
     }
     
     public void processData(){
@@ -56,6 +62,8 @@ public class DataSet {
         resultStrings.add("Mean Error: " + meanError);
         resultStrings.add("Variance: " + variance);
         resultStrings.add("Standard Deviation: " + standardDeviation);
+        resultStrings.add("Min: " + min);
+        resultStrings.add("Max: " + max);
         
         
     }
