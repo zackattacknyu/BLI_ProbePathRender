@@ -182,4 +182,9 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
     public void resetProbeReader(){
         serial.getSerialInterface().reset();
     }
+
+    @Override
+    public float getTrackingQuality() {
+        return serial.getCurrentQuality();
+    }
 }

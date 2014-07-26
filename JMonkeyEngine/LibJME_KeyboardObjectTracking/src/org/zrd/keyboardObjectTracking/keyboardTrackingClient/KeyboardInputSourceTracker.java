@@ -53,5 +53,10 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
     public void resetProbeReader() {
         
     }
+
+    @Override
+    public float getTrackingQuality() {
+        return 120f;
+    }
     
 }

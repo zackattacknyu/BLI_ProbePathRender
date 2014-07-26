@@ -298,6 +298,11 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         return currentRecordingPath.getArcLengthSinceLastRead();
     }
 
+    @Override
+    public float getTrackingQuality() {
+        return currentSourceTracker.getTrackingQuality();
+    }
+
     
     
     

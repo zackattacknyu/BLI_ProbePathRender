@@ -120,5 +120,9 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     public float getArcLengthSinceLastRead() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public float getTrackingQuality() {
+        return locationTracker.getTrackingQuality();
+    }
     
 }

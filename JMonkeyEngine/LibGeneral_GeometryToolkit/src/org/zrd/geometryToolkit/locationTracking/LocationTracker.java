@@ -14,6 +14,8 @@ import java.util.ArrayList;
  */
 public interface LocationTracker {
     
+    float getTrackingQuality();
+    
     Vector3f getCurrentPosition();
     Vector3f getCurrentDisplacement();
     Vector3f getDisplacementSinceLastPoint();

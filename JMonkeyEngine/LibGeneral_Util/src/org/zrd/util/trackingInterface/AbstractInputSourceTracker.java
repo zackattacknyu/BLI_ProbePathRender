@@ -14,6 +14,8 @@ package org.zrd.util.trackingInterface;
  */
 public interface AbstractInputSourceTracker {
     
+    float getTrackingQuality();
+    
     /**
      * Gets the current yaw from the source tracker
      * @return      current yaw reading
