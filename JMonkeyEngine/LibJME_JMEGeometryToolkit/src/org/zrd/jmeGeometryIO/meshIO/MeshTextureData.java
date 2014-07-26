@@ -16,12 +16,12 @@ import java.util.ArrayList;
  *
  * @author BLI
  */
-public class MeshData {
+public class MeshTextureData {
     
     private ArrayList<Vector2f> textureCoordinates;
     private Mesh mesh;
     
-    public MeshData(Mesh mesh){
+    public MeshTextureData(Mesh mesh){
         this.mesh = mesh;
         constructTextureCoordList();
         

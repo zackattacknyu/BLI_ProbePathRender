@@ -14,7 +14,8 @@ import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
-import org.zrd.jmeGeometryIO.meshIO.MeshHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
 
 /**
  *
@@ -30,7 +31,7 @@ public class BallMesh extends RenderedMesh{
         lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/ball_texture.png"));
         //if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
         
-        surfaceMesh = MeshHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
+        surfaceMesh = MeshInputHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         
         /*Quaternion yaw = new Quaternion();
         yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
@@ -57,13 +58,13 @@ public class BallMesh extends RenderedMesh{
         
         activeMeshInfo = new TriangleSet();
         activeMeshInfo.setTransform(surfaceTransform);
-        activeMeshInfo = MeshHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,surfaceTransform);
+        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,surfaceTransform);
         
         ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(activeMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surfaceMesh = MeshHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
+        surfaceMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
         activeMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);

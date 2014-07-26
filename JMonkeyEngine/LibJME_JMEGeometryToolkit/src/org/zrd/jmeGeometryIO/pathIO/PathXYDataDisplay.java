@@ -12,7 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.jmeGeometryIO.meshIO.MeshHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
 import org.zrd.jmeGeometryIO.pathIO.PathDataDisplay;
 
 /**
@@ -130,7 +131,7 @@ public class PathXYDataDisplay extends PathDataDisplay{
         
         mat.getAdditionalRenderState().setWireframe(true);
         
-        return MeshHelper.createMeshFromTriangles(newMesh, mat);
+        return MeshRenderHelper.createMeshFromTriangles(newMesh, mat);
         
     }
     

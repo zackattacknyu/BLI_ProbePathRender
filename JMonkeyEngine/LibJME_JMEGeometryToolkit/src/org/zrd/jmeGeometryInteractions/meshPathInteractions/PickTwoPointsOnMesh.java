@@ -17,7 +17,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
-import org.zrd.jmeGeometryIO.meshIO.MeshHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
@@ -73,7 +73,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                 if(!startPoint.equals(lastPointClicked)){
 
                     lastPointClicked = startPoint;
-                    startingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    startingTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
                     handleStartPoint(startPoint);
                     onStartPoint = false;
                 }
@@ -85,7 +85,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
 
                     lastPointClicked = endPoint;
                     
-                    endingTriangle = MeshHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    endingTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
                     
                     ArrayList<Vector3f> activePath = getActivePathAtEndpoint();
                     
