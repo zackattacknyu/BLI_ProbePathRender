@@ -6,15 +6,11 @@ package org.zrd.probeTrackingOnSurface;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -23,8 +19,6 @@ import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.util.dataWriting.ProbeDataWriter;
-import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
  * 
@@ -88,7 +82,8 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         probeTracker.startStopRecording();
         //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         //probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
-        CalibrationHelper.writeCalibrationResults(scaleCalib.getUniformScaleFactor(),rotCalib.getAggregateRotation(),resultFilePath);
+        CalibrationHelper.writeCalibrationResults(scaleCalib.getUniformScaleFactor(),
+                rotCalib.getAggregateRotation(),probeTracker.getCurrentQualityResults(),resultFilePath);
         probeTracker.setCurrentPosition(endPoint);
     }
 

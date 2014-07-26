@@ -16,19 +16,27 @@ import org.zrd.util.fileHelper.FileDataHelper;
  * @author BLI
  */
 public class CalibrationHelper {
-
-    public static void writeCalibrationResults(float uniformScaleFactor, Quaternion rotationCalibration, Path resultFolder) {
+    
+    public static final String EMPTY_LINE_STRING = " ";
+    
+    public static void writeCalibrationResults(float uniformScaleFactor, 
+            Quaternion rotationCalibration,
+            ArrayList<String> qualityStats, Path resultFolder) {
+        
         ArrayList<String> resultText = new ArrayList<String>(10);
         resultText.add("Uniform Scale Factor: ");
         resultText.add(String.valueOf(uniformScaleFactor));
-        resultText.add(" ");
+        resultText.add(EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Quat: ");
         resultText.add(String.valueOf(rotationCalibration));
-        resultText.add(" ");
+        resultText.add(EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Matrix: ");
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(0)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(1)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(2)));
+        resultText.add(EMPTY_LINE_STRING);
+        resultText.add("Quality Statistics: ");
+        resultText.addAll(qualityStats);
                 
         try {
             FileDataHelper.exportLinesToFile(resultText, 

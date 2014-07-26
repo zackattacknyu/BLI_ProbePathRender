@@ -4,6 +4,7 @@
  */
 package org.zrd.qualityTracker;
 
+import org.zrd.util.stats.QualityStatistics;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.zrd.util.dataWriting.ProbeDataWriter;

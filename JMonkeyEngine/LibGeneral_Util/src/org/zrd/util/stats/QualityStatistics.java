@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.qualityTracker;
+package org.zrd.util.stats;
 
 import java.util.ArrayList;
-import org.zrd.util.stats.DataSet;
 
 /**
  *

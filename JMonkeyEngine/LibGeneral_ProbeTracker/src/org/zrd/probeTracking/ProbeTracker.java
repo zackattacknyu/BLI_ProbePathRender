@@ -17,6 +17,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.dataStreaming.ProbeDataStream;
+import org.zrd.util.stats.QualityStatistics;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -52,6 +53,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private AbstractInputSourceTracker currentSourceTracker;
     private AbstractSerialInputToWorldConverter coordConverter;
     private String recordingText;
+    private QualityStatistics currentQualityStats;
+    private ArrayList<String> currentQualityResults;
     
     public static ProbeTracker initializeProbeTracker(
             AbstractInputSourceTracker currentSourceTracker, 
@@ -146,6 +149,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         if(recordingPath){
             currentRecordingPath.addToPath(currentPosition,currentXYPosition,
                     currentYaw, currentPitch, currentRoll);
+            currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
         }
         
     }
@@ -183,6 +187,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             System.out.println("Recording New Path Stopped");
             recordingText = "Press N to record a new path";
             currentRecordingPath.closeRecording();
+            currentQualityResults = currentQualityStats.closeStatRecording();
             newPathExists = true;
             recordingPath = false;
         }else{
@@ -190,10 +195,15 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             System.out.println("Now Recording new path");
             newPathExists = false;
             currentRecordingPath = makeNewRecorder();
+            currentQualityStats = new QualityStatistics();
             recordingPath = true;
         }
         
         
+    }
+
+    public ArrayList<String> getCurrentQualityResults() {
+        return currentQualityResults;
     }
     
     public ArrayList<Vector3f> lastRecordedPathVertices(){
