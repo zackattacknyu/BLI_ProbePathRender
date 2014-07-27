@@ -16,7 +16,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveAction;
-import org.zrd.jmeGeometryInteractions.meshPathInteractions.PathImport;
+import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;

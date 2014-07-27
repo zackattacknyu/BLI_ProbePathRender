@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryInteractions.meshPathInteractions;
+package org.zrd.jmeGeometryInteractions.meshInteraction;
 
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.collision.CollisionResults;

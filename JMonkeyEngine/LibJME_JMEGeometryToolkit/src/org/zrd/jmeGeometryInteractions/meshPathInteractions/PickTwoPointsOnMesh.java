@@ -4,6 +4,7 @@
  */
 package org.zrd.jmeGeometryInteractions.meshPathInteractions;
 
+import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.math.Triangle;

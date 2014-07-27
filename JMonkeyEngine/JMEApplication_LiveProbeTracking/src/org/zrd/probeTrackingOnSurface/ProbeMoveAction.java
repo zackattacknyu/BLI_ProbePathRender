@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTrackingOnSurface;
 
-import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickPointOnMesh;
+import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
