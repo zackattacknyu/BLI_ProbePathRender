@@ -5,19 +5,21 @@
 package org.zrd.jmeGeometryIO.pathIO;
 
 import com.jme3.material.Material;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
-import org.zrd.jmeGeometryIO.pathIO.PathDataDisplay;
 
 /**
  *
+ * This takes in X,Y data and renders the path directly. It also
+ *      generates a rectangular box around the xmin, xmax, ymin, and ymax
+ *      which can be used to represent a flat surface in the 3D
+ *      environment in which this is rendered. 
+ * 
  * @author BLI
  */
 public class PathXYDataDisplay extends PathDataDisplay{
@@ -32,6 +34,13 @@ public class PathXYDataDisplay extends PathDataDisplay{
         super(initDir);
     }
     
+    /**
+     * Takes in the directory to look for files, tells the user
+     *      to select a file, and then renders the x,y data in the file
+     *      selected and makes the reference rectangle for it
+     * @param initDir       initial directory to look for files
+     * @return              xy data display object that contains render objects
+     */
     public static PathXYDataDisplay obtainXYProbeData(File initDir){
         PathXYDataDisplay data = new PathXYDataDisplay(initDir);
         if(data.isNullReturn()){
@@ -41,6 +50,7 @@ public class PathXYDataDisplay extends PathDataDisplay{
         }
     }
     
+    @Override
     protected void generateDisplayValues(){
         
         float currentX = 0.0f;

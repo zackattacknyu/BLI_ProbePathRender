@@ -5,7 +5,6 @@
 package org.zrd.jmeGeometryIO.pathIO;
 
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -13,7 +12,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
-import org.zrd.jmeGeometryIO.pathIO.PathDataDisplay;
 //import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
@@ -43,6 +41,7 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         }
     }
     
+    @Override
     protected void generateDisplayValues(){
         
         displayVertices = new ArrayList<Vector3f>(10000);
