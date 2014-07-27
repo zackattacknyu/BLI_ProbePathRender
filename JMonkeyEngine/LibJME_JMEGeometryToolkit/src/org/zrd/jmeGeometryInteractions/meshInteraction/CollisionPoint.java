@@ -5,61 +5,55 @@
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
 import com.jme3.collision.CollisionResult;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
-import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
-//import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
+ * This is a data struture that calculates and stores
+ *      the data from when the mouse is clicked and it hits
+ *      the mesh
  *
  * @author BLI
  */
 public class CollisionPoint {
-    
-    public static final Vector3f BASELINE_NORMAL = new Vector3f(0,0,-1);
-    
-    private Vector3f normal;
+
     private Vector3f contactPoint;
-    private Quaternion rotation;
     private Triangle triangle;
     
-    private Vector3f vertex1,vertex2,vertex3;
-    
+    /**
+     * This makes the collisionPoint object
+     * @param point     CollisionResult object from the application
+     */
     public CollisionPoint(CollisionResult point) {
-        
-        normal = point.getContactNormal();
+
         contactPoint = point.getContactPoint();
         triangle = point.getTriangle(triangle);
-        vertex1 = triangle.get1(); 
-        vertex2 = triangle.get2();
-        vertex3 = triangle.get3();
-        calculateRotation();
         
     }
 
-    public Vector3f getVertex1() {
-        return vertex1;
-    }
-
-    public Vector3f getVertex2() {
-        return vertex2;
-    }
-
-    public Vector3f getVertex3() {
-        return vertex3;
-    }
-
-    
-    
+    /**
+     * Gets the triangle at the collision point
+     * @return      jme triangle object for the one hit
+     */
     public Triangle getTriangle(){
         return triangle;
     }
     
-    public String getTriangleInfo(){
-        return MeshTraverseHelper.getTriangleInfo(triangle);
+    /**
+     * gets the exact point the ray hit on the mesh
+     * @return      point on mesh that the ray hit
+     */
+    public Vector3f getContactPoint() {
+        return contactPoint;
     }
     
+    /*
+     * IMPORTANT NOTE: 
+     *  THIS IS OLD CODE THAT IS NO LONGER USED. 
+     *  IT SHOULD BE KEPT IF WE DECIDE TO CALCULATE
+     *      ROTATION AT AN INTERSECTION POINT
+     * 
+     *
     private void calculateRotation(){
        
         float rotAngle = (float) Math.acos(BASELINE_NORMAL.dot(normal));
@@ -67,24 +61,9 @@ public class CollisionPoint {
         rotation = new Quaternion();
         rotation.fromAngleAxis(rotAngle, rotAxis);
         
-        /*float yawAngle = (float)Math.acos(Vector3f.UNIT_Z.dot(normal));
-        float rollAngle = (float)Math.acos(Vector3f.UNIT_Y.dot(normal));
-        float pitchAngle = (float)Math.acos(Vector3f.UNIT_X.dot(normal));
-        rotation = TrackingHelper.getQuarternion(yawAngle, pitchAngle, rollAngle);*/
-        
-    }
+    }*/
 
-    public Vector3f getContactPoint() {
-        return contactPoint;
-    }
-
-    public Quaternion getRotation() {
-        return rotation;
-    }
-
-    public Vector3f getNormal() {
-        return normal;
-    }
+    
     
     
     
