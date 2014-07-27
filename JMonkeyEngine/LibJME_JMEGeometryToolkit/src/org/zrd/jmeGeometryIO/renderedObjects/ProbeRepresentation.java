@@ -15,6 +15,9 @@ import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**
+ * 
+ * This generates the probe representation for use
+ *      by JME applications
  *
  * @author BLI
  */

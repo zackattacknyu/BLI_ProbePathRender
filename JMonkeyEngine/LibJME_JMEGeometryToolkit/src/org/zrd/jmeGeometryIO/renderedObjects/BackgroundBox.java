@@ -12,6 +12,9 @@ import com.jme3.scene.shape.Box;
 
 /**
  *
+ * This generates and transforms the background box that is meant
+ *      to be put behind the Lola Mesh when using that one in a JME application
+ * 
  * @author BLI
  */
 public class BackgroundBox {

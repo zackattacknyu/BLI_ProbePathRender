@@ -18,6 +18,9 @@ import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
 
 /**
+ * 
+ * This generates and transforms the Lola mesh for use
+ *      by JME applications
  *
  * @author Zach
  */

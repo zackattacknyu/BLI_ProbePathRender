@@ -11,6 +11,9 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 
 /**
+ * 
+ * This gets the mesh that is a sphere that was used
+ *      for debugging purposes
  *
  * @author Zach
  */
