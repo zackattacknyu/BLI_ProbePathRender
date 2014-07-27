@@ -50,23 +50,35 @@ public class PathXYDataDisplay extends PathDataDisplay{
         }
     }
     
+    /**
+     * This generates the display vertices to use for the x,y path
+     *      when it gets rendered. The x,y values are assumed
+     *      to be displacement values, so the location starts at (0,0)
+     *      and is then updated based on x and y
+     */
     @Override
     protected void generateDisplayValues(){
         
         float currentX = 0.0f;
         float currentY = 0.0f;
         
+        //default mins and max values to use
         minX = -0.5f;
         maxX = 0.5f;
         minY = -0.5f;
         maxY = 0.5f;
         
+        //x,y uniform displacement scale to use
+        float uniformScale = 0.00002f;
+        
         displayVertices = new ArrayList<Vector3f>(10000);
         for(int index = 0; index < xValues.size(); index++){
             
+            //gets the current (x,y) coordinate
             currentX = currentX + (0.00002f)*xValues.get(index);
             currentY = currentY + (0.00002f)*yValues.get(index);
             
+            //updates the min and max values
             if(currentX < minX){
                 minX = currentX;
             }
@@ -80,6 +92,7 @@ public class PathXYDataDisplay extends PathDataDisplay{
                 maxY = currentY;
             }
             
+            //adds the current location to list of vertices to render
             displayVertices.add(new Vector3f(currentX, currentY, constantZ));
             
             
@@ -112,8 +125,8 @@ public class PathXYDataDisplay extends PathDataDisplay{
      * This generates a rectangle with an x in the middle,
      *      so the vertices include the corners of the rectangle
      *      as well as the center point
-     * @param mat
-     * @return 
+     * @param mat       material for rendering rectange
+     * @return          the jme spatial object for the rectangle
      */
     @Override
     public Spatial generateReferenceObject(Material mat) {

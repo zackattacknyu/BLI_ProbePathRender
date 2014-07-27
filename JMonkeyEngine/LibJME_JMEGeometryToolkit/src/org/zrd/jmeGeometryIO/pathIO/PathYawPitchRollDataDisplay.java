@@ -12,10 +12,16 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import java.io.File;
 import java.util.ArrayList;
-//import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
 
 /**
  *
+ * This takes files that have yaw,pitch,roll data
+ *      and makes a path on the sphere which represents
+ *      where an initial vector would be rotated to
+ *      based on those yaw, pitch, roll values. 
+ * It is meant to be used for debugging purposes to make
+ *      sure the yaw,pitch,roll values of a path make sense
+ * 
  * @author BLI
  */
 public class PathYawPitchRollDataDisplay extends PathDataDisplay{
@@ -32,6 +38,13 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         super(initDir);
     }
     
+    /**
+     * Takes in the directory to look for files, tells the user
+     *      to select a file, and then renders the yaw,pitch,roll data in the file
+     *      selected and makes the reference sphere for it
+     * @param initDir       initial directory to look for files
+     * @return              yaw,pitch,roll data display object that contains render objects
+     */
     public static PathYawPitchRollDataDisplay obtainYawPitchRollProbeData(File initDir){
         PathYawPitchRollDataDisplay data = new PathYawPitchRollDataDisplay(initDir);
         if(data.isNullReturn()){
@@ -41,6 +54,11 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         }
     }
     
+    /**
+     * This takes in the yaw,pitch,roll and uses it to rotate the initial vector
+     *      on the sphere. It takes the result and adds it to the list
+     *      of display vertices
+     */
     @Override
     protected void generateDisplayValues(){
         
@@ -58,14 +76,21 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         
     }
     
-    //temp method put here for compiling of the code here
-    public static Quaternion getQuaternion(float yawInRadians, 
+    /**
+     * This takes in yaw,pitch,roll and gets the quaternion we want to use
+     *      for debugging purposes.
+     * 
+     * NOTE: The GeometryToolkit has a helper class with this same exact method.
+     *      We are keeping this one here however in case we want to do any 
+     *      changes for debugging purposes
+     * 
+     * @param yawInRadians      yaw at point
+     * @param pitchInRadians    pitch at point
+     * @param rollInRadians     roll at point
+     * @return                  quaternion for that rotation
+     */
+    private Quaternion getQuaternion(float yawInRadians, 
             float pitchInRadians, float rollInRadians){
-        
-        /*Quaternion rotation = new Quaternion();
-        rotation.fromAngles(pitchInRadians, rollInRadians, yawInRadians);
-        return rotation;*/
-        
         
         Quaternion yaw = new Quaternion();
         yaw.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
@@ -77,8 +102,6 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         roll.fromAngleAxis(rollInRadians, Vector3f.UNIT_Y);
         
         return (yaw.mult(pitch)).mult(roll);
-        
-        //return (roll.mult(pitch)).mult(yaw);
         
         
     }
@@ -97,6 +120,13 @@ public class PathYawPitchRollDataDisplay extends PathDataDisplay{
         rollValues = new ArrayList<Float>(10000);
     }
 
+    /**
+     * This generates a wireframe sphere so the different
+     *      yaw,pitch,roll rotation results can be shown
+     *      as the path progresses
+     * @param mat       material for the sphere
+     * @return          jme spatial for the sphere
+     */
     @Override
     public Spatial generateReferenceObject(Material mat) {
         Sphere refSphere = new Sphere(40,40,1.0f);
