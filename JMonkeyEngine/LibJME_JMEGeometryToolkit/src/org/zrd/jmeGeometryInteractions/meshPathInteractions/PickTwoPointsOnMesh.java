@@ -48,8 +48,9 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
             System.out.println(messageUponEnabling());
             twoPointPickEnabled = true;
         }else{
-            System.out.println(messageUponEnabling());
+            System.out.println(messageUponCancelling());
             twoPointPickEnabled = false;
+            onStartPoint = true;
         }
     }
     

@@ -15,12 +15,10 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.mesh.IndexBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 
 /**
  * This contains code that helps with taking a mesh from an OBJ file
