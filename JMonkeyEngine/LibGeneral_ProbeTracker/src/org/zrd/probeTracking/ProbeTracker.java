@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTracking;
 
-import org.zrd.probeTracking.deviceToWorldConversion.TrackingHelper;
+import org.zrd.geometryToolkit.locationTracking.TrackingHelper;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;

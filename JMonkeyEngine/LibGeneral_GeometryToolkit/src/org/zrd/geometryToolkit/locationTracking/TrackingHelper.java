@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTracking.deviceToWorldConversion;
+package org.zrd.geometryToolkit.locationTracking;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
