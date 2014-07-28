@@ -21,6 +21,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
+import org.zrd.probeTrackingOnSurface.PickAndRecordPoint;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
@@ -129,6 +130,7 @@ public class Main extends SimpleApplication {
                 inputManager, cam, shootables, probeTracker, meshInfo,
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
+        PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,shootables,Paths_BLIProbePath.PATH_RECORDING_PATH);
         
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
