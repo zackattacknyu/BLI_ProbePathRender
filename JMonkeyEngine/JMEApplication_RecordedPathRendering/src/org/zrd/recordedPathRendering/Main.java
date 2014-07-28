@@ -21,6 +21,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.SphereMesh;
+import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveToFixedPtAction;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
@@ -37,6 +38,7 @@ public class Main extends SimpleApplication {
     private RecordedPathSet recordedPathSet;
     private Material lineMaterial;
     private LineMoveAction lineMoveAction;
+    private LineMoveToFixedPtAction lineMoveActionToFixedPt;
     private PathImport pathImport;
 
     public static void main(String[] args) {
@@ -79,6 +81,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
+        lineMoveActionToFixedPt = new LineMoveToFixedPtAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
     }
@@ -88,6 +91,11 @@ public class Main extends SimpleApplication {
         
         if(lineMoveAction.arePointsNewlyPicked()){
             rootNode.attachChild(TestPathWithData.getPathSpatialWithSampleData(lineMoveAction.getCurrentPath(), assetManager));
+            //displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
+        }
+        
+        if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
+            rootNode.attachChild(TestPathWithData.getPathSpatialWithSampleData(lineMoveActionToFixedPt.getCurrentPath(), assetManager));
             //displayPath(PathRenderHelper.createLineFromVertices(lineMoveAction.getCurrentPath(), lineMaterial));
         }
         
