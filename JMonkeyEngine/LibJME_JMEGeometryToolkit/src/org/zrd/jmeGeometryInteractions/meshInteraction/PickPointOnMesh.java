@@ -14,9 +14,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
-import org.zrd.jmeGeometryInteractions.meshInteraction.CollisionPoint;
 
 /**
+ * This is the class that handles the action of selecting a point
+ *      on a mesh in the application
  *
  * @author BLI
  */
@@ -27,10 +28,14 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
     private Node shootables;
     private MeshPointHandler pointHandler;
     
-    public PickPointOnMesh(InputManager inputManager, Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
-        this("pickPointOnMesh",inputManager,cam,pointHandler,shootableMesh);
-    }
-    
+    /**
+     * This initializes the point picking action
+     * @param name              the name of the action
+     * @param inputManager      the application's input manager
+     * @param cam               the applicatino's camera
+     * @param pointHandler      the pointHandler object that will do something with the result
+     * @param shootableMesh     the mesh to pick a point on
+     */
     public PickPointOnMesh(String name, InputManager inputManager, Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
         super(inputManager,name,MouseInput.BUTTON_LEFT);
         this.inputManager = inputManager;
@@ -41,25 +46,11 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
 
     @Override
     public void actionMethod() {
-        CollisionResults results = getCollisionResults();
+        CollisionResults results = CollisionHelper.getCurrentCollisions(inputManager, cam, shootables);
         if(results.size() > 0){
             CollisionPoint point = new CollisionPoint(results.getClosestCollision());
             pointHandler.handleNewMeshPoint(point.getContactPoint(), point.getTriangle());
         }
-    }
-    
-    private CollisionResults getCollisionResults(){
-        Vector2f click2d = inputManager.getCursorPosition();
-        System.out.println("Mouse Point:" + click2d);
-
-        CollisionResults results = new CollisionResults();
-        Vector3f click3d = cam.getWorldCoordinates(
-            new Vector2f(click2d.x, click2d.y), 0f).clone();
-        Vector3f dir = cam.getWorldCoordinates(
-            new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-        Ray ray = new Ray(click3d, dir);
-        shootables.collideWith(ray, results);
-        return results;
     }
     
 }
