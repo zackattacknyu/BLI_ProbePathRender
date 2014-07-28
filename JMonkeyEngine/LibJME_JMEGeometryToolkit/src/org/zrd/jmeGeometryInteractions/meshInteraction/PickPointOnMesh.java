@@ -8,16 +8,15 @@ import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
 
 /**
  * This is the class that handles the action of selecting a point
- *      on a mesh in the application
+ *      on a mesh in the application. It takes in a MeshPointHandler
+ *      object which is an interface for any class that takes
+ *      in a point being selected on the mesh and processes that.
  *
  * @author BLI
  */
@@ -44,11 +43,24 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
         this.shootables = shootableMesh;
     }
 
+    /**
+     * This gets called when the mouse button is clicked and it calls
+     *      the methods that care about the mouse being clicked. 
+     * It gives the method that cares about the mouse click only
+     *      the closest collision point
+     */
     @Override
     public void actionMethod() {
+        //find the collision results
         CollisionResults results = CollisionHelper.getCurrentCollisions(inputManager, cam, shootables);
+        
+        //if a result was found, process it
         if(results.size() > 0){
+            
+            //uses the closes collision as the one that matters
             CollisionPoint point = new CollisionPoint(results.getClosestCollision());
+            
+            //gives the method the cloest collision point
             pointHandler.handleNewMeshPoint(point.getContactPoint(), point.getTriangle());
         }
     }
