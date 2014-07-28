@@ -23,6 +23,7 @@ import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
+import org.zrd.probeTrackingOnSurface.ProbeMoveToFixedPoint;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
@@ -132,6 +133,8 @@ public class Main extends SimpleApplication {
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
         PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,
                 shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, activeMesh.getActiveMeshInfo().getTransform());
+        ProbeMoveToFixedPoint probeMoveToFixedPt = 
+                new ProbeMoveToFixedPoint(inputManager,cam,shootables,probeTracker);
         
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
