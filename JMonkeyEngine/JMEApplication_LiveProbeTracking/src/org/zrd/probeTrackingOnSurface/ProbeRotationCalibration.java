@@ -112,5 +112,9 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     public Vector3f getCalibEndPoint() {
         return calibEndPoint;
     }
+
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

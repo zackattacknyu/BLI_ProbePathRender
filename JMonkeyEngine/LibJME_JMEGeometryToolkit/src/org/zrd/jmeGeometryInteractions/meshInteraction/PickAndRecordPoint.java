@@ -89,6 +89,11 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         }
         
     }
+
+    @Override
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
+        
+    }
     
     
     

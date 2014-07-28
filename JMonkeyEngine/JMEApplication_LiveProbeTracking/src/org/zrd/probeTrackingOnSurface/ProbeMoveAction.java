@@ -12,6 +12,7 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.probeTracking.ProbeTracker;
 
@@ -49,6 +50,10 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
 
     public String getProbeMoveModeText() {
         return probeMoveModeText;
+    }
+
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

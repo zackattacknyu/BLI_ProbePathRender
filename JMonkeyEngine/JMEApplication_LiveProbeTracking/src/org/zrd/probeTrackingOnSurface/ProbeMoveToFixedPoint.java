@@ -11,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickFixedPointOnMesh;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
@@ -50,6 +51,10 @@ public class ProbeMoveToFixedPoint extends GeneralKeyboardActionMethod implement
 
     public String getProbeMoveModeText() {
         return probeMoveModeText;
+    }
+
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
+        handleNewMeshPoint(pointOnMesh,new Triangle());
     }
     
     

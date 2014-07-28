@@ -6,6 +6,7 @@ package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 
 /**
  *
@@ -14,5 +15,6 @@ import com.jme3.math.Vector3f;
 public interface MeshPointHandler {
     
     void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh);
+    void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh);
     
 }
