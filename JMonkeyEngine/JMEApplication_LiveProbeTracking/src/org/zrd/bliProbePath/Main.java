@@ -21,7 +21,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.probeTrackingOnSurface.PickAndRecordPoint;
+import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;

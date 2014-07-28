@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.probeTrackingOnSurface;
+package org.zrd.jmeGeometryInteractions.meshInteraction;
 
-import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -15,10 +14,7 @@ import com.jme3.scene.Node;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -47,10 +43,16 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         }
     }
 
+    @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
         ArrayList<String> fileStrings = new ArrayList<String>(10);
+        fileStrings.add("Point On Mesh: ");
         fileStrings.add(String.valueOf(pointOnMesh));
-        fileStrings.add(String.valueOf(triangleOnMesh));
+        fileStrings.add(" ");
+        fileStrings.add("Current Triangle:");
+        fileStrings.add(String.valueOf(triangleOnMesh.get1()));
+        fileStrings.add(String.valueOf(triangleOnMesh.get2()));
+        fileStrings.add(String.valueOf(triangleOnMesh.get3()));
         try {
             Path outputFilePath = ProbeDataWriter.getNewDataFilePath(recordedFilePath, "meshPointPicked");
             FileDataHelper.exportLinesToFile(fileStrings, outputFilePath);
