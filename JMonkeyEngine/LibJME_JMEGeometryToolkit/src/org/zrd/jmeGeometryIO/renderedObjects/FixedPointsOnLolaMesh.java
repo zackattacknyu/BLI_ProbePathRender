@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryInteractions.meshInteraction;
+package org.zrd.jmeGeometryIO.renderedObjects;
 
 import com.jme3.math.Vector3f;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
  *
  * @author BLI
  */
-public class FixedPointsOnMesh {
+public class FixedPointsOnLolaMesh {
     
     //TODO: make this come from properties file
     public static final Vector3f[] fixedPoints = {
