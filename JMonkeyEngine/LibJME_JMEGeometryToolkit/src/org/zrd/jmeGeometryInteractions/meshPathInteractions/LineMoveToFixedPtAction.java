@@ -6,17 +6,16 @@ package org.zrd.jmeGeometryInteractions.meshPathInteractions;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.jmeGeometryInteractions.meshInteraction.FixedPointsOnMesh;
 
 /**
  * This handles moving a line so its start and end point match
@@ -26,7 +25,7 @@ import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
  *
  * @author BLI
  */
-public class LineMoveToFixedPtAction extends PickTwoFixedPointsOnMesh{
+public class LineMoveToFixedPtAction extends PickTwoPointsOnMesh{
     
     private RecordedPathSet recordedPathSet;
     private ArrayList<Vector3f> currentPath;
@@ -70,7 +69,8 @@ public class LineMoveToFixedPtAction extends PickTwoFixedPointsOnMesh{
      */
     public LineMoveToFixedPtAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
         super(LINE_MOVE_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_ACTION_NAME,
-                LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo);
+                LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,
+                FixedPointsOnMesh.pointPicker);
         this.recordedPathSet = recordedPathSet;
     }
     
@@ -140,11 +140,6 @@ public class LineMoveToFixedPtAction extends PickTwoFixedPointsOnMesh{
      */
     public ArrayList<Vector3f> getCurrentPath() {
         return currentPath;
-    }
-
-    @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

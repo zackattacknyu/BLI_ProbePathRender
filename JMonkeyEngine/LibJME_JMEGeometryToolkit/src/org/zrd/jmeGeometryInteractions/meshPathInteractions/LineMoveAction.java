@@ -140,10 +140,5 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     public ArrayList<Vector3f> getCurrentPath() {
         return currentPath;
     }
-
-    @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
