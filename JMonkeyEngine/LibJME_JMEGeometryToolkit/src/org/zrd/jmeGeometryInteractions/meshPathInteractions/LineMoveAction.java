@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
@@ -29,6 +30,23 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     
     private RecordedPathSet recordedPathSet;
     private ArrayList<Vector3f> currentPath;
+    
+    /**
+     * Name of the action hitting the keyboard to signify
+     *      moving the current line
+     */
+    public static final String LINE_MOVE_TO_FIXED_PT_ACTION_NAME = "lineMoveToFixedPtAction";
+    
+    /**
+     * Name of the action for hitting the mouse to signify either a start
+     *      or end point for the path
+     */
+    public static final String POINT_CLICK_FOR_LINE_MOVE_TO_FIXED_PT_ACTION_NAME = "pickFixedPtPointForLineMove";
+    
+    /**
+     * The keyboard key to trigger the line move action
+     */
+    public static final int LINE_MOVE_TO_FIXED_PT_ACTION_KEY = KeyInput.KEY_K;
     
     /**
      * Name of the action hitting the keyboard to signify
@@ -70,6 +88,13 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
         super(LINE_MOVE_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_ACTION_NAME,
                 LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo);
+        this.recordedPathSet = recordedPathSet;
+    }
+
+    public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, 
+            RecordedPathSet recordedPathSet, TriangleSet meshInfo, FixedPointPicker pointPicker) {
+        super(LINE_MOVE_TO_FIXED_PT_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_TO_FIXED_PT_ACTION_NAME,
+                LINE_MOVE_TO_FIXED_PT_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,pointPicker);
         this.recordedPathSet = recordedPathSet;
     }
     

@@ -21,7 +21,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.SphereMesh;
-import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveToFixedPtAction;
+import org.zrd.jmeGeometryInteractions.meshInteraction.FixedPointsOnMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
@@ -38,7 +38,7 @@ public class Main extends SimpleApplication {
     private RecordedPathSet recordedPathSet;
     private Material lineMaterial;
     private LineMoveAction lineMoveAction;
-    private LineMoveToFixedPtAction lineMoveActionToFixedPt;
+    private LineMoveAction lineMoveActionToFixedPt;
     private PathImport pathImport;
 
     public static void main(String[] args) {
@@ -81,7 +81,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
-        lineMoveActionToFixedPt = new LineMoveToFixedPtAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
+        lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,FixedPointsOnMesh.pointPicker);
         pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
     }
