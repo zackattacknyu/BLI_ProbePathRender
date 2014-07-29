@@ -11,6 +11,10 @@ import com.jme3.input.MouseInput;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import java.util.Arrays;
+import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
+import org.zrd.geometryToolkit.locationTracking.PointData;
+import org.zrd.geometryToolkit.locationTracking.PointOnMeshData;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
 
@@ -48,10 +52,18 @@ public class PickFixedPointOnMesh extends GeneralMouseActionMethod{
             new Vector3f(-3.9950378f, -4.770878f, -16.18628f),
             new Vector3f(-4.2582374f, -4.843151f, -15.9549675f))};
     
+    public static final PointData[] fixedPointData = {
+        new PointOnMeshData(fixedPoints[0],correspondingTriangles[0]),
+        new PointOnMeshData(fixedPoints[1],correspondingTriangles[1]),
+        new PointOnMeshData(fixedPoints[2],correspondingTriangles[2]),
+        new PointOnMeshData(fixedPoints[3],correspondingTriangles[3]),
+    };
+    
     private InputManager inputManager;
     private Camera cam;
     private Node shootables;
     private MeshPointHandler pointHandler;
+    private FixedPointPicker fixedPtPicker;
     
     /**
      * This initializes the point picking action
@@ -61,12 +73,14 @@ public class PickFixedPointOnMesh extends GeneralMouseActionMethod{
      * @param pointHandler      the pointHandler object that will do something with the result
      * @param shootableMesh     the mesh to pick a point on
      */
-    public PickFixedPointOnMesh(String name, InputManager inputManager, Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
+    public PickFixedPointOnMesh(String name, InputManager inputManager, 
+            Camera cam, MeshPointHandler pointHandler, Node shootableMesh){
         super(inputManager,name,MouseInput.BUTTON_LEFT);
         this.inputManager = inputManager;
         this.cam = cam;
         this.pointHandler = pointHandler;
         this.shootables = shootableMesh;
+        fixedPtPicker = new FixedPointPicker(Arrays.asList(fixedPointData));
     }
 
     /**
@@ -86,23 +100,10 @@ public class PickFixedPointOnMesh extends GeneralMouseActionMethod{
             //uses the closes collision as the one that matters
             CollisionPoint point = new CollisionPoint(results.getClosestCollision());
             
-            Vector3f currentPoint = point.getContactPoint().clone();
-            
-            float minDistance = Float.MAX_VALUE;
-            int minIndex = 0;
-            int currIndex = 0;
-            float currentDist;
-            for(Vector3f fixedPt: fixedPoints){
-                currentDist = fixedPt.clone().distance(currentPoint.clone());
-                if(currentDist < minDistance){
-                    minDistance = currentDist;
-                    minIndex = currIndex;
-                }
-                currIndex++;
-            }
-            
+            PointOnMeshData ptData = (PointOnMeshData)(fixedPtPicker.getNearestPointData(point.getContactPoint()));
+
             //gives the method the cloest collision point
-            pointHandler.handleNewMeshPoint(fixedPoints[minIndex], correspondingTriangles[minIndex]);
+            pointHandler.handleNewMeshPoint(ptData.getPointCoords(), ptData.getTriangleContainingPoint());
         }
     }
     
