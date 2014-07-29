@@ -35,6 +35,10 @@ public class MeshTriangle {
         addAllVertices(vertex1,vertex2,vertex3);
     }
     
+    public MeshTriangle(Triangle triangle){
+        addAllVertices(triangle.get1(),triangle.get2(),triangle.get3());
+    }
+    
     //reorder vertices so that the normal points in correct direction
     public void reorderVertices(){
         Vector3f vert1 = vertex1.getVertex().clone();
@@ -158,6 +162,10 @@ public class MeshTriangle {
     @Override
     public String toString() {
         return MeshTraverseHelper.getTriangleInfo(triangleData);
+    }
+
+    public Triangle getTriangleData() {
+        return triangleData;
     }
     
     

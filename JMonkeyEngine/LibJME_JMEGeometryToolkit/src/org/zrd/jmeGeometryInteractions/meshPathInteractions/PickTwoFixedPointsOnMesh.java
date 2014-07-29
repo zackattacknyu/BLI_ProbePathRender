@@ -7,7 +7,6 @@ package org.zrd.jmeGeometryInteractions.meshPathInteractions;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import com.jme3.input.InputManager;
-import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -18,8 +17,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
-import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.jmeGeometryInteractions.meshInteraction.PickFixedPointOnMesh;
+import org.zrd.jmeGeometryInteractions.meshInteraction.FixedPointsOnMesh;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
@@ -56,7 +54,7 @@ public abstract class PickTwoFixedPointsOnMesh extends GeneralKeyboardActionMeth
      */
     protected PickTwoFixedPointsOnMesh(String actionName, String pointPickName, int keyTrigger, InputManager inputManager, Camera cam, Node shootableMesh, TriangleSet meshInfo){
         super(inputManager,actionName,keyTrigger);
-        new PickFixedPointOnMesh(pointPickName,inputManager,cam,this,shootableMesh);
+        new PickPointOnMesh(pointPickName,inputManager,cam,this,shootableMesh,FixedPointsOnMesh.pointPicker);
         this.meshInfo = meshInfo;
     }
     

@@ -100,7 +100,7 @@ public class PickFixedPointOnMesh extends GeneralMouseActionMethod{
             //uses the closes collision as the one that matters
             CollisionPoint point = new CollisionPoint(results.getClosestCollision());
             
-            PointOnMeshData ptData = (PointOnMeshData)(fixedPtPicker.getNearestPointData(point.getContactPoint()));
+            PointOnMeshData ptData = (PointOnMeshData)(fixedPtPicker.getNearestPointData(point.getPointCoords()));
 
             //gives the method the cloest collision point
             pointHandler.handleNewMeshPoint(ptData.getPointCoords(), ptData.getTriangleContainingPoint());

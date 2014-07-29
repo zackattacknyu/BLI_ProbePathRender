@@ -53,7 +53,7 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     }
 
     public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        handleNewMeshPoint(pointOnMesh,triangleOnMesh.getTriangleData());
     }
     
     

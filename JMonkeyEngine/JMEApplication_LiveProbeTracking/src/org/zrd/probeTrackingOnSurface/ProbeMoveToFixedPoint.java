@@ -12,7 +12,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
-import org.zrd.jmeGeometryInteractions.meshInteraction.PickFixedPointOnMesh;
+import org.zrd.jmeGeometryInteractions.meshInteraction.FixedPointsOnMesh;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.probeTracking.ProbeTracker;
@@ -29,7 +29,7 @@ public class ProbeMoveToFixedPoint extends GeneralKeyboardActionMethod implement
     
     public ProbeMoveToFixedPoint(InputManager inputManager, Camera cam, Node shootableMesh, ProbeTracker probeTracker){
         super(inputManager,"probeFixedPointMoveAction",KeyInput.KEY_K);
-        new PickFixedPointOnMesh("pickFixedPointForProbeMove",inputManager,cam,this,shootableMesh);
+        new PickPointOnMesh("pickFixedPointForProbeMove",inputManager,cam,this,shootableMesh,FixedPointsOnMesh.pointPicker);
         this.probeTracker = probeTracker;
     }
     
