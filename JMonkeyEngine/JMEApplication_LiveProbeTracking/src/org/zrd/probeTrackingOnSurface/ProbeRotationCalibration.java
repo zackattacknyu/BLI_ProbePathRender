@@ -17,6 +17,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.CalibrationHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
+import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
 
@@ -49,7 +50,7 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     public ProbeRotationCalibration(InputManager inputManager, Camera cam, 
             Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo,
             Path resultFilePath){
-        super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo);
+        super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo,FixedPointsOnLolaMesh.pointPicker);
         this.probeTracker = probeTracker;
         this.resultFilePath = resultFilePath;
     }

@@ -53,22 +53,6 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
      * @param cam                   the application's camera
      * @param shootableMesh         the mesh where the points will occur on
      * @param meshInfo              the TriangleSet from Geometry toolkit for the mesh
-     */
-    protected PickTwoPointsOnMesh(String actionName, String pointPickName, int keyTrigger, InputManager inputManager, Camera cam, Node shootableMesh, TriangleSet meshInfo){
-        super(inputManager,actionName,keyTrigger);
-        new PickPointOnMesh(pointPickName,inputManager,cam,this,shootableMesh);
-        this.meshInfo = meshInfo;
-    }
-    
-    /**
-     * This initializes the class that picks two points on the mesh
-     * @param actionName            name of the keyboard action that requires picking two points
-     * @param pointPickName         name of the mouse action that picks a point
-     * @param keyTrigger            the keyboard trigger to start the action
-     * @param inputManager          the application's input manager
-     * @param cam                   the application's camera
-     * @param shootableMesh         the mesh where the points will occur on
-     * @param meshInfo              the TriangleSet from Geometry toolkit for the mesh
      * @param fixedPtPicker         the fixed point picker object
      */
     protected PickTwoPointsOnMesh(String actionName, String pointPickName, 

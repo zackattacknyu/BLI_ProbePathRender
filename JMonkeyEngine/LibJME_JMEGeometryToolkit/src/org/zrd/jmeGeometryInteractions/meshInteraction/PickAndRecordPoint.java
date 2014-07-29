@@ -33,7 +33,7 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
     
     public PickAndRecordPoint(InputManager inputManager, Camera cam, Node shootableMesh, Path recordedFilePath, Matrix4f triangleTransform){
         super(inputManager,"pickAndRecordPoint",KeyInput.KEY_P);
-        new PickPointOnMesh("pickPointForRecording",inputManager,cam,this,shootableMesh);
+        new PickPointOnMesh("pickPointForRecording",inputManager,cam,this,shootableMesh,null);
         this.recordedFilePath = recordedFilePath;
         this.triangleTransform = triangleTransform;
     }

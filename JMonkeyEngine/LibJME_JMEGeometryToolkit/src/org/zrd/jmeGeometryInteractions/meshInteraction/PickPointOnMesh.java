@@ -37,25 +37,7 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
      * @param cam               the applicatino's camera
      * @param pointHandler      the pointHandler object that will do something with the result
      * @param shootableMesh     the mesh to pick a point on
-     */
-    public PickPointOnMesh(String name, InputManager inputManager, Camera cam, 
-            MeshPointHandler pointHandler, Node shootableMesh){
-        super(inputManager,name,MouseInput.BUTTON_LEFT);
-        this.inputManager = inputManager;
-        this.cam = cam;
-        this.pointHandler = pointHandler;
-        this.shootables = shootableMesh;
-        this.ptPicker = null;
-    }
-    
-    /**
-     * This initializes the point picking action
-     * @param name              the name of the action
-     * @param inputManager      the application's input manager
-     * @param cam               the applicatino's camera
-     * @param pointHandler      the pointHandler object that will do something with the result
-     * @param shootableMesh     the mesh to pick a point on
-     * @param fixedPtPicker     the fixed pt picker object for the fixed points that can be chosen
+     * @param fixedPtPicker     the fixed pt picker object for the fixed points that can be chosen (set this field to null if any point can be chosen)
      */
     public PickPointOnMesh(String name, InputManager inputManager, Camera cam, 
             MeshPointHandler pointHandler, Node shootableMesh, FixedPointPicker fixedPtPicker){
@@ -65,6 +47,19 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
         this.pointHandler = pointHandler;
         this.shootables = shootableMesh;
         this.ptPicker = fixedPtPicker;
+    }
+    
+    /**
+     * This initializes the point picking action
+     * @param name              the name of the action
+     * @param inputManager      the application's input manager
+     * @param cam               the applicatino's camera
+     * @param pointHandler      the pointHandler object that will do something with the result
+     * @param shootableMesh     the mesh to pick a point on
+     */
+    public PickPointOnMesh(String name, InputManager inputManager, Camera cam, 
+            MeshPointHandler pointHandler, Node shootableMesh){
+        this(name,inputManager,cam,pointHandler,shootableMesh,null);
     }
 
     /**

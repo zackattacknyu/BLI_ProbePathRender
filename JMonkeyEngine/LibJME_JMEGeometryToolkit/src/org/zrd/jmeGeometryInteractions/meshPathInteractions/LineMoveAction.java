@@ -87,7 +87,7 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
      */
     public LineMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
         super(LINE_MOVE_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_ACTION_NAME,
-                LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo);
+                LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,null);
         this.recordedPathSet = recordedPathSet;
     }
 
