@@ -10,7 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;

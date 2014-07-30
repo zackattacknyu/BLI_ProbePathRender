@@ -5,7 +5,7 @@
 package org.zrd.probeTrackingOnSurface;
 
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
-import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
+import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Triangle;

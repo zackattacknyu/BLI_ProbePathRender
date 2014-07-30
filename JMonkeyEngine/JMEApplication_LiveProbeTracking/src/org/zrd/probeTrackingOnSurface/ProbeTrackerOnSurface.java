@@ -8,12 +8,12 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.probeCalibration.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
+import org.zrd.geometryToolkit.pathTools.PathHelper;
 
 /**
  *
@@ -58,7 +58,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
         }else if(rotCalibrationTool.isCalibrationDone()){
             
             Vector3f currentSegment = locationTracker.getDisplacementSinceLastPoint();
-            if(currentSegment.length() > GeometryToolkitConstants.MIN_SEGMENT_LENGTH){
+            if(currentSegment.length() > PathHelper.MIN_SEGMENT_LENGTH){
                 
                 ArrayList<Vector3f> segmentsOnMesh = pathProj.getCurrentProjectedPath(currentSegment);
                 currentPositionOnMesh = segmentsOnMesh.get(segmentsOnMesh.size()-1);

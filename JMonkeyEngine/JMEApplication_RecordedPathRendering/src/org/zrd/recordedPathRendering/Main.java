@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;

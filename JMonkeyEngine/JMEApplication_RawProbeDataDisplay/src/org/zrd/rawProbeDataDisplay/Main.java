@@ -5,7 +5,6 @@ import com.jme3.renderer.RenderManager;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;

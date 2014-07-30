@@ -4,14 +4,14 @@
  */
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
-import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
+import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
-import org.zrd.geometryToolkit.locationTracking.PointOnMeshData;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
+import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralMouseActionMethod;
 
 /**

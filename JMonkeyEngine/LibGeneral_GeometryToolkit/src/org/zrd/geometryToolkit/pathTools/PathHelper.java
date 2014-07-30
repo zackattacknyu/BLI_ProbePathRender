@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * @author Zach
  */
 public class PathHelper {
+    //min lenght of individual segment
+    public static final float MIN_SEGMENT_LENGTH = 0.001F;
 
     public static ArrayList<Vector3f> getCopyOfPath(ArrayList<Vector3f> path) {
         ArrayList<Vector3f> returnPath = new ArrayList<Vector3f>(path.size());

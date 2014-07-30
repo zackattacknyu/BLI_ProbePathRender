@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.geometryToolkit.locationTracking;
+package org.zrd.geometryToolkit.pointTools;
 
 import com.jme3.math.Vector3f;
 

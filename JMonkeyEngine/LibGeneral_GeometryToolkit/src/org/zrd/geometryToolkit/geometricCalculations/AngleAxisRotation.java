@@ -6,7 +6,6 @@ package org.zrd.geometryToolkit.geometricCalculations;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 
 /**This represents a rotation by its axis and angle
  * 
@@ -48,7 +47,7 @@ public class AngleAxisRotation {
         normalizeQuatIfNeeded(quat);
         float s = (float)Math.sqrt(1-quat.getW()*quat.getW());
         float x,y,z;
-        if (s < GeometryToolkitConstants.EPSILON) { 
+        if (s < MathConstants.EPSILON) { 
             x = quat.getX(); 
             y = quat.getY();
             z = quat.getZ();

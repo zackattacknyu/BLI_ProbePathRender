@@ -5,20 +5,20 @@
 package org.zrd.jmeGeometryInteractions.meshPathInteractions;
 
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
-import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
+import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
-import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
+import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
@@ -186,7 +186,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     //gets the calibrations
                     ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
                     //activePath = currentScaleCalib.getScaledPath();
-                    activePath = PathCompression.getCompressedPath(activePath,GeometryToolkitConstants.MIN_SEGMENT_LENGTH);
+                    activePath = PathCompression.getCompressedPath(activePath,PathHelper.MIN_SEGMENT_LENGTH);
                     RotationCalibration currentRotCalib = 
                             new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);
                     activePath = currentRotCalib.getCurrentPathOnSurface();

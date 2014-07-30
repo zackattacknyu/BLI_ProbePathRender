@@ -4,7 +4,7 @@
  */
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
-import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
+import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Matrix4f;

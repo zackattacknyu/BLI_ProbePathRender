@@ -16,7 +16,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 

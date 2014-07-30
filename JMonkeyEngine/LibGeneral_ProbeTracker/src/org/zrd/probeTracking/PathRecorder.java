@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.OutputHelper;
@@ -84,7 +83,7 @@ public class PathRecorder {
         //write the compressed path
         try {
             ArrayList<Vector3f> compressedVertices = PathCompression.
-                getCompressedPath(vertices,GeometryToolkitConstants.MIN_SEGMENT_LENGTH);
+                getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
             Path compressedPathFile = ProbeDataWriter.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
             GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
         } catch (IOException ex) {

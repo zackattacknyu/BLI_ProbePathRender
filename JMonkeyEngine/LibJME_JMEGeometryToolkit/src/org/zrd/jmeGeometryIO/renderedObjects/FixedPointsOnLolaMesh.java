@@ -6,9 +6,9 @@ package org.zrd.jmeGeometryIO.renderedObjects;
 
 import com.jme3.math.Vector3f;
 import java.util.Arrays;
-import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
-import org.zrd.geometryToolkit.locationTracking.PointData;
-import org.zrd.geometryToolkit.locationTracking.PointOnMeshData;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
+import org.zrd.geometryToolkit.pointTools.PointData;
+import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 
 /**

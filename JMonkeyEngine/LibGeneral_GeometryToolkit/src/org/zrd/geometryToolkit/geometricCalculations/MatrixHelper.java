@@ -5,7 +5,6 @@
 package org.zrd.geometryToolkit.geometricCalculations;
 
 import com.jme3.math.Vector2f;
-import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 
 /**
  *
@@ -31,7 +30,7 @@ public class MatrixHelper {
     public static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f) {
         float det = a * d - b * c;
         float absDet = (float) Math.abs(det);
-        if (absDet < GeometryToolkitConstants.EPSILON) {
+        if (absDet < MathConstants.EPSILON) {
             return null;
         }
         float s = (d * e - b * f) / det;

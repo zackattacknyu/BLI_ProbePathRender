@@ -5,7 +5,7 @@
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
 import com.jme3.collision.CollisionResult;
-import org.zrd.geometryToolkit.locationTracking.PointOnMeshData;
+import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 
 /**
