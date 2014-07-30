@@ -21,6 +21,7 @@ public interface LocationTracker {
     Vector3f getCurrentDisplacement();
     Vector3f getDisplacementSinceLastPoint();
     void setCurrentTriangle(MeshTriangle triangle);
+    void setCurrentPosition(Vector3f position);
     void resetDisplacementSinceLastPoint();
     void updateData();
     

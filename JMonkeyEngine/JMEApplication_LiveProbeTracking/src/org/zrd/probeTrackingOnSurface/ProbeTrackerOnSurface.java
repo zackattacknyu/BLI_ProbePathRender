@@ -30,7 +30,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     private MeshTriangle currentTriangle;
     private MeshTriangle lastTriangle;
 
-    public ProbeTrackerOnSurface(LocationTracker probeTracker, RotationCalibrationTool probeRotCalib, TriangleSet surfaceToTrackOn){
+    public ProbeTrackerOnSurface(LocationTracker probeTracker, TriangleSet surfaceToTrackOn){
         this.locationTracker = probeTracker;
         this.surfaceToTrackOn = surfaceToTrackOn;
         currentPositionOnMesh = probeTracker.getCurrentPosition();
@@ -118,6 +118,10 @@ public class ProbeTrackerOnSurface implements LocationTracker{
 
     public float getTrackingQuality() {
         return locationTracker.getTrackingQuality();
+    }
+
+    public void setCurrentPosition(Vector3f position) {
+        locationTracker.setCurrentPosition(position);
     }
 
     

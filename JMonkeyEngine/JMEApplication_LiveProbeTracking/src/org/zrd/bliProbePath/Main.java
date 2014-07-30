@@ -17,12 +17,12 @@ import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
+import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
-import org.zrd.probeTrackingOnSurface.ProbeMoveToFixedPoint;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
@@ -123,19 +123,20 @@ public class Main extends SimpleApplication {
         
         recordedPathSet = new RecordedPathSet();
 
-        probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,probeTracker);
-        probeRecording = new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
         ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(
                 inputManager, cam, shootables, probeTracker, meshInfo,
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
-        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,rotCalib,meshInfo);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
         PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,
                 shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, activeMesh.getActiveMeshInfo().getTransform());
-        ProbeMoveToFixedPoint probeMoveToFixedPt = 
-                new ProbeMoveToFixedPoint(inputManager,cam,shootables,probeTracker);
+        
         
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
+        new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
+        
+        //new ProbeMoveAction(inputManager,cam,shootables,activeTracker);
+        probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,activeTracker,FixedPointsOnLolaMesh.pointPicker);
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
