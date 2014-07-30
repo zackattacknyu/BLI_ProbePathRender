@@ -5,24 +5,16 @@
 package org.zrd.geometryToolkit.pathTools;
 
 import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
-import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 
 /**
  *
  * @author Zach
  */
 public class PathTransformHelper {
-    
-    public static ArrayList<Vector3f> transformPathEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
-        Matrix4f wholeTransformation = getTransformOfEndpoint(inputPath,newEndpoint);
-        displayAngleOfRotation(wholeTransformation);
-        return MeshTraverseHelper.getTransformedVertices(inputPath, wholeTransformation);
-    }
-    
     /**
      * This takes in a path and returns the matrix transform of the points
      *      that will make it so that the endpoint of the path matches
@@ -34,14 +26,30 @@ public class PathTransformHelper {
     public static Matrix4f getTransformOfEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
         Vector3f startPoint = inputPath.get(0);
         Vector3f oldEndpoint = inputPath.get(inputPath.size()-1);
-        return MeshTraverseHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        return TransformHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
     }
 
-    public static void displayAngleOfRotation(Matrix4f transform) {
-        Quaternion rotation = transform.toRotationQuat();
-        AngleAxisRotation rot = new AngleAxisRotation(rotation);
-        System.out.println("Angle is: " + rot.getAngle() + " radians");
-        System.out.println("Axis of Rotation is: " + rot.getAxis());
+    public static ArrayList<Vector3f> movePathStartPoint(ArrayList<Vector3f> oldPath, Vector3f targetStartPoint) {
+        Vector3f startPoint = oldPath.get(0);
+        Vector3f moveVector = targetStartPoint.subtract(startPoint);
+        Matrix4f moveTransform = new Matrix4f();
+        moveTransform.setTranslation(moveVector);
+        return getTransformedVertices(oldPath, moveTransform);
+    }
+
+    /**
+     * Gets a new array list consisting of the current vertices transformed
+     *  using the matrix in transform
+     * @param vertices  original vertices
+     * @param transform matrix to use to transform the vertices
+     * @return
+     */
+    public static ArrayList<Vector3f> getTransformedVertices(ArrayList<Vector3f> vertices, Matrix4f transform) {
+        ArrayList<Vector3f> outputVertices = new ArrayList<Vector3f>(vertices.size());
+        for (Vector3f vertex : vertices) {
+            outputVertices.add(transform.mult(vertex));
+        }
+        return outputVertices;
     }
     
 }

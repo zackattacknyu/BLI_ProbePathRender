@@ -17,6 +17,7 @@ import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
 import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
 import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
  * This handles moving a line so its start and end point match
@@ -128,7 +129,7 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
         currentPath = recordedPathSet.getCurrentPath();
         
         //moves the current path so its start point matches the one given
-        currentPath = MeshTraverseHelper.movePathStartPoint(currentPath, startPoint);
+        currentPath = PathTransformHelper.movePathStartPoint(currentPath, startPoint);
     }
 
     /**

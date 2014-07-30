@@ -11,6 +11,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
+import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
 
 /**
  *
@@ -57,7 +58,7 @@ public class TriangleLineSegmentIntersection {
         * Translates all the points so that
         * vertex1 is now the origin
         */
-       Matrix4f originVertex1 = MeshTraverseHelper.makeNewOrigin(vertex1);
+       Matrix4f originVertex1 = TransformHelper.makeNewOrigin(vertex1);
        Vector3f seg12Vector = originVertex1.mult(vertex2);
        Vector3f seg13Vector = originVertex1.mult(vertex3);
        Vector3f lineSegStartUse = originVertex1.mult(lineSegmentStart);
@@ -89,7 +90,7 @@ public class TriangleLineSegmentIntersection {
         *       the 13 edge. This transformation allows us to easily find all the
         *       t values that we need. 
         */
-       Matrix3f coordMatrix = MeshTraverseHelper.getCoordinateTransformation(seg12Vector, seg13Vector, newZVector);
+       Matrix3f coordMatrix = TransformHelper.getCoordinateTransformation(seg12Vector, seg13Vector, newZVector);
        Vector3f newStart = coordMatrix.mult(lineSegStartUse);
        Vector3f newEnd = coordMatrix.mult(lineSegEndUse);
        Vector3f newDir = newEnd.clone().subtract(newStart);

@@ -161,7 +161,9 @@ public class MeshTriangle {
 
     @Override
     public String toString() {
-        return MeshTraverseHelper.getTriangleInfo(triangleData);
+        return vertex1.toString() + "," 
+                + vertex2.toString() + 
+                "," + vertex3.toString();
     }
 
     public Triangle getTriangleData() {

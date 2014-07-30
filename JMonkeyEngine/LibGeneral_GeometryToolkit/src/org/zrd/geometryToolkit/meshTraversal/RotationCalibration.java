@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
+import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
@@ -68,7 +69,7 @@ public class RotationCalibration {
     private void performRotationOntoInitialPlane(){
         //this does the initial transformation onto the plane of the first triangle
         Vector3f initEndPoint = initPath.get(1);
-        postMultiplyNewRotation(MeshTraverseHelper.getRotationOntoPlaneQuat(
+        postMultiplyNewRotation(TransformHelper.getRotationOntoPlaneQuat(
                 initTriangleNormal, startingPoint, initEndPoint));
     }
     
@@ -78,11 +79,11 @@ public class RotationCalibration {
     
     private void postMultiplyNewRotation(Quaternion rotation){
         aggregateRotation = rotation.mult(aggregateRotation);
-        aggregateTransform = MeshTraverseHelper.getRotationAroundPoint(startingPoint, aggregateRotation);
+        aggregateTransform = TransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation);
     }
     
     public ArrayList<Vector3f> getCurrentRotatedPath(){
-        return MeshTraverseHelper.getTransformedVertices(
+        return PathTransformHelper.getTransformedVertices(
                 MiscGeometryHelper.getCopyOfPath(initPath), aggregateTransform);
     }
     

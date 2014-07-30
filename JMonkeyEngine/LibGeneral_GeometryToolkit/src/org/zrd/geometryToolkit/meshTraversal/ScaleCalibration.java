@@ -7,6 +7,8 @@ package org.zrd.geometryToolkit.meshTraversal;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
+import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
  *
@@ -27,8 +29,8 @@ public class ScaleCalibration {
         float desiredLength = newEndpoint.distance(startPoint);
         uniformScaleFactor = desiredLength / currentLength;
         displayScaleFactor(uniformScaleFactor);
-        Matrix4f transform = MeshTraverseHelper.getScaleAroundPoint(startPoint, uniformScaleFactor);
-        scaledPath = MeshTraverseHelper.getTransformedVertices(inputPath, transform);
+        Matrix4f transform = TransformHelper.getScaleAroundPoint(startPoint, uniformScaleFactor);
+        scaledPath = PathTransformHelper.getTransformedVertices(inputPath, transform);
     }
     
     public static ArrayList<Vector3f> scalePathForNewEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint) {
