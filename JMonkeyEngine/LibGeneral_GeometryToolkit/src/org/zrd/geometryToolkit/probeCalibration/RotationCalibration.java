@@ -8,12 +8,12 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.AngleAxisRotation;
-import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
-import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
+import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
+import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
@@ -85,7 +85,7 @@ public class RotationCalibration {
     
     public ArrayList<Vector3f> getCurrentRotatedPath(){
         return PathTransformHelper.getTransformedVertices(
-                MiscGeometryHelper.getCopyOfPath(initPath), aggregateTransform);
+                PathHelper.getCopyOfPath(initPath), aggregateTransform);
     }
     
     public ArrayList<Vector3f> getCurrentPathOnSurface(){

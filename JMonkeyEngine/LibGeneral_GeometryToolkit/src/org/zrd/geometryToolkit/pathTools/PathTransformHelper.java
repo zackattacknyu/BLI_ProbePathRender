@@ -7,7 +7,7 @@ package org.zrd.geometryToolkit.pathTools;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
+import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 
 /**
  *
