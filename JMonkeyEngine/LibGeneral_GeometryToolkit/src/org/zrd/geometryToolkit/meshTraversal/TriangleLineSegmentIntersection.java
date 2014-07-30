@@ -59,7 +59,7 @@ public class TriangleLineSegmentIntersection {
         * Translates all the points so that
         * vertex1 is now the origin
         */
-       Matrix4f originVertex1 = TransformHelper.makeNewOrigin(vertex1);
+       Matrix4f originVertex1 = TransformHelper.getNewOriginTransform(vertex1);
        Vector3f seg12Vector = originVertex1.mult(vertex2);
        Vector3f seg13Vector = originVertex1.mult(vertex3);
        Vector3f lineSegStartUse = originVertex1.mult(lineSegmentStart);

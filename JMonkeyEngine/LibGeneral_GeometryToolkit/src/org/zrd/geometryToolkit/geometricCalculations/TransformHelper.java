@@ -18,14 +18,14 @@ public class TransformHelper {
     /**
      * This gets the vector that is the input vector rotated onto the plane
      *      described by the normal.
-     * The difference between this method and getVectorProjOnPlane is that
+     * The difference between this method and getUnitVectorProjectionOntoPlane is that
      *      this one preserves the length of the vector
      * @param normal        normal to the plane
      * @param vector        vector to rotate onto the plane
      * @return              the vector rotated onto the plane with length preserved
      */
-    public static Vector3f getVectorRotatedOntoPlane(Vector3f normal, Vector3f vector) {
-        Vector3f unitVectorOnPlane = getVectorProjOnPlane(normal, vector);
+    public static Vector3f getVectorProjectedOntoPlane(Vector3f normal, Vector3f vector) {
+        Vector3f unitVectorOnPlane = getUnitVectorProjectionOntoPlane(normal, vector);
         float length = vector.length();
         return unitVectorOnPlane.mult(length);
     }
@@ -119,20 +119,6 @@ public class TransformHelper {
     }
 
     /**
-     * This gets us the whole transformation for moving a point onto a plane
-     *      using the projection of the vector
-     * @param normal        normal to the plane
-     * @param originPoint   origin to rotate around
-     * @param actualEndPt   end point to move onto plane
-     * @return
-     */
-    public static Matrix4f getRotationOntoPlane(Vector3f normal, Vector3f originPoint, Vector3f actualEndPt) {
-        Vector3f actualDir = getDirectionVector(originPoint, actualEndPt);
-        Quaternion rotation = getRotationOntoPlane(normal, actualDir);
-        return getRotationAroundPoint(originPoint, rotation);
-    }
-
-    /**
      * Gets the rotation quaternion for rotating a vector
      *      so that it is on the plane described by the normal vector
      * @param normal        the normal to the plane
@@ -140,7 +126,7 @@ public class TransformHelper {
      * @return
      */
     public static Quaternion getRotationOntoPlane(Vector3f normal, Vector3f actualDir) {
-        Vector3f targetDir = getVectorProjOnPlane(normal, actualDir);
+        Vector3f targetDir = getUnitVectorProjectionOntoPlane(normal, actualDir);
         return getRotationFromVectors(actualDir, targetDir);
     }
 
@@ -157,7 +143,7 @@ public class TransformHelper {
      * @param startVector       the vector to get the projection for
      * @return      the unit vector that is the start vector on the plane
      */
-    public static Vector3f getVectorProjOnPlane(Vector3f normal, Vector3f startVector) {
+    public static Vector3f getUnitVectorProjectionOntoPlane(Vector3f normal, Vector3f startVector) {
         Vector3f newNorm = normal.normalize();
         Vector3f newStartVec = startVector.normalize();
         float dotProd = newNorm.dot(newStartVec);
@@ -191,7 +177,7 @@ public class TransformHelper {
      * @param newOrigin
      * @return
      */
-    public static Matrix4f makeNewOrigin(Vector3f newOrigin) {
+    public static Matrix4f getNewOriginTransform(Vector3f newOrigin) {
         Matrix4f originVertex1 = new Matrix4f();
         originVertex1.setTranslation(newOrigin.clone().negate());
         return originVertex1;

@@ -94,7 +94,7 @@ public class PathProjectionOntoMesh {
             oldNormal = currentNormal;
             
             currentVector = remainingPath.peek().clone();
-            currentVectorOnPlane = TransformHelper.getVectorRotatedOntoPlane(currentNormal, currentVector);
+            currentVectorOnPlane = TransformHelper.getVectorProjectedOntoPlane(currentNormal, currentVector);
             
             currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
             
