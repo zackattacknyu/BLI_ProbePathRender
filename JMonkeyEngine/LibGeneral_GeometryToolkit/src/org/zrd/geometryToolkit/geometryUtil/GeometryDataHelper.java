@@ -15,7 +15,7 @@ import org.zrd.util.fileHelper.FileDataHelper;
  *
  * @author Zach
  */
-public class ProbeDataHelper {
+public class GeometryDataHelper {
     
     public static void writeVerticesToFile(ArrayList<Vector3f> vertices, Path filePath){
         ArrayList<String> vertexStrings = new ArrayList<String>(vertices.size());

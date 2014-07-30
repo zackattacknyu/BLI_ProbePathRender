@@ -7,7 +7,7 @@ package org.zrd.jmeGeometryInteractions.pathInteraction;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import java.io.File;
-import org.zrd.geometryToolkit.geometryUtil.ProbeDataHelper;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.util.fileHelper.FileDataHelper;
@@ -66,7 +66,7 @@ public class PathImport extends GeneralKeyboardActionMethod{
         
         //puts the new path into the recorded path set for later rendering
         if(newPathExists){
-            recordedPathSet.addPath(ProbeDataHelper.getVerticesFromFile(selectedFile));
+            recordedPathSet.addPath(GeometryDataHelper.getVerticesFromFile(selectedFile));
         }
     }
 

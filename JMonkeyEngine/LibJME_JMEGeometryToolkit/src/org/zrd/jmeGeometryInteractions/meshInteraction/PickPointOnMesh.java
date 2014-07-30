@@ -4,7 +4,7 @@
  */
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
-import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
+import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;

@@ -10,7 +10,7 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import org.zrd.geometryToolkit.geometryUtil.MeshPointHandler;
+import org.zrd.geometryToolkit.locationTracking.MeshPointHandler;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;

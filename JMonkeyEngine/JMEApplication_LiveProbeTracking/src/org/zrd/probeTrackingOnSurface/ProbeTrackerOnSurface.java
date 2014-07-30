@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
 import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
-import org.zrd.geometryToolkit.locationTracking.RotationCalibrationTool;
+import org.zrd.geometryToolkit.probeCalibration.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
