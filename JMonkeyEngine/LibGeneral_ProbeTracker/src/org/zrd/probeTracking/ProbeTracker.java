@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTracking;
 
-import org.zrd.geometryToolkit.locationTracking.TrackingHelper;
+import org.zrd.geometryToolkit.geometricCalculations.RotationHelper;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -128,7 +128,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         currentDeltaX = currentSourceTracker.getDeltaX();
         currentDeltaY = currentSourceTracker.getDeltaY();
         
-        rotationFromData = TrackingHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
+        rotationFromData = RotationHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
         
         //gets the current displacement vector
         currentDisplacement = coordConverter.getXYZDisplacement(

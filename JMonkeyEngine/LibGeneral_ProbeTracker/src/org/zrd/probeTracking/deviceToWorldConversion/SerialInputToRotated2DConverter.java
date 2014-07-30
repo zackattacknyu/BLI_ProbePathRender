@@ -4,7 +4,7 @@
  */
 package org.zrd.probeTracking.deviceToWorldConversion;
 
-import org.zrd.geometryToolkit.locationTracking.TrackingHelper;
+import org.zrd.geometryToolkit.geometricCalculations.RotationHelper;
 import com.jme3.math.Quaternion;
 
 /**
@@ -16,7 +16,7 @@ public class SerialInputToRotated2DConverter extends AbstractSerialInputToWorldC
 
     @Override
     protected Quaternion getRotationQuat(float yaw, float pitch, float roll) {
-        return TrackingHelper.getQuaternion(yaw);
+        return RotationHelper.getQuaternion(yaw);
     }
 
     
