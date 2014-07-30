@@ -27,6 +27,8 @@ import org.zrd.jmeUtil.materials.MaterialHelper;
  * @author BLI
  */
 public class PathRenderHelper {
+    public static final float PATH_LINE_WIDTH = 60.0F;
+    public static final ColorRGBA LINE_COLOR = ColorRGBA.Black;
     
     /**
      * This takes in a segment sets with data and returns a Node which is a set
@@ -93,7 +95,7 @@ public class PathRenderHelper {
         Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lineVertices.size()]);
         
         //makes the color array
-        ColorRGBA lineColor = GeometryToolkitConstants.LINE_COLOR;
+        ColorRGBA lineColor = LINE_COLOR;
         Vector4f[] lineColors = new Vector4f[lineVertices.size()];
         for (int j = 0; j < lineColors.length; j++) {
             lineColors[j] = new Vector4f(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha());
@@ -107,7 +109,7 @@ public class PathRenderHelper {
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
         mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
         mesh.setBuffer(VertexBuffer.Type.Color, 4, BufferUtils.createFloatBuffer(lineColors));
-        mesh.setLineWidth(GeometryToolkitConstants.PATH_LINE_WIDTH);
+        mesh.setLineWidth(PATH_LINE_WIDTH);
         
         //makes the spatial object out of the mesh
         Spatial probePathLine = new Geometry("Line", mesh);

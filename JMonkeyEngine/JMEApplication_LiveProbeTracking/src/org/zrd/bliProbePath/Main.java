@@ -97,7 +97,7 @@ public class Main extends SimpleApplication {
                 Properties_BLIProbePath.getProperties().
                 getProperty("surfaceTrackingOn"));
         
-        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
         

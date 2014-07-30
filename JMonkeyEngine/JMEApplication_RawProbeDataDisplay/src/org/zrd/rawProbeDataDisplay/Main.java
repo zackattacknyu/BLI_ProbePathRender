@@ -25,7 +25,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
         initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);

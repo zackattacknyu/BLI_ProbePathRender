@@ -50,7 +50,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         recordedPathSet = new RecordedPathSet();
-        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
         
         File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         

@@ -5,6 +5,7 @@
 package org.zrd.jmeUtil.applicationHelp;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
 import java.util.Properties;
 
@@ -48,6 +49,8 @@ public class ApplicationHelper {
     public static final String TITLE_PROPERTY_NAME = "settings.title";
     public static final String X_RES_PROPERTY_NAME = "settings.xResolution";
     public static final String Y_RES_PROPERTY_NAME = "settings.yResolution";
+    public static final ColorRGBA BACKGROUND_COLOR = 
+            new ColorRGBA(205.0F / 256.0F, 204.0F / 256.0F, 207.0F / 256.0F, 1.0F);
     
     /**
      * This initializes an application using the application settings
