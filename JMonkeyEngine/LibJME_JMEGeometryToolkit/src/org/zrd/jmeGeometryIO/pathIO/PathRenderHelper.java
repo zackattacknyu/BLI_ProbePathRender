@@ -16,7 +16,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
@@ -93,7 +93,7 @@ public class PathRenderHelper {
         Vector3f[] lineVertexData = lineVertices.toArray(new Vector3f[lineVertices.size()]);
         
         //makes the color array
-        ColorRGBA lineColor = ProgramConstants.LINE_COLOR;
+        ColorRGBA lineColor = GeometryToolkitConstants.LINE_COLOR;
         Vector4f[] lineColors = new Vector4f[lineVertices.size()];
         for (int j = 0; j < lineColors.length; j++) {
             lineColors[j] = new Vector4f(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha());
@@ -107,7 +107,7 @@ public class PathRenderHelper {
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(lineVertexData));
         mesh.setBuffer(VertexBuffer.Type.Index, 2, indices);
         mesh.setBuffer(VertexBuffer.Type.Color, 4, BufferUtils.createFloatBuffer(lineColors));
-        mesh.setLineWidth(ProgramConstants.PATH_LINE_WIDTH);
+        mesh.setLineWidth(GeometryToolkitConstants.PATH_LINE_WIDTH);
         
         //makes the spatial object out of the mesh
         Spatial probePathLine = new Geometry("Line", mesh);

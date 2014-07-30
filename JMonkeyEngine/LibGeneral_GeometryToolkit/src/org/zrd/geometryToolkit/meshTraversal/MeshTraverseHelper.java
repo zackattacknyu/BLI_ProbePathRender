@@ -11,7 +11,7 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 
 /**
  *
@@ -63,7 +63,7 @@ public class MeshTraverseHelper {
     public static Vector2f solveMatrixEqu(float a, float b, float c, float d, float e, float f){
         float det = a*d-b*c;
         float absDet = (float)Math.abs(det);
-        if(absDet < ProgramConstants.EPSILON) return null;
+        if(absDet < GeometryToolkitConstants.EPSILON) return null;
         float s = (d*e-b*f)/det;
         float t = (a*f-e*c)/det;
         return new Vector2f(s,t);

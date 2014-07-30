@@ -47,7 +47,7 @@ public class AngleAxisRotation {
         normalizeQuatIfNeeded(quat);
         float s = (float)Math.sqrt(1-quat.getW()*quat.getW());
         float x,y,z;
-        if (s < ProgramConstants.EPSILON) { 
+        if (s < GeometryToolkitConstants.EPSILON) { 
             x = quat.getX(); 
             y = quat.getY();
             z = quat.getZ();

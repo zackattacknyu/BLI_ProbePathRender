@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
@@ -50,7 +50,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         recordedPathSet = new RecordedPathSet();
-        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
         
         File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         

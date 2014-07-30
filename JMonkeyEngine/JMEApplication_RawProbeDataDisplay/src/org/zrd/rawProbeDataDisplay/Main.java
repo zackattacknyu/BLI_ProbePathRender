@@ -5,7 +5,7 @@ import com.jme3.renderer.RenderManager;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
@@ -25,7 +25,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
         initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);

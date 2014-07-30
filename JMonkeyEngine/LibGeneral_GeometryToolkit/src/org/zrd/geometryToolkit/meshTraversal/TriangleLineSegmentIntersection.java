@@ -10,7 +10,7 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 
 /**
  *
@@ -178,7 +178,7 @@ public class TriangleLineSegmentIntersection {
      */
     private static float getIntersection(float start, float dir){
         float absDir = (float)Math.abs(dir);
-        if(absDir<ProgramConstants.EPSILON){
+        if(absDir<GeometryToolkitConstants.EPSILON){
             //System.out.println("DIR WAS NEAR ZERO!!!");
             return Float.POSITIVE_INFINITY;
         }else{

@@ -12,7 +12,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -186,7 +186,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     //gets the calibrations
                     ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
                     //activePath = currentScaleCalib.getScaledPath();
-                    activePath = PathCompression.getCompressedPath(activePath,ProgramConstants.MIN_SEGMENT_LENGTH);
+                    activePath = PathCompression.getCompressedPath(activePath,GeometryToolkitConstants.MIN_SEGMENT_LENGTH);
                     RotationCalibration currentRotCalib = 
                             new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);
                     activePath = currentRotCalib.getCurrentPathOnSurface();

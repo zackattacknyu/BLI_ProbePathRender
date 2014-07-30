@@ -8,6 +8,7 @@ import com.jme3.math.Quaternion;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -17,8 +18,6 @@ import org.zrd.util.fileHelper.FileDataHelper;
  */
 public class CalibrationHelper {
     
-    public static final String EMPTY_LINE_STRING = " ";
-    
     public static void writeCalibrationResults(float uniformScaleFactor, 
             Quaternion rotationCalibration,
             ArrayList<String> qualityStats, Path resultFolder) {
@@ -26,15 +25,15 @@ public class CalibrationHelper {
         ArrayList<String> resultText = new ArrayList<String>(10);
         resultText.add("Uniform Scale Factor: ");
         resultText.add(String.valueOf(uniformScaleFactor));
-        resultText.add(EMPTY_LINE_STRING);
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Quat: ");
         resultText.add(String.valueOf(rotationCalibration));
-        resultText.add(EMPTY_LINE_STRING);
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Matrix: ");
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(0)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(1)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(2)));
-        resultText.add(EMPTY_LINE_STRING);
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.add("Quality Statistics: ");
         resultText.addAll(qualityStats);
                 

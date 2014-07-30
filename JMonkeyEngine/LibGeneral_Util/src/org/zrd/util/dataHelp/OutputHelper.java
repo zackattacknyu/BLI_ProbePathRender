@@ -18,6 +18,7 @@ public class OutputHelper {
      *      of the current one.
      */
     public static final String DATA_IN_OUTPUT_SEPARATOR = ",";
+    public static final String EMPTY_LINE_STRING = " ";
     
     /**
      * This takes in a name of a field and its value and makes a string

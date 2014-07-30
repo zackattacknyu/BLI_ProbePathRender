@@ -10,7 +10,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdgeTriangles;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 
 /**
  *
@@ -135,8 +135,8 @@ public class ModelVerification {
             vector13 = triangle.getSide13().getVector();
             
             //degenerate side
-            if( (vector12.length() < ProgramConstants.EPSILON) 
-                    || (vector13.length() < ProgramConstants.EPSILON) ){
+            if( (vector12.length() < GeometryToolkitConstants.EPSILON) 
+                    || (vector13.length() < GeometryToolkitConstants.EPSILON) ){
                 System.out.println("Degen Triangle: " + triangle);
                 return false;
             }
@@ -145,8 +145,8 @@ public class ModelVerification {
             vector12.normalizeLocal();
             vector13.normalizeLocal();
             dotProd = vector12.dot(vector13);
-            if((Math.abs(dotProd-1) < ProgramConstants.EPSILON) || 
-                    (Math.abs(dotProd+1) < ProgramConstants.EPSILON)){
+            if((Math.abs(dotProd-1) < GeometryToolkitConstants.EPSILON) || 
+                    (Math.abs(dotProd+1) < GeometryToolkitConstants.EPSILON)){
                 //if dot prod is near 1 or -1, then unit vectors are identical
                 System.out.println("Degen Triangle: " + triangle);
                 System.out.println("Degen Triangle texture coordinates: " + triangle.getTextureCoords());

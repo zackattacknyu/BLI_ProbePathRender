@@ -10,7 +10,7 @@ import com.jme3.math.ColorRGBA;
  *
  * @author BLI
  */
-public class ProgramConstants {
+public class GeometryToolkitConstants {
 
     //min lenght of individual segment
     public static final float MIN_SEGMENT_LENGTH = 0.001f;

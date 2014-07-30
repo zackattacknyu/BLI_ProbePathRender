@@ -1,7 +1,7 @@
 package org.zrd.bliProbePath;
 
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
-import org.zrd.geometryToolkit.geometryUtil.ProgramConstants;
+import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -97,7 +97,7 @@ public class Main extends SimpleApplication {
                 Properties_BLIProbePath.getProperties().
                 getProperty("surfaceTrackingOn"));
         
-        viewPort.setBackgroundColor(ProgramConstants.BACKGROUND_COLOR);
+        viewPort.setBackgroundColor(GeometryToolkitConstants.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
         
