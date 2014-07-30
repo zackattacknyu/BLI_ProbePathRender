@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
@@ -311,6 +312,10 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     @Override
     public float getTrackingQuality() {
         return currentSourceTracker.getTrackingQuality();
+    }
+
+    @Override
+    public void setCurrentTriangle(MeshTriangle triangle) {
     }
 
     

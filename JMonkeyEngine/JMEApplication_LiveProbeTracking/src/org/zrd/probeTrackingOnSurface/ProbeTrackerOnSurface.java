@@ -23,7 +23,6 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     
     
     private LocationTracker locationTracker;
-    private RotationCalibrationTool rotCalibrationTool;
     private Vector3f currentPositionOnMesh;
     private PathProjectionOntoMesh pathProj;
     private TriangleSet surfaceToTrackOn;
@@ -32,10 +31,16 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     private MeshTriangle lastTriangle;
 
     public ProbeTrackerOnSurface(LocationTracker probeTracker, RotationCalibrationTool probeRotCalib, TriangleSet surfaceToTrackOn){
-        this.rotCalibrationTool = probeRotCalib;
         this.locationTracker = probeTracker;
         this.surfaceToTrackOn = surfaceToTrackOn;
         currentPositionOnMesh = probeTracker.getCurrentPosition();
+        pathProj = null;
+    }
+    
+    public void setCurrentTriangle(MeshTriangle triangle) {
+        pathProj = new PathProjectionOntoMesh(triangle,locationTracker.getCurrentPosition(),surfaceToTrackOn);
+        locationTracker.resetDisplacementSinceLastPoint();
+        lastTriangle = triangle;
     }
 
     public Vector3f getCurrentPosition() {
@@ -45,25 +50,19 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     public void updateData(){
         locationTracker.updateData();
         
-        if(rotCalibrationTool.isCalibrationNewlyFinished()){
+        if(pathProj == null){
             
-            pathProj = new PathProjectionOntoMesh(rotCalibrationTool.getTriangleAtEndPoint(),
-                    rotCalibrationTool.getCalibEndPoint().clone(),surfaceToTrackOn);
-            currentPositionOnMesh = rotCalibrationTool.getCalibEndPoint().clone();
-            locationTracker.resetDisplacementSinceLastPoint();
-            lastTriangle = rotCalibrationTool.getTriangleAtEndPoint();
+            currentPositionOnMesh = locationTracker.getCurrentPosition();
             
-            System.out.println("Triangle at end point: " + lastTriangle);
-            
-        }else if(rotCalibrationTool.isCalibrationDone()){
+        }else{
             
             Vector3f currentSegment = locationTracker.getDisplacementSinceLastPoint();
             if(currentSegment.length() > PathHelper.MIN_SEGMENT_LENGTH){
-                
+
                 ArrayList<Vector3f> segmentsOnMesh = pathProj.getCurrentProjectedPath(currentSegment);
-                currentPositionOnMesh = segmentsOnMesh.get(segmentsOnMesh.size()-1);
+                currentPositionOnMesh = PathHelper.getLastPoint(segmentsOnMesh);
                 locationTracker.resetDisplacementSinceLastPoint();
-                
+
                 currentTriangle = pathProj.getCurrentTriangle();
                 if(currentTriangle == null){
                     System.out.println("CurrentTriangle is null");
@@ -72,15 +71,11 @@ public class ProbeTrackerOnSurface implements LocationTracker{
                     System.out.println("Current Triangle: " + currentTriangle);
                     lastTriangle = currentTriangle;
                 }
-                
+
             }
-            
-            
-        }else{
-            
-            currentPositionOnMesh = locationTracker.getCurrentPosition();
-            
         }
+        
+        
         
         
     }
@@ -124,5 +119,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     public float getTrackingQuality() {
         return locationTracker.getTrackingQuality();
     }
+
+    
     
 }

@@ -57,7 +57,7 @@ public class RotationCalibration {
     public RotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         aggregateRotation = new Quaternion();
         this.initPath = initPath;
-        startingPoint = initPath.get(0);
+        startingPoint = PathHelper.getFirstPoint(initPath);
         initTriangleNormal = startingTriangle.getNormal();
         this.startingTriangle = startingTriangle;
         this.endPoint = endPoint;
@@ -69,7 +69,7 @@ public class RotationCalibration {
     
     private void performRotationOntoInitialPlane(){
         //this does the initial transformation onto the plane of the first triangle
-        Vector3f initEndPoint = initPath.get(1);
+        Vector3f initEndPoint = PathHelper.getSecondPoint(initPath);
         postMultiplyNewRotation(
                 RotationTransformHelper.getRotationOntoPlane(
                 initTriangleNormal, startingPoint, initEndPoint));

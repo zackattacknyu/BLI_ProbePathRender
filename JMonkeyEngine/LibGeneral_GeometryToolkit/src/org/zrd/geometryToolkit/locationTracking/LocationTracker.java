@@ -7,6 +7,7 @@ package org.zrd.geometryToolkit.locationTracking;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 
 /**
  *
@@ -19,6 +20,7 @@ public interface LocationTracker {
     Vector3f getCurrentPosition();
     Vector3f getCurrentDisplacement();
     Vector3f getDisplacementSinceLastPoint();
+    void setCurrentTriangle(MeshTriangle triangle);
     void resetDisplacementSinceLastPoint();
     void updateData();
     

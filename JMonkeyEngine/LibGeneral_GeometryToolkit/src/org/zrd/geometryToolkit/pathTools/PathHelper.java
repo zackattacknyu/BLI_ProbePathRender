@@ -23,4 +23,15 @@ public class PathHelper {
         return returnPath;
     }
     
+    public static Vector3f getFirstPoint(ArrayList<Vector3f> path){
+        return path.get(0);
+    }
+    
+    public static Vector3f getSecondPoint(ArrayList<Vector3f> path){
+        return path.get(1);
+    }
+    
+    public static Vector3f getLastPoint(ArrayList<Vector3f> path){
+        return path.get(path.size()-1);
+    }
 }
