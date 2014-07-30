@@ -11,6 +11,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometryUtil.GeometryToolkitConstants;
+import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
 import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
 
 /**
@@ -105,7 +106,7 @@ public class TriangleLineSegmentIntersection {
        if(Float.isInfinite(intersectEdge12)) numBadEdges++;
        intersectEdge13 = getIntersection(newStart.getX(),newDir.getX());
        if(Float.isInfinite(intersectEdge13)) numBadEdges++;
-       Vector2f intersect23Points = MeshTraverseHelper.solveMatrixEqu(
+       Vector2f intersect23Points = MiscGeometryHelper.solveMatrixEqu(
                newDir.getX(), -1, 
                newDir.getY(), 1, 
                -1*newStart.getX(), 1-newStart.getY());

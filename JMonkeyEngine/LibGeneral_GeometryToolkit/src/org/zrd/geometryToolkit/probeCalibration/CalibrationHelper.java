@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.geometryToolkit.meshTraversal;
+package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Quaternion;
 import java.io.IOException;

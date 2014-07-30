@@ -14,8 +14,8 @@ import org.zrd.geometryToolkit.locationTracking.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.MeshTraverseHelper;
-import org.zrd.geometryToolkit.meshTraversal.RotationCalibration;
-import org.zrd.geometryToolkit.meshTraversal.ScaleCalibration;
+import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
+import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 

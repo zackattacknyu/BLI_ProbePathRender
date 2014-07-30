@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.geometryToolkit.meshTraversal;
+package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
@@ -13,6 +13,7 @@ import org.zrd.geometryToolkit.geometryUtil.MiscGeometryHelper;
 import org.zrd.geometryToolkit.geometryUtil.TransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
