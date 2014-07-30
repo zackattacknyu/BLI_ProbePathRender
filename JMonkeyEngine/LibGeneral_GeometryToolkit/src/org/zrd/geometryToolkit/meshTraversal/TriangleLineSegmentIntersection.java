@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometricCalculations.MathConstants;
 import org.zrd.geometryToolkit.geometricCalculations.MatrixHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
+import org.zrd.geometryToolkit.geometricCalculations.TranslationHelper;
 
 /**
  *
@@ -59,7 +60,7 @@ public class TriangleLineSegmentIntersection {
         * Translates all the points so that
         * vertex1 is now the origin
         */
-       Matrix4f originVertex1 = TransformHelper.getNewOriginTransform(vertex1);
+       Matrix4f originVertex1 = TranslationHelper.getNewOriginTransform(vertex1);
        Vector3f seg12Vector = originVertex1.mult(vertex2);
        Vector3f seg13Vector = originVertex1.mult(vertex3);
        Vector3f lineSegStartUse = originVertex1.mult(lineSegmentStart);

@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.Stack;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
+import org.zrd.geometryToolkit.geometricCalculations.VectorProjectionHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -94,7 +95,7 @@ public class PathProjectionOntoMesh {
             oldNormal = currentNormal;
             
             currentVector = remainingPath.peek().clone();
-            currentVectorOnPlane = TransformHelper.getVectorProjectedOntoPlane(currentNormal, currentVector);
+            currentVectorOnPlane = VectorProjectionHelper.getVectorProjectedOntoPlane(currentNormal, currentVector);
             
             currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
             

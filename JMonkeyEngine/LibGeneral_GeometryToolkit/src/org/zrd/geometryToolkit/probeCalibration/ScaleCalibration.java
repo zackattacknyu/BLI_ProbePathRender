@@ -7,6 +7,7 @@ package org.zrd.geometryToolkit.probeCalibration;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometricCalculations.ScaleTransformHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
@@ -29,7 +30,7 @@ public class ScaleCalibration {
         float desiredLength = newEndpoint.distance(startPoint);
         uniformScaleFactor = desiredLength / currentLength;
         displayScaleFactor(uniformScaleFactor);
-        Matrix4f transform = TransformHelper.getScaleAroundPoint(startPoint, uniformScaleFactor);
+        Matrix4f transform = ScaleTransformHelper.getScaleAroundPoint(startPoint, uniformScaleFactor);
         scaledPath = PathTransformHelper.getTransformedVertices(inputPath, transform);
     }
     

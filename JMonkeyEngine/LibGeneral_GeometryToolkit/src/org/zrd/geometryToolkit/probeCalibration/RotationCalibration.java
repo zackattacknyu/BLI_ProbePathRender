@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -45,7 +46,6 @@ public class RotationCalibration {
      * This is the aggregate transformation to be done on the vertices of the
      *      original path before the path is projected onto the plane
      */
-    private Matrix4f aggregateTransform;
     private Quaternion aggregateRotation;
     
     private Vector3f startingPoint;
@@ -55,7 +55,6 @@ public class RotationCalibration {
     private Vector3f endPoint;
     
     public RotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
-        aggregateTransform = new Matrix4f();
         aggregateRotation = new Quaternion();
         this.initPath = initPath;
         startingPoint = initPath.get(0);
@@ -64,13 +63,15 @@ public class RotationCalibration {
         this.endPoint = endPoint;
         this.meshInfo = meshInfo;
         
+        performRotationOntoInitialPlane();
         performRotationCalibration();
     }
     
     private void performRotationOntoInitialPlane(){
         //this does the initial transformation onto the plane of the first triangle
         Vector3f initEndPoint = initPath.get(1);
-        postMultiplyNewRotation(TransformHelper.getRotationOntoPlaneQuat(
+        postMultiplyNewRotation(
+                RotationTransformHelper.getRotationOntoPlane(
                 initTriangleNormal, startingPoint, initEndPoint));
     }
     
@@ -80,12 +81,12 @@ public class RotationCalibration {
     
     private void postMultiplyNewRotation(Quaternion rotation){
         aggregateRotation = rotation.mult(aggregateRotation);
-        aggregateTransform = TransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation);
     }
     
     public ArrayList<Vector3f> getCurrentRotatedPath(){
         return PathTransformHelper.getTransformedVertices(
-                PathHelper.getCopyOfPath(initPath), aggregateTransform);
+                PathHelper.getCopyOfPath(initPath), 
+                RotationTransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation));
     }
     
     public ArrayList<Vector3f> getCurrentPathOnSurface(){
@@ -94,9 +95,7 @@ public class RotationCalibration {
     }
 
     private void performRotationCalibration() {
-        
-        performRotationOntoInitialPlane();
-        
+
         //this does NOT follow the surface yet
         ArrayList<Vector3f> currentPathOnSurface = getCurrentRotatedPath();
 

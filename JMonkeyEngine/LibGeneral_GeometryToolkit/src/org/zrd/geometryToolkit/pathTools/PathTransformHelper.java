@@ -7,6 +7,7 @@ package org.zrd.geometryToolkit.pathTools;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 
 /**
@@ -25,7 +26,7 @@ public class PathTransformHelper {
     public static Matrix4f getTransformOfEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
         Vector3f startPoint = inputPath.get(0);
         Vector3f oldEndpoint = inputPath.get(inputPath.size()-1);
-        return TransformHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
+        return RotationTransformHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);
     }
 
     public static ArrayList<Vector3f> movePathStartPoint(ArrayList<Vector3f> oldPath, Vector3f targetStartPoint) {
