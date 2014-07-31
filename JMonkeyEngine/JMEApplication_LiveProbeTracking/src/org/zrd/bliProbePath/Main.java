@@ -22,12 +22,12 @@ import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
-import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
-import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
+import probeTrackingRender.ProbeMoveAction;
+import probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
-import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
-import org.zrd.probeTrackingOnSurface.ProbeTrackerRender;
-import org.zrd.probeTrackingOnSurface.ResetTracker;
+import probeTrackingRender.ProbeTrackerRecording;
+import probeTrackingRender.ProbeTrackerRender;
+import probeTrackingRender.ResetTracker;
 
 
 /**

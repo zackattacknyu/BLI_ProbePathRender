@@ -98,3 +98,6 @@
 /JMonkeyEngine/LibGeneral_QualityTracker/build/
 /JMonkeyEngine/LibGeneral_QualityTracker/dist/
 /JMonkeyEngine/CMDApplication_QualityRecorder/dist/
+/JMonkeyEngine/LibJME_ProbeTrackerRendering/nbproject/private/
+/JMonkeyEngine/LibJME_ProbeTrackerRendering/build/
+/JMonkeyEngine/LibJME_ProbeTrackerRendering/dist/
