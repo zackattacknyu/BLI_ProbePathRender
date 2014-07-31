@@ -24,7 +24,7 @@ import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import org.zrd.probeTrackingOnSurface.ProbeMoveAction;
 import org.zrd.probeTrackingOnSurface.ProbeRotationCalibration;
-import org.zrd.probeTrackingOnSurface.ProbeTrackerOnSurface;
+import org.zrd.probeTracking.ProbeTrackerOnSurface;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRecording;
 import org.zrd.probeTrackingOnSurface.ProbeTrackerRender;
 import org.zrd.probeTrackingOnSurface.ResetTracker;
