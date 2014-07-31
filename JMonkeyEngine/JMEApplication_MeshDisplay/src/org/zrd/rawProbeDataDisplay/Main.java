@@ -23,9 +23,11 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
-        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
+        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\meshedReconstructionFiles\\reconstructions").toFile();
         
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
+        
+        rootNode.attachChild(MeshImport.importMesh(assetManager, initialImportDirectory));
     }
 
     @Override
