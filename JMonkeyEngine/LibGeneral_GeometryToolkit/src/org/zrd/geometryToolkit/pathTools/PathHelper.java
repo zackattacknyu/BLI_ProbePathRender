@@ -34,4 +34,9 @@ public class PathHelper {
     public static Vector3f getLastPoint(ArrayList<Vector3f> path){
         return path.get(path.size()-1);
     }
+
+    public static float getCurrentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint) {
+        Vector3f actualEndpoint = getLastPoint(path);
+        return actualEndpoint.clone().distance(targetEndpoint.clone());
+    }
 }

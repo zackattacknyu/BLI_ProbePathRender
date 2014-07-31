@@ -5,10 +5,10 @@
 package org.zrd.geometryToolkit.pathTools;
 
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
-import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 
 /**
  *
@@ -21,9 +21,9 @@ public class PathTransformHelper {
      *      the input endpoint while the start point is the same.
      * @param inputPath         original path
      * @param newEndpoint       desired endpoint of the path
-     * @return          the transformation that will keep the start points but change the endpoint to the desired one
+     * @return          the rotation that will keep the start points but change the endpoint to the desired one
      */
-    public static Matrix4f getTransformOfEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
+    public static Quaternion getTransformOfEndpoint(ArrayList<Vector3f> inputPath, Vector3f newEndpoint){
         Vector3f startPoint = inputPath.get(0);
         Vector3f oldEndpoint = inputPath.get(inputPath.size()-1);
         return RotationTransformHelper.getRotationAroundPoint(startPoint, newEndpoint, oldEndpoint);

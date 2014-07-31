@@ -21,11 +21,10 @@ public class RotationTransformHelper {
      * @param actualEndPt       actual end point
      * @return
      */
-    public static Matrix4f getRotationAroundPoint(Vector3f originPoint, Vector3f expectedEndPt, Vector3f actualEndPt) {
+    public static Quaternion getRotationAroundPoint(Vector3f originPoint, Vector3f expectedEndPt, Vector3f actualEndPt) {
         Vector3f expectedDir = TranslationHelper.getUnitDirectionVector(originPoint, expectedEndPt);
         Vector3f actualDir = TranslationHelper.getUnitDirectionVector(originPoint, actualEndPt);
-        Quaternion rotQuaternion = getRotationFromVectors(actualDir, expectedDir);
-        return RotationTransformHelper.getRotationAroundPoint(originPoint, rotQuaternion);
+        return getRotationFromVectors(actualDir, expectedDir);
     }
 
     /**

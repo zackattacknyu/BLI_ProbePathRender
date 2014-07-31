@@ -171,8 +171,16 @@ public class PathOnMeshCalculator {
         return currentRotationAngAxis.getQuat();
     }
     
-    public static float findRotationAngleAlongPlane(Matrix4f transform,Vector3f normal){
-        AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(transform.toRotationQuat());
+    /**
+     * This takes a rotation consisting of angle and axis and find the angle
+     *      in it, making sure to negate it if the axis and the normal
+     *      are in opposite directions
+     * @param rotation      the rotation
+     * @param normal        the normal to check
+     * @return              the rotation angle
+     */
+    public static float getRotationAngleAlongPlane(Quaternion rotation,Vector3f normal){
+        AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotation);
         float currentRotationAngle = rotToEndptAngAxis.getAngle();
         Vector3f rotToEndptAxis = rotToEndptAngAxis.getAxis();
         if (normal.dot(rotToEndptAxis) < 0) {
@@ -183,13 +191,8 @@ public class PathOnMeshCalculator {
     
     private float getRotationAngleAlongSurface(ArrayList<Vector3f> currentPath){
         //finds the rotation angle
-        Matrix4f rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPath, endPoint);
-        return findRotationAngleAlongPlane(rotationToEndpoint,initTriangleNormal);
-    }
-    
-    public static float currentEndpointDistance(ArrayList<Vector3f> path, Vector3f targetEndpoint){
-        Vector3f actualEndpoint = path.get(path.size()-1);
-        return actualEndpoint.clone().distance(targetEndpoint.clone());
+        Quaternion rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPath, endPoint);
+        return getRotationAngleAlongPlane(rotationToEndpoint,initTriangleNormal);
     }
     
     private boolean hasConverged(float currentDistance, float previousDistance){
@@ -221,7 +224,7 @@ public class PathOnMeshCalculator {
             currentPathOnSurface = getCurrentPathOnSurface();
             
             //sees how close we are to matching endpoints
-            currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
+            currentDistance = PathHelper.getCurrentEndpointDistance(currentPathOnSurface, endPoint);
 
             //uses Cauchy convergence to stop when the distance has converged
             if (hasConverged(previousDistance,currentDistance)) {
@@ -288,7 +291,7 @@ public class PathOnMeshCalculator {
             currentPathOnSurface = PathProjectionOntoMesh.findPathProjectionOntoMesh(
                     currentRotatedPath,startingTriangle,meshInfo);
             
-            currentDistance = currentEndpointDistance(currentPathOnSurface,endPoint);
+            currentDistance = getCurrentEndpointDistance(currentPathOnSurface,endPoint);
             System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
             
             if(currentDistance < 0.1){
