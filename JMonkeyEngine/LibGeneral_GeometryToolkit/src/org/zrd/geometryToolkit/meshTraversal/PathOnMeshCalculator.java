@@ -177,24 +177,47 @@ public class PathOnMeshCalculator {
      *      are in opposite directions
      * @param rotation      the rotation
      * @param normal        the normal to check
-     * @return              the rotation angle
+     * @return              the rotation angle from the input rotation, negated if necessary
      */
     public static float getRotationAngleAlongPlane(Quaternion rotation,Vector3f normal){
+        //converts rotation to angle,axis form
         AngleAxisRotation rotToEndptAngAxis = new AngleAxisRotation(rotation);
+        
+        //finds the angle and axis
         float currentRotationAngle = rotToEndptAngAxis.getAngle();
         Vector3f rotToEndptAxis = rotToEndptAngAxis.getAxis();
+        
+        /*
+         * If the axis and the normal point in opposite directions,
+         *      then you want to negate the angle to make it look correct
+         */
         if (normal.dot(rotToEndptAxis) < 0) {
             currentRotationAngle = -1 * currentRotationAngle;
         }
+        
         return currentRotationAngle;
     }
     
+    /**
+     * This gets the rotation angle along the surface to use
+     * @param currentPath       current path we care about
+     * @return                  rotation to get end points to match
+     */
     private float getRotationAngleAlongSurface(ArrayList<Vector3f> currentPath){
         //finds the rotation angle
         Quaternion rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPath, endPoint);
         return getRotationAngleAlongPlane(rotationToEndpoint,initTriangleNormal);
     }
     
+    /**
+     * Tests the previous distance and current distance to see 
+     *      if their difference is small enough, thus they
+     *      have converged
+     * 
+     * @param currentDistance
+     * @param previousDistance
+     * @return 
+     */
     private boolean hasConverged(float currentDistance, float previousDistance){
         return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
     }
@@ -240,20 +263,21 @@ public class PathOnMeshCalculator {
     }
     
     
-    
+    /**
+     * Displays the aggegate rotation quaternion
+     */
     private void displayQuatResult(){
         System.out.println("Rotation Quaternion: " + aggregateRotation);
     }
     
+    /**
+     * Displays the distance result
+     * @param currentDistance   distance value
+     */
     private void displayDistResult(float currentDistance){
         System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
         System.out.println("Final Rotation was: " + aggregateRotation);
     }
-    
-    
-    
-    
-    
     
     /*
      * * ********IMPORTANT NOTE*****************
