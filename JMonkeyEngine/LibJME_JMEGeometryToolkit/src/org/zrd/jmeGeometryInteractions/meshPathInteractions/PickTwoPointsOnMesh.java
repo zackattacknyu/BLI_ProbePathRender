@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
+import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
@@ -117,7 +117,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
      */
     protected abstract void handleEndPointResult(Vector3f endPoint,
             ScaleCalibration scaleCalib, 
-            RotationCalibration rotCalib, 
+            PathOnMeshCalculator rotCalib, 
             ArrayList<Vector3f> scaledAndRotatedPath);
     
     /**
@@ -187,8 +187,8 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
                     //activePath = currentScaleCalib.getScaledPath();
                     activePath = PathCompression.getCompressedPath(activePath,PathHelper.MIN_SEGMENT_LENGTH);
-                    RotationCalibration currentRotCalib = 
-                            new RotationCalibration(activePath,endPoint,startingTriangle,meshInfo);
+                    PathOnMeshCalculator currentRotCalib = 
+                            new PathOnMeshCalculator(activePath,endPoint,startingTriangle,meshInfo);
                     activePath = currentRotCalib.getCurrentPathOnSurface();
                     
                     //calls the method that handles the result

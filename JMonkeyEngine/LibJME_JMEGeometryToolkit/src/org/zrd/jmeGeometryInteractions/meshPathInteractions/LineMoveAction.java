@@ -12,7 +12,7 @@ import com.jme3.scene.Node;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
+import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
@@ -142,7 +142,7 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     @Override
     protected void handleEndPointResult(Vector3f endPoint, 
         ScaleCalibration scaleCalib, 
-        RotationCalibration rotCalib, 
+        PathOnMeshCalculator rotCalib, 
         ArrayList<Vector3f> scaledAndRotatedPath) {
         
         currentPath = scaledAndRotatedPath;

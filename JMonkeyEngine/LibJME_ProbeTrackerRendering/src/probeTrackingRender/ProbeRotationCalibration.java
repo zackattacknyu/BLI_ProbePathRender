@@ -15,7 +15,7 @@ import org.zrd.geometryToolkit.probeCalibration.RotationCalibrationTool;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.probeCalibration.CalibrationHelper;
-import org.zrd.geometryToolkit.probeCalibration.RotationCalibration;
+import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
@@ -80,7 +80,7 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     }
 
     @Override
-    protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, RotationCalibration rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
+    protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, PathOnMeshCalculator rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
         rotationCalibrationDone = true;
         
         calibEndPoint = endPoint.clone();

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.geometryToolkit.probeCalibration;
+package org.zrd.geometryToolkit.meshTraversal;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
@@ -10,26 +10,45 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
-import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
+ * ALGORITHMIC CODE:
+ * This implements my algorithm for taking a path and transforming
+ *      it onto the mesh. 
+ * 
  * This houses the code that takes in a mesh and a path
  *      as well as the target start and end points
  *      on the mesh and tries to make the path follow 
  *      the mesh so that the end points match
  * 
- * TODO: Change this code so the main output is a Quaternion
- *      for rotation and the matrix transform is only
- *      used to change the path and is not the main output
+ * To find the correct transform, we need to rotate the path so the starting
+ *      segment is on the starting triangle and then rotate it along
+ *      that triangle until the end points match up. Due to problems that can 
+ *      occur with mesh flattening, I did not try for a deterministic solution
+ *      to this problem and instead have an approximation algorithm which does
+ *      a binary search to try and find that second rotation along the 
+ *      first triangle. 
+ * 
+ * Here is the approximation algorithm:
+ *      1. Rotate the path so that the first segment is on the first triangle
+ *      2. Make the first triangle normal N and rotated path P and P'
+ *      3. Take the end point of P', the start point, and the target end point
+ *              and find the rotation R so that the path end point will match
+ *              up the target end point
+ *      4. Convert R to angle and axis rotation and label its angle Theta
+ *      5. Find the rotation R' that consists of the axis N with an angle of Theta
+ *      6. Rotate the path P by R' and make it path P
+ *      7. Project path P onto the mesh to get path P'
+ *      8. Find the distance between the target end point and the end point of P'
+ *      9. Repeat steps 3-8 until the distances in step 8 converge to a value
  *
  * @author BLI
  */
-public class RotationCalibration {
+public class PathOnMeshCalculator {
     
     public static final int MAX_ROTATION_ATTEMPTS = 100;
     public static final float DIFF_FOR_CONVERGENCE = 0.0001f;
@@ -54,7 +73,7 @@ public class RotationCalibration {
     private TriangleSet meshInfo;
     private Vector3f endPoint;
     
-    public RotationCalibration(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+    public PathOnMeshCalculator(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         aggregateRotation = new Quaternion();
         this.initPath = initPath;
         startingPoint = PathHelper.getFirstPoint(initPath);
