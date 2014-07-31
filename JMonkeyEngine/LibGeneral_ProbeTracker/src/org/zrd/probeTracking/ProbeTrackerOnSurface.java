@@ -37,16 +37,19 @@ public class ProbeTrackerOnSurface implements LocationTracker{
         pathProj = null;
     }
     
+    @Override
     public void setCurrentTriangle(MeshTriangle triangle) {
         pathProj = new PathProjectionOntoMesh(triangle,locationTracker.getCurrentPosition(),surfaceToTrackOn);
         locationTracker.resetDisplacementSinceLastPoint();
         lastTriangle = triangle;
     }
 
+    @Override
     public Vector3f getCurrentPosition() {
         return currentPositionOnMesh;
     }
     
+    @Override
     public void updateData(){
         locationTracker.updateData();
         
