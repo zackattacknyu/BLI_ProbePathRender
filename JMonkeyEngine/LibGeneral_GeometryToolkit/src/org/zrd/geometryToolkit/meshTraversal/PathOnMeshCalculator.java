@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometricCalculations.MathHelper;
 import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -208,19 +209,6 @@ public class PathOnMeshCalculator {
         Quaternion rotationToEndpoint = PathTransformHelper.getTransformOfEndpoint(currentPath, endPoint);
         return getRotationAngleAlongPlane(rotationToEndpoint,initTriangleNormal);
     }
-    
-    /**
-     * Tests the previous distance and current distance to see 
-     *      if their difference is small enough, thus they
-     *      have converged
-     * 
-     * @param currentDistance
-     * @param previousDistance
-     * @return 
-     */
-    private boolean hasConverged(float currentDistance, float previousDistance){
-        return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
-    }
 
     /**
      * This executes the algorithm described above that approximates
@@ -250,7 +238,7 @@ public class PathOnMeshCalculator {
             currentDistance = PathHelper.getCurrentEndpointDistance(currentPathOnSurface, endPoint);
 
             //uses Cauchy convergence to stop when the distance has converged
-            if (hasConverged(previousDistance,currentDistance)) {
+            if (MathHelper.hasSequenceConverged(previousDistance,currentDistance, PathOnMeshCalculator.DIFF_FOR_CONVERGENCE)) {
                 break;
             }
             
