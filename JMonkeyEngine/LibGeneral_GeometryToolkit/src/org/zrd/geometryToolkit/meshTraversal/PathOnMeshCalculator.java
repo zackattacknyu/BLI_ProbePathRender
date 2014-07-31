@@ -45,12 +45,25 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
  *      7. Project path P onto the mesh to get path P'
  *      8. Find the distance between the target end point and the end point of P'
  *      9. Repeat steps 3-8 until the distances in step 8 converge to a value
+ * 
+ * It is important to note that we do not keep track of paths as we go
+ *      but rather we keep track of the aggregate of all the rotations done
+ *      and calculate the current paths using the initial path and the rotation
  *
  * @author BLI
  */
 public class PathOnMeshCalculator {
     
+    /**
+     * The maximum number of rotation attempts done before 
+     *      quitting and settling with the results
+     */
     public static final int MAX_ROTATION_ATTEMPTS = 100;
+    
+    /**
+     * The Epsilon we are using for this algorithm
+     *      to determine that the distances have converged. 
+     */
     public static final float DIFF_FOR_CONVERGENCE = 0.0001f;
     
     /*
@@ -62,8 +75,7 @@ public class PathOnMeshCalculator {
     private ArrayList<Vector3f> initPath;
     
     /*
-     * This is the aggregate transformation to be done on the vertices of the
-     *      original path before the path is projected onto the plane
+     * This is the aggregate of all the rotations done. 
      */
     private Quaternion aggregateRotation;
     
@@ -73,6 +85,14 @@ public class PathOnMeshCalculator {
     private TriangleSet meshInfo;
     private Vector3f endPoint;
     
+    /**
+     * Initializes the object which will calculate the 
+     *      best rotation of the path onto the mesh
+     * @param initPath              initial path
+     * @param endPoint              target end point
+     * @param startingTriangle      initial triangle on mesh
+     * @param meshInfo              mesh to track on
+     */
     public PathOnMeshCalculator(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         aggregateRotation = new Quaternion();
         this.initPath = initPath;
@@ -83,85 +103,68 @@ public class PathOnMeshCalculator {
         this.meshInfo = meshInfo;
         
         performRotationOntoInitialPlane();
-        performRotationCalibration();
+        approximatePathLocationOnMesh();
     }
-    
+
+    /**
+     * this does the initial transformation onto the plane of the first triangle
+     */
     private void performRotationOntoInitialPlane(){
-        //this does the initial transformation onto the plane of the first triangle
+
         Vector3f initEndPoint = PathHelper.getSecondPoint(initPath);
-        postMultiplyNewRotation(
+        preMultiplyNewRotation(
                 RotationTransformHelper.getRotationOntoPlane(
                 initTriangleNormal, startingPoint, initEndPoint));
     }
     
+    /**
+     * This gets the total rotation done on the initial path
+     * @return  quaternion for rotation
+     */
     public Quaternion getAggregateRotation(){
         return aggregateRotation;
     }
     
-    private void postMultiplyNewRotation(Quaternion rotation){
+    /**
+     * This does (rotation)*(currentRotation) and uses the value
+     *      as the current rotation, where the multipliation
+     *      is the equivalent of matrix multiplication of the 
+     *      rotation matrices. 
+     * @param rotation      quaternion for new rotation
+     */
+    private void preMultiplyNewRotation(Quaternion rotation){
         aggregateRotation = rotation.mult(aggregateRotation);
     }
     
+    /**
+     * This gets the initial path rotated using the current
+     *      aggregate rotation and the origin point of rotation
+     *      as the origin point of the path
+     * @return      path vertices after being rotated by current aggregate rotation
+     */
     public ArrayList<Vector3f> getCurrentRotatedPath(){
         return PathTransformHelper.getTransformedVertices(
                 PathHelper.getCopyOfPath(initPath), 
                 RotationTransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation));
     }
     
+    /**
+     * This takes the current path rotated onto the mesh and it projects
+     *      it onto the mesh and returns those vertices
+     * @return      current rotated path projected onto mesh
+     */
     public ArrayList<Vector3f> getCurrentPathOnSurface(){
         return PathProjectionOntoMesh.getPathProjectedOntoMesh(
                 getCurrentRotatedPath(), startingTriangle, meshInfo);
     }
-
-    private void performRotationCalibration() {
-
-        //this does NOT follow the surface yet
-        ArrayList<Vector3f> currentPathOnSurface = getCurrentRotatedPath();
-
-        float currentRotationAngle;
-
-        float currentDistance=0,previousDistance = 0;
-        
-        for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
-            
-            //finds the rotation angle
-            currentRotationAngle = getRotationAngleAlongSurface(currentPathOnSurface);
-            
-            //gets the transform
-            postMultiplyNewRotation(obtainTransformFromAngle(currentRotationAngle));
-            
-            //projects the rotated path on the surface
-            currentPathOnSurface = getCurrentPathOnSurface();
-            
-            //sees how close we are to matching endpoints
-            currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
-
-            //uses Cauchy convergence to stop when the distance has converged
-            if (hasConverged(previousDistance,currentDistance)) {
-                break;
-            }
-            
-            previousDistance = currentDistance;
-        }
-        
-        //displays the results
-        displayDistResult(currentDistance);
-        displayQuatResult();
-    }
     
-    private boolean hasConverged(float currentDistance, float previousDistance){
-        return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
-    }
-    
-    private void displayQuatResult(){
-        System.out.println("Rotation Quaternion: " + aggregateRotation);
-    }
-    
-    private void displayDistResult(float currentDistance){
-        System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
-        System.out.println("Final Rotation was: " + aggregateRotation);
-    }
-    
+    /**
+     * This takes the inputted rotation angle and find the quaternion
+     *      that is the rotation described by that angle and the 
+     *      initial normal as the axis
+     * @param currentRotationAngle      rotation angle
+     * @return                          rotation using inputted angle and triangle normal as axis
+     */
     private Quaternion obtainTransformFromAngle(float currentRotationAngle){
         AngleAxisRotation currentRotationAngAxis = 
                 new AngleAxisRotation(initTriangleNormal, currentRotationAngle);
@@ -188,6 +191,63 @@ public class PathOnMeshCalculator {
         Vector3f actualEndpoint = path.get(path.size()-1);
         return actualEndpoint.clone().distance(targetEndpoint.clone());
     }
+    
+    private boolean hasConverged(float currentDistance, float previousDistance){
+        return (Math.abs(currentDistance-previousDistance) < DIFF_FOR_CONVERGENCE);
+    }
+
+    /**
+     * This executes the algorithm described above that approximates
+     *      the path location on the mesh
+     */
+    private void approximatePathLocationOnMesh() {
+
+        //this does NOT follow the surface yet
+        //  hence why I am calling the rotated path getter
+        ArrayList<Vector3f> currentPathOnSurface = getCurrentRotatedPath();
+
+        float currentRotationAngle;
+        float currentDistance=0,previousDistance = 0;
+        
+        for (int tryNum = 1; tryNum <= MAX_ROTATION_ATTEMPTS; tryNum++) {
+            
+            //finds the rotation angle
+            currentRotationAngle = getRotationAngleAlongSurface(currentPathOnSurface);
+            
+            //gets the transform
+            preMultiplyNewRotation(obtainTransformFromAngle(currentRotationAngle));
+            
+            //projects the rotated path on the surface
+            currentPathOnSurface = getCurrentPathOnSurface();
+            
+            //sees how close we are to matching endpoints
+            currentDistance = currentEndpointDistance(currentPathOnSurface, endPoint);
+
+            //uses Cauchy convergence to stop when the distance has converged
+            if (hasConverged(previousDistance,currentDistance)) {
+                break;
+            }
+            
+            previousDistance = currentDistance;
+        }
+        
+        //displays the results
+        displayDistResult(currentDistance);
+        displayQuatResult();
+    }
+    
+    
+    
+    private void displayQuatResult(){
+        System.out.println("Rotation Quaternion: " + aggregateRotation);
+    }
+    
+    private void displayDistResult(float currentDistance){
+        System.out.println("Distance from target endpoint to actual endpoint: " + currentDistance);
+        System.out.println("Final Rotation was: " + aggregateRotation);
+    }
+    
+    
     
     
     
