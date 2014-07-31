@@ -6,6 +6,8 @@ package org.zrd.rawProbeDataDisplay;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.Matrix4f;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import org.zrd.geometryToolkit.geometricCalculations.TranslationHelper;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -70,7 +74,28 @@ public class MeshImport{
         
         Spatial returnMesh = MeshInputHelper.generateModel("Models/" + objFile.getName(), lolaMaterial, assetManager);
         
+        float surfaceScale = 80f;
         returnMesh.scale(80f);
+        Matrix4f scaleMat = new Matrix4f();
+        scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
+        Matrix4f surfaceTransform = scaleMat;
+        
+        TriangleSet activeMeshInfo = new TriangleSet();
+        activeMeshInfo.setTransform(surfaceTransform);
+        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,returnMesh,surfaceTransform);
+        
+        float minX = activeMeshInfo.getMinX();
+        float maxX = activeMeshInfo.getMaxX();
+        float minY = activeMeshInfo.getMinY();
+        float maxY = activeMeshInfo.getMaxY();
+        float minZ = activeMeshInfo.getMinZ();
+        float maxZ = activeMeshInfo.getMaxZ();
+        float avgX = (minX+maxX)/2;
+        float avgY = (minY+maxY)/2;
+        float avgZ = (minZ+maxZ)/2;
+        
+        Matrix4f translateTransform = TranslationHelper.getNewOriginTransform(new Vector3f(avgX,avgY,avgZ));
+        returnMesh.move(-avgX, -avgY, -avgZ);
         
         return returnMesh;
         

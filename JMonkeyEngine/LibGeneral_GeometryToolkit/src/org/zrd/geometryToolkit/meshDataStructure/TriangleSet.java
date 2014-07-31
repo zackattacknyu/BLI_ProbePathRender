@@ -136,6 +136,26 @@ public class TriangleSet {
        vertexWithMaxY = getMaxVertex(vertexWithMaxY,vertex,1);
        vertexWithMaxZ = getMaxVertex(vertexWithMaxZ,vertex,2);
    }
+   
+    public float getMinX(){
+        return vertexWithMinX.getVertex().get(0);
+    }
+    public float getMinY(){
+        return vertexWithMinY.getVertex().get(1);
+    }
+    public float getMinZ(){
+        return vertexWithMinZ.getVertex().get(2);
+    }
+    
+    public float getMaxX(){
+        return vertexWithMaxX.getVertex().get(0);
+    }
+    public float getMaxY(){
+        return vertexWithMaxY.getVertex().get(1);
+    }
+    public float getMaxZ(){
+        return vertexWithMaxZ.getVertex().get(2);
+    }
 
     public MeshVertex getVertexWithMinX() {
         return vertexWithMinX;
