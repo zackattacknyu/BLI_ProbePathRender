@@ -1,5 +1,7 @@
 %the following paths are all on the Lola Mesh
 
+%{
+
 %when rotating the path from top left to top right
 quat1 = [0.25984886, -0.31837386, 0.5798652, 0.70347196];
 
@@ -17,3 +19,13 @@ meanQuat = mean(quat12);
 
 %Result is as follows:
 %   0.2559   -0.3667    0.5326    0.7153
+
+%}
+
+%These are the quaternions after using precise points in the virtual
+%       world and precise positions of the probe
+%Same descriptions for each variable
+quat1 = [-0.42791983, -0.55609095, 0.6624931, -0.26220307];
+quat2 = [0.015292523, -0.11193628, 0.8141645, 0.5695369];
+quat3 = [0.013024371, 0.7474542, -0.56122136, -0.3552089];
+quat4 = [-0.07789981, -0.24101731, 0.43595392, 0.86358917];

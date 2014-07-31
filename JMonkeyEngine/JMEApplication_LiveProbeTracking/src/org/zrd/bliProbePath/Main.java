@@ -59,6 +59,8 @@ public class Main extends SimpleApplication {
     
     private LiveTrackingText outputText;
     
+    private boolean renderPathsDuringRecording = false;
+    
     
     
     public static void main(String[] args) {
@@ -135,10 +137,16 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        //new ProbeMoveAction(inputManager,cam,shootables,activeTracker);
-        probeMoveAction = new ProbeMoveAction(inputManager,cam,shootables,activeTracker,FixedPointsOnLolaMesh.pointPicker);
+        boolean useFixedPoints = true;
+        
+        probeMoveAction = useFixedPoints ? 
+                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,
+                    FixedPointsOnLolaMesh.pointPicker) : 
+                new ProbeMoveAction(inputManager,cam,shootables,activeTracker);
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
+        
+        
         
         outputText = new LiveTrackingText(guiNode,assetManager);
         
@@ -159,10 +167,13 @@ public class Main extends SimpleApplication {
     public void simpleRender(RenderManager rm) {
         probeTrackerRender.updateRenderObjectInfo();
         
-        probeTrackerRender.updateRenderPathInfo();
-        if(probeTrackerRender.isNewRenderedPathsExist()){
-            rootNode.attachChild(probeTrackerRender.getRenderedPaths());
+        if(renderPathsDuringRecording){
+            probeTrackerRender.updateRenderPathInfo();
+            if(probeTrackerRender.isNewRenderedPathsExist()){
+                rootNode.attachChild(probeTrackerRender.getRenderedPaths());
+            }
         }
+        
         
         outputText.setXyzText(activeTracker.getXYZtext());
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
