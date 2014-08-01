@@ -27,7 +27,10 @@ public class Main extends SimpleApplication {
         
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
         
-        rootNode.attachChild(MeshImport.importMesh(assetManager, initialImportDirectory));
+        MeshImport newMesh = new MeshImport(assetManager,initialImportDirectory);
+        
+        rootNode.attachChild(newMesh.getFinalMesh());
+        cam.setLocation(newMesh.getCameraCenter());
     }
 
     @Override

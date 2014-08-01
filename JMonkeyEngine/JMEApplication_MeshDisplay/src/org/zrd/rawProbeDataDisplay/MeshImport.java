@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import org.zrd.geometryToolkit.geometricCalculations.TranslationHelper;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
@@ -28,6 +27,14 @@ import org.zrd.util.fileHelper.FileDataHelper;
  * @author Zach
  */
 public class MeshImport{
+    
+    private Spatial finalMesh;
+    private TriangleSet finalMeshInfo;
+    private Vector3f cameraCenter;
+    
+    public MeshImport(AssetManager assetManager, File importDirectory){
+        importMesh(assetManager,importDirectory);
+    }
     
     public static void createDirectoryIfNone(Path path){
         if(!Files.exists(path)){
@@ -55,7 +62,19 @@ public class MeshImport{
         
     }
 
-    public static Spatial importMesh(AssetManager assetManager, File importDirectory){
+    public Spatial getFinalMesh() {
+        return finalMesh;
+    }
+
+    public TriangleSet getFinalMeshInfo() {
+        return finalMeshInfo;
+    }
+
+    public Vector3f getCameraCenter() {
+        return cameraCenter;
+    }
+
+    private void importMesh(AssetManager assetManager, File importDirectory){
         
         Path assetPath = Paths.get("assets");
         createDirectoryIfNone(assetPath);
@@ -88,24 +107,23 @@ public class MeshImport{
         lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));
         //if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
         
-        Spatial returnMesh = MeshInputHelper.generateModel("Models/" + objFile.getName(), lolaMaterial, assetManager);
+        finalMesh = MeshInputHelper.generateModel("Models/" + objFile.getName(), lolaMaterial, assetManager);
         
         float surfaceScale = 80f;
-        returnMesh.scale(80f);
+        finalMesh.scale(80f);
         Matrix4f scaleMat = new Matrix4f();
         scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
         
-        TriangleSet activeMeshInfo = new TriangleSet();
-        activeMeshInfo.setTransform(scaleMat);
-        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,returnMesh,scaleMat);
+        finalMeshInfo = new TriangleSet();
+        finalMeshInfo.setTransform(scaleMat);
+        finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,finalMesh,scaleMat);
 
-        Vector3f centerPt = getCenterPoint(activeMeshInfo);
+        Vector3f centerPt = getCenterPoint(finalMeshInfo);
         
-        returnMesh.move(centerPt.clone().negate());
+        finalMesh.move(centerPt.clone().negate());
         
-        
-        
-        return returnMesh;
+        float minZ = finalMeshInfo.getMinZ();
+        cameraCenter = new Vector3f(0,0,minZ*5);
         
         /*
          * 
