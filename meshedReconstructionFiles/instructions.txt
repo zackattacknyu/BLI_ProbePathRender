@@ -1,0 +1,37 @@
+Here are the instructions for generating a mesh and texture from Chris's code:
+
+1. Start the program
+
+2. Reset the reconstruction
+
+3. Click on Save Color Image
+
+4. Click on Record Video and then move around the camera to make the mesh better
+
+5. Click on Stop Recording when finished
+
+6. Click on Create Mesh and make sure PLY is selected
+
+7. Name it "MeshedReconstruction.ply" and put it in the following folder:
+...\BLI Kinect Reconstruction\bin\Debug
+
+8. In explorer, go to the following folder:
+...\BLI Kinect Reconstruction\bin\Release
+
+9. Find the PNG file corresponding to what was just recorded.
+It should be "<number>.png". 
+
+10. Take the number from step 9 and also find "<number>.txt"
+as well as "<number>_depth_simple.png"
+
+11. Take the three files from step 9,10 and copy them to:
+...\BLI Kinect Reconstruction\bin\Debug
+
+12. Go to the folder from step 11 and make sure there are no other
+txt or png files in it besides the ones just copied
+
+13. In that folder, double click on recon.bat and then follow 
+the instructions
+
+14. The files "textured_mesh.obj" and "textured_mesh.mtl"
+will now contain the mesh and material for texture

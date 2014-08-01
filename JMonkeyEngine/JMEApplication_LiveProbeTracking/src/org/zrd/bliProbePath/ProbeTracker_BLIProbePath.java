@@ -7,8 +7,6 @@ package org.zrd.bliProbePath;
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
