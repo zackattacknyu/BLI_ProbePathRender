@@ -38,6 +38,22 @@ public class MeshImport{
             }
         }
     }
+    
+    public static Vector3f getCenterPoint(TriangleSet triSet){
+        
+        float minX = triSet.getMinX();
+        float maxX = triSet.getMaxX();
+        float minY = triSet.getMinY();
+        float maxY = triSet.getMaxY();
+        float minZ = triSet.getMinZ();
+        float maxZ = triSet.getMaxZ();
+        float avgX = (minX+maxX)/2;
+        float avgY = (minY+maxY)/2;
+        float avgZ = (minZ+maxZ)/2;
+        
+        return new Vector3f(avgX, avgY, avgZ);
+        
+    }
 
     public static Spatial importMesh(AssetManager assetManager, File importDirectory){
         
@@ -78,24 +94,16 @@ public class MeshImport{
         returnMesh.scale(80f);
         Matrix4f scaleMat = new Matrix4f();
         scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
-        Matrix4f surfaceTransform = scaleMat;
         
         TriangleSet activeMeshInfo = new TriangleSet();
-        activeMeshInfo.setTransform(surfaceTransform);
-        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,returnMesh,surfaceTransform);
+        activeMeshInfo.setTransform(scaleMat);
+        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,returnMesh,scaleMat);
+
+        Vector3f centerPt = getCenterPoint(activeMeshInfo);
         
-        float minX = activeMeshInfo.getMinX();
-        float maxX = activeMeshInfo.getMaxX();
-        float minY = activeMeshInfo.getMinY();
-        float maxY = activeMeshInfo.getMaxY();
-        float minZ = activeMeshInfo.getMinZ();
-        float maxZ = activeMeshInfo.getMaxZ();
-        float avgX = (minX+maxX)/2;
-        float avgY = (minY+maxY)/2;
-        float avgZ = (minZ+maxZ)/2;
+        returnMesh.move(centerPt.clone().negate());
         
-        Matrix4f translateTransform = TranslationHelper.getNewOriginTransform(new Vector3f(avgX,avgY,avgZ));
-        returnMesh.move(-avgX, -avgY, -avgZ);
+        
         
         return returnMesh;
         
