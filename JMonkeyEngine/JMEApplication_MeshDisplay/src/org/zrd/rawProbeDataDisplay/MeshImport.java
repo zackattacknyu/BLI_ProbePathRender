@@ -74,6 +74,18 @@ public class MeshImport{
     public Vector3f getCameraCenter() {
         return cameraCenter;
     }
+    
+    private String importAndCopyFile(File importDirectory, Path targetDirectory){
+        File fileToCopy = FileDataHelper.importPathUsingFileSelector(importDirectory);
+        String fileName = fileToCopy.getName();
+        Path copiedFilePath = targetDirectory.resolve(fileName);
+        try {
+            Files.copy(fileToCopy.toPath(), copiedFilePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        return fileName;
+    }
 
     private void importMesh(AssetManager assetManager, File importDirectory){
         
@@ -84,33 +96,19 @@ public class MeshImport{
         createDirectoryIfNone(modelAssets);
         
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
-        File objFile = FileDataHelper.importPathUsingFileSelector(importDirectory);
-        String objFileName = objFile.getName();
-        Path newObjFilePath = modelAssets.resolve(objFileName);
-        try {
-            Files.copy(objFile.toPath(), newObjFilePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+        String objFileName = importAndCopyFile(importDirectory,modelAssets);
         
         Path textureAssets = assetPath.resolve("Textures");
         createDirectoryIfNone(textureAssets);
         
         JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
-        File textureFile = FileDataHelper.importPathUsingFileSelector(importDirectory);
-        String textureFileName = textureFile.getName();
-        Path textureFilePath = textureAssets.resolve(textureFileName);
-        try {
-            Files.copy(textureFile.toPath(), textureFilePath,StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+        String textureFileName = importAndCopyFile(importDirectory,textureAssets);
         
-        Material lolaMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));
-        //if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
+        Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        objectMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));
+        //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
         
-        finalMesh = MeshInputHelper.generateModel("Models/" + objFile.getName(), lolaMaterial, assetManager);
+        finalMesh = MeshInputHelper.generateModel("Models/" + objFileName, objectMaterial, assetManager);
         
         float surfaceScale = 80f;
         finalMesh.scale(80f);
@@ -160,7 +158,7 @@ public class MeshImport{
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surfaceMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
+        surfaceMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, objectMaterial);
         activeMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
