@@ -126,7 +126,7 @@ public class MeshImport{
         finalMesh.move(centerPt.clone().negate());
         
         float minZ = finalMeshInfo.getMinZ();
-        cameraCenter = new Vector3f(0,0,minZ*5);
+        cameraCenter = new Vector3f(0,0,minZ*1.5f);
         
         /*
          * 
