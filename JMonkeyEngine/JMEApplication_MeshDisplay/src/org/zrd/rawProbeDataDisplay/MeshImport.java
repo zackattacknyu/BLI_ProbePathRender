@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
@@ -82,6 +83,7 @@ public class MeshImport{
         Path modelAssets = assetPath.resolve("Models");
         createDirectoryIfNone(modelAssets);
         
+        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
         File objFile = FileDataHelper.importPathUsingFileSelector(importDirectory);
         String objFileName = objFile.getName();
         Path newObjFilePath = modelAssets.resolve(objFileName);
@@ -94,6 +96,7 @@ public class MeshImport{
         Path textureAssets = assetPath.resolve("Textures");
         createDirectoryIfNone(textureAssets);
         
+        JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
         File textureFile = FileDataHelper.importPathUsingFileSelector(importDirectory);
         String textureFileName = textureFile.getName();
         Path textureFilePath = textureAssets.resolve(textureFileName);
