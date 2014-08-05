@@ -72,10 +72,17 @@ public class MeshImport{
      *      new mesh, an AssetNotFoundException gets thrown
      * This seems to be because the assetManager loads all the assets
      *      upon the application start
-     * Two solutions need to be done:
+     * Two solutions could be done:
      *      1) Have the asset files loaded separately 
      *          and then restart the application
      *      2) Figure out how to get the asset manager to rebuild all the file keys
+     * 
+     * This is what I will try right now:
+     *      1) Run a barebones application
+     *      2) Have the import file code run and copy the files
+     *          into the assets directory
+     *      3) Destroy the simple application from 1
+     *      4) Start the real application
      * 
      * @param assetManager
      * @param importDirectory 
