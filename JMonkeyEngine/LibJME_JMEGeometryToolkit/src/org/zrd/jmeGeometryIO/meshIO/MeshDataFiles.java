@@ -28,9 +28,5 @@ public class MeshDataFiles {
         this.textureFile = textureFile;
     }
     
-    public MeshDataFiles(File initDir){
-        MeshInputHelper.obtainFiles(initDir);
-    }
-    
     
 }

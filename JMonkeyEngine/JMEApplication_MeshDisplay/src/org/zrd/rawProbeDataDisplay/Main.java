@@ -6,6 +6,7 @@ import com.jme3.renderer.RenderManager;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 
 /**
@@ -18,11 +19,16 @@ public class Main extends SimpleApplication {
     private MeshDataFiles meshFiles;
 
     public static void main(String[] args) {
-        File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\"
-                + "BLI_ProbePathRender\\meshedReconstructionFiles\\"
+        File initialImportDirectory = Paths.get(
+                "C:\\"
+                + "Users\\"
+                + "BLI\\"
+                + "Desktop\\"
+                + "BLI_ProbePathRender\\"
+                + "meshedReconstructionFiles\\"
                 + "reconstructions").toFile();
 
-        MeshDataFiles meshFiles = new MeshDataFiles(initialImportDirectory);
+        MeshDataFiles meshFiles = MeshInputHelper.obtainFiles(initialImportDirectory);
         
         Properties appProps = Properties_RawProbeDataDisplay.getProperties();
         Main currentApp = new Main();

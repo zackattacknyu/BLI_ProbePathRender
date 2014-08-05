@@ -5,7 +5,6 @@
 package org.zrd.rawProbeDataDisplay;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
