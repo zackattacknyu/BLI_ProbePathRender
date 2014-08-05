@@ -43,6 +43,13 @@ public class GeneralFileHelper {
         return selectedFile;
     }
 
+    /**
+     * This imports a file and then copies it into the target
+     *      directory
+     * @param importDirectory       directory to put in file chooser window
+     * @param targetDirectory       directory to copy file to
+     * @return                      the copied file
+     */
     public static File importAndCopyFile(File importDirectory, Path targetDirectory) {
         File fileToCopy = GeneralFileHelper.importPathUsingFileSelector(importDirectory);
         String fileName = fileToCopy.getName();
