@@ -1,5 +1,6 @@
 package org.zrd.rawProbeDataDisplay;
 
+import org.zrd.jmeGeometryIO.meshIO.MeshDataFiles;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import java.io.File;
@@ -40,8 +41,8 @@ public class Main extends SimpleApplication {
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
         
         meshImport.importMeshAndTextureChosen(assetManager,
-                meshFiles.getObjFileName(),
-                meshFiles.getTextureFileName());
+                meshFiles.getObjFile(),
+                meshFiles.getTextureFile());
         
         rootNode.attachChild(meshImport.getFinalMesh());
         cam.setLocation(meshImport.getCameraCenter());

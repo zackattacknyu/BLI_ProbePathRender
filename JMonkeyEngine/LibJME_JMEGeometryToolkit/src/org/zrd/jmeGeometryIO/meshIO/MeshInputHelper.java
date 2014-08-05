@@ -19,8 +19,10 @@ import com.jme3.scene.VertexBuffer;
 import java.io.File;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * This contains code that helps with taking a mesh from an OBJ file
@@ -187,6 +189,17 @@ public class MeshInputHelper {
                     transform, meshInfo);
         }
         return meshInfo;
+    }
+
+    public static MeshDataFiles obtainFiles(File initImportDirectory) {
+        
+        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
+        File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
+        
+        JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
+        File textureFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
+        
+        return new MeshDataFiles(objFile, textureFile);
     }
     
 }
