@@ -5,6 +5,7 @@
 package org.zrd.jmeGeometryIO.meshIO;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
@@ -15,6 +16,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
@@ -129,8 +131,7 @@ public class MeshInputHelper {
     }
 
     /**
-     * This is used to import an OBJ file and turn the mesh into 
-     *      a jme spatial object
+     * This is used to import a file
      * @param objFileLocation       the file location
      * @param ballMat               the material to put onto the mesh
      * @param assetManager          the application's asset manager
@@ -141,6 +142,19 @@ public class MeshInputHelper {
         Spatial sampleMesh = assetManager.loadModel(objFileLocation);
         sampleMesh.setMaterial(ballMat);
         return sampleMesh;
+    }
+
+    /**
+     * This is used to import a file
+     * @param objFileLocation       the file location
+     * @param ballMat               the material to put onto the mesh
+     * @param assetManager          the application's asset manager
+     * @return                      the jme spatial for the mesh
+     */
+    public static Spatial generateModel(File objFile, 
+            Material ballMat, AssetManager assetManager) {
+        assetManager.registerLocator(objFile.getParentFile().getAbsolutePath(), FileLocator.class);
+        return generateModel(objFile.getName(),ballMat,assetManager);
     }
 
     /**

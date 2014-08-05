@@ -5,8 +5,10 @@
 package org.zrd.jmeUtil.materials;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import java.io.File;
 
 /**
  *This has methods that help make material objects
@@ -55,6 +57,18 @@ public class MaterialHelper {
         ColorRGBA grayColor = new ColorRGBA(brightness, brightness, brightness, 1.0F);
         outputMaterial.setColor("Color", grayColor);
         return outputMaterial;
+    }
+    
+    public static Material getTextureMaterial(AssetManager assetManager, String textureFileLocation){
+        Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
+        objectMaterial.setTexture("ColorMap",assetManager.loadTexture(textureFileLocation));
+        return objectMaterial;
+    }
+    
+    public static Material getTextureMaterial(AssetManager assetManager, File textureFile){
+        assetManager.registerLocator(textureFile.getParentFile().getAbsolutePath(), FileLocator.class);
+        
+        return getTextureMaterial(assetManager,textureFile.getName());
     }
     
 }

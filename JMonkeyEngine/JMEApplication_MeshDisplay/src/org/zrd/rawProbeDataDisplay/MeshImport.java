@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**
  * 
@@ -56,21 +57,12 @@ public class MeshImport{
     }
     
     public void importMeshAndTextureChosen(AssetManager assetManager, File objFile, File textureFile){
-
-        File objFileParent = objFile.getParentFile();
-        File textureFileParent = textureFile.getParentFile();
         
-        assetManager.registerLocator(textureFileParent.getAbsolutePath(), FileLocator.class);
-        
-        Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        objectMaterial.setTexture("ColorMap",assetManager.loadTexture(textureFile.getName()));
+        Material objectMaterial = MaterialHelper.getTextureMaterial(assetManager, textureFile);
         //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
         
-        assetManager.registerLocator(objFileParent.getAbsolutePath(), FileLocator.class);
-        
-        finalMesh = assetManager.loadModel(objFile.getName());
-        finalMesh.setMaterial(objectMaterial);
-        
+        finalMesh = MeshInputHelper.generateModel(objFile, objectMaterial, assetManager);
+
         float surfaceScale = 80f;
         finalMesh.scale(80f);
         Matrix4f scaleMat = new Matrix4f();
