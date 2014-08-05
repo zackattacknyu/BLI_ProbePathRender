@@ -9,13 +9,8 @@ import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * 
@@ -29,8 +24,6 @@ public class MeshImport{
     private Spatial finalMesh;
     private TriangleSet finalMeshInfo;
     private Vector3f cameraCenter;
-    private String objFileName;
-    private String textureFileName;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -60,47 +53,7 @@ public class MeshImport{
         return cameraCenter;
     }
     
-
-    
-    public void obtainFiles(File initImportDirectory){
-        Path assetPath = Paths.get("assets");
-        GeneralFileHelper.createDirectoryIfNone(assetPath);
-        
-        Path modelAssets = assetPath.resolve("Models");
-        GeneralFileHelper.createDirectoryIfNone(modelAssets);
-        
-        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
-        objFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,modelAssets);
-        
-        Path textureAssets = assetPath.resolve("Textures");
-        GeneralFileHelper.createDirectoryIfNone(textureAssets);
-        
-        JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
-        textureFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,textureAssets);
-    }
-
-    /**
-     * TODO:
-     * This needs to be improved as when it imports a completely 
-     *      new mesh, an AssetNotFoundException gets thrown
-     * This seems to be because the assetManager loads all the assets
-     *      upon the application start
-     * Two solutions could be done:
-     *      1) Have the asset files loaded separately 
-     *          and then restart the application
-     *      2) Figure out how to get the asset manager to rebuild all the file keys
-     * 
-     * This is what I will try right now:
-     *      1) Run a barebones application
-     *      2) Have the import file code run and copy the files
-     *          into the assets directory
-     *      3) Destroy the simple application from 1
-     *      4) Start the real application
-     * 
-     * @param assetManager
-     * @param importDirectory 
-     */
-    public void importMeshAndTextureChosen(AssetManager assetManager){
+    public void importMeshAndTextureChosen(AssetManager assetManager, String objFileName, String textureFileName){
 
         Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         objectMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));

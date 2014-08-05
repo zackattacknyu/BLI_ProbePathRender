@@ -14,16 +14,18 @@ import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 public class Main extends SimpleApplication {
     
     private MeshImport meshImport = new MeshImport();
+    private MeshDataFiles meshFiles;
 
     public static void main(String[] args) {
-        Properties appProps = Properties_RawProbeDataDisplay.getProperties();
-        Main currentApp = new Main();
-        
         File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\"
                 + "BLI_ProbePathRender\\meshedReconstructionFiles\\"
                 + "reconstructions").toFile();
-        currentApp.meshImport.obtainFiles(initialImportDirectory);
+        MeshDataFiles meshFiles = new MeshDataFiles(initialImportDirectory);
         
+        Properties appProps = Properties_RawProbeDataDisplay.getProperties();
+        Main currentApp = new Main();
+        
+        currentApp.meshFiles = meshFiles;
         ApplicationHelper.initializeApplication(currentApp, appProps);
     }
     
@@ -36,7 +38,9 @@ public class Main extends SimpleApplication {
         
         new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
         
-        meshImport.importMeshAndTextureChosen(assetManager);
+        meshImport.importMeshAndTextureChosen(assetManager,
+                meshFiles.getObjFileName(),
+                meshFiles.getTextureFileName());
         
         rootNode.attachChild(meshImport.getFinalMesh());
         cam.setLocation(meshImport.getCameraCenter());
