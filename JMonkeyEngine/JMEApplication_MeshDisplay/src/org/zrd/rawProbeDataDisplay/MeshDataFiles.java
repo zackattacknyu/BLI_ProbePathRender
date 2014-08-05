@@ -5,8 +5,6 @@
 package org.zrd.rawProbeDataDisplay;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
@@ -32,20 +30,13 @@ public class MeshDataFiles {
     }
     
     public void obtainFiles(File initImportDirectory){
-        Path assetPath = Paths.get("assets");
-        GeneralFileHelper.createDirectoryIfNone(assetPath);
-        
-        Path modelAssets = assetPath.resolve("Models");
-        GeneralFileHelper.createDirectoryIfNone(modelAssets);
         
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
-        objFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,modelAssets);
-        
-        Path textureAssets = assetPath.resolve("Textures");
-        GeneralFileHelper.createDirectoryIfNone(textureAssets);
+        objFileName = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
         
         JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
-        textureFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,textureAssets);
+        textureFileName = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
     }
+    
     
 }
