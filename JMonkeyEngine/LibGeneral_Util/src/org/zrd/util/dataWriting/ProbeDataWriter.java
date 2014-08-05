@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * This is a class for writing probe data. It is meant to do the work
@@ -80,9 +81,7 @@ public class ProbeDataWriter {
         String currentTimestamp = TimeHelper.getTimestampSuffix();
         String fileName = fileNamePrefix + DataWritingConstants.PREFIX_TO_SUFFIX_SEPARATOR + 
                 currentTimestamp + DataWritingConstants.OUTPUT_FILE_FORMAT;
-        if(!Files.exists(folderPath)){
-            Files.createDirectories(folderPath);
-        }
+        GeneralFileHelper.createDirectoryIfNone(folderPath);
         return folderPath.resolve(fileName);
     }
     

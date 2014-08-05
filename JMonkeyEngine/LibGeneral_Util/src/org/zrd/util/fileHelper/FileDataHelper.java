@@ -34,22 +34,6 @@ public class FileDataHelper {
     }
 
     /**
-     * This opens the file chooser window and puts into a file object
-     *      the one selected if one was selected
-     * @param initialImportDirectory        the directory for the file chooser window to open on
-     * @return      the file that was chosen if one was chosen
-     */
-    public static File importPathUsingFileSelector(File initialImportDirectory) {
-        JFileChooser selector = new JFileChooser(initialImportDirectory);
-        int chosenOption = selector.showOpenDialog(null);
-        File selectedFile = null;
-        if (chosenOption == JFileChooser.APPROVE_OPTION) {
-            selectedFile = selector.getSelectedFile();
-        }
-        return selectedFile;
-    }
-
-    /**
      * This takes in a file and puts each line into a separate entry
      *      in an array list of strings
      * @param dataFile      file to read from

@@ -11,6 +11,7 @@ import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * This is the class that is in charge of reading when the user hits
@@ -59,7 +60,7 @@ public class PathImport extends GeneralKeyboardActionMethod{
     public void actionMethod() {
         
         //calls the method to get a file
-        File selectedFile = FileDataHelper.importPathUsingFileSelector(initDirectory);
+        File selectedFile = GeneralFileHelper.importPathUsingFileSelector(initDirectory);
         
         //whether a new path exists
         newPathExists = (selectedFile != null);

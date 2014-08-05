@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * 
@@ -36,17 +37,7 @@ public class MeshImport{
     public MeshImport(AssetManager assetManager, File importDirectory){
         importMesh(assetManager,importDirectory);
     }
-    
-    public static void createDirectoryIfNone(Path path){
-        if(!Files.exists(path)){
-            try {
-                Files.createDirectory(path);
-            } catch (IOException ex) {
-                System.out.println("Error creating path: " + ex);
-            }
-        }
-    }
-    
+
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
         float minX = triSet.getMinX();
@@ -74,35 +65,37 @@ public class MeshImport{
     public Vector3f getCameraCenter() {
         return cameraCenter;
     }
-    
-    private String importAndCopyFile(File importDirectory, Path targetDirectory){
-        File fileToCopy = FileDataHelper.importPathUsingFileSelector(importDirectory);
-        String fileName = fileToCopy.getName();
-        Path copiedFilePath = targetDirectory.resolve(fileName);
-        try {
-            Files.copy(fileToCopy.toPath(), copiedFilePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
-        return fileName;
-    }
 
+    /**
+     * TODO:
+     * This needs to be improved as when it imports a completely 
+     *      new mesh, an AssetNotFoundException gets thrown
+     * This seems to be because the assetManager loads all the assets
+     *      upon the application start
+     * Two solutions need to be done:
+     *      1) Have the asset files loaded separately 
+     *          and then restart the application
+     *      2) Figure out how to get the asset manager to rebuild all the file keys
+     * 
+     * @param assetManager
+     * @param importDirectory 
+     */
     private void importMesh(AssetManager assetManager, File importDirectory){
         
         Path assetPath = Paths.get("assets");
-        createDirectoryIfNone(assetPath);
+        GeneralFileHelper.createDirectoryIfNone(assetPath);
         
         Path modelAssets = assetPath.resolve("Models");
-        createDirectoryIfNone(modelAssets);
+        GeneralFileHelper.createDirectoryIfNone(modelAssets);
         
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
-        String objFileName = importAndCopyFile(importDirectory,modelAssets);
+        String objFileName = GeneralFileHelper.importAndCopyFile(importDirectory,modelAssets);
         
         Path textureAssets = assetPath.resolve("Textures");
-        createDirectoryIfNone(textureAssets);
+        GeneralFileHelper.createDirectoryIfNone(textureAssets);
         
         JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
-        String textureFileName = importAndCopyFile(importDirectory,textureAssets);
+        String textureFileName = GeneralFileHelper.importAndCopyFile(importDirectory,textureAssets);
         
         Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         objectMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));

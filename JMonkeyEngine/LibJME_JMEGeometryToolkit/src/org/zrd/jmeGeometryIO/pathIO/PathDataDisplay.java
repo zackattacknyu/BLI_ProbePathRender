@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  * 
@@ -33,7 +34,7 @@ public abstract class PathDataDisplay {
      * @param initDir 
      */
     protected PathDataDisplay(File initDir){
-        File startingFile = FileDataHelper.importPathUsingFileSelector(initDir);
+        File startingFile = GeneralFileHelper.importPathUsingFileSelector(initDir);
         if(startingFile == null){
             nullReturn = true;
         }else{
