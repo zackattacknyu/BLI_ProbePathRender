@@ -10,15 +10,11 @@ import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
@@ -33,10 +29,8 @@ public class MeshImport{
     private Spatial finalMesh;
     private TriangleSet finalMeshInfo;
     private Vector3f cameraCenter;
-    
-    public MeshImport(AssetManager assetManager, File importDirectory){
-        importMesh(assetManager,importDirectory);
-    }
+    private String objFileName;
+    private String textureFileName;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -65,6 +59,25 @@ public class MeshImport{
     public Vector3f getCameraCenter() {
         return cameraCenter;
     }
+    
+
+    
+    public void obtainFiles(File initImportDirectory){
+        Path assetPath = Paths.get("assets");
+        GeneralFileHelper.createDirectoryIfNone(assetPath);
+        
+        Path modelAssets = assetPath.resolve("Models");
+        GeneralFileHelper.createDirectoryIfNone(modelAssets);
+        
+        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
+        objFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,modelAssets);
+        
+        Path textureAssets = assetPath.resolve("Textures");
+        GeneralFileHelper.createDirectoryIfNone(textureAssets);
+        
+        JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
+        textureFileName = GeneralFileHelper.importAndCopyFile(initImportDirectory,textureAssets);
+    }
 
     /**
      * TODO:
@@ -87,23 +100,8 @@ public class MeshImport{
      * @param assetManager
      * @param importDirectory 
      */
-    private void importMesh(AssetManager assetManager, File importDirectory){
-        
-        Path assetPath = Paths.get("assets");
-        GeneralFileHelper.createDirectoryIfNone(assetPath);
-        
-        Path modelAssets = assetPath.resolve("Models");
-        GeneralFileHelper.createDirectoryIfNone(modelAssets);
-        
-        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
-        String objFileName = GeneralFileHelper.importAndCopyFile(importDirectory,modelAssets);
-        
-        Path textureAssets = assetPath.resolve("Textures");
-        GeneralFileHelper.createDirectoryIfNone(textureAssets);
-        
-        JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
-        String textureFileName = GeneralFileHelper.importAndCopyFile(importDirectory,textureAssets);
-        
+    public void importMeshAndTextureChosen(AssetManager assetManager){
+
         Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         objectMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));
         //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
