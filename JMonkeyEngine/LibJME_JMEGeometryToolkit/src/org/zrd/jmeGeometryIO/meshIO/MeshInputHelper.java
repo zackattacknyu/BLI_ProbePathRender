@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
@@ -148,7 +149,7 @@ public class MeshInputHelper {
 
     /**
      * This is used to import a file
-     * @param objFileLocation       the file location
+     * @param objFile               the model file
      * @param ballMat               the material to put onto the mesh
      * @param assetManager          the application's asset manager
      * @return                      the jme spatial for the mesh
@@ -157,6 +158,21 @@ public class MeshInputHelper {
             Material ballMat, AssetManager assetManager) {
         assetManager.registerLocator(objFile.getParentFile().getAbsolutePath(), FileLocator.class);
         return generateModel(objFile.getName(),ballMat,assetManager);
+    }
+    
+    /**
+     * This is used to import a file
+     * @param objFile               the model file
+     * @param textureFile           the texture to overlay onto the mesh
+     * @param assetManager          the application's asset manager
+     * @return                      the jme spatial for the mesh
+     */
+    public static Spatial generateModel(File objFile, 
+            File textureFile, AssetManager assetManager) {
+        Material objectMaterial = MaterialHelper.getTextureMaterial(assetManager, textureFile);
+        //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
+        
+        return generateModel(objFile, objectMaterial, assetManager);
     }
 
     /**

@@ -15,7 +15,7 @@ import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
  */
 public class Main extends SimpleApplication {
     
-    private MeshImport meshImport = new MeshImport();
+    private MeshImportData meshImport = new MeshImportData();
     private MeshDataFiles meshFiles;
 
     public static void main(String[] args) {
