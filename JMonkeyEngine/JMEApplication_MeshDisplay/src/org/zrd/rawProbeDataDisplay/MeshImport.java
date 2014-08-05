@@ -5,10 +5,12 @@
 package org.zrd.rawProbeDataDisplay;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import java.io.File;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 
@@ -53,13 +55,21 @@ public class MeshImport{
         return cameraCenter;
     }
     
-    public void importMeshAndTextureChosen(AssetManager assetManager, String objFileName, String textureFileName){
+    public void importMeshAndTextureChosen(AssetManager assetManager, File objFile, File textureFile){
 
+        File objFileParent = objFile.getParentFile();
+        File textureFileParent = textureFile.getParentFile();
+        
+        assetManager.registerLocator(textureFileParent.getAbsolutePath(), FileLocator.class);
+        
         Material objectMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        objectMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/" + textureFileName));
+        objectMaterial.setTexture("ColorMap",assetManager.loadTexture(textureFile.getName()));
         //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
         
-        finalMesh = MeshInputHelper.generateModel("Models/" + objFileName, objectMaterial, assetManager);
+        assetManager.registerLocator(objFileParent.getAbsolutePath(), FileLocator.class);
+        
+        finalMesh = assetManager.loadModel(objFile.getName());
+        finalMesh.setMaterial(objectMaterial);
         
         float surfaceScale = 80f;
         finalMesh.scale(80f);

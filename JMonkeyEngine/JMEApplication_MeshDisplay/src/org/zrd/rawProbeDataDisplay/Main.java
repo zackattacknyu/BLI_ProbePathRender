@@ -20,6 +20,7 @@ public class Main extends SimpleApplication {
         File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\"
                 + "BLI_ProbePathRender\\meshedReconstructionFiles\\"
                 + "reconstructions").toFile();
+
         MeshDataFiles meshFiles = new MeshDataFiles(initialImportDirectory);
         
         Properties appProps = Properties_RawProbeDataDisplay.getProperties();

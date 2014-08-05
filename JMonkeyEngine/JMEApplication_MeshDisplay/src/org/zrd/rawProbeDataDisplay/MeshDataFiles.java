@@ -16,14 +16,14 @@ import org.zrd.util.fileHelper.GeneralFileHelper;
  */
 public class MeshDataFiles {
     
-    private String objFileName;
-    private String textureFileName;
+    private File objFileName;
+    private File textureFileName;
 
-    public String getObjFileName() {
+    public File getObjFileName() {
         return objFileName;
     }
 
-    public String getTextureFileName() {
+    public File getTextureFileName() {
         return textureFileName;
     }
     

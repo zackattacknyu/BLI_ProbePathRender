@@ -43,7 +43,7 @@ public class GeneralFileHelper {
         return selectedFile;
     }
 
-    public static String importAndCopyFile(File importDirectory, Path targetDirectory) {
+    public static File importAndCopyFile(File importDirectory, Path targetDirectory) {
         File fileToCopy = GeneralFileHelper.importPathUsingFileSelector(importDirectory);
         String fileName = fileToCopy.getName();
         Path copiedFilePath = targetDirectory.resolve(fileName);
@@ -52,7 +52,7 @@ public class GeneralFileHelper {
         } catch (IOException ex) {
             System.out.println(ex);
         }
-        return fileName;
+        return copiedFilePath.toFile();
     }
     
 }
