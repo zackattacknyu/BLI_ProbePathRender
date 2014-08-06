@@ -116,7 +116,7 @@ public class CameraCoordProperties {
         float xVal = getFloatProperty(CameraCoordProperties.CAMERA_ROTATION_X_PROPERTY_NAME);
         float yVal = getFloatProperty(CameraCoordProperties.CAMERA_ROTATION_Y_PROPERTY_NAME);
         float zVal = getFloatProperty(CameraCoordProperties.CAMERA_ROTATION_Z_PROPERTY_NAME);
-        return new Quaternion(wVal,xVal,yVal,zVal);
+        return new Quaternion(xVal,yVal,zVal,wVal);
     }
     
     public float getFloatProperty(String propertyName){
