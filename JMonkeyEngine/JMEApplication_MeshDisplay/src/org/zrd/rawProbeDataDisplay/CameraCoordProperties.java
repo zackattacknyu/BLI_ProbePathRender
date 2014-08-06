@@ -79,7 +79,7 @@ public class CameraCoordProperties {
     
     public void writeCameraCoordProperties(Path folder){
         PropertiesHelper.writePropertiesFile(camCoords, folder, 
-                "cameraCoords_","---Camera Location and Rotation Information---");
+                "cameraCoords","---Camera Location and Rotation Information---");
     }
     
     private void setCamCoordProperty(String name, String value){
