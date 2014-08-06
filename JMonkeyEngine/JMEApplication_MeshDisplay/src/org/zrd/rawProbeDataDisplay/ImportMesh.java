@@ -60,14 +60,15 @@ public class ImportMesh extends GeneralKeyboardActionMethod{
         //calls the method to get a file
         MeshDataFiles meshFiles = MeshInputHelper.obtainFiles(initDirectory);
         
-        
         //whether a new mesh exists
-        //newMeshExists = (selectedFile != null);
-        newMeshExists = true;
+        newMeshExists = (meshFiles != null);
         
-        currentMeshImport = new MeshImportData(assetManager,
-                meshFiles.getObjFile(),
-                meshFiles.getTextureFile());
+        if(newMeshExists){
+            currentMeshImport = new MeshImportData(assetManager,
+                    meshFiles.getObjFile(),meshFiles.getTextureFile());
+        }
+        
+        
     }
 
     public MeshImportData getCurrentMeshImport() {

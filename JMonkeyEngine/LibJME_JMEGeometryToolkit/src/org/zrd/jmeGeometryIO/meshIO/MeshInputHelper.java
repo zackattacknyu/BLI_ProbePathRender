@@ -212,8 +212,12 @@ public class MeshInputHelper {
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
         File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
         
+        if(objFile == null) return null;
+        
         JOptionPane.showMessageDialog(null, "Please choose an Image file for the texture");
         File textureFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
+        
+        if(textureFile == null) return null;
         
         return new MeshDataFiles(objFile, textureFile);
     }
