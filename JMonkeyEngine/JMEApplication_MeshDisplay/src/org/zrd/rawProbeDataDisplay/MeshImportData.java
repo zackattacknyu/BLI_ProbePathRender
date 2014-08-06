@@ -53,9 +53,13 @@ public class MeshImportData{
         return cameraCenter;
     }
     
-    public void importMeshAndTextureChosen(AssetManager assetManager, File objFile, File textureFile){
-        
+    public MeshImportData(AssetManager assetManager, File objFile, File textureFile){
         finalMesh = MeshInputHelper.generateModel(objFile, textureFile, assetManager);
+        
+        modifyMesh();
+    }
+    
+    public void modifyMesh(){
 
         float surfaceScale = 80f;
         finalMesh.scale(80f);
