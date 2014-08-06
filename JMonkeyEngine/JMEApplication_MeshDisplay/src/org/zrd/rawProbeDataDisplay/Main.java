@@ -7,6 +7,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 
 /**
@@ -43,8 +44,7 @@ public class Main extends SimpleApplication {
         
         meshImportAction = new ImportMesh(inputManager,assetManager,initialImportDirectory);
         
-        new OutputCameraCoordinates(inputManager,cam,logPath);
-        new ImportCameraCoordinates(inputManager,cam,logPath);
+        new CameraCoordIO(inputManager,cam,logPath);
     }
 
     @Override
