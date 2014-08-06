@@ -9,9 +9,11 @@ import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.util.dataWriting.ProbeDataWriter;
 
 /**
  *
@@ -20,9 +22,9 @@ import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 public class OutputCameraCoordinates extends GeneralKeyboardActionMethod{
     
     private Camera cam;
-    private File dataPath;
+    private Path dataPath;
     
-    public OutputCameraCoordinates(InputManager inputManager,Camera cam, File dataPath){
+    public OutputCameraCoordinates(InputManager inputManager,Camera cam, Path dataPath){
         super(inputManager,"outputCameraCoords",KeyInput.KEY_O);
         this.cam = cam;
         this.dataPath = dataPath;
@@ -31,6 +33,13 @@ public class OutputCameraCoordinates extends GeneralKeyboardActionMethod{
     @Override
     public void actionMethod() {
         Properties coords = getCameraCoords(cam);
+        ProbeDataWriter dataWriting = ProbeDataWriter.getNewWriter(dataPath, "cameraCoords_");
+        try {
+            coords.store(dataWriting.getOutputFileWriter(), "---Camera Location and Rotation Information---");
+        } catch (IOException ex) {
+            System.out.println("Error writing properties file: " + ex);
+        }
+        ProbeDataWriter.closeWriter(dataWriting);
     }
     
     public static Properties getCameraCoords(Camera cam){

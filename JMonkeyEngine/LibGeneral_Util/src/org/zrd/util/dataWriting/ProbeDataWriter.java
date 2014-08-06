@@ -84,6 +84,10 @@ public class ProbeDataWriter {
         GeneralFileHelper.createDirectoryIfNone(folderPath);
         return folderPath.resolve(fileName);
     }
+
+    public FileWriter getOutputFileWriter() {
+        return outputFileWriter;
+    }
     
     /**
      * This takes in the folder path and prefix and returns the data writer
