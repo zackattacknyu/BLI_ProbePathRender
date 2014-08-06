@@ -7,6 +7,7 @@ package org.zrd.rawProbeDataDisplay;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.scene.Spatial;
 import java.io.File;
 import org.zrd.jmeGeometryIO.meshIO.MeshDataFiles;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
@@ -32,7 +33,7 @@ public class ImportMesh extends GeneralKeyboardActionMethod{
     private File initDirectory;
     private boolean newMeshExists;
     private AssetManager assetManager;
-    private MeshImportData currentMeshImport;
+    private MeshRenderData currentMeshImport;
     
     /**
      * Initializes the class which keeps track of when the user hits "i" 
@@ -64,14 +65,17 @@ public class ImportMesh extends GeneralKeyboardActionMethod{
         newMeshExists = (meshFiles != null);
         
         if(newMeshExists){
-            currentMeshImport = new MeshImportData(assetManager,
-                    meshFiles.getObjFile(),meshFiles.getTextureFile());
+            Spatial importedMesh = MeshInputHelper.generateModel(
+                    meshFiles.getObjFile(), 
+                    meshFiles.getTextureFile(), 
+                    assetManager);
+            currentMeshImport = new MeshRenderData(importedMesh);
         }
         
         
     }
 
-    public MeshImportData getCurrentMeshImport() {
+    public MeshRenderData getCurrentMeshImport() {
         return currentMeshImport;
     }
 
