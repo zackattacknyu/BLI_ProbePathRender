@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Properties;
+import org.zrd.util.dataWriting.ProbeDataWriter;
 
 /**
  * This contains methods related to getting properties from a
@@ -17,6 +19,21 @@ import java.util.Properties;
  * @author BLI
  */
 public class PropertiesHelper {
+    
+    public static float getFloatValueProperty(Properties props,String propertyName){
+        return Float.valueOf(props.getProperty(propertyName));
+    }
+    
+    public static void writePropertiesFile(Properties propsFile, Path dataPath, String prefix, String comments){
+        ProbeDataWriter dataWriting = ProbeDataWriter.getNewWriter(dataPath, prefix);
+        try {
+            propsFile.store(dataWriting.getOutputFileWriter(), comments);
+        } catch (IOException ex) {
+            System.out.println("Error writing properties file: " + ex);
+        }
+        ProbeDataWriter.closeWriter(dataWriting);
+        
+    }
     
     /**
      * This takes in a properties file name and gets the properties

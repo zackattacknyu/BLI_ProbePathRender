@@ -1,0 +1,9 @@
+#---Camera Location and Rotation Information---
+#Wed Aug 06 15:28:58 PDT 2014
+camRotation.w=0.592821
+camLocation.y=31.91303
+camLocation.x=-17.284357
+camRotation.z=0.75844634
+camRotation.y=-0.108179905
+camRotation.x=0.24823295
+camLocation.z=-59.407486

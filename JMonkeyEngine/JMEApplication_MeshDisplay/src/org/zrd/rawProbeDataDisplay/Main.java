@@ -43,7 +43,7 @@ public class Main extends SimpleApplication {
         meshImportAction = new ImportMesh(inputManager,assetManager,initialImportDirectory);
         
         new OutputCameraCoordinates(inputManager,cam,logPath);
-        new InputCameraCoordinates(inputManager,cam,logPath);
+        new ImportCameraCoordinates(inputManager,cam,logPath);
     }
 
     @Override
