@@ -32,6 +32,7 @@ public class OutputCameraCoordinates extends GeneralKeyboardActionMethod{
 
     @Override
     public void actionMethod() {
+        System.out.println("Now writing camera coordinates");
         Properties coords = getCameraCoords(cam);
         ProbeDataWriter dataWriting = ProbeDataWriter.getNewWriter(dataPath, "cameraCoords_");
         try {
@@ -40,6 +41,7 @@ public class OutputCameraCoordinates extends GeneralKeyboardActionMethod{
             System.out.println("Error writing properties file: " + ex);
         }
         ProbeDataWriter.closeWriter(dataWriting);
+        System.out.println("Now finished writing camera coordinates");
     }
     
     public static Properties getCameraCoords(Camera cam){
