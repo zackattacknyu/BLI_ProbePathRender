@@ -16,6 +16,8 @@ import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
@@ -39,7 +41,7 @@ public class Main extends SimpleApplication {
     private boolean surfaceTrackingOn = false;
     private boolean ballMeshOn = false;
     
-    private Spatial surface,moveableObject;
+    private Spatial moveableObject;
     private Material lineMaterial;
     
     private ProbeTrackerRender probeTrackerRender;
@@ -51,10 +53,7 @@ public class Main extends SimpleApplication {
     private Node shootables;
     private RecordedPathSet recordedPathSet;
 
-    private TriangleSet meshInfo;
-
     private ProbeMoveAction probeMoveAction;
-    private ProbeTrackerRecording probeRecording;
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     private LiveTrackingText outputText;
@@ -90,13 +89,24 @@ public class Main extends SimpleApplication {
         } catch (IOException ex) {
             System.out.println("Error trying to capture video: " + ex);
         }*/
-        
+
         ballMeshOn = Boolean.parseBoolean(
                 Properties_BLIProbePath.getProperties().
                 getProperty("ballOn"));
         surfaceTrackingOn = Boolean.parseBoolean(
                 Properties_BLIProbePath.getProperties().
                 getProperty("surfaceTrackingOn"));
+        
+        RenderedMesh activeMesh;
+        MeshRenderData importedMesh = MeshInputHelper.selectFilesAndGenerateRenderData(
+                Paths_BLIProbePath.LOG_PARENT_PATH.toFile(),assetManager);
+        
+        if(importedMesh == null){
+            activeMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
+        }else{
+            activeMesh = new RenderedMesh(importedMesh.getFinalMesh(),
+                    importedMesh.getFinalMeshInfo());
+        }
         
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
                 
@@ -105,7 +115,6 @@ public class Main extends SimpleApplication {
         int cameraMode = ballMeshOn ? 3 : 1;
         cameraTracker.setDefaultCamera((short)cameraMode);
         
-        RenderedMesh activeMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
 
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
@@ -115,8 +124,8 @@ public class Main extends SimpleApplication {
         
         if(!ballMeshOn) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
-        meshInfo = activeMesh.getActiveMeshInfo();
-        surface = activeMesh.getSurfaceMesh();
+        TriangleSet meshInfo = activeMesh.getActiveMeshInfo();
+        Spatial surface = activeMesh.getSurfaceMesh();
         
         shootables = new Node("shootables");
         shootables.attachChild(surface);

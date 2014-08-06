@@ -46,7 +46,6 @@ public class ImportMesh extends GeneralKeyboardActionMethod{
     public ImportMesh(InputManager inputManager, AssetManager assetManager, File initDirectory){
         super(inputManager,IMPORT_ACTION_NAME,IMPORT_KEYBOARD_KEY);
         this.initDirectory = initDirectory;
-        this.initDirectory = initDirectory;
         this.assetManager = assetManager;
     }
 
@@ -59,21 +58,10 @@ public class ImportMesh extends GeneralKeyboardActionMethod{
     @Override
     public void actionMethod() {
         
-        //calls the method to get a file
-        MeshDataFiles meshFiles = MeshInputHelper.obtainFiles(initDirectory);
+        currentMeshImport = MeshInputHelper.selectFilesAndGenerateRenderData(
+                initDirectory, assetManager);
         
-        //whether a new mesh exists
-        newMeshExists = (meshFiles != null);
-        
-        if(newMeshExists){
-            Spatial importedMesh = MeshInputHelper.generateModel(
-                    meshFiles.getObjFile(), 
-                    meshFiles.getTextureFile(), 
-                    assetManager);
-            currentMeshImport = new MeshRenderData(importedMesh);
-        }
-        
-        
+        newMeshExists = (currentMeshImport != null);
     }
 
     public MeshRenderData getCurrentMeshImport() {

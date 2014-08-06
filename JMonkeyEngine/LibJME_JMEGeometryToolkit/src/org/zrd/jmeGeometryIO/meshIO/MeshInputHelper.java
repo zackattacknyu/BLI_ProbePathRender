@@ -174,6 +174,21 @@ public class MeshInputHelper {
         
         return generateModel(objFile, objectMaterial, assetManager);
     }
+    
+    public static MeshRenderData generateRenderData(MeshDataFiles meshFiles, AssetManager assetManager){
+        Spatial importedMesh = generateModel(meshFiles.getObjFile(),
+                meshFiles.getTextureFile(),assetManager);
+        return new MeshRenderData(importedMesh);
+    }
+    
+    public static MeshRenderData selectFilesAndGenerateRenderData(File initImport, AssetManager assetManager){
+        MeshDataFiles meshFiles = MeshInputHelper.obtainFiles(initImport);
+        if(meshFiles == null){
+            return null;
+        }else{
+            return generateRenderData(meshFiles,assetManager);
+        }
+    }
 
     /**
      * This adds a general spatial to a triangleSet. It is meant to be used

@@ -18,6 +18,14 @@ public class RenderedMesh {
     
     protected Spatial surfaceMesh;
     protected TriangleSet activeMeshInfo;
+    
+    public RenderedMesh(){
+        
+    }
+    public RenderedMesh(Spatial mesh, TriangleSet meshInfo){
+        surfaceMesh = mesh;
+        activeMeshInfo = meshInfo;
+    }
 
     /**
      * Get the rendered mesh
