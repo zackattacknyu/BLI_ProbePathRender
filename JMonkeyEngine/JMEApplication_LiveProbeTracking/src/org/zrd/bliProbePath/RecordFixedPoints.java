@@ -53,6 +53,8 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
              *      in the array list of points. 
              */
             if(currentPt.equals(lastRecordedPt)){
+                
+                System.out.println("Now putting vertices into text file");
                 GeometryDataHelper.writeVerticesToDataFile(currentPtsRecording, 
                         dataRecordingPath, "fixedPoints");
                 resetRecording();
@@ -64,6 +66,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
         }else{
             
             //we are now recording and put the first point in the array list
+            System.out.println("Now recording points");
             addCurrentPoint();
             recording = true;
             
@@ -77,6 +80,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     
     private void addCurrentPoint(){
         currentPtsRecording.add(currentPt);
+        System.out.println("Point: " + currentPt + " has been added to list");
         lastRecordedPt = currentPt.clone();
     }
     
