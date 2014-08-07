@@ -13,12 +13,12 @@ import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveAction;
 import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
-import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.SphereMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
@@ -60,7 +60,7 @@ public class Main extends SimpleApplication {
             cameraTracker.setDefaultCamera((short)1);
         }
         
-        RenderedMesh activeMesh;
+        MeshRenderData activeMesh;
         if(sphereOn){
             activeMesh = new SphereMesh(assetManager);
         }else{

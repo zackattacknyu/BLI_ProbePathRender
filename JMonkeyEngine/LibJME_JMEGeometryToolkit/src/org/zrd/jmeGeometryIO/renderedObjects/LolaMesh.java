@@ -4,7 +4,6 @@
  */
 package org.zrd.jmeGeometryIO.renderedObjects;
 
-import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
@@ -16,6 +15,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
 
 /**
@@ -25,7 +25,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
  *
  * @author Zach
  */
-public class LolaMesh extends RenderedMesh{
+public class LolaMesh extends MeshRenderData{
 
     public LolaMesh(AssetManager assetManager){
         
@@ -37,7 +37,7 @@ public class LolaMesh extends RenderedMesh{
         lolaMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
         //if(wireframeOn) lolaMaterial.getAdditionalRenderState().setWireframe(true);
         
-        surfaceMesh = MeshInputHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
+        renderedMesh = MeshInputHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         
         Quaternion yaw = new Quaternion();
         yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
@@ -57,20 +57,20 @@ public class LolaMesh extends RenderedMesh{
         moveMatrix.setTranslation(surfaceLoc);
         Matrix4f surfaceTransform = moveMatrix.mult(scaleMat).mult(surfaceRot);
         
-        surfaceMesh.setLocalRotation(surfaceRotation);
-        surfaceMesh.scale(surfaceScale);
-        surfaceMesh.move(surfaceLoc);
+        renderedMesh.setLocalRotation(surfaceRotation);
+        renderedMesh.scale(surfaceScale);
+        renderedMesh.move(surfaceLoc);
         
-        activeMeshInfo = new TriangleSet();
-        activeMeshInfo.setTransform(surfaceTransform);
-        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,surfaceTransform);
+        finalMeshInfo = new TriangleSet();
+        finalMeshInfo.setTransform(surfaceTransform);
+        finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,renderedMesh,surfaceTransform);
         
-        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(activeMeshInfo);
+        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(finalMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surfaceMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
-        activeMeshInfo = correctedMesh;
+        renderedMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, lolaMaterial);
+        finalMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
     }

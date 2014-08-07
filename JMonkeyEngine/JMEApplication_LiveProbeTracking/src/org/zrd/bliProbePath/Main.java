@@ -14,7 +14,6 @@ import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
-import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
@@ -98,15 +97,11 @@ public class Main extends SimpleApplication {
                 Properties_BLIProbePath.getProperties().
                 getProperty("surfaceTrackingOn"));
         
-        RenderedMesh activeMesh;
         MeshRenderData importedMesh = MeshInputHelper.selectFilesAndGenerateRenderData(
                 Paths_BLIProbePath.LOG_PARENT_PATH.toFile(),assetManager);
         
         if(importedMesh == null){
-            activeMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
-        }else{
-            activeMesh = new RenderedMesh(importedMesh.getFinalMesh(),
-                    importedMesh.getFinalMeshInfo());
+            importedMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
         }
         
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
@@ -126,8 +121,8 @@ public class Main extends SimpleApplication {
         
         if(!ballMeshOn) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
-        TriangleSet meshInfo = activeMesh.getActiveMeshInfo();
-        Spatial surface = activeMesh.getSurfaceMesh();
+        TriangleSet meshInfo = importedMesh.getActiveMeshInfo();
+        Spatial surface = importedMesh.getSurfaceMesh();
         
         shootables = new Node("shootables");
         shootables.attachChild(surface);
@@ -142,7 +137,7 @@ public class Main extends SimpleApplication {
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
         PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,
-                shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, activeMesh.getActiveMeshInfo().getTransform());
+                shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, importedMesh.getActiveMeshInfo().getTransform());
         
         
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;

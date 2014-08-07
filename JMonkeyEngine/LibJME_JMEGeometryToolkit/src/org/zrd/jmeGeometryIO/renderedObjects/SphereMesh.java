@@ -4,12 +4,12 @@
  */
 package org.zrd.jmeGeometryIO.renderedObjects;
 
-import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
+import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 
 /**
  * 
@@ -18,7 +18,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
  *
  * @author Zach
  */
-public class SphereMesh extends RenderedMesh{
+public class SphereMesh extends MeshRenderData{
 
     public SphereMesh(AssetManager assetManager){
         
@@ -29,17 +29,17 @@ public class SphereMesh extends RenderedMesh{
         sphereMaterial.setTexture("ColorMap",assetManager.loadTexture("Textures/lola_texture.png"));
         //if(wireframeOn) sphereMaterial.getAdditionalRenderState().setWireframe(true);
         
-        surfaceMesh = MeshInputHelper.generateModel(sphereLocation, sphereMaterial, assetManager);
+        renderedMesh = MeshInputHelper.generateModel(sphereLocation, sphereMaterial, assetManager);
 
         float surfaceScale = 20f;
         Matrix4f sphereTransform = new Matrix4f();
         sphereTransform.setScale(20f, 20f, 20f);
 
-        surfaceMesh.scale(surfaceScale);
+        renderedMesh.scale(surfaceScale);
         
-        activeMeshInfo = new TriangleSet();
-        activeMeshInfo.setTransform(sphereTransform);
-        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,sphereTransform);
+        finalMeshInfo = new TriangleSet();
+        finalMeshInfo.setTransform(sphereTransform);
+        finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,renderedMesh,sphereTransform);
     }
     
     

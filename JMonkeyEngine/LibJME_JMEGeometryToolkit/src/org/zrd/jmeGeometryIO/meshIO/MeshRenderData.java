@@ -18,9 +18,9 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  */
 public class MeshRenderData{
     
-    private Spatial renderedMesh;
-    private TriangleSet finalMeshInfo;
-    private Vector3f cameraCenter;
+    protected Spatial renderedMesh;
+    protected TriangleSet finalMeshInfo;
+    protected Vector3f cameraCenter;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -38,16 +38,25 @@ public class MeshRenderData{
         
     }
 
-    public Spatial getFinalMesh() {
+    public Spatial getSurfaceMesh() {
         return renderedMesh;
     }
 
-    public TriangleSet getFinalMeshInfo() {
+    public TriangleSet getActiveMeshInfo() {
         return finalMeshInfo;
     }
 
     public Vector3f getCameraCenter() {
         return cameraCenter;
+    }
+    
+    public MeshRenderData(){
+        
+    }
+    
+    public MeshRenderData(Spatial mesh, TriangleSet meshInfo){
+        renderedMesh = mesh;
+        finalMeshInfo = meshInfo;
     }
     
     public MeshRenderData(Spatial renderedMesh){
