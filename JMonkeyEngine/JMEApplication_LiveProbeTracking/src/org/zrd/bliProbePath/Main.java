@@ -9,11 +9,12 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Properties;
+import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
-import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
+import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
@@ -111,6 +112,7 @@ public class Main extends SimpleApplication {
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
                 
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
+        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH);
         
         int cameraMode = ballMeshOn ? 3 : 1;
         cameraTracker.setDefaultCamera((short)cameraMode);
@@ -146,7 +148,7 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        boolean useFixedPoints = true;
+        boolean useFixedPoints = false;
         
         probeMoveAction = useFixedPoints ? 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,

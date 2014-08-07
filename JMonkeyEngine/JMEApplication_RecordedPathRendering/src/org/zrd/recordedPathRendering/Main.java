@@ -18,7 +18,7 @@ import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveAction;
 import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
-import org.zrd.jmeGeometryIO.renderedObjects.RenderedMesh;
+import org.zrd.jmeGeometryIO.meshIO.RenderedMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.SphereMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
