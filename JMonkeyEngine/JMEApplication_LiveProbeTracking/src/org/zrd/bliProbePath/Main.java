@@ -96,6 +96,9 @@ public class Main extends SimpleApplication {
         surfaceTrackingOn = Boolean.parseBoolean(
                 Properties_BLIProbePath.getProperties().
                 getProperty("surfaceTrackingOn"));
+        boolean showBackground = Boolean.parseBoolean(
+                Properties_BLIProbePath.getProperties().
+                getProperty("showBackground"));
         
         MeshRenderData importedMesh = MeshInputHelper.selectFilesAndGenerateRenderData(
                 Paths_BLIProbePath.LOG_PARENT_PATH.toFile(),assetManager);
@@ -119,7 +122,7 @@ public class Main extends SimpleApplication {
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
         
-        if(!ballMeshOn) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
+        if(showBackground) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
 
         TriangleSet meshInfo = importedMesh.getActiveMeshInfo();
         Spatial surface = importedMesh.getSurfaceMesh();

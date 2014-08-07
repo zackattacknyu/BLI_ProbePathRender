@@ -41,7 +41,7 @@ public class BackgroundBox {
         sampleBox.setName(name);
         sampleBox.setLocalScale(1);
         sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(10.0f, -10.0f, 20.0f);
+        sampleBox.setLocalTranslation(10.0f, -10.0f, 0.0f);
         return sampleBox;
     }
     
