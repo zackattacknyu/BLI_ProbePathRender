@@ -58,6 +58,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
                 GeometryDataHelper.writeVerticesToDataFile(currentPtsRecording, 
                         dataRecordingPath, "fixedPoints");
                 resetRecording();
+                System.out.println("Finished adding vertices to text file");
                 
             }else{
                 addCurrentPoint();
