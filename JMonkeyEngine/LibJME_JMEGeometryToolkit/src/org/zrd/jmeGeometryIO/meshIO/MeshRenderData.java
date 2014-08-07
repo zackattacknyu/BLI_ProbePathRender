@@ -21,7 +21,6 @@ public class MeshRenderData{
     protected Spatial renderedMesh;
     protected TriangleSet finalMeshInfo;
     protected Vector3f cameraPosition;
-    protected Vector3f meshCenterPoint;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -41,10 +40,6 @@ public class MeshRenderData{
 
     public Spatial getSurfaceMesh() {
         return renderedMesh;
-    }
-
-    public Vector3f getMeshCenterPoint() {
-        return meshCenterPoint;
     }
 
     public TriangleSet getActiveMeshInfo() {
@@ -71,19 +66,29 @@ public class MeshRenderData{
     }
     
     public void modifyMesh(){
-
+        
         float surfaceScale = 80f;
-        renderedMesh.scale(80f);
+        
         Matrix4f scaleMat = new Matrix4f();
         scaleMat.scale(new Vector3f(surfaceScale,surfaceScale,surfaceScale));
+        renderedMesh.scale(surfaceScale);
         
-        finalMeshInfo = new TriangleSet();
-        finalMeshInfo.setTransform(scaleMat);
-        finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,renderedMesh,scaleMat);
+        TriangleSet initMeshInfo = new TriangleSet();
+        initMeshInfo = MeshInputHelper.addToTriangleSet(initMeshInfo, renderedMesh, scaleMat);
+        Vector3f meshCenter = getCenterPoint(initMeshInfo);
+        
+        Vector3f meshTranslationVector = meshCenter.clone().negate();
+        
+        Matrix4f translationMatrix = new Matrix4f();
+        translationMatrix.setTranslation(meshTranslationVector);
+        renderedMesh.move(meshTranslationVector);
 
-        meshCenterPoint = getCenterPoint(finalMeshInfo);
         
-        //renderedMesh.move(centerPt.clone().negate());
+        
+        Matrix4f finalTransform = translationMatrix.mult(scaleMat);
+        finalMeshInfo = new TriangleSet();
+        finalMeshInfo.setTransform(finalTransform);
+        finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,renderedMesh,finalTransform);
         
         float minZ = finalMeshInfo.getMinZ();
         cameraPosition = new Vector3f(0,0,minZ*1.5f);
