@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
@@ -37,13 +38,7 @@ public class CalibrationHelper {
         resultText.add("Quality Statistics: ");
         resultText.addAll(qualityStats);
                 
-        try {
-            FileDataHelper.exportLinesToFile(resultText, 
-                    ProbeDataWriter.getNewDataFilePath(
-                    resultFolder, "CalibrationResults"));
-        } catch (IOException ex) {
-            System.out.println("Error Writing Calibration Results: " + ex);
-        }
+        FileDataHelper.exportLinesToFile(resultText,GeneralFileHelper.getNewDataFilePath(resultFolder, "CalibrationResults"));
     }
     
 }

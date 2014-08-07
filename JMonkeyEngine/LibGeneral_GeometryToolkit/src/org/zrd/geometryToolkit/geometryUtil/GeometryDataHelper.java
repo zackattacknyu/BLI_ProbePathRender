@@ -10,12 +10,18 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
  * @author Zach
  */
 public class GeometryDataHelper {
+    
+    public static void writeVerticesToDataFile(ArrayList<Vector3f> vertices, Path filePath, String prefix){
+        Path textFilePath = GeneralFileHelper.getNewDataFilePath(filePath, prefix);
+        GeometryDataHelper.writeVerticesToFile(vertices, textFilePath);
+    }
     
     public static void writeVerticesToFile(ArrayList<Vector3f> vertices, Path filePath){
         ArrayList<String> vertexStrings = new ArrayList<String>(vertices.size());

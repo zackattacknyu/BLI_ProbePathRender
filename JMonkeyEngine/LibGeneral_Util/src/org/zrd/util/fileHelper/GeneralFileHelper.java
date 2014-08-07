@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import javax.swing.JFileChooser;
+import org.zrd.util.dataWriting.DataWritingConstants;
+import org.zrd.util.dataWriting.TimeHelper;
 
 /**
  *
@@ -60,6 +62,22 @@ public class GeneralFileHelper {
             System.out.println(ex);
         }
         return copiedFilePath.toFile();
+    }
+
+    /**
+     * This takes in the folder path and prefix and constructs the Path object
+     *      for the file to be used. Specifically, it constructs a text file
+     *      with the format {prefix}_{timestamp}.txt
+     * @param folderPath            path to put file
+     * @param fileNamePrefix        prefix of file name
+     * @return                      Path object for file
+     * @throws IOException          if there is a problem writing the file
+     */
+    public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix){
+        String currentTimestamp = TimeHelper.getTimestampSuffix();
+        String fileName = fileNamePrefix + DataWritingConstants.PREFIX_TO_SUFFIX_SEPARATOR + currentTimestamp + DataWritingConstants.OUTPUT_FILE_FORMAT;
+        GeneralFileHelper.createDirectoryIfNone(folderPath);
+        return folderPath.resolve(fileName);
     }
     
 }

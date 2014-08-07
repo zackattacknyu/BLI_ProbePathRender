@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 import org.zrd.util.stats.DataSet;
 
 /**
@@ -45,13 +46,8 @@ public class QualityRecorder {
      */
     public void closeRecording(){
         ProbeDataWriter.closeWriter(qualityWriter);
-        
-        try {
-            FileDataHelper.exportLinesToFile(currentQualitySet.closeStatRecording(), 
-                    ProbeDataWriter.getNewDataFilePath(recordingFilePath, "qualityStats"));
-        } catch (IOException ex) {
-            System.out.println("Error trying to write stats to file: " + ex);
-        }
+        FileDataHelper.exportLinesToFile(currentQualitySet.closeStatRecording(),
+                GeneralFileHelper.getNewDataFilePath(recordingFilePath, "qualityStats"));
     }    
     
 }

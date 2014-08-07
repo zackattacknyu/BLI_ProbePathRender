@@ -20,6 +20,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
@@ -80,13 +81,8 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         fileStrings.addAll(currentTriStrings);
         fileStrings.addAll(origTriStrings);
         
-        
-        try {
-            Path outputFilePath = ProbeDataWriter.getNewDataFilePath(recordedFilePath, "meshPointPicked");
-            FileDataHelper.exportLinesToFile(fileStrings, outputFilePath);
-        } catch (IOException ex) {
-            System.out.println("Error trying to record point: " + ex);
-        }
+        Path outputFilePath = GeneralFileHelper.getNewDataFilePath(recordedFilePath, "meshPointPicked");
+        FileDataHelper.exportLinesToFile(fileStrings, outputFilePath);
         
     }
 

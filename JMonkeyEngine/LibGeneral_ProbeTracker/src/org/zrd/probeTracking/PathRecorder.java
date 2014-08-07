@@ -14,6 +14,7 @@ import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
@@ -81,14 +82,10 @@ public class PathRecorder {
         ProbeDataWriter.closeWriter(yawPitchRollWriter);
         
         //write the compressed path
-        try {
-            ArrayList<Vector3f> compressedVertices = PathCompression.
-                getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
-            Path compressedPathFile = ProbeDataWriter.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
-            GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
-        } catch (IOException ex) {
-            System.out.println("Exception thrown trying to write compressed file: " + ex);
-        }
+        ArrayList<Vector3f> compressedVertices = PathCompression.
+            getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
+        Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
+        GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){
