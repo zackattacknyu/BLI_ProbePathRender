@@ -163,6 +163,7 @@ public class SerialReader implements SerialPortEventListener {
          */
         public void reset(){
             int rInt = 'r';
+            if(output == null) return;
             try {
                 output.write(rInt);
             } catch (IOException ex) {
