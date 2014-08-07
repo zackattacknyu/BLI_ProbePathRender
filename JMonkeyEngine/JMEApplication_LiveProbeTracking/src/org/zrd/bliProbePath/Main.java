@@ -27,6 +27,7 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import probeTrackingRender.ProbeMoveAction;
 import probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
+import org.zrd.util.properties.PropertiesHelper;
 import probeTrackingRender.ProbeTrackerRecording;
 import probeTrackingRender.ProbeTrackerRender;
 import probeTrackingRender.ResetTracker;
@@ -90,15 +91,12 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
 
-        ballMeshOn = Boolean.parseBoolean(
-                Properties_BLIProbePath.getProperties().
-                getProperty("ballOn"));
-        surfaceTrackingOn = Boolean.parseBoolean(
-                Properties_BLIProbePath.getProperties().
-                getProperty("surfaceTrackingOn"));
-        boolean showBackground = Boolean.parseBoolean(
-                Properties_BLIProbePath.getProperties().
-                getProperty("showBackground"));
+        ballMeshOn = PropertiesHelper.getBooleanValueProperty(
+                Properties_BLIProbePath.getProperties(), "ballOn");
+        surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
+                Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
+        boolean showBackground = PropertiesHelper.getBooleanValueProperty(
+                Properties_BLIProbePath.getProperties(), "showBackground");
         
         MeshRenderData importedMesh = MeshInputHelper.selectFilesAndGenerateRenderData(
                 Paths_BLIProbePath.LOG_PARENT_PATH.toFile(),assetManager);

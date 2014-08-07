@@ -24,6 +24,10 @@ public class PropertiesHelper {
         return Float.valueOf(props.getProperty(propertyName));
     }
     
+    public static boolean getBooleanValueProperty(Properties props, String propertyName){
+        return Boolean.valueOf(props.getProperty(propertyName));
+    }
+    
     public static void writePropertiesFile(Properties propsFile, Path dataPath, String prefix, String comments){
         ProbeDataWriter dataWriting = ProbeDataWriter.getNewWriter(dataPath, prefix);
         try {
