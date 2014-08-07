@@ -20,7 +20,8 @@ public class MeshRenderData{
     
     protected Spatial renderedMesh;
     protected TriangleSet finalMeshInfo;
-    protected Vector3f cameraCenter;
+    protected Vector3f cameraPosition;
+    protected Vector3f meshCenterPoint;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -42,12 +43,16 @@ public class MeshRenderData{
         return renderedMesh;
     }
 
+    public Vector3f getMeshCenterPoint() {
+        return meshCenterPoint;
+    }
+
     public TriangleSet getActiveMeshInfo() {
         return finalMeshInfo;
     }
 
-    public Vector3f getCameraCenter() {
-        return cameraCenter;
+    public Vector3f getCameraPosition() {
+        return cameraPosition;
     }
     
     public MeshRenderData(){
@@ -76,12 +81,12 @@ public class MeshRenderData{
         finalMeshInfo.setTransform(scaleMat);
         finalMeshInfo = MeshInputHelper.addToTriangleSet(finalMeshInfo,renderedMesh,scaleMat);
 
-        Vector3f centerPt = getCenterPoint(finalMeshInfo);
+        meshCenterPoint = getCenterPoint(finalMeshInfo);
         
-        renderedMesh.move(centerPt.clone().negate());
+        //renderedMesh.move(centerPt.clone().negate());
         
         float minZ = finalMeshInfo.getMinZ();
-        cameraCenter = new Vector3f(0,0,minZ*1.5f);
+        cameraPosition = new Vector3f(0,0,minZ*1.5f);
         
         /*
          * 

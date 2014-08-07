@@ -51,7 +51,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         if(meshImportAction.isNewMeshExists()){
             rootNode.attachChild(meshImportAction.getCurrentMeshImport().getSurfaceMesh());
-            cam.setLocation(meshImportAction.getCurrentMeshImport().getCameraCenter());
+            cam.setLocation(meshImportAction.getCurrentMeshImport().getCameraPosition());
         }
     }
 

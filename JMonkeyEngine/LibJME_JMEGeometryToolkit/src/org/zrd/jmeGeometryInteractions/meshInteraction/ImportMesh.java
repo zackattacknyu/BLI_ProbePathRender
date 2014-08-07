@@ -8,9 +8,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.scene.Spatial;
 import java.io.File;
-import org.zrd.jmeGeometryIO.meshIO.MeshDataFiles;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
