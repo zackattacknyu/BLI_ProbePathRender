@@ -26,6 +26,22 @@ public class FixedPointIO {
         outputVertices = new ArrayList<Vector3f>();
     }
     
+    public FixedPointIO(ArrayList<Vector3f> outputVerts){
+        
+        int numVerts = outputVerts.size();
+        if(numVerts % 4 == 0){
+            for(int i = 0; i < numVerts/4; i++){
+                
+                fixedPoints.add(outputVerts.get(i*4 + 0).clone());
+                correspondingTriangles.add(new MeshTriangle(
+                        outputVerts.get(i*4 + 1),
+                        outputVerts.get(i*4 + 2),
+                        outputVerts.get(i*4 + 3)));
+                
+            }
+        }
+    }
+    
     public void addPoint(Vector3f fixedPoint, MeshTriangle correspondingTriangle){
         fixedPoints.add(fixedPoint);
         outputVertices.add(fixedPoint);
