@@ -84,8 +84,8 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
                 returnPoint = (PointOnMeshData)(ptPicker.getNearestPointData(returnPoint.getPointCoords()));
             }
             
-            //gives the method the cloest collision point
-            pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleContainingPoint());
+            //gives the method the closest collision point
+            pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleWithPt());
         }
     }
     

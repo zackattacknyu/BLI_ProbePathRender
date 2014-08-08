@@ -23,7 +23,7 @@ public class CollisionPoint extends PointOnMeshData{
      */
     public CollisionPoint(CollisionResult point) {
 
-        super(point.getContactPoint(),new MeshTriangle(point.getTriangle(null)));
+        super(point.getContactPoint(),new MeshTriangle(point.getTriangle(null)),point.getTriangle(null));
         
     }
     

@@ -12,13 +12,11 @@ import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
@@ -83,11 +81,6 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         
         Path outputFilePath = GeneralFileHelper.getNewDataFilePath(recordedFilePath, "meshPointPicked");
         FileDataHelper.exportLinesToFile(fileStrings, outputFilePath);
-        
-    }
-
-    @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
         
     }
     

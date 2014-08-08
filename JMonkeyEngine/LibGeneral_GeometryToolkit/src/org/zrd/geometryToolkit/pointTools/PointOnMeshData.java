@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.pointTools;
 
+import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 
@@ -14,14 +15,30 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 public class PointOnMeshData extends PointData{
     
     protected MeshTriangle triangleContainingPoint;
+    protected Triangle triangleWithPt;
     
     public PointOnMeshData(Vector3f coords, MeshTriangle triangleWithPt){
         super(coords);
         triangleContainingPoint = triangleWithPt;
     }
+    
+    public PointOnMeshData(Vector3f coords, Triangle triangleWithPt){
+        super(coords);
+        this.triangleWithPt = triangleWithPt;
+    }
+    
+    public PointOnMeshData(Vector3f coords, MeshTriangle triangle, Triangle triangleWithPt){
+        super(coords);
+        this.triangleContainingPoint = triangle;
+        this.triangleWithPt = triangleWithPt;
+    }
 
     public MeshTriangle getTriangleContainingPoint() {
         return triangleContainingPoint;
+    }
+
+    public Triangle getTriangleWithPt() {
+        return triangleWithPt;
     }
 
     

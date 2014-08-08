@@ -8,6 +8,7 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.math.Matrix4f;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -16,6 +17,7 @@ import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
+import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
@@ -29,10 +31,12 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     private LocationTracker activeTracker;
     private MeshTriangle currentPickedTriangle;
     private Vector3f currentPickedPoint;
+    private Matrix4f transform;
     
-    public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker){
+    public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, Matrix4f transform){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);
         new PickPointOnMesh("pickPointForProbeMove",inputManager,cam,this,shootableMesh,null);
+        this.transform = transform;
         this.activeTracker = probeTracker;
     }
     
@@ -54,20 +58,15 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
 
     @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
-        handleNewMeshPoint(pointOnMesh,new MeshTriangle(triangleOnMesh));
+        if(moveProbeEnabled){
+            currentPickedPoint = pointOnMesh.clone();
+            activeTracker.setCurrentPosition(currentPickedPoint);
+            currentPickedTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, transform);
+        }
     }
 
     public String getProbeMoveModeText() {
         return probeMoveModeText;
-    }
-
-    @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
-        if(moveProbeEnabled){
-            currentPickedPoint = pointOnMesh.clone();
-            activeTracker.setCurrentPosition(currentPickedPoint);
-            currentPickedTriangle = triangleOnMesh.clone();
-        }
     }
 
     @Override

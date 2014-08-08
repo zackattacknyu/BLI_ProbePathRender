@@ -149,7 +149,7 @@ public class Main extends SimpleApplication {
         probeMoveAction = useFixedPoints ? 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,
                     FixedPointsOnLolaMesh.pointPicker) : 
-                new ProbeMoveAction(inputManager,cam,shootables,activeTracker);
+                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,meshInfo.getTransform());
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         

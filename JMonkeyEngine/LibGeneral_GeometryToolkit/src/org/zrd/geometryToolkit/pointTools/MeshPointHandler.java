@@ -15,6 +15,5 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 public interface MeshPointHandler {
     
     void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh);
-    void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh);
     
 }

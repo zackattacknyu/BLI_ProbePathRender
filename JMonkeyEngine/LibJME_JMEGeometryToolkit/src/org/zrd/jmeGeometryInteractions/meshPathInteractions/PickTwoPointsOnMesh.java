@@ -218,9 +218,4 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
         }        
     }
     
-    @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh){
-        handleNewMeshPoint(pointOnMesh,triangleOnMesh.getTriangleData());
-    } 
-    
 }
