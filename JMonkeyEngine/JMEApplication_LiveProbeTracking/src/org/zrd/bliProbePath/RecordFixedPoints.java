@@ -10,12 +10,9 @@ import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
-import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import org.zrd.util.dataWriting.ProbeDataWriter;
-import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *This records fixed points. If the user presses T, then
