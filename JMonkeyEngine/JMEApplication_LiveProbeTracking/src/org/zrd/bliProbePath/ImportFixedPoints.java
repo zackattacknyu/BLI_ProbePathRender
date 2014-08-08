@@ -47,6 +47,10 @@ public class ImportFixedPoints extends GeneralKeyboardActionMethod{
             return false;
         }
     }
+
+    public FixedPointIO getImportedPoints() {
+        return importedPoints;
+    }
     
     
     

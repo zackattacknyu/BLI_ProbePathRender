@@ -5,9 +5,12 @@ import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
@@ -63,6 +66,8 @@ public class Main extends SimpleApplication {
     
     private ImportFixedPoints fixedPtsImport;
     
+    private Material fixedPtMaterial;
+    
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
         ApplicationHelper.initializeApplication(new Main(), appProps);
@@ -90,6 +95,8 @@ public class Main extends SimpleApplication {
         } catch (IOException ex) {
             System.out.println("Error trying to capture video: " + ex);
         }*/
+        
+        fixedPtMaterial = MaterialHelper.getColorMaterial(1.0f, 0.0f, 0.0f, assetManager);
 
         ballMeshOn = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "ballOn");
@@ -186,5 +193,21 @@ public class Main extends SimpleApplication {
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
+        
+        if(fixedPtsImport.isNewPointsImported()){
+            
+            for(Vector3f fixedPt: fixedPtsImport.getImportedPoints().getFixedPoints()){
+                rootNode.attachChild(initBox(fixedPtMaterial,fixedPt));
+            }
+            
+        }
+    }
+    
+    private Spatial initBox(Material ballMat, Vector3f position){
+        Box b = new Box(0.2f, 0.2f, 0.2f);
+        Spatial sampleBox = new Geometry("FixedPoint", b);
+        sampleBox.setMaterial(ballMat);
+        sampleBox.setLocalTranslation(position);
+        return sampleBox;
     }
 }
