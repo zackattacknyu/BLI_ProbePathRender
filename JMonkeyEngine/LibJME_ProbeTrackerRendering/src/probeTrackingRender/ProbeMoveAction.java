@@ -15,19 +15,20 @@ import com.jme3.scene.Node;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
-import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
+import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import org.zrd.probeTracking.ProbeTracker;
 
 /**
  *
  * @author BLI
  */
-public class ProbeMoveAction extends GeneralKeyboardActionMethod implements MeshPointHandler{
+public class ProbeMoveAction extends GeneralKeyboardActionMethod implements MeshPointHandler,PointsOnMeshTracker{
 
     private boolean moveProbeEnabled = false;
     private String probeMoveModeText;
     private LocationTracker activeTracker;
+    private MeshTriangle currentPickedTriangle;
+    private Vector3f currentPickedPoint;
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);
@@ -51,18 +52,32 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
         }
     }
 
+    @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
-        if(moveProbeEnabled){
-            activeTracker.setCurrentPosition(pointOnMesh);
-        }
+        handleNewMeshPoint(pointOnMesh,new MeshTriangle(triangleOnMesh));
     }
 
     public String getProbeMoveModeText() {
         return probeMoveModeText;
     }
 
+    @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
-        handleNewMeshPoint(pointOnMesh,triangleOnMesh.getTriangleData());
+        if(moveProbeEnabled){
+            currentPickedPoint = pointOnMesh.clone();
+            activeTracker.setCurrentPosition(currentPickedPoint);
+            currentPickedTriangle = triangleOnMesh.clone();
+        }
+    }
+
+    @Override
+    public MeshTriangle getCurrentTriangleOnMesh() {
+        return currentPickedTriangle;
+    }
+
+    @Override
+    public Vector3f getCurrentPointOnMesh() {
+        return currentPickedPoint;
     }
     
     

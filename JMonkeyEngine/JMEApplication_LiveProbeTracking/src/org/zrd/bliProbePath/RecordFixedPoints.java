@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.GeneralFileHelper;
@@ -29,20 +31,22 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     private Vector3f lastRecordedPt;
     private Vector3f currentPt;
     private ArrayList<Vector3f> currentPtsRecording;
-    private LocationTracker locTracker;
+    private PointsOnMeshTracker ptsMeshTracker;
     private boolean recording = false;
     private Path dataRecordingPath;
     
-    public RecordFixedPoints(InputManager inputManager, LocationTracker locTracker, Path dataRecordingPath){
+    public RecordFixedPoints(InputManager inputManager, PointsOnMeshTracker ptsMeshTracker, Path dataRecordingPath){
         super(inputManager,"recordFixedPts",KeyInput.KEY_T);
-        this.locTracker = locTracker;
+        this.ptsMeshTracker = ptsMeshTracker;
         this.dataRecordingPath = dataRecordingPath;
         currentPtsRecording = new ArrayList<Vector3f>();
     }
     
     @Override
     public void actionMethod() {
-        currentPt = locTracker.getCurrentPosition();
+        currentPt = ptsMeshTracker.getCurrentPointOnMesh();
+        
+        if(currentPt == null) return;
         
         if(recording){
             
@@ -54,11 +58,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
              */
             if(currentPt.equals(lastRecordedPt)){
                 
-                System.out.println("Now putting vertices into text file");
-                GeometryDataHelper.writeVerticesToDataFile(currentPtsRecording, 
-                        dataRecordingPath, "fixedPoints");
-                resetRecording();
-                System.out.println("Finished adding vertices to text file");
+                writeVerticesAndReset();
                 
             }else{
                 addCurrentPoint();
@@ -74,15 +74,39 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
         }
     }
     
+    private void writeVerticesAndReset(){
+        System.out.println("Now putting vertices into text file");
+        GeometryDataHelper.writeVerticesToDataFile(currentPtsRecording, 
+                dataRecordingPath, "fixedPoints");
+        resetRecording();
+        System.out.println("Finished adding vertices to text file");
+    }
+    
     private void resetRecording(){
         currentPtsRecording.clear();
         recording = false;
     }
     
     private void addCurrentPoint(){
-        currentPtsRecording.add(currentPt);
-        System.out.println("Point: " + currentPt + " has been added to list");
-        lastRecordedPt = currentPt.clone();
+
+        MeshTriangle currentTri = ptsMeshTracker.getCurrentTriangleOnMesh();
+        
+        if(currentTri == null){
+            
+            System.out.println("Not on Mesh yet. Point Not recorded");
+            
+        }else{
+            
+            currentPtsRecording.add(currentPt);
+            System.out.println("Point: " + currentPt + " has been added to list");
+            currentPtsRecording.add(currentTri.getVertex1().getVertex());
+            currentPtsRecording.add(currentTri.getVertex2().getVertex());
+            currentPtsRecording.add(currentTri.getVertex3().getVertex());
+            lastRecordedPt = currentPt.clone();
+            
+        }
+
+        
     }
     
 }

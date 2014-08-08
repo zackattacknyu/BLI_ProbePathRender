@@ -153,7 +153,7 @@ public class Main extends SimpleApplication {
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
-        new RecordFixedPoints(inputManager,activeTracker,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
+        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         
         outputText = new LiveTrackingText(guiNode,assetManager);
         
