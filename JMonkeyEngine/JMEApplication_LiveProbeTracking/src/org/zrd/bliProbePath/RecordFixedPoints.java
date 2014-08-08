@@ -27,8 +27,8 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     
     private Vector3f lastRecordedPt;
     private Vector3f currentPt;
-    private ArrayList<Vector3f> currentPtsRecording;
     private PointsOnMeshTracker ptsMeshTracker;
+    private FixedPointIO fixedPointOutput;
     private boolean recording = false;
     private Path dataRecordingPath;
     
@@ -36,7 +36,6 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
         super(inputManager,"recordFixedPts",KeyInput.KEY_T);
         this.ptsMeshTracker = ptsMeshTracker;
         this.dataRecordingPath = dataRecordingPath;
-        currentPtsRecording = new ArrayList<Vector3f>();
     }
     
     @Override
@@ -65,6 +64,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
             
             //we are now recording and put the first point in the array list
             System.out.println("Now recording points");
+            fixedPointOutput = new FixedPointIO();
             addCurrentPoint();
             recording = true;
             
@@ -72,15 +72,7 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     }
     
     private void writeVerticesAndReset(){
-        System.out.println("Now putting vertices into text file");
-        GeometryDataHelper.writeVerticesToDataFile(currentPtsRecording, 
-                dataRecordingPath, "fixedPoints");
-        resetRecording();
-        System.out.println("Finished adding vertices to text file");
-    }
-    
-    private void resetRecording(){
-        currentPtsRecording.clear();
+        fixedPointOutput.writeInformationToFile(dataRecordingPath);
         recording = false;
     }
     
@@ -93,12 +85,8 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
             System.out.println("Not on Mesh yet. Point Not recorded");
             
         }else{
-            
-            currentPtsRecording.add(currentPt);
+            fixedPointOutput.addPoint(currentPt, currentTri);
             System.out.println("Point: " + currentPt + " has been added to list");
-            currentPtsRecording.add(currentTri.getVertex1().getVertex());
-            currentPtsRecording.add(currentTri.getVertex2().getVertex());
-            currentPtsRecording.add(currentTri.getVertex3().getVertex());
             lastRecordedPt = currentPt.clone();
             
         }
