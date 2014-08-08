@@ -61,7 +61,7 @@ public class Main extends SimpleApplication {
     
     private boolean renderPathsDuringRecording = false;
     
-    
+    private ImportFixedPoints fixedPtsImport;
     
     public static void main(String[] args) {
         Properties appProps = Properties_BLIProbePath.getProperties();
@@ -154,7 +154,7 @@ public class Main extends SimpleApplication {
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
         new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
-        
+        fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         outputText = new LiveTrackingText(guiNode,assetManager);
         
         //RotationTesting.doRotationTesting();

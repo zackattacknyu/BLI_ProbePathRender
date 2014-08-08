@@ -25,10 +25,22 @@ public class FixedPointIO {
         correspondingTriangles = new ArrayList<MeshTriangle>();
         outputVertices = new ArrayList<Vector3f>();
     }
+
+    public ArrayList<Vector3f> getFixedPoints() {
+        return fixedPoints;
+    }
+
+    public ArrayList<MeshTriangle> getCorrespondingTriangles() {
+        return correspondingTriangles;
+    }
     
     public FixedPointIO(ArrayList<Vector3f> outputVerts){
         
+        fixedPoints = new ArrayList<Vector3f>();
+        correspondingTriangles = new ArrayList<MeshTriangle>();
+        
         int numVerts = outputVerts.size();
+        
         if(numVerts % 4 == 0){
             for(int i = 0; i < numVerts/4; i++){
                 
@@ -40,6 +52,7 @@ public class FixedPointIO {
                 
             }
         }
+        
     }
     
     public void addPoint(Vector3f fixedPoint, MeshTriangle correspondingTriangle){
