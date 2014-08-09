@@ -5,6 +5,7 @@
 package org.zrd.bliProbePath;
 
 import com.jme3.math.Vector3f;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,11 @@ public class FixedPointIO {
     
     public FixedPointIO(){
         outputVertices = new ArrayList<Vector3f>();
+    }
+    
+    public static FixedPointIO getPointsFromFile(File fileToImport){
+        ArrayList<Vector3f> vertices = GeometryDataHelper.getVerticesFromFile(fileToImport);
+        return new FixedPointIO(vertices);
     }
 
     public FixedPointIO(ArrayList<Vector3f> outputVerts){
