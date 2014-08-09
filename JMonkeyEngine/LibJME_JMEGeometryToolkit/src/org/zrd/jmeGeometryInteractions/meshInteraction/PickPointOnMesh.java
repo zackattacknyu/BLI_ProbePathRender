@@ -8,6 +8,7 @@ import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
@@ -82,10 +83,15 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
             //restrict ourselves to fixed points in this case
             if(ptPicker != null){
                 returnPoint = (PointOnMeshData)(ptPicker.getNearestPointData(returnPoint.getPointCoords()));
+                
+                pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleContainingPoint());
+            }else{
+                
+                //gives the method the closest collision point
+                pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleWithPt());
             }
             
-            //gives the method the closest collision point
-            pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleWithPt());
+            
         }
     }
 

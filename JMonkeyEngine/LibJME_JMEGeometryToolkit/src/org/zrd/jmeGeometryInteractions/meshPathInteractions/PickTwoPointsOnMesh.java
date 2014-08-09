@@ -134,6 +134,13 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     public MeshTriangle getEndingTriangle(){
         return endingTriangle;
     }
+    
+    @Override
+     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh){
+         handleNewMeshPoint(pointOnMesh,
+                 MeshInputHelper.convertInputTriangleToMeshTriangle(
+                 triangleOnMesh, meshInfo.getTransform()));
+     }
 
     /**
      * This takes in the point on the mesh and the triangle at that point
@@ -146,7 +153,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
      * @param triangleOnMesh    the triangle at that point
      */
     @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
         
         //makes sure the action has been enabled
         if(twoPointPickEnabled){
@@ -160,7 +167,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     lastPointClicked = startPoint;
                     
                     //registers the starting triangle
-                    startingTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    startingTriangle = triangleOnMesh.clone();
                     
                     //calls the action that handles the start point
                     handleStartPoint(startPoint);
@@ -178,7 +185,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     lastPointClicked = endPoint;
                     
                     //registers the ending triangle
-                    endingTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, meshInfo.getTransform());
+                    endingTriangle = triangleOnMesh.clone();
                     
                     //gets the active pre-transformed path
                     ArrayList<Vector3f> activePath = getActivePathAtEndpoint();

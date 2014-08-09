@@ -48,7 +48,7 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
     }
 
     @Override
-    public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
         ArrayList<String> fileStrings = new ArrayList<String>(10);
         ArrayList<String> pointStrings = new ArrayList<String>(10);
         ArrayList<String> currentTriStrings = new ArrayList<String>(10);
@@ -67,12 +67,11 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         origTriStrings.add(String.valueOf(triangleOnMesh.get3()));
         */
 
-        MeshTriangle meshTri = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, triangleTransform);
         currentTriStrings.add(" ");
         currentTriStrings.add("Triangle On Current Mesh: ");
-        currentTriStrings.add(String.valueOf(meshTri.getVertex1()));
-        currentTriStrings.add(String.valueOf(meshTri.getVertex2()));
-        currentTriStrings.add(String.valueOf(meshTri.getVertex3()));
+        currentTriStrings.add(String.valueOf(triangleOnMesh.getVertex1()));
+        currentTriStrings.add(String.valueOf(triangleOnMesh.getVertex2()));
+        currentTriStrings.add(String.valueOf(triangleOnMesh.getVertex3()));
         
         //decide the order in which to put the strings
         fileStrings.addAll(pointStrings);
@@ -82,6 +81,11 @@ public class PickAndRecordPoint extends GeneralKeyboardActionMethod implements M
         Path outputFilePath = GeneralFileHelper.getNewDataFilePath(recordedFilePath, "meshPointPicked");
         FileDataHelper.exportLinesToFile(fileStrings, outputFilePath);
         
+    }
+    
+    @Override
+    public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh){
+        handleNewMeshPoint(pointOnMesh,MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, triangleTransform));
     }
     
     

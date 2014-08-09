@@ -65,10 +65,17 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
 
     @Override
     public void handleNewMeshPoint(Vector3f pointOnMesh, Triangle triangleOnMesh) {
+        handleNewMeshPoint(pointOnMesh,
+                MeshInputHelper.convertInputTriangleToMeshTriangle(
+                triangleOnMesh, transform));
+    }
+    
+    @Override
+    public void handleNewMeshPoint(Vector3f pointOnMesh, MeshTriangle triangleOnMesh) {
         if(moveProbeEnabled){
             currentPickedPoint = pointOnMesh.clone();
             activeTracker.setCurrentPosition(currentPickedPoint);
-            currentPickedTriangle = MeshInputHelper.convertInputTriangleToMeshTriangle(triangleOnMesh, transform);
+            currentPickedTriangle = triangleOnMesh.clone();
         }
     }
 
