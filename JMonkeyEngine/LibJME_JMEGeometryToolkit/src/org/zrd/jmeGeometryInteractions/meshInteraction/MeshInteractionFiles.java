@@ -64,13 +64,6 @@ public class MeshInteractionFiles {
         fixedPointsFile = getMeshInteractionFile("fixedPoints",".txt");
     }
     
-    public void displayFiles(){
-        System.out.println(dataFiles.getObjFile().getAbsolutePath());
-        System.out.println(dataFiles.getTextureFile().getAbsolutePath());
-        System.out.println(cameraCoordFile.getAbsolutePath());
-        System.out.println(fixedPointsFile.getAbsolutePath());
-    }
-    
     private File getMeshInteractionFile(String prefix,String fileExtension){
         return locationOfFiles.resolve(prefix + "_" + suffixOfFiles + fileExtension).toFile();
     }
