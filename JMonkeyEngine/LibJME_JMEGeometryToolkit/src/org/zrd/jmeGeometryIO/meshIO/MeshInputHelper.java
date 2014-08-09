@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
@@ -182,7 +183,7 @@ public class MeshInputHelper {
     }
     
     public static MeshRenderData selectFilesAndGenerateRenderData(File initImport, AssetManager assetManager){
-        MeshDataFiles meshFiles = MeshInputHelper.obtainFiles(initImport);
+        MeshDataFiles meshFiles = MeshInputHelper.obtainAllFiles(initImport);
         if(meshFiles == null){
             return null;
         }else{
@@ -235,6 +236,20 @@ public class MeshInputHelper {
         if(textureFile == null) return null;
         
         return new MeshDataFiles(objFile, textureFile);
+    }
+    
+    public static MeshDataFiles obtainAllFiles(File initImportDirectory) {
+        
+        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
+        File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
+        
+        if(objFile == null) return null;
+        
+        MeshInteractionFiles interactionFiles = new MeshInteractionFiles(objFile);
+        
+        interactionFiles.displayFiles();
+        
+        return interactionFiles.getDataFiles();
     }
     
 }

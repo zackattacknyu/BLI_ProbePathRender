@@ -19,6 +19,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointData;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
@@ -66,6 +67,7 @@ public class Main extends SimpleApplication {
     private boolean renderPathsDuringRecording = false;
     
     private ImportFixedPoints fixedPtsImport;
+    private FixedPointPicker fixedPtsToPick;
     
     private Material fixedPtMaterial;
     
@@ -153,10 +155,10 @@ public class Main extends SimpleApplication {
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
         boolean useFixedPoints = true;
+        fixedPtsToPick = FixedPointsOnLolaMesh.pointPicker;
         
         probeMoveAction = useFixedPoints ? 
-                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,
-                    FixedPointsOnLolaMesh.pointPicker) : 
+                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,fixedPtsToPick) : 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,meshInfo.getTransform());
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
