@@ -183,11 +183,11 @@ public class MeshInputHelper {
     }
     
     public static MeshRenderData selectFilesAndGenerateRenderData(File initImport, AssetManager assetManager){
-        MeshDataFiles meshFiles = MeshInputHelper.obtainAllFiles(initImport);
+        MeshInteractionFiles meshFiles = MeshInputHelper.obtainAllFiles(initImport);
         if(meshFiles == null){
             return null;
         }else{
-            return generateRenderData(meshFiles,assetManager);
+            return generateRenderData(meshFiles.getDataFiles(),assetManager);
         }
     }
 
@@ -238,18 +238,14 @@ public class MeshInputHelper {
         return new MeshDataFiles(objFile, textureFile);
     }
     
-    public static MeshDataFiles obtainAllFiles(File initImportDirectory) {
+    public static MeshInteractionFiles obtainAllFiles(File initImportDirectory) {
         
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
         File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
         
         if(objFile == null) return null;
         
-        MeshInteractionFiles interactionFiles = new MeshInteractionFiles(objFile);
-        
-        interactionFiles.displayFiles();
-        
-        return interactionFiles.getDataFiles();
+        return new MeshInteractionFiles(objFile);
     }
     
 }
