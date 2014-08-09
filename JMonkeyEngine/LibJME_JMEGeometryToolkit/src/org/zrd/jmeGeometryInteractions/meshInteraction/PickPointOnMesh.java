@@ -88,5 +88,11 @@ public class PickPointOnMesh extends GeneralMouseActionMethod{
             pointHandler.handleNewMeshPoint(returnPoint.getPointCoords(), returnPoint.getTriangleWithPt());
         }
     }
+
+    public void setPtPicker(FixedPointPicker ptPicker) {
+        this.ptPicker = ptPicker;
+    }
+
+
     
 }

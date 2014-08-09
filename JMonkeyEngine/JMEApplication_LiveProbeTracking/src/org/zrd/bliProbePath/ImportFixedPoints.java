@@ -34,7 +34,7 @@ public class ImportFixedPoints extends GeneralKeyboardActionMethod{
         File fileToImport = GeneralFileHelper.importPathUsingFileSelector(initDirectory.toFile());
         ArrayList<Vector3f> vertices = GeometryDataHelper.getVerticesFromFile(fileToImport);
         importedPoints = new FixedPointIO(vertices);
-        if(importedPoints.getFixedPoints().size() > 0){
+        if(importedPoints.getFixedPointsOnMesh().size() > 0){
             newPointsImported = true;
         }
     }

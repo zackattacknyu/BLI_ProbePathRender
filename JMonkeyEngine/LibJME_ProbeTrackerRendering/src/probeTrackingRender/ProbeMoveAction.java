@@ -32,17 +32,20 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     private MeshTriangle currentPickedTriangle;
     private Vector3f currentPickedPoint;
     private Matrix4f transform;
+    private PickPointOnMesh meshPointPicking;
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, Matrix4f transform){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);
-        new PickPointOnMesh("pickPointForProbeMove",inputManager,cam,this,shootableMesh,null);
+        meshPointPicking = new PickPointOnMesh("pickPointForProbeMove",
+                inputManager,cam,this,shootableMesh,null);
         this.transform = transform;
         this.activeTracker = probeTracker;
     }
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, FixedPointPicker fixedPtPicker){
         super(inputManager,"probeFixedPointMoveAction",KeyInput.KEY_K);
-        new PickPointOnMesh("pickFixedPointForProbeMove",inputManager,cam,this,shootableMesh,fixedPtPicker);
+        meshPointPicking = new PickPointOnMesh("pickFixedPointForProbeMove",
+                inputManager,cam,this,shootableMesh,fixedPtPicker);
         this.activeTracker = probeTracker;
     }
     
@@ -54,6 +57,10 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
         }else{
             probeMoveModeText = "Press J to Enable Clicking Probe Movement";
         }
+    }
+    
+    public void setFixedPointSet(FixedPointPicker fixedPtPicker){
+        meshPointPicking.setPtPicker(fixedPtPicker);
     }
 
     @Override

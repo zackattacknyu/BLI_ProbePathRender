@@ -19,6 +19,7 @@ import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.geometryToolkit.pointTools.PointData;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
@@ -151,7 +152,7 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        boolean useFixedPoints = false;
+        boolean useFixedPoints = true;
         
         probeMoveAction = useFixedPoints ? 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,
@@ -196,9 +197,11 @@ public class Main extends SimpleApplication {
         
         if(fixedPtsImport.isNewPointsImported()){
             
-            for(Vector3f fixedPt: fixedPtsImport.getImportedPoints().getFixedPoints()){
-                rootNode.attachChild(initBox(fixedPtMaterial,fixedPt));
+            for(PointData fixedPt: fixedPtsImport.getImportedPoints().getFixedPointsOnMesh()){
+                rootNode.attachChild(initBox(fixedPtMaterial,fixedPt.getPointCoords()));
             }
+            
+            probeMoveAction.setFixedPointSet(fixedPtsImport.getImportedPoints().getFixedPtPicker());
             
         }
     }

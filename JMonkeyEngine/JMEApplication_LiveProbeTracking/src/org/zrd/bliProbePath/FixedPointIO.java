@@ -7,8 +7,12 @@ package org.zrd.bliProbePath;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
+import org.zrd.geometryToolkit.pointTools.PointData;
+import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
 
 /**
  *
@@ -16,49 +20,45 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
  */
 public class FixedPointIO {
     
-    private ArrayList<Vector3f> fixedPoints;
-    private ArrayList<MeshTriangle> correspondingTriangles;
     private ArrayList<Vector3f> outputVertices;
+    private Collection<PointData> fixedPointsOnMesh;
     
     public FixedPointIO(){
-        fixedPoints = new ArrayList<Vector3f>();
-        correspondingTriangles = new ArrayList<MeshTriangle>();
         outputVertices = new ArrayList<Vector3f>();
     }
 
-    public ArrayList<Vector3f> getFixedPoints() {
-        return fixedPoints;
-    }
-
-    public ArrayList<MeshTriangle> getCorrespondingTriangles() {
-        return correspondingTriangles;
-    }
-    
     public FixedPointIO(ArrayList<Vector3f> outputVerts){
         
-        fixedPoints = new ArrayList<Vector3f>();
-        correspondingTriangles = new ArrayList<MeshTriangle>();
+        fixedPointsOnMesh = new ArrayList<PointData>();
         
         int numVerts = outputVerts.size();
+        
+        Vector3f currentFixedPt;
+        MeshTriangle currentTriangle;
         
         if(numVerts % 4 == 0){
             for(int i = 0; i < numVerts/4; i++){
                 
-                fixedPoints.add(outputVerts.get(i*4 + 0).clone());
-                correspondingTriangles.add(new MeshTriangle(
-                        outputVerts.get(i*4 + 1),
-                        outputVerts.get(i*4 + 2),
-                        outputVerts.get(i*4 + 3)));
+                currentFixedPt = outputVerts.get(i*4).clone();
+                currentTriangle = new MeshTriangle(outputVerts.get(i*4 + 1),outputVerts.get(i*4 + 2),outputVerts.get(i*4 + 3));
+                
+                fixedPointsOnMesh.add(new PointOnMeshData(currentFixedPt,currentTriangle));
                 
             }
         }
         
     }
+
+    public Collection<PointData> getFixedPointsOnMesh() {
+        return fixedPointsOnMesh;
+    }
+    
+    public FixedPointPicker getFixedPtPicker(){
+        return new FixedPointPicker(fixedPointsOnMesh);
+    }
     
     public void addPoint(Vector3f fixedPoint, MeshTriangle correspondingTriangle){
-        fixedPoints.add(fixedPoint);
         outputVertices.add(fixedPoint);
-        correspondingTriangles.add(correspondingTriangle);
         outputVertices.add(correspondingTriangle.getVertex1().getVertex());
         outputVertices.add(correspondingTriangle.getVertex2().getVertex());
         outputVertices.add(correspondingTriangle.getVertex3().getVertex());
