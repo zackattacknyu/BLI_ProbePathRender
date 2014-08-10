@@ -185,6 +185,8 @@ public class Main extends SimpleApplication {
         fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         outputText = new LiveTrackingText(guiNode,assetManager);
         
+        new RecordMeshSessionInfo(inputManager);
+        
         //RotationTesting.doRotationTesting();
         
     }
