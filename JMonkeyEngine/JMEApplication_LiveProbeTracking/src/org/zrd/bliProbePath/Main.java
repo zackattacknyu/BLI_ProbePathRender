@@ -181,11 +181,11 @@ public class Main extends SimpleApplication {
         
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
-        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
+        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH,meshInterFiles);
         fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         outputText = new LiveTrackingText(guiNode,assetManager);
         
-        new RecordMeshSessionInfo(inputManager);
+        new RecordMeshSessionInfo(inputManager,meshInterFiles);
         
         //RotationTesting.doRotationTesting();
         

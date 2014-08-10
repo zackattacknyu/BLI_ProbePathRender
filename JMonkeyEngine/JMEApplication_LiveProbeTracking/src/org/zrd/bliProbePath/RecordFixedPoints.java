@@ -10,7 +10,9 @@ import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
+import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import probeTrackingRender.ProbeMoveAction;
 
 /**
  *This records fixed points. If the user presses T, then
@@ -29,11 +31,17 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     private FixedPointIO fixedPointOutput;
     private boolean recording = false;
     private Path dataRecordingPath;
+    private MeshInteractionFiles meshInterFiles;
     
     public RecordFixedPoints(InputManager inputManager, PointsOnMeshTracker ptsMeshTracker, Path dataRecordingPath){
         super(inputManager,"recordFixedPts",KeyInput.KEY_T);
         this.ptsMeshTracker = ptsMeshTracker;
         this.dataRecordingPath = dataRecordingPath;
+    }
+
+    public RecordFixedPoints(InputManager inputManager, PointsOnMeshTracker ptsMeshTracker, Path dataRecordingPath, MeshInteractionFiles meshInterFiles) {
+        this(inputManager,ptsMeshTracker,dataRecordingPath);
+        this.meshInterFiles = meshInterFiles;
     }
     
     @Override

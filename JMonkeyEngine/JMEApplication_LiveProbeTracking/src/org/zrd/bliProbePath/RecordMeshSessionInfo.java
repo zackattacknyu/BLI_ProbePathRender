@@ -7,6 +7,7 @@ package org.zrd.bliProbePath;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import javax.swing.JOptionPane;
+import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
@@ -15,9 +16,11 @@ import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
  */
 public class RecordMeshSessionInfo extends GeneralKeyboardActionMethod{
     
+    private MeshInteractionFiles meshSessionFiles;
     
-    public RecordMeshSessionInfo(InputManager manager){
+    public RecordMeshSessionInfo(InputManager manager,MeshInteractionFiles meshSessionFiles){
         super(manager,"recordMeshSessionInfo",KeyInput.KEY_V);
+        this.meshSessionFiles = meshSessionFiles;
     }
 
     @Override
