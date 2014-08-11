@@ -172,7 +172,7 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        boolean useFixedPoints = true;
+        boolean useFixedPoints = false;
         
         
         probeMoveAction = useFixedPoints ? 

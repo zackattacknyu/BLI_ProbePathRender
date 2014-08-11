@@ -7,6 +7,7 @@ package org.zrd.bliProbePath;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
+import java.io.File;
 import java.nio.file.Path;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
@@ -78,7 +79,8 @@ public class RecordFixedPoints extends GeneralKeyboardActionMethod{
     }
     
     private void writeVerticesAndReset(){
-        fixedPointOutput.writeInformationToFile(dataRecordingPath);
+        File fixedPtsFile = fixedPointOutput.writeInformationToFile(dataRecordingPath);
+        meshInterFiles.setFixedPointsFileToCopy(fixedPtsFile);
         recording = false;
     }
     

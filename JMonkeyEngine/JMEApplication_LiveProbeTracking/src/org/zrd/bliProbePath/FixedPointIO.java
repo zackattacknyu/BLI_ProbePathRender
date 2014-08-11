@@ -14,6 +14,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointData;
 import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
@@ -70,10 +71,13 @@ public class FixedPointIO {
         outputVertices.add(correspondingTriangle.getVertex3().getVertex());
     }
     
-    public void writeInformationToFile(Path dataPath){
+    public File writeInformationToFile(Path dataPath){
         System.out.println("Now putting vertices into text file");
-        GeometryDataHelper.writeVerticesToDataFile(outputVertices,dataPath, "fixedPoints");
+        //GeometryDataHelper.writeVerticesToDataFile(outputVertices,dataPath, "fixedPoints");
+        Path textFilePath = GeneralFileHelper.getNewDataFilePath(dataPath, "fixedPoints");
+        GeometryDataHelper.writeVerticesToFile(outputVertices, textFilePath);
         System.out.println("Finished adding vertices to text file");
+        return textFilePath.toFile();
     }
     
 }

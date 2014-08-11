@@ -35,6 +35,7 @@ public class RecordMeshSessionInfo extends GeneralKeyboardActionMethod{
         
         if(option == JOptionPane.YES_OPTION){
             System.out.println("Yes Option Chosen");
+            meshSessionFiles.copyFixedPointsFile();
         }
     }
     

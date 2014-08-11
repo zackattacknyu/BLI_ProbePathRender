@@ -5,7 +5,12 @@
 package org.zrd.jmeGeometryInteractions.meshInteraction;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zrd.jmeGeometryIO.meshIO.MeshDataFiles;
 
 /**
@@ -32,6 +37,9 @@ public class MeshInteractionFiles {
     private File fixedPointsFile;
     private Path locationOfFiles;
     private String suffixOfFiles;
+    
+    private File cameraCoordFileToCopy;
+    private File fixedPointsFileToCopy;
 
     public MeshDataFiles getDataFiles() {
         return dataFiles;
@@ -43,6 +51,23 @@ public class MeshInteractionFiles {
 
     public File getFixedPointsFile() {
         return fixedPointsFile;
+    }
+
+    public void setCameraCoordFileToCopy(File cameraCoordFileToCopy) {
+        this.cameraCoordFileToCopy = cameraCoordFileToCopy;
+    }
+
+    public void setFixedPointsFileToCopy(File fixedPointsFileToCopy) {
+        this.fixedPointsFileToCopy = fixedPointsFileToCopy;
+    }
+    
+    public void copyFixedPointsFile(){
+        try {
+            Files.copy(fixedPointsFileToCopy.toPath(), fixedPointsFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            System.out.println("Error copying mesh interaction files: " + ex);
+        }
     }
     
     public MeshInteractionFiles(File meshObjFile){
@@ -65,7 +90,11 @@ public class MeshInteractionFiles {
     }
     
     private File getMeshInteractionFile(String prefix,String fileExtension){
-        return locationOfFiles.resolve(prefix + "_" + suffixOfFiles + fileExtension).toFile();
+        return locationOfFiles.resolve(getMeshInteractionFileName(prefix,fileExtension)).toFile();
+    }
+    
+    private String getMeshInteractionFileName(String prefix, String fileExtension){
+        return prefix + "_" + suffixOfFiles + fileExtension;
     }
     
 }
