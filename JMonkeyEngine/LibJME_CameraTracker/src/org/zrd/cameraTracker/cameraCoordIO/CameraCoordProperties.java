@@ -56,9 +56,9 @@ public class CameraCoordProperties {
         this(cam.getLocation(),cam.getRotation());
     }
     
-    public static void writeCameraCoordinatesToFile(Camera cam, Path dataFolder){
+    public static File writeCameraCoordinatesToFile(Camera cam, Path dataFolder){
         CameraCoordProperties camCoordProps = new CameraCoordProperties(cam);
-        camCoordProps.writeCameraCoordProperties(dataFolder);
+        return camCoordProps.writeCameraCoordProperties(dataFolder);
     }
     
     public static void selectFileAndSetCameraCoords(Camera cam, File initDirectory){
@@ -77,8 +77,8 @@ public class CameraCoordProperties {
         setCamRotationProperties(rotation);
     }
     
-    public void writeCameraCoordProperties(Path folder){
-        PropertiesHelper.writePropertiesFile(camCoords, folder, 
+    public File writeCameraCoordProperties(Path folder){
+        return PropertiesHelper.writePropertiesFile(camCoords, folder, 
                 "cameraCoords","---Camera Location and Rotation Information---");
     }
     

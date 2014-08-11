@@ -28,7 +28,7 @@ public class PropertiesHelper {
         return Boolean.valueOf(props.getProperty(propertyName));
     }
     
-    public static void writePropertiesFile(Properties propsFile, Path dataPath, String prefix, String comments){
+    public static File writePropertiesFile(Properties propsFile, Path dataPath, String prefix, String comments){
         ProbeDataWriter dataWriting = ProbeDataWriter.getNewWriter(dataPath, prefix);
         try {
             propsFile.store(dataWriting.getOutputFileWriter(), comments);
@@ -36,7 +36,7 @@ public class PropertiesHelper {
             System.out.println("Error writing properties file: " + ex);
         }
         ProbeDataWriter.closeWriter(dataWriting);
-        
+        return dataWriting.getOutputFile();
     }
     
     /**

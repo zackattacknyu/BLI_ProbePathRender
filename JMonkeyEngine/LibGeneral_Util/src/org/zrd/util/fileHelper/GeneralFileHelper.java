@@ -28,6 +28,17 @@ public class GeneralFileHelper {
             }
         }
     }
+    
+    public static void copyFileIfNotNull(File sourceFile, File targetFile){
+        try {
+            if(sourceFile != null && sourceFile.exists()){
+                Files.copy(sourceFile.toPath(), targetFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException ex) {
+            System.out.println("Error copying mesh interaction files: " + ex);
+        }
+    }
 
     /**
      * This opens the file chooser window and puts into a file object

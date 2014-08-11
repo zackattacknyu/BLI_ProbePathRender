@@ -4,6 +4,7 @@
  */
 package org.zrd.jmeGeometryIO.meshIO;
 
+import org.zrd.util.fileHelper.MeshDataFiles;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
+import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 

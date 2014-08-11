@@ -2,16 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryInteractions.meshInteraction;
+package org.zrd.util.fileHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.zrd.jmeGeometryIO.meshIO.MeshDataFiles;
+import org.zrd.util.fileHelper.MeshDataFiles;
 
 /**
  * 
@@ -61,13 +59,11 @@ public class MeshInteractionFiles {
         this.fixedPointsFileToCopy = fixedPointsFileToCopy;
     }
     
-    public void copyFixedPointsFile(){
-        try {
-            Files.copy(fixedPointsFileToCopy.toPath(), fixedPointsFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            System.out.println("Error copying mesh interaction files: " + ex);
-        }
+   
+    
+    public void copyFiles(){
+        GeneralFileHelper.copyFileIfNotNull(fixedPointsFileToCopy, fixedPointsFile);
+        GeneralFileHelper.copyFileIfNotNull(cameraCoordFileToCopy, cameraCoordFile);
     }
     
     public MeshInteractionFiles(File meshObjFile){

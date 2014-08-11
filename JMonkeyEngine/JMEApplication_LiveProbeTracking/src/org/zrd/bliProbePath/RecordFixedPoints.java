@@ -11,7 +11,7 @@ import java.io.File;
 import java.nio.file.Path;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
-import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
+import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import probeTrackingRender.ProbeMoveAction;
 

@@ -27,7 +27,7 @@ import static org.zrd.jmeGeometryIO.meshIO.MeshInputHelper.generateRenderData;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
-import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
+import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
@@ -110,10 +110,8 @@ public class Main extends SimpleApplication {
                 Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
         boolean showBackground = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "showBackground");
-        
+
         cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH);
-        
         int cameraMode = ballMeshOn ? 3 : 1;
         cameraTracker.setDefaultCamera((short)cameraMode);
         
@@ -138,6 +136,10 @@ public class Main extends SimpleApplication {
             }
             
         }
+        
+        
+        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
+        
         
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
 

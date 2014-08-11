@@ -7,7 +7,7 @@ package org.zrd.bliProbePath;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import javax.swing.JOptionPane;
-import org.zrd.jmeGeometryInteractions.meshInteraction.MeshInteractionFiles;
+import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 
 /**
@@ -35,7 +35,7 @@ public class RecordMeshSessionInfo extends GeneralKeyboardActionMethod{
         
         if(option == JOptionPane.YES_OPTION){
             System.out.println("Yes Option Chosen");
-            meshSessionFiles.copyFixedPointsFile();
+            meshSessionFiles.copyFiles();
         }
     }
     

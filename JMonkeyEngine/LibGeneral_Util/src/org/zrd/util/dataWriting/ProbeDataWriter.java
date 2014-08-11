@@ -101,6 +101,10 @@ public class ProbeDataWriter {
             System.out.println("Exception thrown trying to close writer: " + ex);
         }
     }
+
+    public File getOutputFile() {
+        return outputFile;
+    }
     
     /**
      * This is a static method that takes in a data writer and writes a line
