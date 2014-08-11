@@ -1,5 +1,8 @@
 package org.zrd.bliProbePath;
 
+import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
+import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
+import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
 import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
