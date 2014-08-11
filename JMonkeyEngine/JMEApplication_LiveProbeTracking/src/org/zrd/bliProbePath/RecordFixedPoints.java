@@ -13,7 +13,6 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import probeTrackingRender.ProbeMoveAction;
 
 /**
  *This records fixed points. If the user presses T, then
