@@ -73,7 +73,6 @@ public class FixedPointIO {
     
     public File writeInformationToFile(Path dataPath){
         System.out.println("Now putting vertices into text file");
-        //GeometryDataHelper.writeVerticesToDataFile(outputVertices,dataPath, "fixedPoints");
         Path textFilePath = GeneralFileHelper.getNewDataFilePath(dataPath, "fixedPoints");
         GeometryDataHelper.writeVerticesToFile(outputVertices, textFilePath);
         System.out.println("Finished adding vertices to text file");
