@@ -21,6 +21,10 @@ import java.nio.file.Path;
  * - PNG file has format "textureDefinition_{suffix}.png"
  * - TXT file with camera coords has format "cameraCoords_{suffix}.txt"
  * - TXT file with fixed points has format "fixedPoints_{suffix}.txt"
+ * 
+ * The files to copy represent the file objects for the current camera 
+ *      coordinate or fixed point file. When they are copied, they
+ *      are put into the same folder as the OBJ file. 
  *
  * @author BLI
  */
