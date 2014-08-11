@@ -15,9 +15,14 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
  */
 public class CameraCoordIO {
     
+    
+    
+    
     public CameraCoordIO(InputManager inputManager, Camera cam, Path dataPath,MeshInteractionFiles meshInterFiles){
         new OutputCameraCoordinates(inputManager,cam,dataPath,meshInterFiles);
         new ImportCameraCoordinates(inputManager,cam,dataPath);
     }
-    
+    public CameraCoordIO(InputManager inputManager, Camera cam, Path dataPath){
+        this(inputManager,cam,dataPath,null);
+    }
 }
