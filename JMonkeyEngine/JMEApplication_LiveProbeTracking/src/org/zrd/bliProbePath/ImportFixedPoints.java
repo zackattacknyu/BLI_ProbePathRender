@@ -4,6 +4,7 @@
  */
 package org.zrd.bliProbePath;
 
+import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import java.io.File;

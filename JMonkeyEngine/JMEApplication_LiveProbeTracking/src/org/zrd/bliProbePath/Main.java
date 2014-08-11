@@ -1,5 +1,6 @@
 package org.zrd.bliProbePath;
 
+import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
