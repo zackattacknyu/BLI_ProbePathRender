@@ -19,7 +19,9 @@ import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointRender;
 import org.zrd.jmeUtil.materials.MaterialHelper;
+import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
+import org.zrd.util.properties.PropertiesHelper;
 
 /**
  *
@@ -32,6 +34,10 @@ public class MeshSession {
     private Node shootableMesh;
     private Node fixedPointNode;
     private FixedPointPicker fixedPtsToPick;
+    
+    public MeshSession(AssetManager assetManager,Camera cam){
+        this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
+    }
     
     public MeshSession(Path meshDataPath,Properties props,AssetManager assetManager, Camera cam){
         

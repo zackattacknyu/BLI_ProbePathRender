@@ -6,24 +6,17 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Properties;
+import meshSessionTools.MeshSession;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
-import org.zrd.cameraTracker.cameraMoves.CameraTracker;
-import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
-import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveAction;
 import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
-import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
-import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
-import org.zrd.jmeGeometryIO.renderedObjects.SphereMesh;
-import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
+import org.zrd.util.fileHelper.FilePathHelper;
 
 /**
  * test
@@ -31,10 +24,6 @@ import org.zrd.jmeUtil.materials.MaterialHelper;
  */
 public class Main extends SimpleApplication {
     
-    private boolean sphereOn = false;
-    private Spatial surface;
-    private TriangleSet meshInfo;
-    private Node shootables;
     private RecordedPathSet recordedPathSet;
     private Material lineMaterial;
     private LineMoveAction lineMoveAction;
@@ -49,39 +38,21 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         recordedPathSet = new RecordedPathSet();
-        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
+        ApplicationHelper.setBackgroundColor(viewPort);
         
-        File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
+        MeshSession currentSession = new MeshSession(assetManager,cam);
+        Node shootables = currentSession.getShootableMesh();
+        FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
+        TriangleSet meshInfo = currentSession.getMeshInfo();
         
-        CameraTracker cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
-        /*if(sphereOn){
-            cameraTracker.setDefaultCamera((short)0);
-        }else{
-            cameraTracker.setDefaultCamera((short)1);
-        }*/
+        new CameraTrackerImpl(cam,flyCam,inputManager);
         
-        MeshRenderData activeMesh;
-        if(sphereOn){
-            activeMesh = new SphereMesh(assetManager);
-        }else{
-            activeMesh = new LolaMesh(assetManager);
-        }
-        
-        if(!sphereOn){
-            rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
-        }
-
-        meshInfo = activeMesh.getActiveMeshInfo();
-        surface = activeMesh.getSurfaceMesh();
-        
-        shootables = new Node("shootables");
-        shootables.attachChild(surface);
         
         rootNode.attachChild(shootables);
         
         lineMoveAction = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo);
-        lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,FixedPointsOnLolaMesh.pointPicker);
-        pathImport = new PathImport(inputManager,recordedPathSet,initialImportDirectory);
+        lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
+        pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
     }
 

@@ -94,9 +94,7 @@ public class Main extends SimpleApplication {
         outputText = new LiveTrackingText(guiNode,assetManager);
 
         //initializes the mesh session variables
-        MeshSession currentSession = new MeshSession(
-                FilePathHelper.getDefaultInputFolder(),
-                props,assetManager,cam);
+        MeshSession currentSession = new MeshSession(assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
