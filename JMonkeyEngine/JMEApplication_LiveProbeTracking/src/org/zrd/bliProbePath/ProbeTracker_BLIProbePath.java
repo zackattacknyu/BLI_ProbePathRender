@@ -11,7 +11,7 @@ import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
-import org.zrd.util.fileHelper.PathHelper;
+import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.properties.PropertiesHelper;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
@@ -66,7 +66,7 @@ public class ProbeTracker_BLIProbePath {
         
         return ProbeTracker.initializeProbeTracker(
                 currentSourceTracker, displacementMode, 
-                PathHelper.getDefaultOutputFolder(), 
+                FilePathHelper.getDefaultOutputFolder(), 
                 finalScaleX, finalScaleY, startingPosition,initQuat);
     }
     

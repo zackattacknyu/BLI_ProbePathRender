@@ -3,13 +3,10 @@ package org.zrd.rawProbeDataDisplay;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportMesh;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
-import org.zrd.util.properties.PropertiesHelper;
+import org.zrd.util.fileHelper.FilePathHelper;
 
 /**
  * test
@@ -28,23 +25,11 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
+
+        meshImportAction = new ImportMesh(inputManager,assetManager,FilePathHelper.getDefaultInputFolder().toFile());
         
-        File initialImportDirectory = Paths.get(
-                "C:\\"
-                + "Users\\"
-                + "BLI\\"
-                + "Desktop\\"
-                + "BLI_ProbePathRender\\"
-                + "meshedReconstructionFiles\\"
-                + "reconstructions").toFile();
-        
-        new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
-        
-        Path logPath = Paths.get("textFiles");
-        
-        meshImportAction = new ImportMesh(inputManager,assetManager,initialImportDirectory);
-        
-        new CameraCoordIO(inputManager,cam,logPath);
+        new CameraTrackerImpl(cam,flyCam,inputManager);
+        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultOutputFolder());
     }
 
     @Override

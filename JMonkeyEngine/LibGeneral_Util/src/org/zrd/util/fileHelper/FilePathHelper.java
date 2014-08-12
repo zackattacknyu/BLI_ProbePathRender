@@ -11,7 +11,7 @@ import java.nio.file.Paths;
  *
  * @author Zach
  */
-public class PathHelper {
+public class FilePathHelper {
     
     public static final String DEFAULT_INPUT_FOLDER_NAME = "input";
     public static final String DEFAULT_OUTPUT_FOLDER_NAME = "output";

@@ -27,7 +27,7 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import probeTrackingRender.ProbeMoveAction;
 import probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
-import org.zrd.util.fileHelper.PathHelper;
+import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.properties.PropertiesHelper;
 import probeTrackingRender.ProbeTrackerRecording;
 import probeTrackingRender.ProbeTrackerRender;
@@ -85,7 +85,7 @@ public class Main extends SimpleApplication {
         
         //initializes the variables
         Properties props = PropertiesHelper.getDefaultProperties();
-        Path defaultOutputPath = PathHelper.getDefaultOutputFolder();
+        Path defaultOutputPath = FilePathHelper.getDefaultOutputFolder();
         boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(props, "surfaceTrackingOn");
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
@@ -95,7 +95,7 @@ public class Main extends SimpleApplication {
 
         //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(
-                PathHelper.getDefaultInputFolder(),
+                FilePathHelper.getDefaultInputFolder(),
                 props,assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
