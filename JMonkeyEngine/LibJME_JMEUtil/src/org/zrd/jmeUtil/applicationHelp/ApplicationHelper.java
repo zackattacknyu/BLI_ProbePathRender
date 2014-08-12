@@ -8,6 +8,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
 import java.util.Properties;
+import org.zrd.util.properties.PropertiesHelper;
 
 /**
  * This helper code helps initialize the JME Applications.
@@ -84,6 +85,18 @@ public class ApplicationHelper {
     public static void initializeApplication(SimpleApplication app, Properties appProps){
         
         initializeApplication(app,getAppSettings(appProps));
+        
+    }
+    
+    /**
+     * This intializes an application using the properties file that contain
+     *      the important settings
+     * @param app           the application to start
+     * @param appProps      the proerties object containing the important info
+     */
+    public static void initializeApplication(SimpleApplication app){
+        
+        initializeApplication(app,PropertiesHelper.getDefaultProperties());
         
     }
 

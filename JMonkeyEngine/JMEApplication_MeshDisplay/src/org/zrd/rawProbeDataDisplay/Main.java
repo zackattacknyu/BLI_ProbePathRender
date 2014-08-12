@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
+import org.zrd.util.properties.PropertiesHelper;
 
 /**
  * test
@@ -19,8 +20,7 @@ public class Main extends SimpleApplication {
     private ImportMesh meshImportAction;
 
     public static void main(String[] args) {
-        Properties appProps = Properties_RawProbeDataDisplay.getProperties();
-        ApplicationHelper.initializeApplication(new Main(), appProps);
+        ApplicationHelper.initializeApplication(new Main());
     }
     
 

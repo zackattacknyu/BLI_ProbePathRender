@@ -57,8 +57,7 @@ public class Main extends SimpleApplication {
     private Material fixedPtMaterial;
     
     public static void main(String[] args) {
-        Properties appProps = PropertiesHelper.getDefaultProperties();
-        ApplicationHelper.initializeApplication(new Main(), appProps);
+        ApplicationHelper.initializeApplication(new Main());
     }
 
     @Override

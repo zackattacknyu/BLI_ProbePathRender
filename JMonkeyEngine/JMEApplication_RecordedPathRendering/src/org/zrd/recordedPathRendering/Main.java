@@ -42,8 +42,7 @@ public class Main extends SimpleApplication {
     private PathImport pathImport;
 
     public static void main(String[] args) {
-        Properties appProps = Properties_RecordedPathRendering.getProperties();
-        ApplicationHelper.initializeApplication(new Main(), appProps);
+        ApplicationHelper.initializeApplication(new Main());
     }
     
 

@@ -4,7 +4,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Properties;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
@@ -16,8 +15,7 @@ import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
 public class Main extends SimpleApplication {
 
     public static void main(String[] args) {
-        Properties appProps = Properties_RawProbeDataDisplay.getProperties();
-        ApplicationHelper.initializeApplication(new Main(), appProps);
+        ApplicationHelper.initializeApplication(new Main());
     }
     private File initialImportDirectory;
 
