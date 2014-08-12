@@ -1,6 +1,6 @@
 package org.zrd.bliProbePath;
 
-import meshSessionTools.MeshSession;
+import org.zrd.meshSessionTools.MeshSession;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;

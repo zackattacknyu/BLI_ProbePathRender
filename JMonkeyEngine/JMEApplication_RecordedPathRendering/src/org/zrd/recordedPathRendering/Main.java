@@ -6,7 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import meshSessionTools.MeshSession;
+import org.zrd.meshSessionTools.MeshSession;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
