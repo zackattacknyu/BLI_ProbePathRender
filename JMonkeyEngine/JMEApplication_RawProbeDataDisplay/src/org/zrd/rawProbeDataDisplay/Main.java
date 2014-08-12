@@ -3,10 +3,14 @@ package org.zrd.rawProbeDataDisplay;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
+import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
+import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
+import org.zrd.util.fileHelper.FilePathHelper;
 
 /**
  * test
@@ -17,17 +21,24 @@ public class Main extends SimpleApplication {
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
     }
-    private File initialImportDirectory;
 
     @Override
     public void simpleInitApp() {
         
-        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
-        initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
+        ApplicationHelper.setBackgroundColor(viewPort);
+        Path inputFolder = FilePathHelper.getDefaultInputFolder();
         
-        new CameraTrackerImpl_RawProbeDataDisplay(cam,flyCam,inputManager);
-        new RawXYDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
-        new RawYawPitchRollDataImport(inputManager,assetManager,rootNode,initialImportDirectory);
+        new CameraTrackerImpl(cam,flyCam,inputManager);
+        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultOutputFolder());
+        
+        File defaultCameraCoordsFile = inputFolder.resolve("defaultCameraCoords.txt").toFile();
+        if(defaultCameraCoordsFile.exists()){
+            CameraCoordProperties.setCameraCoordinatesUsingFile(cam, defaultCameraCoordsFile);
+        }
+        
+        
+        new RawXYDataImport(inputManager,assetManager,rootNode,inputFolder.toFile());
+        new RawYawPitchRollDataImport(inputManager,assetManager,rootNode,inputFolder.toFile());
     }
 
     @Override
