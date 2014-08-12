@@ -63,7 +63,7 @@ public class ProbeTracker_BLIProbePath {
         Quaternion initQuat = new Quaternion(quatW,quatX,quatY,quatZ);
         
         return ProbeTracker.initializeProbeTracker(
-                currentSourceTracker, displacementMode, Paths_BLIProbePath.PATH_RECORDING_PATH, 
+                currentSourceTracker, displacementMode, Paths_BLIProbePath.OUTPUT_PATH, 
                 finalScaleX, finalScaleY, startingPosition,initQuat);
     }
     

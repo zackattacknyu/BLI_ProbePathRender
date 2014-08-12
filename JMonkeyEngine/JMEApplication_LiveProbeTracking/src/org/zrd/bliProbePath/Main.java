@@ -93,7 +93,7 @@ public class Main extends SimpleApplication {
 
         //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(
-                Paths_BLIProbePath.MESH_SESSION_PATH,
+                Paths_BLIProbePath.INPUT_PATH,
                 Properties_BLIProbePath.getProperties(),
                 assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
@@ -110,7 +110,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(moveableObject);
         
         //initialize camera coordinate actions
-        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
+        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.OUTPUT_PATH,meshInterFiles);
         new CameraTrackerImpl(cam,flyCam,inputManager);
         
         //initialize trackers
@@ -122,9 +122,9 @@ public class Main extends SimpleApplication {
         new ResetTracker(inputManager,probeTracker);
         new ProbeRotationCalibration(
                 inputManager, cam, shootables, probeTracker, meshInfo,
-                Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
+                Paths_BLIProbePath.OUTPUT_PATH);
         new PickAndRecordPoint(inputManager,cam,
-                shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, meshInfo.getTransform());
+                shootables,Paths_BLIProbePath.OUTPUT_PATH, meshInfo.getTransform());
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
         //initialize active tracker actions
@@ -134,8 +134,8 @@ public class Main extends SimpleApplication {
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
         //initialize fixed points actions
-        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH,meshInterFiles);
-        fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
+        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.OUTPUT_PATH,meshInterFiles);
+        fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.OUTPUT_PATH);
         
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
