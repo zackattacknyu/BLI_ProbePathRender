@@ -58,7 +58,6 @@ public abstract class CameraTracker {
      * This is used to enable the default settings
      */
     protected void enableDefaults(){
-        setDefaultCamera();
         enableFlyCam();
     }
     
@@ -141,28 +140,10 @@ public abstract class CameraTracker {
      */
     protected abstract void moveOutward();
     
-    /**
-     * This sets the default settings for the camera
-     *      for the most common mode
-     */
-    public abstract void setDefaultCamera();
-    
-    /**
-     * This sets the default camera depending on the mode
-     * @param mode      mode depending on context
-     */
-    public abstract void setDefaultCamera(short mode);
     
     /**
      * This is meant to enable the fly by camera (w,a,s,d,q,z buttons)
      */
     protected abstract void enableFlyCam();
-    
-    /**
-     * Sets the default camera based on location and rotation
-     * @param defaultLocation       default location of camera
-     * @param defaultRotation       default rotation of camera
-     */
-    public abstract void setDefaultCamera(Vector3f defaultLocation, Quaternion defaultRotation);
     
 }

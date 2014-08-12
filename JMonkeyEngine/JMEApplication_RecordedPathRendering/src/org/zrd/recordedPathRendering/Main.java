@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import meshSessionTools.MeshSession;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
+import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
@@ -44,9 +45,8 @@ public class Main extends SimpleApplication {
         Node shootables = currentSession.getShootableMesh();
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         TriangleSet meshInfo = currentSession.getMeshInfo();
-        
-        new CameraTrackerImpl(cam,flyCam,inputManager);
-        
+
+        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam);
         
         rootNode.attachChild(shootables);
         

@@ -192,30 +192,6 @@ public class CameraTrackerImpl extends CameraTracker{
     }
     
     /**
-     * Sets up default camera
-     */
-    public void setDefaultCamera(){
-        setDefaultCamera(new Vector3f(),new Quaternion());
-    }
-    
-    /**
-     * Sets up default camera depending on the mode we are in.
-     *  By default it does nothing. It is meant to be overridden
-     * @param sphereOn 
-     */
-    public void setDefaultCamera(short mode){
-    }
-    
-    /**
-     * Sets default camera location.
-     * By default nothing happens. should be overridden
-     * @param defaultLocation       initial camera location
-     * @param defaultRotation       initial camera rotation
-     */
-    public void setDefaultCamera(Vector3f defaultLocation, Quaternion defaultRotation){
-    }
-    
-    /**
      * Enables the flyCam, which is a JME convience method to enable
      *  w,a,s,d,q,z movement of the camera
      */

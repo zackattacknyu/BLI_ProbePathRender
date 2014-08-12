@@ -5,6 +5,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
+import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
 
@@ -28,8 +29,7 @@ public class Main extends SimpleApplication {
 
         meshImportAction = new ImportMesh(inputManager,assetManager,FilePathHelper.getDefaultInputFolder().toFile());
         
-        new CameraTrackerImpl(cam,flyCam,inputManager);
-        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultOutputFolder());
+        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam);
     }
 
     @Override

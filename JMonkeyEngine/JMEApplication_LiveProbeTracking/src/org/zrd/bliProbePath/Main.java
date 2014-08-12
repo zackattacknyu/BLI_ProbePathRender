@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
+import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -109,8 +110,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(moveableObject);
         
         //initialize camera coordinate actions
-        new CameraCoordIO(inputManager,cam,defaultOutputPath,meshInterFiles);
-        new CameraTrackerImpl(cam,flyCam,inputManager);
+        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         
         //initialize trackers
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);

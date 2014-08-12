@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
+import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawXYDataImport;
 import org.zrd.rawProbeDataDisplay.rawDataRendering.RawYawPitchRollDataImport;
@@ -28,8 +29,7 @@ public class Main extends SimpleApplication {
         ApplicationHelper.setBackgroundColor(viewPort);
         Path inputFolder = FilePathHelper.getDefaultInputFolder();
         
-        new CameraTrackerImpl(cam,flyCam,inputManager);
-        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultOutputFolder());
+        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam);
         
         File defaultCameraCoordsFile = inputFolder.resolve("defaultCameraCoords.txt").toFile();
         if(defaultCameraCoordsFile.exists()){
