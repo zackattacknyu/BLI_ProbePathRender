@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryIO.renderedObjects;
+package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -19,6 +19,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
 
 /**
+ * UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  * 
  * This generates and transforms the Lola mesh for use
  *      by JME applications

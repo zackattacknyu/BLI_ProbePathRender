@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryIO.renderedObjects;
+package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -11,7 +11,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 
-/**
+/**UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  * 
  * This gets the mesh that is a sphere that was used
  *      for debugging purposes

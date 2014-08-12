@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryIO.renderedObjects;
+package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -11,6 +11,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 /**
+ * UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  *
  * This generates and transforms the background box that is meant
  *      to be put behind the Lola Mesh when using that one in a JME application
