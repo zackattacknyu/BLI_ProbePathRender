@@ -3,7 +3,6 @@ package org.zrd.bliProbePath;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
-import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -39,16 +38,9 @@ import probeTrackingRender.ResetTracker;
  */
 public class Main extends SimpleApplication {
     
-    private boolean surfaceTrackingOn = false;
-    
-    private Spatial moveableObject;
-    private Material lineMaterial;
-    
     private ProbeTrackerRender probeTrackerRender;
     private ProbeTracker probeTracker;
     private LocationTracker activeTracker;
-
-    private Node shootables;
     private RecordedPathSet recordedPathSet;
 
     private ProbeMoveAction probeMoveAction;
@@ -59,7 +51,6 @@ public class Main extends SimpleApplication {
     private boolean renderPathsDuringRecording = false;
     
     private ImportFixedPoints fixedPtsImport;
-    private FixedPointPicker fixedPtsToPick;
     
     private Material fixedPtMaterial;
     
@@ -91,62 +82,62 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
         
-        
-        surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
+        //initializes the variables
+        boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
+        Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
+        recordedPathSet = new RecordedPathSet();
+        Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
+        boolean useFixedPoints = false;
+        outputText = new LiveTrackingText(guiNode,assetManager);
 
-        new CameraTrackerImpl(cam,flyCam,inputManager);
-        
+        //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(
                 Paths_BLIProbePath.MESH_SESSION_PATH,
                 Properties_BLIProbePath.getProperties(),
                 assetManager,cam);
-        rootNode.attachChild(currentSession.getFixedPointNode());
-        shootables = currentSession.getShootableMesh();
-        rootNode.attachChild(shootables);
-        fixedPtsToPick = currentSession.getFixedPtsToPick();
+        Node shootables = currentSession.getShootableMesh();
+        FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
         TriangleSet meshInfo = currentSession.getMeshInfo();
         
-        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
-        
-        
+        //initialize the defaults
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
-
-        lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
-
-        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
         
-        moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
+        //display default objects
+        rootNode.attachChild(currentSession.getFixedPointNode());
+        rootNode.attachChild(shootables);
         rootNode.attachChild(moveableObject);
         
-        recordedPathSet = new RecordedPathSet();
-
+        //initialize camera coordinate actions
+        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
+        new CameraTrackerImpl(cam,flyCam,inputManager);
+        
+        //initialize trackers
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
+        activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
+        
+        //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
         new ProbeRotationCalibration(
                 inputManager, cam, shootables, probeTracker, meshInfo,
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
-        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
         new PickAndRecordPoint(inputManager,cam,
                 shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, meshInfo.getTransform());
-        
-        
-        activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        boolean useFixedPoints = false;
-        
-        
+        //initialize active tracker actions
         probeMoveAction = useFixedPoints ? 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,fixedPtsToPick) : 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,meshInfo.getTransform());
-        
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
+        //initialize fixed points actions
         new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH,meshInterFiles);
         fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
-        outputText = new LiveTrackingText(guiNode,assetManager);
         
+        //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
         
         //RotationTesting.doRotationTesting();

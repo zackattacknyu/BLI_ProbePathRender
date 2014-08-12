@@ -199,21 +199,20 @@ public class CameraTrackerImpl extends CameraTracker{
     }
     
     /**
-     * Sets up default camera depending on the mode we are in
+     * Sets up default camera depending on the mode we are in.
+     *  By default it does nothing. It is meant to be overridden
      * @param sphereOn 
      */
     public void setDefaultCamera(short mode){
-        setDefaultCamera();
     }
     
     /**
-     * Sets default camera location
+     * Sets default camera location.
+     * By default nothing happens. should be overridden
      * @param defaultLocation       initial camera location
      * @param defaultRotation       initial camera rotation
      */
     public void setDefaultCamera(Vector3f defaultLocation, Quaternion defaultRotation){
-        currentCam.setLocation(defaultLocation);
-        currentCam.setRotation(defaultRotation);
     }
     
     /**
