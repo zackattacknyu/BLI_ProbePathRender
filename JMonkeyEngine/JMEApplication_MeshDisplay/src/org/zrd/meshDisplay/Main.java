@@ -1,4 +1,4 @@
-package org.zrd.rawProbeDataDisplay;
+package org.zrd.meshDisplay;
 
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportMesh;
 import com.jme3.app.SimpleApplication;
@@ -24,7 +24,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
+        ApplicationHelper.setBackgroundColor(viewPort);
 
         meshImportAction = new ImportMesh(inputManager,assetManager,FilePathHelper.getDefaultInputFolder().toFile());
         

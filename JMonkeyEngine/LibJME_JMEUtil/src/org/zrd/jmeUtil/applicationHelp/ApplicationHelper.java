@@ -6,6 +6,7 @@ package org.zrd.jmeUtil.applicationHelp;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
 import java.util.Properties;
 import org.zrd.util.properties.PropertiesHelper;
@@ -122,5 +123,7 @@ public class ApplicationHelper {
     }
     
     
-    
+    public static void setBackgroundColor(ViewPort viewPort){
+        viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
+    }
 }
