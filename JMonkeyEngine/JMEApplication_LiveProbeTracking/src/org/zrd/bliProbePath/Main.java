@@ -3,30 +3,21 @@ package org.zrd.bliProbePath;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
-import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
-import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
-import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
-import org.zrd.geometryToolkit.pointTools.PointData;
-import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointRender;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
@@ -56,8 +47,6 @@ public class Main extends SimpleApplication {
     private ProbeTrackerRender probeTrackerRender;
     private ProbeTracker probeTracker;
     private LocationTracker activeTracker;
-    
-    private CameraTracker cameraTracker;
 
     private Node shootables;
     private RecordedPathSet recordedPathSet;
@@ -102,28 +91,22 @@ public class Main extends SimpleApplication {
             System.out.println("Error trying to capture video: " + ex);
         }*/
         
-        fixedPtMaterial = MaterialHelper.getColorMaterial(1.0f, 0.0f, 0.0f, assetManager);
-
-        String defaultSuffix = Properties_BLIProbePath.getProperties().getProperty("defaultMesh");
+        
         surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
-        boolean showBackground = PropertiesHelper.getBooleanValueProperty(
-                Properties_BLIProbePath.getProperties(), "showBackground");
 
-        cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
+        new CameraTrackerImpl(cam,flyCam,inputManager);
         
-        MeshInteractionFiles meshInterFiles = MeshInputHelper.obtainAllFiles(
-                Paths_BLIProbePath.MESH_SESSION_PATH.toFile(),defaultSuffix);
-        MeshRenderData importedMesh = MeshInputHelper.generateRenderData(
-                meshInterFiles.getDataFiles(),assetManager);
-        if(meshInterFiles.getCameraCoordFile().exists()){
-            CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
-        }
-        if(meshInterFiles.getFixedPointsFile().exists()){
-            FixedPointIO fixedPtsImported = FixedPointIO.getPointsFromFile(meshInterFiles.getFixedPointsFile());
-            fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
-            rootNode.attachChild(FixedPointRender.displayFixedPoints(fixedPtsImported,fixedPtMaterial));
-        }
+        MeshSession currentSession = new MeshSession(
+                Paths_BLIProbePath.MESH_SESSION_PATH,
+                Properties_BLIProbePath.getProperties(),
+                assetManager,cam);
+        rootNode.attachChild(currentSession.getFixedPointNode());
+        shootables = currentSession.getShootableMesh();
+        rootNode.attachChild(shootables);
+        fixedPtsToPick = currentSession.getFixedPtsToPick();
+        MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
+        TriangleSet meshInfo = currentSession.getMeshInfo();
         
         new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
         
@@ -137,24 +120,14 @@ public class Main extends SimpleApplication {
         moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         rootNode.attachChild(moveableObject);
         
-        if(showBackground) rootNode.attachChild(BackgroundBox.getBackgroundBox(assetManager));
-
-        TriangleSet meshInfo = importedMesh.getActiveMeshInfo();
-        Spatial surface = importedMesh.getSurfaceMesh();
-        
-        shootables = new Node("shootables");
-        shootables.attachChild(surface);
-        
-        rootNode.attachChild(shootables);
-        
         recordedPathSet = new RecordedPathSet();
 
-        ResetTracker resetTracker = new ResetTracker(inputManager,probeTracker);
-        ProbeRotationCalibration rotCalib = new ProbeRotationCalibration(
+        new ResetTracker(inputManager,probeTracker);
+        new ProbeRotationCalibration(
                 inputManager, cam, shootables, probeTracker, meshInfo,
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
-        PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,
+        new PickAndRecordPoint(inputManager,cam,
                 shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, meshInfo.getTransform());
         
         
