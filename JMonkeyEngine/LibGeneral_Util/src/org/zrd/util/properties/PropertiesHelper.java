@@ -20,6 +20,8 @@ import org.zrd.util.dataWriting.ProbeDataWriter;
  */
 public class PropertiesHelper {
     
+    public static final String DEFAULT_PROPERTIES_FILE_NAME = "tracker.properties";
+    
     public static float getFloatValueProperty(Properties props,String propertyName){
         return Float.valueOf(props.getProperty(propertyName));
     }
@@ -49,6 +51,10 @@ public class PropertiesHelper {
         
         return getProperties(new File(fileName));
         
+    }
+    
+    public static Properties getDefaultProperties(){
+        return getProperties(DEFAULT_PROPERTIES_FILE_NAME);
     }
     
     /**

@@ -11,6 +11,8 @@ import java.util.Properties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
+import org.zrd.util.fileHelper.PathHelper;
+import org.zrd.util.properties.PropertiesHelper;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -20,7 +22,7 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 public class ProbeTracker_BLIProbePath {
 
     public static ProbeTracker createNewProbeTracker(InputManager manager){
-        Properties trackerProps = Properties_BLIProbePath.getProperties();
+        Properties trackerProps = PropertiesHelper.getDefaultProperties();
         
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
@@ -63,7 +65,8 @@ public class ProbeTracker_BLIProbePath {
         Quaternion initQuat = new Quaternion(quatW,quatX,quatY,quatZ);
         
         return ProbeTracker.initializeProbeTracker(
-                currentSourceTracker, displacementMode, Paths_BLIProbePath.OUTPUT_PATH, 
+                currentSourceTracker, displacementMode, 
+                PathHelper.getDefaultOutputFolder(), 
                 finalScaleX, finalScaleY, startingPosition,initQuat);
     }
     

@@ -9,6 +9,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
+import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
@@ -26,6 +27,7 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import probeTrackingRender.ProbeMoveAction;
 import probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
+import org.zrd.util.fileHelper.PathHelper;
 import org.zrd.util.properties.PropertiesHelper;
 import probeTrackingRender.ProbeTrackerRecording;
 import probeTrackingRender.ProbeTrackerRender;
@@ -55,7 +57,7 @@ public class Main extends SimpleApplication {
     private Material fixedPtMaterial;
     
     public static void main(String[] args) {
-        Properties appProps = Properties_BLIProbePath.getProperties();
+        Properties appProps = PropertiesHelper.getDefaultProperties();
         ApplicationHelper.initializeApplication(new Main(), appProps);
     }
 
@@ -83,8 +85,9 @@ public class Main extends SimpleApplication {
         }*/
         
         //initializes the variables
-        boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
-                Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
+        Properties props = PropertiesHelper.getDefaultProperties();
+        Path defaultOutputPath = PathHelper.getDefaultOutputFolder();
+        boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(props, "surfaceTrackingOn");
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
@@ -93,9 +96,8 @@ public class Main extends SimpleApplication {
 
         //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(
-                Paths_BLIProbePath.INPUT_PATH,
-                Properties_BLIProbePath.getProperties(),
-                assetManager,cam);
+                PathHelper.getDefaultInputFolder(),
+                props,assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
@@ -110,7 +112,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(moveableObject);
         
         //initialize camera coordinate actions
-        new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.OUTPUT_PATH,meshInterFiles);
+        new CameraCoordIO(inputManager,cam,defaultOutputPath,meshInterFiles);
         new CameraTrackerImpl(cam,flyCam,inputManager);
         
         //initialize trackers
@@ -122,9 +124,9 @@ public class Main extends SimpleApplication {
         new ResetTracker(inputManager,probeTracker);
         new ProbeRotationCalibration(
                 inputManager, cam, shootables, probeTracker, meshInfo,
-                Paths_BLIProbePath.OUTPUT_PATH);
+                defaultOutputPath);
         new PickAndRecordPoint(inputManager,cam,
-                shootables,Paths_BLIProbePath.OUTPUT_PATH, meshInfo.getTransform());
+                shootables,defaultOutputPath, meshInfo.getTransform());
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
         //initialize active tracker actions
@@ -134,8 +136,8 @@ public class Main extends SimpleApplication {
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
         //initialize fixed points actions
-        new RecordFixedPoints(inputManager,probeMoveAction,Paths_BLIProbePath.OUTPUT_PATH,meshInterFiles);
-        fixedPtsImport = new ImportFixedPoints(inputManager,Paths_BLIProbePath.OUTPUT_PATH);
+        new RecordFixedPoints(inputManager,probeMoveAction,defaultOutputPath,meshInterFiles);
+        fixedPtsImport = new ImportFixedPoints(inputManager,defaultOutputPath);
         
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
