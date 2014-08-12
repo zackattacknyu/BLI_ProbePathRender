@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.bliProbePath;
+package meshSessionTools;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -38,8 +38,7 @@ public class MeshSession {
         String defaultSuffix = props.getProperty("defaultMesh");
         
         Material fixedPtMaterial = MaterialHelper.getColorMaterial(1.0f, 0.0f, 0.0f, assetManager);
-        meshInterFiles = MeshInputHelper.obtainAllFiles(
-                Paths_BLIProbePath.MESH_SESSION_PATH.toFile(),defaultSuffix);
+        meshInterFiles = MeshInputHelper.obtainAllFiles(meshDataPath.toFile(),defaultSuffix);
         MeshRenderData importedMesh = MeshInputHelper.generateRenderData(
                 meshInterFiles.getDataFiles(),assetManager);
         if(meshInterFiles.getCameraCoordFile().exists()){

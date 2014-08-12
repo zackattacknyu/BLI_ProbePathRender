@@ -132,8 +132,8 @@ public class MeshTriangle {
     @Override
     public int hashCode() {
         return vertex1.hashCode() 
-                + vertex2.hashCode() + 
-                vertex3.hashCode();
+                + vertex2.hashCode() 
+                + vertex3.hashCode();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.zrd.bliProbePath;
 
+import meshSessionTools.MeshSession;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
@@ -8,7 +9,6 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
