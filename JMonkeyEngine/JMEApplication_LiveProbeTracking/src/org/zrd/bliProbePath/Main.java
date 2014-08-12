@@ -18,6 +18,7 @@ import com.jme3.scene.shape.Box;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
 import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
@@ -52,7 +53,6 @@ import probeTrackingRender.ResetTracker;
 public class Main extends SimpleApplication {
     
     private boolean surfaceTrackingOn = false;
-    private boolean ballMeshOn = false;
     
     private Spatial moveableObject;
     private Material lineMaterial;
@@ -108,39 +108,29 @@ public class Main extends SimpleApplication {
         
         fixedPtMaterial = MaterialHelper.getColorMaterial(1.0f, 0.0f, 0.0f, assetManager);
 
-        ballMeshOn = PropertiesHelper.getBooleanValueProperty(
-                Properties_BLIProbePath.getProperties(), "ballOn");
+        String defaultSuffix = Properties_BLIProbePath.getProperties().getProperty("defaultMesh");
         surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "surfaceTrackingOn");
         boolean showBackground = PropertiesHelper.getBooleanValueProperty(
                 Properties_BLIProbePath.getProperties(), "showBackground");
 
-        cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        int cameraMode = ballMeshOn ? 3 : 1;
-        cameraTracker.setDefaultCamera((short)cameraMode);
+        cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
         
         fixedPtsToPick = FixedPointsOnLolaMesh.pointPicker;
         
-        MeshInteractionFiles meshInterFiles = MeshInputHelper.obtainAllFiles(Paths_BLIProbePath.LOG_PARENT_PATH.toFile());
+        MeshInteractionFiles meshInterFiles = MeshInputHelper.obtainAllFiles(
+                Paths_BLIProbePath.MESH_SESSION_PATH.toFile(),defaultSuffix);
         
-        MeshRenderData importedMesh;
-        if(meshInterFiles == null){
-            importedMesh = ballMeshOn ? new BallMesh(assetManager) : new LolaMesh(assetManager);
-        }else{
-            importedMesh = MeshInputHelper.generateRenderData(meshInterFiles.getDataFiles(),assetManager);
-            
-            if(meshInterFiles.getCameraCoordFile().exists()){
-                CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
-            }
-            
-            if(meshInterFiles.getFixedPointsFile().exists()){
-                FixedPointIO fixedPtsImported = FixedPointIO.getPointsFromFile(meshInterFiles.getFixedPointsFile());
-                fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
-                displayFixedPoints(fixedPtsImported,fixedPtMaterial);
-            }
-            
+        MeshRenderData importedMesh = MeshInputHelper.generateRenderData(
+                meshInterFiles.getDataFiles(),assetManager);
+        if(meshInterFiles.getCameraCoordFile().exists()){
+            CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
         }
-        
+        if(meshInterFiles.getFixedPointsFile().exists()){
+            FixedPointIO fixedPtsImported = FixedPointIO.getPointsFromFile(meshInterFiles.getFixedPointsFile());
+            fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
+            displayFixedPoints(fixedPtsImported,fixedPtMaterial);
+        }
         
         new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
         

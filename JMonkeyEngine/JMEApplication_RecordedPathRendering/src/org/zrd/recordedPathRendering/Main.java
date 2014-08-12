@@ -9,6 +9,7 @@ import com.jme3.scene.Spatial;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
+import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -53,12 +54,12 @@ public class Main extends SimpleApplication {
         
         File initialImportDirectory = Paths.get("C:\\Users\\BLI\\Desktop\\BLI_ProbePathRender\\sampleTextFiles").toFile();
         
-        CameraTracker cameraTracker = new CameraTrackerImpl_ProbePathRender(cam,flyCam,inputManager);
-        if(sphereOn){
+        CameraTracker cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
+        /*if(sphereOn){
             cameraTracker.setDefaultCamera((short)0);
         }else{
             cameraTracker.setDefaultCamera((short)1);
-        }
+        }*/
         
         MeshRenderData activeMesh;
         if(sphereOn){

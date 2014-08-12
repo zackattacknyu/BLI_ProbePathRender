@@ -79,6 +79,17 @@ public class MeshInteractionFiles {
         
         locationOfFiles = meshObjFile.getParentFile().toPath();
         
+        getAllFiles(meshObjFile);
+    }
+    
+    public MeshInteractionFiles(Path locationOfFiles, String suffixOfFiles){
+        this.locationOfFiles = locationOfFiles;
+        this.suffixOfFiles = suffixOfFiles;
+        File meshObj = getMeshInteractionFile("meshDefinition",".obj");
+        getAllFiles(meshObj);
+    }
+    
+    private void getAllFiles(File meshObjFile){
         dataFiles = new MeshDataFiles(meshObjFile,getMeshInteractionFile("textureDefinition",".png"));
         
         cameraCoordFile = getMeshInteractionFile("cameraCoords",".txt");

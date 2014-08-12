@@ -239,14 +239,25 @@ public class MeshInputHelper {
         return new MeshDataFiles(objFile, textureFile);
     }
     
-    public static MeshInteractionFiles obtainAllFiles(File initImportDirectory) {
+    public static MeshInteractionFiles obtainAllFiles(File initImportDirectory, String defaultFileSuffix) {
         
         JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
         File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory);
         
-        if(objFile == null) return null;
+        if(objFile == null){
+            if(defaultFileSuffix == null){
+                return null;
+            }else{
+                return new MeshInteractionFiles(initImportDirectory.toPath(),defaultFileSuffix);
+            }
+            
+        }
         
         return new MeshInteractionFiles(objFile);
+    }
+    
+    public static MeshInteractionFiles obtainAllFiles(File initImportDirectory) {
+        return obtainAllFiles(initImportDirectory,null);
     }
     
 }

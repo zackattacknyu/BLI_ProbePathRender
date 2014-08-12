@@ -20,7 +20,7 @@ import com.jme3.renderer.Camera;
  *
  * @author BLI
  */
-public abstract class CameraTrackerImpl extends CameraTracker{
+public class CameraTrackerImpl extends CameraTracker{
     
     //mouse input codes for mouse axes used in rotation
     public static final int ROTATE_UPDOWN_MOUSEAXIS = MouseInput.AXIS_Y;
@@ -194,13 +194,17 @@ public abstract class CameraTrackerImpl extends CameraTracker{
     /**
      * Sets up default camera
      */
-    public abstract void setDefaultCamera();
+    public void setDefaultCamera(){
+        setDefaultCamera(new Vector3f(),new Quaternion());
+    }
     
     /**
      * Sets up default camera depending on the mode we are in
      * @param sphereOn 
      */
-    public abstract void setDefaultCamera(short mode);
+    public void setDefaultCamera(short mode){
+        setDefaultCamera();
+    }
     
     /**
      * Sets default camera location
