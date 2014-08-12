@@ -91,7 +91,7 @@ public class Main extends SimpleApplication {
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
-        boolean useFixedPoints = false;
+        boolean useFixedPoints = PropertiesHelper.getBooleanValueProperty(props, "useFixedPoints");
         outputText = new LiveTrackingText(guiNode,assetManager);
 
         //initializes the mesh session variables

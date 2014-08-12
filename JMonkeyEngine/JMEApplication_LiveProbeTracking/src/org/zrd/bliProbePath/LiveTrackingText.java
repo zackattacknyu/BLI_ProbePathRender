@@ -65,7 +65,6 @@ public class LiveTrackingText {
         currentStartY = currentStartY + xyzText.getLineHeight();
         
         probeMoveModeText = initializeNewText(currentStartY);
-        probeMoveModeText.setText("Press J to Enable Clicking Probe Movement");
     }
     
     private BitmapText initializeNewText(float currentStartY){

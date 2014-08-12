@@ -34,12 +34,19 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     private Matrix4f transform;
     private PickPointOnMesh meshPointPicking;
     
+    private String enableClickingText;
+    private String disableClickingText;
+    
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, Matrix4f transform){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);
         meshPointPicking = new PickPointOnMesh("pickPointForProbeMove",
                 inputManager,cam,this,shootableMesh,null);
         this.transform = transform;
         this.activeTracker = probeTracker;
+        
+        enableClickingText = "Press J to Enable Probe Movement to Clicked Points on Mesh";
+        disableClickingText = "Press J to Disable Probe Movement to Clicked Points on Mesh";
+        probeMoveModeText = enableClickingText;
     }
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, FixedPointPicker fixedPtPicker){
@@ -47,15 +54,19 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
         meshPointPicking = new PickPointOnMesh("pickFixedPointForProbeMove",
                 inputManager,cam,this,shootableMesh,fixedPtPicker);
         this.activeTracker = probeTracker;
+        
+        enableClickingText = "Press K to Enable Probe Movement to Fixed Points on Mesh";
+        disableClickingText = "Press K to Disable Probe Movement to Fixed Points on Mesh";
+        probeMoveModeText = enableClickingText;
     }
     
     @Override
     public void actionMethod() {
         moveProbeEnabled = !moveProbeEnabled;
         if(moveProbeEnabled){
-            probeMoveModeText = "Press J to Disable Clicking Probe Movement";
+            probeMoveModeText = disableClickingText;
         }else{
-            probeMoveModeText = "Press J to Enable Clicking Probe Movement";
+            probeMoveModeText = enableClickingText;
         }
     }
     
