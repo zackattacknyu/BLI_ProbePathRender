@@ -39,9 +39,24 @@
 
 \section*{Abstract}
 
+Previous attempts at tracking objects as they move have used magnetic fields or a camera array. With deformable surfaces trying to track on them is especially difficult because the path is not directly following the original shape for the mesh. For this paper, we present an algorithm for tracking on a deformable surface as well as a way of tracking using only displacement and orientation sensors. We developed a probe that contained an optical mouse sensor for displacement on the surface and an accelerometer, gyroscope, and compass to find out the orientation of each displacement. We used this data to record paths and developed an algorithm for doing calibrations as well as following the surface. 
+
 \section*{Introduction}
 
+In various medical applications, there is a need to track a probe as it moves across a patient's body and takes measurements. Previous attempts at tracking did not produce great results. Trying to track with Kinect is not very reliable and magnetic tracking systems are heavy and cumbersome. Currently they attach a grid to the patient and painstakingly take measurements at each point in the grid. We then thought that using an ordinary optical mouse sensor on the surface itself could work well. Because the surface is not flat, we will need to know the orientation so we put a gyroscope, compass, and accelerometer into the probe. \\
+\\
+We use a Kinect to take a 3D scan of the surface. We then do some mesh simplification and load the mesh into our tracking environment. Our tracking environment is similar to a video game environment and is meant to give live updates on where the probe is located. This paper is focused on taking the data from the probe and rendering it in the environment that already has the mesh loaded into it. After integrating the orientation and displacement data we end up with a 3D path. We then have a problem. We have a path that went between two points on the mesh and the mesh coordinates in 3D space and need to figure out how to manipulate the path so that it goes between the points on the mesh in the virtual environment. \\
+\\
+With the problem above, we can rotate the path so that the first part of it at least is on the mesh. We then need to figure out the rotation along the mesh to complete the calibration. This is a difficult problem because we have a 3D path and a curved surface. Trying to flatten the surface can be difficult and there is no guarantee it will give us what we need. We thus decided to do a searching method in order to try and approximate the best rotation calibration. We also applied a projection method in order to get the 3D path onto the mesh while preserving arc length. 
+
 \section*{Related Work}
+
+Surface flattening paper entiled mesh unfolding
+
+Magnetic tracking:
+\begin{verbatim}
+http://s2014.siggraph.org/attendees/emerging-technologies/events/im3d-magnetic-motion-tracking-system-dexterous-3d
+\end{verbatim}
 
 \section*{Following a Deformable mesh}
 
