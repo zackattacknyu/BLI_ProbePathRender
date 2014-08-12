@@ -4,7 +4,6 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
 import org.zrd.geometryToolkit.pointTools.FixedPointIO;
-import org.zrd.cameraTracker.presetModes.CameraTrackerImpl_ProbePathRender;
 import org.zrd.cameraTracker.cameraMoves.CameraTracker;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -21,17 +20,14 @@ import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
 import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.BackgroundBox;
-import org.zrd.jmeGeometryIO.renderedObjects.LolaMesh;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointData;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import static org.zrd.jmeGeometryIO.meshIO.MeshInputHelper.generateRenderData;
 import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
-import org.zrd.jmeGeometryIO.renderedObjects.BallMesh;
-import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
+import org.zrd.jmeGeometryIO.renderedObjects.FixedPointRender;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
@@ -116,11 +112,8 @@ public class Main extends SimpleApplication {
 
         cameraTracker = new CameraTrackerImpl(cam,flyCam,inputManager);
         
-        fixedPtsToPick = FixedPointsOnLolaMesh.pointPicker;
-        
         MeshInteractionFiles meshInterFiles = MeshInputHelper.obtainAllFiles(
                 Paths_BLIProbePath.MESH_SESSION_PATH.toFile(),defaultSuffix);
-        
         MeshRenderData importedMesh = MeshInputHelper.generateRenderData(
                 meshInterFiles.getDataFiles(),assetManager);
         if(meshInterFiles.getCameraCoordFile().exists()){
@@ -129,7 +122,7 @@ public class Main extends SimpleApplication {
         if(meshInterFiles.getFixedPointsFile().exists()){
             FixedPointIO fixedPtsImported = FixedPointIO.getPointsFromFile(meshInterFiles.getFixedPointsFile());
             fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
-            displayFixedPoints(fixedPtsImported,fixedPtMaterial);
+            rootNode.attachChild(FixedPointRender.displayFixedPoints(fixedPtsImported,fixedPtMaterial));
         }
         
         new CameraCoordIO(inputManager,cam,Paths_BLIProbePath.PATH_RECORDING_PATH,meshInterFiles);
@@ -162,7 +155,7 @@ public class Main extends SimpleApplication {
                 Paths_BLIProbePath.CALIBRATION_RESULTS_PATH);
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
         PickAndRecordPoint pointRecorder = new PickAndRecordPoint(inputManager,cam,
-                shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, importedMesh.getActiveMeshInfo().getTransform());
+                shootables,Paths_BLIProbePath.PATH_RECORDING_PATH, meshInfo.getTransform());
         
         
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
@@ -215,24 +208,10 @@ public class Main extends SimpleApplication {
         
         if(fixedPtsImport.isNewPointsImported()){
             
-            displayFixedPoints(fixedPtsImport.getImportedPoints(),fixedPtMaterial);
+            rootNode.attachChild(FixedPointRender.displayFixedPoints(fixedPtsImport.getImportedPoints(),fixedPtMaterial));
             
             probeMoveAction.setFixedPointSet(fixedPtsImport.getImportedPoints().getFixedPtPicker());
             
         }
-    }
-    
-    private void displayFixedPoints(FixedPointIO fixedPts,Material ptMaterial){
-        for(PointData fixedPt: fixedPts.getFixedPointsOnMesh()){
-            rootNode.attachChild(initBox(ptMaterial,fixedPt.getPointCoords()));
-        }
-    }
-    
-    private Spatial initBox(Material ballMat, Vector3f position){
-        Box b = new Box(0.2f, 0.2f, 0.2f);
-        Spatial sampleBox = new Geometry("FixedPoint", b);
-        sampleBox.setMaterial(ballMat);
-        sampleBox.setLocalTranslation(position);
-        return sampleBox;
     }
 }
