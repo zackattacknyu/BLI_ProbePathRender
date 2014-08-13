@@ -53,8 +53,25 @@ This paper presents two algorithms. The first one takes a path that almost follo
 
 \section*{Related Work}
 
-Surface flattening paper entiled mesh unfolding
-
+Commercial motion tracking for professional film makers use image-based tracking techniques. 
+\begin{verbatim}
+http://helpx.adobe.com/after-effects/using/tracking-stabilizing-motion-cs5.html
+\end{verbatim}
+This method has some serious disadvantages for our application. Being that is designed for use by artists, it does not have a guarantee of measurement accuracy, which is necessary for our case. Additionally, the fact that it is image based means the probe would always have to be in the view of the camera and in a clinical setting that can be hard to ensure. The post-processing of the images can be time consuming and in a clinical setting the results should come quickly. Finally, training the medical technicians taking the data to do all the steps that would be required is impractical. \\
+\\
+Using the Kinect for tracking would have some advantages over image-based tracking. Because the Kinect gives us a depth map, we could more easily ensure measurement accuracy. Additionally, there would be much less processing required to get a final motion path. It still has the disadvantage that the probe would always have to be in view of the camera. It also has the disadvantage that the result is dependent on the shape of the probe. For this application, we do not know the shape of the final probe and it is impractical to try and accommodate all the different probe shapes.\\
+\\
+Motion Capture is a popular technique for film making that tracks a character's motion in 3D space. Using a motion capture system we would get 3D coordinates for the probe's position as it moves across a patient. Current motion capture systems however are expensive and cumbersome to set up. Both of these make it impractical for the clinical setting. **INSERT REFERENCE**\\
+\\
+Current work on deformable surface tracking is focused on tracking the deformations of the surface itself.
+\begin{verbatim}
+http://rll.berkeley.edu/tracking/paper.pdf
+http://cvlab.epfl.ch/files/content/sites/cvlab2/files/publications/publications/2007/SalzmannHF07.pdf
+\end{verbatim}
+This paper focuses on deformable surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
+\\
+Surface flattening paper entiled mesh unfolding\\
+\\
 Magnetic tracking:
 \begin{verbatim}
 http://s2014.siggraph.org/attendees/emerging-technologies/events/im3d-magnetic-motion-tracking-system-dexterous-3d
