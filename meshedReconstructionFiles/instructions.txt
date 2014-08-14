@@ -8,12 +8,12 @@ Here are the instructions for generating a mesh and texture from Chris's code:
 
 4. Click on Record Video and then move around the camera to make the mesh better
 
-5. Click on Stop Recording when finished
+5. Click on Create Mesh and make sure PLY is selected
 
-6. Click on Create Mesh and make sure PLY is selected
-
-7. Name it "MeshedReconstruction.ply" and put it in the following folder:
+6. Name it "MeshedReconstruction.ply" and put it in the following folder:
 ...\BLI Kinect Reconstruction\bin\Debug
+
+7. Click on Stop Recording when finished
 
 8. In explorer, go to the following folder:
 ...\BLI Kinect Reconstruction\bin\Release
