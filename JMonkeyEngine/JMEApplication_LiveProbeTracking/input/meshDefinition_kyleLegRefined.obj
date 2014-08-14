@@ -9,7 +9,7 @@
 # Faces: 32217
 #
 ####
-mtllib ./meshDefinition_kyleLegRefined.mtl
+mtllib ./meshDefinition_kyleLegRefined.obj.mtl
 
 vn -0.070134 -1.377923 -5.698589
 v 0.196089 0.063189 0.708475 0.752941 0.752941 0.752941

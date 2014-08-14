@@ -32,7 +32,7 @@ public class MeshSession {
     private MeshInteractionFiles meshInterFiles;
     private TriangleSet meshInfo;
     private Node shootableMesh;
-    private Node fixedPointNode;
+    private Node fixedPointNode = new Node();
     private FixedPointPicker fixedPtsToPick;
     
     public MeshSession(AssetManager assetManager,Camera cam){
