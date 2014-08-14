@@ -1,0 +1,42 @@
+Make sure you have the following:
+- obj file for the mesh
+- png file for its texture
+
+Setting up tracking:
+
+1. Decide on a suffix to name all your files with such as "patientMesh"
+
+2. Name the obj file "meshDefinition_{suffix}.obj"
+
+3. Name the png file "textureDefinition_{suffix}.png"
+
+4. Copy the files from 2 and 3 into the folder "input"
+	that is in the root of the live tracker folder
+	- DO NOT PUT THE MTL FILE INTO THIS FOLDER
+
+5. When starting the live tracker, pick the obj file and it 
+		will automatically select the png file for the texture
+		
+6. Position the camera where you would like and click "O" (the letter)
+		to save the camera position
+
+7. Press J to enable point picking. 
+
+8. Pick on the calibration points as precisely as possible. Press T when
+		you have selected one to save it
+
+9. On the last calibration point, press T twice to save the fixed points to a file
+
+10. Press V to save the fixed points and camera coordinates to the same
+		folder as where the OBJ file and PNG file are
+
+
+Tracking after doing setup:
+
+1. Start the live tracking app
+
+2. Select the obj file containing the mesh
+
+3. If the steps above were successful, then the camera should be positioned
+	as desired and there should be little red boxes at the desired
+	calibration points.
