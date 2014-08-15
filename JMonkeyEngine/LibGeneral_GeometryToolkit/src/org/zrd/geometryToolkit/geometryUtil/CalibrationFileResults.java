@@ -5,6 +5,7 @@
 package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.Quaternion;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -16,13 +17,13 @@ public class CalibrationFileResults {
     private Quaternion rotationCalib = new Quaternion();
     private float scaleCalib = 1.0f;
     
-    private String REAL_TO_PROBE_FACTOR_NAME = "scaleFactor.realToProbe";
-    private String VIRTUAL_TO_REAL_FACTOR_NAME = "scaleFactor.virtualToReal";
+    public static final String REAL_TO_PROBE_FACTOR_NAME = "scaleFactor.realToProbe";
+    public static final String VIRTUAL_TO_REAL_FACTOR_NAME = "scaleFactor.virtualToReal";
     
-    private String QUATERNION_W_FACTOR_NAME = "initQuat.w";
-    private String QUATERNION_X_FACTOR_NAME = "initQuat.x";
-    private String QUATERNION_Y_FACTOR_NAME = "initQuat.y";
-    private String QUATERNION_Z_FACTOR_NAME = "initQuat.z";
+    public static final String QUATERNION_W_FACTOR_NAME = "initQuat.w";
+    public static final String QUATERNION_X_FACTOR_NAME = "initQuat.x";
+    public static final String QUATERNION_Y_FACTOR_NAME = "initQuat.y";
+    public static final String QUATERNION_Z_FACTOR_NAME = "initQuat.z";
     
     public CalibrationFileResults(Properties props){
         
@@ -60,6 +61,18 @@ public class CalibrationFileResults {
         
         
         
+    }
+    
+    public static ArrayList<String> getCalibrationPropertiesStrings(Quaternion calib){
+        ArrayList<String> returnString = new ArrayList<String>(4);
+        returnString.add(getPropertiesString(QUATERNION_W_FACTOR_NAME,calib.getW()));
+        returnString.add(getPropertiesString(QUATERNION_X_FACTOR_NAME,calib.getX()));
+        returnString.add(getPropertiesString(QUATERNION_Y_FACTOR_NAME,calib.getY()));
+        returnString.add(getPropertiesString(QUATERNION_Z_FACTOR_NAME,calib.getZ()));
+        return returnString;
+    }
+    private static String getPropertiesString(String name, float value){
+        return name + "=" + String.valueOf(value);
     }
 
     public Quaternion getRotationCalib() {
