@@ -96,6 +96,7 @@ public class PathRecorder {
         SegmentSet recordedPath = new SegmentSet(compressedVertices);
         Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath,timestampSuffix, "compressedPathInfo");
         FileDataHelper.exportLinesToFile(recordedPath.getResultStrings(), recordedPathStats);
+        OutputHelper.printStringCollection(recordedPath.getResultStrings());
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){
