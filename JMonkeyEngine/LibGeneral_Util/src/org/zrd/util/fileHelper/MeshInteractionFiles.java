@@ -33,6 +33,7 @@ public class MeshInteractionFiles {
     private MeshDataFiles dataFiles;
     private File cameraCoordFile;
     private File fixedPointsFile;
+    private File calibrationProperties;
     private Path locationOfFiles;
     private String suffixOfFiles;
     
@@ -49,6 +50,10 @@ public class MeshInteractionFiles {
 
     public File getFixedPointsFile() {
         return fixedPointsFile;
+    }
+
+    public File getCalibrationProperties() {
+        return calibrationProperties;
     }
 
     public void setCameraCoordFileToCopy(File cameraCoordFileToCopy) {
@@ -94,6 +99,7 @@ public class MeshInteractionFiles {
         
         cameraCoordFile = getMeshInteractionFile("cameraCoords",".txt");
         fixedPointsFile = getMeshInteractionFile("fixedPoints",".txt");
+        calibrationProperties = getMeshInteractionFile("calibrationProperties",".txt");
     }
     
     private File getMeshInteractionFile(String prefix,String fileExtension){
