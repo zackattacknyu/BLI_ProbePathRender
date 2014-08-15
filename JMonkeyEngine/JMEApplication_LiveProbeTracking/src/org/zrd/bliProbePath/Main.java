@@ -7,6 +7,7 @@ import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import java.nio.file.Path;
@@ -100,6 +101,14 @@ public class Main extends SimpleApplication {
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
         TriangleSet meshInfo = currentSession.getMeshInfo();
+        
+        //redoes the calibration if necessary
+        if(!currentSession.getRotCalib().equals(new Quaternion())){
+            probeTracker.setRotationCalibration(currentSession.getRotCalib());
+        }
+        if(currentSession.getScaleCalib() != 1){
+            probeTracker.setScale(currentSession.getScaleCalib());
+        }
         
         //initialize the defaults
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);

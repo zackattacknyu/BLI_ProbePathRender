@@ -6,12 +6,14 @@ package org.zrd.meshSessionTools;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
+import org.zrd.geometryToolkit.geometryUtil.CalibrationFileResults;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
@@ -34,6 +36,8 @@ public class MeshSession {
     private Node shootableMesh;
     private Node fixedPointNode = new Node();
     private FixedPointPicker fixedPtsToPick;
+    private Quaternion rotCalib = new Quaternion();
+    private float scaleCalib = 1;
     
     public MeshSession(AssetManager assetManager,Camera cam){
         this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
@@ -55,6 +59,11 @@ public class MeshSession {
             fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
             fixedPointNode = FixedPointRender.displayFixedPoints(fixedPtsImported,fixedPtMaterial);
         }
+        if(meshInterFiles.getCalibrationProperties().exists()){
+            CalibrationFileResults result = new CalibrationFileResults(PropertiesHelper.getProperties(meshInterFiles.getCalibrationProperties()));
+            rotCalib = result.getRotationCalib();
+            scaleCalib = result.getScaleCalib();
+        }
 
         meshInfo = importedMesh.getActiveMeshInfo();
         
@@ -62,6 +71,14 @@ public class MeshSession {
         shootableMesh = new Node("shootables");
         shootableMesh.attachChild(surface);
         
+    }
+
+    public Quaternion getRotCalib() {
+        return rotCalib;
+    }
+
+    public float getScaleCalib() {
+        return scaleCalib;
     }
 
     public MeshInteractionFiles getMeshInterFiles() {

@@ -99,7 +99,7 @@ public class MeshInteractionFiles {
         
         cameraCoordFile = getMeshInteractionFile("cameraCoords",".txt");
         fixedPointsFile = getMeshInteractionFile("fixedPoints",".txt");
-        calibrationProperties = getMeshInteractionFile("calibrationProperties",".txt");
+        calibrationProperties = getMeshInteractionFile("calibrationProperties",".properties");
     }
     
     private File getMeshInteractionFile(String prefix,String fileExtension){
