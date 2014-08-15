@@ -119,9 +119,6 @@ public class Main extends SimpleApplication {
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
-        new ProbeRotationCalibration(
-                inputManager, cam, shootables, probeTracker, meshInfo,
-                defaultOutputPath,fixedPtsToPick);
         new PickAndRecordPoint(inputManager,cam,
                 shootables,defaultOutputPath, meshInfo.getTransform());
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
