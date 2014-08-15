@@ -16,6 +16,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.probeCalibration.CalibrationHelper;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
+import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
@@ -49,8 +50,8 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     
     public ProbeRotationCalibration(InputManager inputManager, Camera cam, 
             Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo,
-            Path resultFilePath){
-        super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo,FixedPointsOnLolaMesh.pointPicker);
+            Path resultFilePath, FixedPointPicker fixedPtPicker){
+        super("probeCalibAction","pickPointForProbeCalib",KeyInput.KEY_B,inputManager,cam,shootableMesh,meshInfo,fixedPtPicker);
         this.probeTracker = probeTracker;
         this.resultFilePath = resultFilePath;
     }
@@ -75,12 +76,15 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
 
     @Override
     protected void handleStartPoint(Vector3f startPoint) {
+        System.out.println("Start Point set at: " + startPoint);
         probeTracker.setCurrentPosition(startPoint);
         probeTracker.startStopRecording();
     }
 
     @Override
     protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, PathOnMeshCalculator rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
+        System.out.println("End Point set at: " + endPoint);
+        
         rotationCalibrationDone = true;
         
         calibEndPoint = endPoint.clone();
