@@ -11,8 +11,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import java.nio.file.Path;
 import java.util.Properties;
-import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
-import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
@@ -24,7 +22,6 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
-import org.zrd.jmeGeometryInteractions.meshInteraction.PickAndRecordPoint;
 import probeTrackingRender.ProbeMoveAction;
 import probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
@@ -93,7 +90,10 @@ public class Main extends SimpleApplication {
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         boolean useFixedPoints = PropertiesHelper.getBooleanValueProperty(props, "useFixedPoints");
         outputText = new LiveTrackingText(guiNode,assetManager);
-
+        
+        //initialize tracker
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
+        
         //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
@@ -112,8 +112,7 @@ public class Main extends SimpleApplication {
         //initialize camera coordinate actions
         CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         
-        //initialize trackers
-        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
+        //initialize surface tracker
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
