@@ -25,6 +25,7 @@ public class CameraTrackingIO {
     public static void initializeCameraTrackingIO(InputManager inputManager, 
             Camera cam, FlyByCamera flyCam, MeshInteractionFiles meshInterFiles){
         new CameraTrackerImpl(cam,flyCam,inputManager);
-        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultOutputFolder(),meshInterFiles);
+        new CameraCoordIO(inputManager,cam,FilePathHelper.getDefaultInputFolder(),
+                FilePathHelper.getDefaultOutputFolder(),meshInterFiles);
     }
 }

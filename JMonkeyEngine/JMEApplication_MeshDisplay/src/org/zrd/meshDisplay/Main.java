@@ -3,8 +3,6 @@ package org.zrd.meshDisplay;
 import org.zrd.jmeGeometryInteractions.meshInteraction.ImportMesh;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
-import org.zrd.cameraTracker.cameraCoordIO.CameraCoordIO;
-import org.zrd.cameraTracker.cameraMoveImpl.CameraTrackerImpl;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
