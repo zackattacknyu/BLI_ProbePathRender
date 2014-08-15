@@ -49,6 +49,21 @@ public class ProbeDataWriter {
     }
     
     /**
+     * This instantes a probe data writer. Specifically, it takes in the folder
+     *      path for the file, the prefix for it, and makes the file name and 
+     *      writer that will write data to the file. The file name will have the
+     *      format {prefix}_{timestamp}.txt
+     * @param folderPath        the folder path to put the file
+     * @param fileNamePrefix    the prefix of the file
+     * @throws IOException      if an IOException
+     */
+    public ProbeDataWriter(Path folderPath, String timestampSuffix, String fileNamePrefix) throws IOException{
+        outputFile = GeneralFileHelper.getNewDataFilePath(folderPath, timestampSuffix,fileNamePrefix).toFile();
+        outputFileWriter = new FileWriter(outputFile);
+        outputWriter = new BufferedWriter(outputFileWriter);
+    }
+    
+    /**
      * This writes a line to the current writer being output writer
      * @param line              line to writer to the text file
      * @throws IOException      if there is a problem writing the line
@@ -79,9 +94,26 @@ public class ProbeDataWriter {
      * @param prefix            prefix of the data file name
      * @return                  data writer object
      */
+    public static ProbeDataWriter getNewWriter(Path folderPath, String timestampSuffix, String prefix){
+        try {
+            ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath, timestampSuffix,prefix);
+            return currentWriter;
+        } catch (IOException ex) {
+            System.out.println("Exception thrown try to instantiate writer: " + ex);
+            return null;
+        }
+    }
+    
+    /**
+     * This takes in the folder path and prefix and returns the data writer
+     *      object from this class
+     * @param folderPath        path to put file into
+     * @param prefix            prefix of the data file name
+     * @return                  data writer object
+     */
     public static ProbeDataWriter getNewWriter(Path folderPath, String prefix){
         try {
-            ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath,prefix);
+            ProbeDataWriter currentWriter = new ProbeDataWriter(folderPath, prefix);
             return currentWriter;
         } catch (IOException ex) {
             System.out.println("Exception thrown try to instantiate writer: " + ex);

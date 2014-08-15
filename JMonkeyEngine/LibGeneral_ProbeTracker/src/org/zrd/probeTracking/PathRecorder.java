@@ -15,6 +15,7 @@ import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.dataWriting.TimeHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
@@ -34,6 +35,7 @@ public class PathRecorder {
     private float arcLengthSinceLastRead = 0;
     private Vector3f lastPosition;
     private ArrayList<Vector3f> verticesSinceLastRead;
+    private String timestampSuffix;
     
     public PathRecorder(Vector3f startingPosition){
         vertices = new ArrayList<Vector3f>(100);
@@ -49,13 +51,14 @@ public class PathRecorder {
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath){
         this(startingPosition);
         this.pathRecordingFilePath = pathRecordingFilePath;
+        this.timestampSuffix = TimeHelper.getTimestampSuffix();
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, "pathVertices");
+                pathRecordingFilePath, timestampSuffix,"pathVertices");
         xyVertexWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, 
+                pathRecordingFilePath, timestampSuffix,
                 "pathXYvertices");
         yawPitchRollWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, "yawPitchRollData");
+                pathRecordingFilePath, timestampSuffix, "yawPitchRollData");
         pathSpecified = true;
     }
 
@@ -86,12 +89,12 @@ public class PathRecorder {
         //write the compressed path
         ArrayList<Vector3f> compressedVertices = PathCompression.
             getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
-        Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
+        Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath,timestampSuffix, "pathVerticesCompressed");
         GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
         
         //write the path arc length
         SegmentSet recordedPath = new SegmentSet(compressedVertices);
-        Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath, "compressedPathInfo");
+        Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath,timestampSuffix, "compressedPathInfo");
         FileDataHelper.exportLinesToFile(recordedPath.getResultStrings(), recordedPathStats);
     }
     
