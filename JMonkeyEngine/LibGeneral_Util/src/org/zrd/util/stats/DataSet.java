@@ -5,6 +5,7 @@
 package org.zrd.util.stats;
 
 import java.util.ArrayList;
+import org.zrd.util.dataHelp.OutputHelper;
 
 /**
  *
@@ -58,7 +59,7 @@ public class DataSet {
         meanError = currentError/numberDataPoints;
         
         resultStrings = new ArrayList<String>(9);
-        resultStrings.add(" ");
+        resultStrings.add(OutputHelper.EMPTY_LINE_STRING);
         resultStrings.add("Quality Statistics for Path: ");
         resultStrings.add("Mean: " + mean);
         resultStrings.add("Mean Error: " + meanError);
@@ -66,14 +67,12 @@ public class DataSet {
         resultStrings.add("Standard Deviation: " + standardDeviation);
         resultStrings.add("Min: " + min);
         resultStrings.add("Max: " + max);
-        resultStrings.add(" ");
+        resultStrings.add(OutputHelper.EMPTY_LINE_STRING);
         
     }
     
     public void displayResults(){
-        for(String result: resultStrings){
-            System.out.println(result);
-        }
+        OutputHelper.printStringCollection(resultStrings);
     }
     
     public ArrayList<String> getResultStrings(){

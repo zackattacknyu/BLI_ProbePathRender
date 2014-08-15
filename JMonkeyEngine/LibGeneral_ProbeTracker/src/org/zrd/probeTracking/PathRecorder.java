@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
+import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
@@ -86,6 +88,11 @@ public class PathRecorder {
             getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath, "pathVerticesCompressed");
         GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
+        
+        //write the path arc length
+        SegmentSet recordedPath = new SegmentSet(compressedVertices);
+        Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(pathRecordingFilePath, "compressedPathInfo");
+        FileDataHelper.exportLinesToFile(recordedPath.getResultStrings(), recordedPathStats);
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){

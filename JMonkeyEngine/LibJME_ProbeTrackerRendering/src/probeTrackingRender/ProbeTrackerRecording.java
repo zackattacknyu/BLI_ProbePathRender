@@ -35,10 +35,6 @@ public class ProbeTrackerRecording extends GeneralKeyboardActionMethod{
         recordingText = probeTracker.getRecordingText();
         if(probeTracker.isNewPathExists()){
             recordedPathSet.addPath(probeTracker.getCurrentPathVertices());
-            
-            SegmentSet recordedPath = new SegmentSet(probeTracker.getCurrentPathVertices());
-            System.out.println("Arc Length of Recorded Path: " + recordedPath.getArcLength());
-            
             newPathExists = true;
         }
     }

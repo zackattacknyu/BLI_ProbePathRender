@@ -4,6 +4,8 @@
  */
 package org.zrd.util.dataHelp;
 
+import java.util.Collection;
+
 /**
  * These are simple methods that take in float values and string
  *      them together to make a string for output purposes
@@ -79,5 +81,12 @@ public class OutputHelper {
     public static String getOrientationOutputText(float yaw, float pitch, float roll) {
         return yaw + OutputHelper.DATA_IN_OUTPUT_SEPARATOR + pitch + OutputHelper.DATA_IN_OUTPUT_SEPARATOR + roll;
     }
+    
+    public static void printStringCollection(Collection<String> stringCol){
+        for(String line: stringCol){
+            System.out.println(line);
+        }
+    }
+    
     
 }

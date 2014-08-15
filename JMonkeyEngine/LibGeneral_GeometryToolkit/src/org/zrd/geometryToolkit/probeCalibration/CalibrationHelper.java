@@ -5,11 +5,9 @@
 package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Quaternion;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.util.dataHelp.OutputHelper;
-import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
@@ -34,8 +32,6 @@ public class CalibrationHelper {
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(0)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(1)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(2)));
-        resultText.add(OutputHelper.EMPTY_LINE_STRING);
-        resultText.add("Quality Statistics: ");
         resultText.addAll(qualityStats);
                 
         FileDataHelper.exportLinesToFile(resultText,GeneralFileHelper.getNewDataFilePath(resultFolder, "CalibrationResults"));
