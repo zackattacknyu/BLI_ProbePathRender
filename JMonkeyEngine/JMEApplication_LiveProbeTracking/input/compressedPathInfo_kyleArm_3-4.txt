@@ -1,7 +1,0 @@
- 
-Arc Length of Recorded Path: 
-3.753123
- 
-Length between start and end points
-3.753123
- 
