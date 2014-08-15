@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.zrd.util.dataWriting.DataWritingConstants;
 import org.zrd.util.dataWriting.TimeHelper;
 
@@ -48,6 +49,25 @@ public class GeneralFileHelper {
      */
     public static File importPathUsingFileSelector(File initialImportDirectory) {
         JFileChooser selector = new JFileChooser(initialImportDirectory);
+        int chosenOption = selector.showOpenDialog(null);
+        File selectedFile = null;
+        if (chosenOption == JFileChooser.APPROVE_OPTION) {
+            selectedFile = selector.getSelectedFile();
+        }
+        return selectedFile;
+    }
+    
+    /**
+     * This opens the file chooser window and puts into a file object
+     *      the one selected if one was selected
+     * @param initialImportDirectory        the directory for the file chooser window to open on
+     * @return      the file that was chosen if one was chosen
+     */
+    public static File importPathUsingFileSelector(File initialImportDirectory, String extension) {
+        JFileChooser selector = new JFileChooser(initialImportDirectory);
+        String description = extension + " files";
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Select Files",extension);
+        selector.setFileFilter(filter);
         int chosenOption = selector.showOpenDialog(null);
         File selectedFile = null;
         if (chosenOption == JFileChooser.APPROVE_OPTION) {
