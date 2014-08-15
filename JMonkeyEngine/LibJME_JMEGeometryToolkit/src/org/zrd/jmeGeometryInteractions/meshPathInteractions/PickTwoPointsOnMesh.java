@@ -181,8 +181,6 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
 
                 Vector3f endPoint = pointOnMesh.clone();
                 if(!endPoint.equals(lastPointClicked)){
-
-                    lastPointClicked = endPoint;
                     
                     //registers the ending triangle
                     endingTriangle = triangleOnMesh.clone();
@@ -204,6 +202,13 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     twoPointPickEnabled = false;
                     onStartPoint = true;
                     pointsNewlyPicked = true;
+                    
+                    /*
+                     * This must be set to null so that the same point
+                     *      can be used as the end of one path
+                     *      and the start of the next path
+                     */
+                    lastPointClicked = null;
                 }
 
             }
