@@ -40,3 +40,23 @@ Tracking after doing setup:
 3. If the steps above were successful, then the camera should be positioned
 	as desired and there should be little red boxes at the desired
 	calibration points.
+	
+Doing scale calibration:
+
+1. Measure the real world distance between the points
+
+2. Find the virtual distance between the points. This can be accomplished by making
+		paths between the individual paths and seeing the length from start to end point
+
+3. Find out the (virtualDistance)/(realDistance) ratio and put it into the scale factor
+		field in the properties file
+
+Doing Rotation Calibration:
+
+1. Put the probe on a calibration point
+2. Press B
+3. Click the calibration point you are on
+4. Move the probe to another calibration point
+5. Click the calibration point moved to
+6. The rotation quaternion will be in the calibration results text file generated in the output folder
+7. If the result was good, then put the quaternion into the calibration properties file for the mesh
