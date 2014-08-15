@@ -1,0 +1,6 @@
+
+Markers:		Virtual Length:			Real Length(mm):		Virtual To Real Factor:
+1-2				3.7467246				46						0.0814505
+2-3				3.0476606				41						0.0743332
+3-4				3.753123				44						0.0852983
+4-1				3.2204692				46						0.0700102
