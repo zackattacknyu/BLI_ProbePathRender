@@ -13,8 +13,8 @@ import java.util.Properties;
  */
 public class CalibrationFileResults {
     
-    private Quaternion rotationCalib;
-    private float scaleCalib;
+    private Quaternion rotationCalib = new Quaternion();
+    private float scaleCalib = 1.0f;
     
     private String REAL_TO_PROBE_FACTOR_NAME = "scaleFactor.realToProbe";
     private String VIRTUAL_TO_REAL_FACTOR_NAME = "scaleFactor.virtualToReal";
