@@ -89,7 +89,7 @@ public class Main extends SimpleApplication {
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
-        boolean useFixedPoints = PropertiesHelper.getBooleanValueProperty(props, "useFixedPoints");
+        boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
         outputText = new LiveTrackingText(guiNode,assetManager);
         
         //initialize tracker
@@ -131,7 +131,7 @@ public class Main extends SimpleApplication {
                 shootables,defaultOutputPath, meshInfo.getTransform());*/
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        if(useFixedPoints){
+        if(useFixedPointsIfExists){
             new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo,
                 defaultOutputPath,fixedPtsToPick);
         }else{
@@ -140,7 +140,7 @@ public class Main extends SimpleApplication {
         }
         
         //initialize active tracker actions
-        probeMoveAction = useFixedPoints ? 
+        probeMoveAction = (useFixedPointsIfExists && (fixedPtsToPick != null)) ? 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,fixedPtsToPick) : 
                 new ProbeMoveAction(inputManager,cam,shootables,activeTracker,meshInfo.getTransform());
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
