@@ -57,14 +57,16 @@ public class DataSet {
         standardDeviation = (float) Math.sqrt(variance);
         meanError = currentError/numberDataPoints;
         
-        resultStrings = new ArrayList<String>(4);
+        resultStrings = new ArrayList<String>(9);
+        resultStrings.add(" ");
+        resultStrings.add("Quality Statistics for Path: ");
         resultStrings.add("Mean: " + mean);
         resultStrings.add("Mean Error: " + meanError);
         resultStrings.add("Variance: " + variance);
         resultStrings.add("Standard Deviation: " + standardDeviation);
         resultStrings.add("Min: " + min);
         resultStrings.add("Max: " + max);
-        
+        resultStrings.add(" ");
         
     }
     
