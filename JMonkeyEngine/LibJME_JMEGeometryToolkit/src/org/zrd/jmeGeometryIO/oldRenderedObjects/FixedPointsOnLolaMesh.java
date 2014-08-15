@@ -2,19 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.jmeGeometryIO.renderedObjects;
-
-import com.jme3.math.Vector3f;
-import java.util.Arrays;
-import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
-import org.zrd.geometryToolkit.pointTools.PointData;
-import org.zrd.geometryToolkit.pointTools.PointOnMeshData;
-import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
 /**
  *
  * @author BLI
- */
+ *
 public class FixedPointsOnLolaMesh {
     
     //TODO: make this come from properties file
@@ -51,4 +44,4 @@ public class FixedPointsOnLolaMesh {
     public static final FixedPointPicker pointPicker = 
             new FixedPointPicker(Arrays.asList(fixedPointData));
     
-}
+}*/

@@ -23,7 +23,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
  * This generates and tansforms the Ball Mesh for use by JME applications
  *
  * @author Zach
- */
+ *
 public class BallMesh extends MeshRenderData{
 
     public BallMesh(AssetManager assetManager){
@@ -36,13 +36,13 @@ public class BallMesh extends MeshRenderData{
         
         renderedMesh = MeshInputHelper.generateModel(objFileLocation, lolaMaterial, assetManager);
         
-        /*Quaternion yaw = new Quaternion();
-        yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
-        Quaternion pitch = new Quaternion();
-        pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
+        //Quaternion yaw = new Quaternion();
+        //yaw.fromAngleAxis(180*FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
+        //Quaternion pitch = new Quaternion();
+        //pitch.fromAngleAxis(-20*FastMath.DEG_TO_RAD, Vector3f.UNIT_X);
+        //Quaternion surfaceRotation = yaw.mult(pitch);
         
-        Quaternion surfaceRotation = yaw.mult(pitch);*/
-        float surfaceScale = 40f;
+        * float surfaceScale = 40f;
         //Vector3f surfaceLoc = new Vector3f(0,22,-53);
         
         Matrix4f surfaceRot = new Matrix4f();
@@ -75,4 +75,4 @@ public class BallMesh extends MeshRenderData{
     
     
     
-}
+}*/

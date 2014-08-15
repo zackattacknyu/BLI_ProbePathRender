@@ -4,20 +4,13 @@
  */
 package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.Matrix4f;
-import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
-
 /**UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  * 
  * This gets the mesh that is a sphere that was used
  *      for debugging purposes
  *
  * @author Zach
- */
+ *
 public class SphereMesh extends MeshRenderData{
 
     public SphereMesh(AssetManager assetManager){
@@ -44,4 +37,4 @@ public class SphereMesh extends MeshRenderData{
     
     
     
-}
+}*/

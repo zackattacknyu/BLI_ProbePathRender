@@ -119,8 +119,8 @@ public class Main extends SimpleApplication {
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
-        new PickAndRecordPoint(inputManager,cam,
-                shootables,defaultOutputPath, meshInfo.getTransform());
+        /*new PickAndRecordPoint(inputManager,cam,
+                shootables,defaultOutputPath, meshInfo.getTransform());*/
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
         if(useFixedPoints){

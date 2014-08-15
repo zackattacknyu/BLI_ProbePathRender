@@ -18,7 +18,7 @@ import org.zrd.geometryToolkit.probeCalibration.CalibrationHelper;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
-import org.zrd.jmeGeometryIO.renderedObjects.FixedPointsOnLolaMesh;
+import org.zrd.jmeGeometryIO.oldRenderedObjects.FixedPointsOnLolaMesh;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
 

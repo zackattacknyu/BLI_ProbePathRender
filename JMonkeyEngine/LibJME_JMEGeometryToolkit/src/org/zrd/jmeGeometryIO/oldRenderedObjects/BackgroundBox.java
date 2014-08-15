@@ -4,12 +4,6 @@
  */
 package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
-
 /**
  * UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  *
@@ -17,7 +11,7 @@ import com.jme3.scene.shape.Box;
  *      to be put behind the Lola Mesh when using that one in a JME application
  * 
  * @author BLI
- */
+ *
 public class BackgroundBox {
     
     private Spatial background;
@@ -46,4 +40,4 @@ public class BackgroundBox {
         return sampleBox;
     }
     
-}
+}*/

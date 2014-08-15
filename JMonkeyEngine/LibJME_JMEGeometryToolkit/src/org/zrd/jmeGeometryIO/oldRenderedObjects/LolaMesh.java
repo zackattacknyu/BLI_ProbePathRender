@@ -4,20 +4,6 @@
  */
 package org.zrd.jmeGeometryIO.oldRenderedObjects;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix4f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
-import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
-import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
-import org.zrd.geometryToolkit.modelTesting.ModelVerification;
-import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
-import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
-import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
-
 /**
  * UNUSED CODE BUT KEEP FOR POTENTIAL FUTURE USES
  * 
@@ -25,7 +11,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderHelper;
  *      by JME applications
  *
  * @author Zach
- */
+
 public class LolaMesh extends MeshRenderData{
 
     public LolaMesh(AssetManager assetManager){
@@ -78,4 +64,4 @@ public class LolaMesh extends MeshRenderData{
     
     
     
-}
+}*/
