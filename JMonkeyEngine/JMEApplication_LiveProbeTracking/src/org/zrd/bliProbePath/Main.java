@@ -86,6 +86,7 @@ public class Main extends SimpleApplication {
         Properties props = PropertiesHelper.getDefaultProperties();
         Path defaultOutputPath = FilePathHelper.getDefaultOutputFolder();
         boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(props, "surfaceTrackingOn");
+        boolean showTriangleNormals = PropertiesHelper.getBooleanValueProperty(props, "showTriangleNormals");
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
@@ -119,7 +120,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(moveableObject);
         
         //lines for the normals for verification purposes
-        rootNode.attachChild(currentSession.getTriangleNormalDisplay());
+        if(showTriangleNormals) rootNode.attachChild(currentSession.getTriangleNormalDisplay());
         
         //initialize camera coordinate actions
         CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
