@@ -118,6 +118,9 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(shootables);
         rootNode.attachChild(moveableObject);
         
+        //lines for the normals for verification purposes
+        rootNode.attachChild(currentSession.getTriangleNormalDisplay());
+        
         //initialize camera coordinate actions
         CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         

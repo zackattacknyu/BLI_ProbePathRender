@@ -6,6 +6,7 @@ package org.zrd.meshSessionTools;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -37,7 +38,9 @@ public class MeshSession {
     private Node fixedPointNode = new Node();
     private FixedPointPicker fixedPtsToPick;
     private Quaternion rotCalib = new Quaternion();
+    private MeshRenderData importedMesh;
     private float scaleCalib = 1;
+    private Material normalLineMaterial;
     
     public MeshSession(AssetManager assetManager,Camera cam){
         this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
@@ -48,8 +51,10 @@ public class MeshSession {
         String defaultSuffix = props.getProperty("defaultMesh");
         
         Material fixedPtMaterial = MaterialHelper.getColorMaterial(1.0f, 0.0f, 0.0f, assetManager);
+        normalLineMaterial = MaterialHelper.getColorMaterial(assetManager, ColorRGBA.Black);
+        
         meshInterFiles = MeshInputHelper.obtainAllFiles(meshDataPath.toFile(),defaultSuffix);
-        MeshRenderData importedMesh = MeshInputHelper.generateRenderData(
+        importedMesh = MeshInputHelper.generateRenderData(
                 meshInterFiles.getDataFiles(),assetManager);
         if(meshInterFiles.getCameraCoordFile().exists()){
             CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
@@ -71,6 +76,16 @@ public class MeshSession {
         shootableMesh = new Node("shootables");
         shootableMesh.attachChild(surface);
         
+    }
+    
+    /**
+     * This gets the lines for all the triangle normals which originate
+     *      from the triangle center points. Note that this should only be used
+     *      once for model verification purposes
+     * @return      Node for all the normal lines
+     */
+    public Node getTriangleNormalDisplay(){
+        return importedMesh.generateNormalLines(normalLineMaterial);
     }
 
     public Quaternion getRotCalib() {

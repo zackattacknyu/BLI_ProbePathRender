@@ -7,11 +7,15 @@ package org.zrd.jmeGeometryIO.meshIO;
 import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
+import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
 import org.zrd.geometryToolkit.modelTesting.ModelVerification;
+import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 
 /**
  * 
@@ -26,6 +30,8 @@ public class MeshRenderData{
     protected TriangleSet finalMeshInfo;
     protected Material meshMaterial;
     protected Vector3f cameraPosition;
+    
+    private static final float NORMAL_LINE_MAGNITUDE = 0.2f;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -112,6 +118,24 @@ public class MeshRenderData{
         finalMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
+    }
+    
+    public Node generateNormalLines(Material lineMaterial){
+        Node lines = new Node();
+        ArrayList<Vector3f> linePoints = new ArrayList<Vector3f>(2);
+        Vector3f startPoint;
+        Vector3f endPoint;
+        Spatial currentLine;        
+        for(MeshTriangle tri: finalMeshInfo.getTriangleList()){
+            startPoint = tri.getCenter();
+            endPoint = startPoint.add(tri.getNormal().clone().mult(NORMAL_LINE_MAGNITUDE));
+            linePoints.add(startPoint);
+            linePoints.add(endPoint);
+            currentLine = PathRenderHelper.createLineFromVertices(linePoints, lineMaterial);
+            lines.attachChild(currentLine);
+            linePoints.clear();
+        }
+        return lines;
     }
     
     
