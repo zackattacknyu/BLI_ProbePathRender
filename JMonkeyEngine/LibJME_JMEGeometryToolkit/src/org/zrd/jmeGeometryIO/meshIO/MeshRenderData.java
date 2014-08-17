@@ -4,10 +4,14 @@
  */
 package org.zrd.jmeGeometryIO.meshIO;
 
+import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.modelTesting.ModelCorrection;
+import org.zrd.geometryToolkit.modelTesting.ModelVerification;
 
 /**
  * 
@@ -20,6 +24,7 @@ public class MeshRenderData{
     
     protected Spatial renderedMesh;
     protected TriangleSet finalMeshInfo;
+    protected Material meshMaterial;
     protected Vector3f cameraPosition;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
@@ -46,6 +51,10 @@ public class MeshRenderData{
         return finalMeshInfo;
     }
 
+    public Material getMeshMaterial() {
+        return meshMaterial;
+    }
+
     public Vector3f getCameraPosition() {
         return cameraPosition;
     }
@@ -54,14 +63,15 @@ public class MeshRenderData{
         
     }
     
-    public MeshRenderData(Spatial mesh, TriangleSet meshInfo){
+    public MeshRenderData(Spatial mesh, Material meshMat, TriangleSet meshInfo){
         renderedMesh = mesh;
         finalMeshInfo = meshInfo;
+        meshMaterial = meshMat;
     }
     
-    public MeshRenderData(Spatial renderedMesh){
+    public MeshRenderData(Spatial renderedMesh, Material meshMat){
         this.renderedMesh = renderedMesh;
-        
+        this.meshMaterial = meshMat;
         modifyMesh();
     }
     
@@ -93,22 +103,15 @@ public class MeshRenderData{
         float minZ = finalMeshInfo.getMinZ();
         cameraPosition = new Vector3f(0,0,minZ*1.5f);
         
-        /*
-         * 
-        
-        activeMeshInfo = new TriangleSet();
-        activeMeshInfo.setTransform(surfaceTransform);
-        activeMeshInfo = MeshInputHelper.addToTriangleSet(activeMeshInfo,surfaceMesh,surfaceTransform);
-        
-        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(activeMeshInfo);
+        //do model testing
+        ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(finalMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
-        surfaceMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, objectMaterial);
-        activeMeshInfo = correctedMesh;
+        renderedMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, meshMaterial);
+        finalMeshInfo = correctedMesh;
         
         ModelVerification.performModelVerification(correctedMesh);
-        * */
     }
     
     

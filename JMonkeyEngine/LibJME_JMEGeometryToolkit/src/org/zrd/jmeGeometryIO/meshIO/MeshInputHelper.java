@@ -142,11 +142,11 @@ public class MeshInputHelper {
      * @param assetManager          the application's asset manager
      * @return                      the jme spatial for the mesh
      */
-    public static Spatial generateModel(String objFileLocation, 
+    public static MeshRenderData generateModel(String objFileLocation, 
             Material ballMat, AssetManager assetManager) {
         Spatial sampleMesh = assetManager.loadModel(objFileLocation);
         sampleMesh.setMaterial(ballMat);
-        return sampleMesh;
+        return new MeshRenderData(sampleMesh,ballMat);
     }
 
     /**
@@ -156,7 +156,7 @@ public class MeshInputHelper {
      * @param assetManager          the application's asset manager
      * @return                      the jme spatial for the mesh
      */
-    public static Spatial generateModel(File objFile, 
+    public static MeshRenderData generateModel(File objFile, 
             Material ballMat, AssetManager assetManager) {
         assetManager.registerLocator(objFile.getParentFile().getAbsolutePath(), FileLocator.class);
         return generateModel(objFile.getName(),ballMat,assetManager);
@@ -169,7 +169,7 @@ public class MeshInputHelper {
      * @param assetManager          the application's asset manager
      * @return                      the jme spatial for the mesh
      */
-    public static Spatial generateModel(File objFile, 
+    public static MeshRenderData generateModel(File objFile, 
             File textureFile, AssetManager assetManager) {
         Material objectMaterial = MaterialHelper.getTextureMaterial(assetManager, textureFile);
         //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
@@ -178,9 +178,8 @@ public class MeshInputHelper {
     }
     
     public static MeshRenderData generateRenderData(MeshDataFiles meshFiles, AssetManager assetManager){
-        Spatial importedMesh = generateModel(meshFiles.getObjFile(),
+        return generateModel(meshFiles.getObjFile(),
                 meshFiles.getTextureFile(),assetManager);
-        return new MeshRenderData(importedMesh);
     }
     
     public static MeshRenderData selectFilesAndGenerateRenderData(File initImport, AssetManager assetManager){

@@ -152,8 +152,6 @@ public class Main extends SimpleApplication {
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
         
-        //RotationTesting.doRotationTesting();
-        
     }
 
     @Override
