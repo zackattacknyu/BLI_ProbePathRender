@@ -51,10 +51,6 @@ public class Main extends SimpleApplication {
     
     private boolean renderPathsDuringRecording = false;
     
-    private ImportFixedPoints fixedPtsImport;
-    
-    private Material fixedPtMaterial;
-    
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
     }
@@ -93,9 +89,6 @@ public class Main extends SimpleApplication {
         boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
         outputText = new LiveTrackingText(guiNode,assetManager);
         
-        //initialize tracker
-        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager);
-        
         //initializes the mesh session variables
         MeshSession currentSession = new MeshSession(assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
@@ -103,13 +96,10 @@ public class Main extends SimpleApplication {
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
         TriangleSet meshInfo = currentSession.getMeshInfo();
         
-        //redoes the calibration if necessary
-        if(!currentSession.getRotCalib().equals(new Quaternion())){
-            probeTracker.setRotationCalibration(currentSession.getRotCalib());
-        }
-        if(currentSession.getScaleCalib() != 1){
-            probeTracker.setScale(currentSession.getScaleCalib());
-        }
+        //initialize tracker
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(
+                inputManager,props,
+                currentSession.getCalibrationProperties());
         
         //initialize the defaults
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);
@@ -151,7 +141,6 @@ public class Main extends SimpleApplication {
         
         //initialize fixed points actions
         new RecordFixedPoints(inputManager,probeMoveAction,defaultOutputPath,meshInterFiles);
-        fixedPtsImport = new ImportFixedPoints(inputManager,defaultOutputPath);
         
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
@@ -183,13 +172,5 @@ public class Main extends SimpleApplication {
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
-        
-        if(fixedPtsImport.isNewPointsImported()){
-            
-            rootNode.attachChild(FixedPointRender.displayFixedPoints(fixedPtsImport.getImportedPoints(),fixedPtMaterial));
-            
-            probeMoveAction.setFixedPointSet(fixedPtsImport.getImportedPoints().getFixedPtPicker());
-            
-        }
     }
 }

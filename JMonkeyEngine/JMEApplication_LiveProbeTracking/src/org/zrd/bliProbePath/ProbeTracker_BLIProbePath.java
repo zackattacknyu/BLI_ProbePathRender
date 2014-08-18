@@ -8,7 +8,7 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.Properties;
-import org.zrd.geometryToolkit.geometryUtil.CalibrationFileResults;
+import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
 import org.zrd.keyboardObjectTracking.keyboardTrackingClient.KeyboardInputSourceTracker;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
@@ -22,8 +22,7 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  */
 public class ProbeTracker_BLIProbePath {
 
-    public static ProbeTracker createNewProbeTracker(InputManager manager){
-        Properties trackerProps = PropertiesHelper.getDefaultProperties();
+    public static ProbeTracker createNewProbeTracker(InputManager manager, Properties trackerProps, Properties specificCalibProps){
         
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
@@ -39,11 +38,11 @@ public class ProbeTracker_BLIProbePath {
 
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
-        
-        CalibrationFileResults results = new CalibrationFileResults(trackerProps);
 
-        float finalScaleX = results.getScaleCalib();
-        float finalScaleY = results.getScaleCalib();
+        CalibrationProperties results = CalibrationProperties.obtainCalibrationProperties(specificCalibProps, trackerProps);
+
+        float finalScaleX = results.getScaleCalibration();
+        float finalScaleY = results.getScaleCalibration();
         
         //gets the starting position
         float startX = Float.parseFloat(
