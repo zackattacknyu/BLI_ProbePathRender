@@ -6,9 +6,9 @@ package org.zrd.probeTrackingRender;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
-import org.zrd.probeTracking.ProbeTracker;
 
 /**
  *
@@ -16,21 +16,21 @@ import org.zrd.probeTracking.ProbeTracker;
  */
 public class ProbeTrackerRecording extends GeneralKeyboardActionMethod{
     
-    private ProbeTracker probeTracker;
+    private LocationTracker activeTracker;
     private RecordedPathSet recordedPathSet;
     private boolean newPathExists = false;
     
-    public ProbeTrackerRecording(InputManager inputManager, RecordedPathSet recordedPathSet, ProbeTracker probeTracker){
+    public ProbeTrackerRecording(InputManager inputManager, RecordedPathSet recordedPathSet, LocationTracker activeTracker){
         super(inputManager,"startStopNewPath",KeyInput.KEY_N);
-        this.probeTracker = probeTracker;
+        this.activeTracker = activeTracker;
         this.recordedPathSet = recordedPathSet;
     }
 
     @Override
     public void actionMethod() {
-        probeTracker.startStopRecording();
-        if(probeTracker.isNewPathExists()){
-            recordedPathSet.addPath(probeTracker.getCurrentPathVertices());
+        activeTracker.startStopRecording();
+        if(activeTracker.isNewPathExists()){
+            recordedPathSet.addPath(activeTracker.getCurrentPathVertices());
             newPathExists = true;
         }
     }

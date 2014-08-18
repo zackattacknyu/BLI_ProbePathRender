@@ -34,5 +34,9 @@ public interface LocationTracker {
     
     ArrayList<Vector3f> getVerticesSinceLastRead();
     float getArcLengthSinceLastRead();
+
+    void startStopRecording();
+    boolean isNewPathExists();
+    ArrayList<Vector3f> getCurrentPathVertices();
     
 }

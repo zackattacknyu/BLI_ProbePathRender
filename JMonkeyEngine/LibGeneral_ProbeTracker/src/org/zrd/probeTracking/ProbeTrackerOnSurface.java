@@ -6,6 +6,7 @@ package org.zrd.probeTracking;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
@@ -28,11 +29,15 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     
     private MeshTriangle currentTriangle;
     private MeshTriangle lastTriangle;
+    private boolean recordingPath = false;
+    private PathRecorder currentRecordingPathOnMesh;
+    private Path outputFilePath;
 
-    public ProbeTrackerOnSurface(LocationTracker probeTracker, TriangleSet surfaceToTrackOn){
+    public ProbeTrackerOnSurface(LocationTracker probeTracker, TriangleSet surfaceToTrackOn, Path outputFilePath){
         this.locationTracker = probeTracker;
         this.surfaceToTrackOn = surfaceToTrackOn;
         currentPositionOnMesh = probeTracker.getCurrentPosition();
+        this.outputFilePath = outputFilePath;
         pathProj = null;
     }
     
@@ -77,7 +82,9 @@ public class ProbeTrackerOnSurface implements LocationTracker{
             }
         }
         
-        
+        if(recordingPath){
+            currentRecordingPathOnMesh.addToPath(currentPositionOnMesh);
+        }
         
         
     }
@@ -135,6 +142,33 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     @Override
     public void setCurrentPosition(Vector3f position) {
         locationTracker.setCurrentPosition(position);
+    }
+
+    @Override
+    public void startStopRecording() {
+        //starts and stops the tracking for the probe tracker
+        locationTracker.startStopRecording();
+        
+        if(recordingPath){
+            System.out.println("Recording New Path Stopped");
+            currentRecordingPathOnMesh.closeRecording();
+            recordingPath = false;
+        }else{
+            System.out.println("Now Recording new path");
+            currentRecordingPathOnMesh = new PathRecorder(currentPositionOnMesh,outputFilePath,true);
+            recordingPath = true;
+        }
+        
+    }
+
+    @Override
+    public boolean isNewPathExists() {
+        return locationTracker.isNewPathExists();
+    }
+
+    @Override
+    public ArrayList<Vector3f> getCurrentPathVertices() {
+        return currentRecordingPathOnMesh.getVertices();
     }
 
     

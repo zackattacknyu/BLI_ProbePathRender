@@ -113,12 +113,12 @@ public class Main extends SimpleApplication {
         CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         
         //initialize surface tracker
-        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo);
+        probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo,FilePathHelper.getDefaultOutputFolder());
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
-        new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
+        new ProbeTrackerRecording(inputManager,recordedPathSet,activeTracker);
         
         new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo,
                 defaultOutputPath,fixedPtsToPick);
