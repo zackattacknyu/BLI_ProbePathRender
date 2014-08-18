@@ -6,9 +6,7 @@ package probeTrackingRender;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import java.io.File;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
-import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
 import org.zrd.probeTracking.ProbeTracker;
 

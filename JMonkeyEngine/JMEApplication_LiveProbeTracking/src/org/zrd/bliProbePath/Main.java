@@ -1,13 +1,11 @@
 package org.zrd.bliProbePath;
 
 import org.zrd.meshSessionTools.MeshSession;
-import org.zrd.jmeGeometryInteractions.meshInteraction.ImportFixedPoints;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import java.nio.file.Path;
@@ -18,7 +16,6 @@ import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
-import org.zrd.jmeGeometryIO.renderedObjects.FixedPointRender;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
@@ -147,10 +144,7 @@ public class Main extends SimpleApplication {
          */
         
         probeTrackerRender.updateInfo();
-    }
-
-    @Override
-    public void simpleRender(RenderManager rm) {
+        
         probeTrackerRender.updateRenderObjectInfo();
         
         if(renderPathsDuringRecording){
@@ -163,7 +157,10 @@ public class Main extends SimpleApplication {
         
         outputText.setXyzText(activeTracker.getXYZtext());
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
-        
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
+    }
+
+    @Override
+    public void simpleRender(RenderManager rm) {
     }
 }
