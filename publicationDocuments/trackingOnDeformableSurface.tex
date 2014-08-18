@@ -59,18 +59,9 @@ Using the Kinect for tracking would have some advantages over image-based tracki
 \\
 Motion Capture is a popular technique for film making that tracks a character's motion in 3D space. Using a motion capture system we would get 3D coordinates for the probe's position as it moves across a patient. Current motion capture systems however are expensive and cumbersome to set up. Both of these make it impractical for the clinical setting. **INSERT REFERENCE**\\
 \\
-There is work being done on using magnets for motion tracking.
-\begin{verbatim}
-http://s2014.siggraph.org/attendees/emerging-technologies/events/im3d-magnetic-motion-tracking-system-dexterous-3d
-\end{verbatim}
-While we could get measurement accuracy with this method and the setup would not be too difficult, the system would be cumbersome for patients. It would also only be limited to tracking across an area as big as the magnetic coils. The method we are proposing can be used on any mesh that is scanned in 3D and can track across the entire mesh.\\
+There is work being done on using magnets for motion tracking \cite{magnetictracking}. While we could get measurement accuracy with this method and the setup would not be too difficult, the system would be cumbersome for patients. It would also only be limited to tracking across an area as big as the magnetic coils. The method we are proposing can be used on any mesh that is scanned in 3D. Additionally, we want to easily be able to track across the entire mesh that was scanned.\\
 \\
-Current work on deformable surface tracking is focused on tracking the deformations of the surface itself.
-\begin{verbatim}
-http://rll.berkeley.edu/tracking/paper.pdf
-http://cvlab.epfl.ch/files/content/sites/cvlab2/files/publications/publications/2007/SalzmannHF07.pdf
-\end{verbatim}
-This paper focuses on deformable surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
+Current work on deformable surface tracking is focused on tracking the deformations of the surface itself \cite{deformableobjecttracking,convexopt}. This paper focuses on deformable surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
 \\
 Being that we are tracking on a 2D surface embedded into 3D space, we thought about trying to flatten the mesh first and then track on it. We found the following paper that described a mesh flattening algorithm. **INSERT CITATION**. Even though the mesh flattening does not have any holes or gaps when using this algorithm, there is no way to assure that our path will not leave the boundary of the flattened mesh. Additionally, we need an algorithm to work on arbitrary meshes and the mesh flattening was only proven to work with a handful of meshes. Due to these difficulties, we decided not to flatten the entire mesh and only do local flattening when we want the path to follow the mesh, which means we care about the triangle where the path is currently as well as its neighboring triangles. 
 
