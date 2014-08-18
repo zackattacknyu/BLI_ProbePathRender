@@ -76,7 +76,7 @@ http://cvlab.epfl.ch/files/content/sites/cvlab2/files/publications/publications/
 \end{verbatim}
 This paper focuses on deformable surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
 \\
-Surface flattening paper entitled mesh unfolding\\
+Being that we are tracking on a 2D surface embedded into 3D space, we thought about trying to flatten the mesh first and then track on it. We found the following paper that described a mesh flattening algorithm. **INSERT CITATION**. Even though the mesh flattening does not have any holes or gaps when using this algorithm, there is no way to assure that our path will not leave the boundary of the flattened mesh. Additionally, we need an algorithm to work on arbitrary meshes and the mesh flattening was only proven to work with a handful of meshes. Due to these difficulties, we decided not to flatten the entire mesh and only do local flattening when we want the path to follow the mesh, which means we care about the triangle where the path is currently as well as its neighboring triangles. 
 
 \section*{Following a Deformable mesh}
 
@@ -88,7 +88,8 @@ Surface flattening paper entitled mesh unfolding\\
 
 \section*{Acknowledgments}
 
-\section*{References}
+\bibliographystyle{plain}
+\bibliography{trackingRefs}
 
 \section*{Appendix}
 
