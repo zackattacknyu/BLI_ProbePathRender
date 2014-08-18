@@ -15,6 +15,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
@@ -36,6 +37,14 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
     
     private String enableClickingText;
     private String disableClickingText;
+    
+    public static ProbeMoveAction initializeProbeMoveAction(InputManager inputManager, Camera cam, 
+            Node shootableMesh, LocationTracker activeTracker, TriangleSet meshInfo, FixedPointPicker fixedPtPicker, 
+            boolean useFixedPointsIfExists){
+        return (useFixedPointsIfExists && (fixedPtPicker != null)) ? 
+                new ProbeMoveAction(inputManager,cam,shootableMesh,activeTracker,fixedPtPicker) : 
+                new ProbeMoveAction(inputManager,cam,shootableMesh,activeTracker,meshInfo.getTransform());
+    }
     
     public ProbeMoveAction(InputManager inputManager, Camera cam, Node shootableMesh, LocationTracker probeTracker, Matrix4f transform){
         super(inputManager,"probeMoveAction",KeyInput.KEY_J);

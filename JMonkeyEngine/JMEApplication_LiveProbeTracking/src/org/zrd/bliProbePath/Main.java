@@ -121,22 +121,15 @@ public class Main extends SimpleApplication {
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
-        /*new PickAndRecordPoint(inputManager,cam,
-                shootables,defaultOutputPath, meshInfo.getTransform());*/
         new ProbeTrackerRecording(inputManager,recordedPathSet,probeTracker);
         
-        if(useFixedPointsIfExists){
-            new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo,
+        new ProbeRotationCalibration(inputManager, cam, shootables, probeTracker, meshInfo,
                 defaultOutputPath,fixedPtsToPick);
-        }else{
-            new ProbeRotationCalibration(
-                inputManager, cam, shootables, probeTracker, meshInfo,defaultOutputPath,null);
-        }
         
         //initialize active tracker actions
-        probeMoveAction = (useFixedPointsIfExists && (fixedPtsToPick != null)) ? 
-                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,fixedPtsToPick) : 
-                new ProbeMoveAction(inputManager,cam,shootables,activeTracker,meshInfo.getTransform());
+        probeMoveAction = ProbeMoveAction.initializeProbeMoveAction(inputManager, 
+                cam, shootables, activeTracker, meshInfo, 
+                fixedPtsToPick, useFixedPointsIfExists);
         probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
         
         //initialize fixed points actions
