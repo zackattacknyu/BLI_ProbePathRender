@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package probeTrackingRender;
+package org.zrd.probeTrackingRender;
 
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -17,7 +17,6 @@ import org.zrd.probeTracking.ProbeTracker;
 public class ProbeTrackerRecording extends GeneralKeyboardActionMethod{
     
     private ProbeTracker probeTracker;
-    private String recordingText;
     private RecordedPathSet recordedPathSet;
     private boolean newPathExists = false;
     
@@ -30,7 +29,6 @@ public class ProbeTrackerRecording extends GeneralKeyboardActionMethod{
     @Override
     public void actionMethod() {
         probeTracker.startStopRecording();
-        recordingText = probeTracker.getRecordingText();
         if(probeTracker.isNewPathExists()){
             recordedPathSet.addPath(probeTracker.getCurrentPathVertices());
             newPathExists = true;

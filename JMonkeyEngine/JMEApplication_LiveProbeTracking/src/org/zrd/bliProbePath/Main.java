@@ -20,14 +20,14 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.probeTracking.ProbeTracker;
-import probeTrackingRender.ProbeMoveAction;
-import probeTrackingRender.ProbeRotationCalibration;
+import org.zrd.probeTrackingRender.ProbeMoveAction;
+import org.zrd.probeTrackingRender.ProbeRotationCalibration;
 import org.zrd.probeTracking.ProbeTrackerOnSurface;
 import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.properties.PropertiesHelper;
-import probeTrackingRender.ProbeTrackerRecording;
-import probeTrackingRender.ProbeTrackerRender;
-import probeTrackingRender.ResetTracker;
+import org.zrd.probeTrackingRender.ProbeTrackerRecording;
+import org.zrd.probeTrackingRender.ProbeTrackerRender;
+import org.zrd.probeTrackingRender.ResetTracker;
 
 
 /**

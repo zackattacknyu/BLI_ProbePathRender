@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package probeTrackingRender;
+package org.zrd.probeTrackingRender;
 
 import org.zrd.jmeGeometryInteractions.meshInteraction.PickPointOnMesh;
 import org.zrd.geometryToolkit.pointTools.MeshPointHandler;

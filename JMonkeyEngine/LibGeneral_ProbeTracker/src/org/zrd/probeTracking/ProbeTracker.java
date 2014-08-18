@@ -53,7 +53,6 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private float currentDeltaX=0,currentDeltaY=0;
     private AbstractInputSourceTracker currentSourceTracker;
     private AbstractSerialInputToWorldConverter coordConverter;
-    private String recordingText;
     private QualityStatistics currentQualityStats;
     private ArrayList<String> currentQualityResults;
     
@@ -195,16 +194,14 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         
         if(recordingPath){
             System.out.println("Recording New Path Stopped");
-            recordingText = "Press N to record a new path";
             currentRecordingPath.closeRecording();
             currentQualityResults = currentQualityStats.closeStatRecording();
             newPathExists = true;
             recordingPath = false;
         }else{
-            recordingText = "Now recording new path (Press N to stop recording)";
             System.out.println("Now Recording new path");
             newPathExists = false;
-            currentRecordingPath = makeNewRecorder();
+            currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath);
             currentQualityStats = new QualityStatistics();
             recordingPath = true;
         }
@@ -218,18 +215,6 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     public ArrayList<Vector3f> lastRecordedPathVertices(){
         return currentRecordingPath.getVertices();
-    }
-
-    public String getRecordingText() {
-        return recordingText;
-    }
-    
-    private PathRecorder makeNewRecorder(){
-        if(pathRecordingFilePath == null){
-            return new PathRecorder(currentPosition);
-        }else{
-            return new PathRecorder(currentPosition,pathRecordingFilePath);
-        }
     }
 
     public void resetProbe(){
