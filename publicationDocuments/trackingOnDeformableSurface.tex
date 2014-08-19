@@ -79,8 +79,44 @@ This can be furthur simplified to say
 \[
 E = v - N(v.N)
 \]
+We then find the intersection of the vector $E$ with the current triangle. If the segment is entirely in the triangle, then we move onto the next segment starting from the endpoint of $E$. If the segment leaves the triangle, then we find which edge the segment intersects and repeat the projection procedure for the end part of the segment that is not in the triangle. This procedure of course relied on finding the intersection of the triangle with the segment which proved to be non-trivial.\\
+\\
+When finding the triangle and segment intersection, we had a triangle in a 3D space as well as a segment that was supposed to be coplanar to the triangle but could be slightly off due to floating-point errors with the coordinates. To find the intersection point, I converted the segment and triangle coordinates to the coordinate system where one of the vertices of the triangle is the origin and the basis vectors are the two vectors made by the segments coming off that vertex as well as the cross product of those vectors. In this coordinate system, the third coordinate should be zero. In practice, it was near zero due to floating point errors. Once in the new coordinate system, we just had to find the 2D intersection of the triangle and the segment. \\
+\\
+The above procedure describes what we did with a single segment. With paths, we just iterated this procedure for each segment of the path. We assumed that the important aspect of each segment is its vector and not its origin point, since that is what we get from the probe. This meant that the end point of a projected segment was treated as the start point for the rest of the path when doing the loop to project the entire path onto the mesh.
 
-\section*{Calibration of Rotation}
+\section*{Calibration of Rotation and Scale}
+
+After taking a 3D scan and importing the mesh into our environment, we have our object in a virtual world with a virtual coordinate system. Our probe operates in the real world. We thus need to know how to translate between the two in order to get an accurate visualization. We first needed to translate displacement readings from the probe to displacement in the virtual world. Afterwards, we needed to get rotation calibrated so that the displacement vectors went in accurate directions in the virtual world. \\
+\\
+The Scale Calibration was relatively straightforward. The probe gave numerical displacement readings that ranged from -127 to 127. We then made the probe travel 100 mm in every direction and summed up the displacement values. This gave us a probe unit to millimeters conversion factor. We then measured the distance between the calibration points in the virtual world and in the real world in millimeters and this gave us a virtual unit to millimeters conversion ratio. We then combined the two ratios and obtained a probe unit to virtual unit conversion ratio. \\
+\\
+The Rotation Calibration was difficult. This involved recording a path that went between calibration points and finding the correct rotation to apply in the virtual world so that the start and end point of the path are the points on the mesh. Making the start point match is easy as you just translate the path. With making the end points match, the path has to follow the mesh in order to conclude that the end points truly match. We needed to find a rotation to apply to the path that would make end points match as close as possible while the path is projected onto the mesh. In order to do this, I first rotated the path onto the mesh meaning the first segment of the path was on the same plane as its triangle. I then rotated the path along the plane made by the first triangle until the end points matched up closely. I then took the rotated path and projected it onto the mesh. I then found the rotation required to match the projected path endpoint with the target endpoint. I used that angle and rotated the original rotated path along the surface that much. I then projected that path and repeated the process until I got convergence. The aggregate rotation that resulted was used as the rotation calibration and applied to the rotation found by the probe to get the rotation in the virtual world. Here is the pseudo-code for the rotation calibration:
+
+\begin{verbatim}
+N: normal to the first triangle
+P: original path
+P': current path rotated
+P'': the path P' projected onto the mesh
+
+Rotations will be in axis-angle form as (T,E) 
+where T is the angle and E is the axis
+
+1. Let p be the projection of the first segment of P onto the first triangle
+2. Rotate P so that its first segment matches p and call the rotated path P'
+3. Find the rotation (Theta,E) that will make the end point of P' 
+   match the target end point
+4. Apply the rotation (Theta,N) to P' to rotate it along the 
+   same plane as the first triangle
+5. Find the path P'' which is P' projected onto the mesh
+6. Find the rotation (Theta,E) that will make the end point 
+   of P'' match the target end point
+7. Apply the rotation (Theta,N) to P'
+8. Repeat steps 5-7 until P' converges
+
+Output the quaternion Q such that P' = Q*P
+
+\end{verbatim}
 
 \section*{Experimental Results}
 
