@@ -145,6 +145,12 @@ public class Main extends SimpleApplication {
         
         probeTrackerRender.updateInfo();
         
+        
+    }
+
+    @Override
+    public void simpleRender(RenderManager rm) {
+        
         probeTrackerRender.updateRenderObjectInfo();
         
         if(renderPathsDuringRecording){
@@ -158,9 +164,5 @@ public class Main extends SimpleApplication {
         outputText.setXyzText(activeTracker.getXYZtext());
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
-    }
-
-    @Override
-    public void simpleRender(RenderManager rm) {
     }
 }

@@ -79,6 +79,8 @@ public class ProbeTrackerOnSurface implements LocationTracker{
                     lastTriangle = currentTriangle;
                 }
 
+            }else{
+                currentPositionOnMesh = locationTracker.getCurrentPosition();
             }
         }
         
