@@ -67,6 +67,19 @@ Being that we are tracking on a 2D surface embedded into 3D space, we thought ab
 
 \section*{Following a Deformable mesh}
 
+For the purposes of our application, we need to have paths on the mesh itself so that we know the location on the mesh of particular data points. Due to the deformability, the paths ends up being close to the mesh, but not on the mesh itself, no matter how accurate the calibration was. Additionally, in order to do the calibration, we need the path to follow the mesh itself so that the end points line up. We thus came up with an algorithm for projecting a path onto the triangles of the mesh. \\
+\\
+A path is just a series of connected segments and the mesh is just a series of triangles. Thus the input of our algorithm is a segment with a start and end point as well as the triangle where it originates and the triangles neighbors. We need to make sure the projection preserves the length of the segment. We also want to preserve the orientation along the surface thus we are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
+\\
+If we let $v$ be the segment vector, $N$ be the normal, and $E$ be the resultant vector that is the projection of $v$ onto the plane described by $N$, then the following equation will get us $E$
+\[
+E = v - proj_N(v)
+\]
+This can be furthur simplified to say
+\[
+E = v - N(v.N)
+\]
+
 \section*{Calibration of Rotation}
 
 \section*{Experimental Results}
