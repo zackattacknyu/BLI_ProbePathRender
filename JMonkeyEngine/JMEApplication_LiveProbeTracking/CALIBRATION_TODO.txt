@@ -1,2 +1,0 @@
-Make sure you have to hit the spacebar
-between clicks when doing calibration or selecting two points
