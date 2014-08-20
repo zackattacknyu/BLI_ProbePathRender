@@ -21,6 +21,7 @@ import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.jmeUtil.mouseKeyboard.SpacebarHitImpl;
 
 /**
  * 
@@ -41,6 +42,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     private MeshTriangle startingTriangle;
     private MeshTriangle endingTriangle;
     private TriangleSet meshInfo;
+    private SpacebarHitImpl spacebarHit;
     
     private boolean pointsNewlyPicked = false;
     
@@ -61,6 +63,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
         super(inputManager,actionName,keyTrigger);
         new PickPointOnMesh(pointPickName,inputManager,cam,this,shootableMesh,fixedPtPicker);
         this.meshInfo = meshInfo;
+        this.spacebarHit = new SpacebarHitImpl(inputManager);
     }
     
     /**
@@ -173,6 +176,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     handleStartPoint(startPoint);
                     
                     onStartPoint = false;
+                    spacebarHit.resetSpacebarHit();
                 }
 
             }else{
@@ -180,7 +184,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                 //we are at the end point
 
                 Vector3f endPoint = pointOnMesh.clone();
-                if(!endPoint.equals(lastPointClicked)){
+                if(!endPoint.equals(lastPointClicked) && spacebarHit.wasSpacebarHit()){
                     
                     //registers the ending triangle
                     endingTriangle = triangleOnMesh.clone();

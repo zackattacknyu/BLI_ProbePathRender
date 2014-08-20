@@ -128,6 +128,8 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
         
         //moves the current path so its start point matches the one given
         currentPath = PathTransformHelper.movePathStartPoint(currentPath, startPoint);
+        
+        System.out.println("Hit spacebar before selecting end point");
     }
 
     /**
