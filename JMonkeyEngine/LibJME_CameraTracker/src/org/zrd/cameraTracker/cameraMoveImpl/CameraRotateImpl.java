@@ -42,7 +42,7 @@ public class CameraRotateImpl extends GeneralMouseAnalogMethod implements Camera
         this.rotMatrix = rotMatrix;
         this.lookAtCenter = lookAtCenter;
         
-        mouseClick = new MouseClickImpl(manager);
+        mouseClick = new MouseClickImpl(manager,"mouseClickFor"+name);
     }
 
     /**

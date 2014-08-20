@@ -28,7 +28,15 @@ public class MouseClickImpl extends GeneralMouseActionMethod{
      * @param manager   the input manager currently being used
      */
     public MouseClickImpl(InputManager manager){
-        super(manager,"cameraMouseClick",MouseInput.BUTTON_LEFT);
+        this(manager,"cameraMouseClick");
+    }
+    
+    /**
+     * constructor to instantiate the listener for the mouse
+     * @param manager   the input manager currently being used
+     */
+    public MouseClickImpl(InputManager manager, String name){
+        super(manager,name,MouseInput.BUTTON_LEFT);
     }
     
     /**
