@@ -108,3 +108,5 @@
 /JMonkeyEngine/LibJME_JMESessionToolkit/dist/
 /JMonkeyEngine/JMEApplication_MeshDisplay/dist/
 /JMonkeyEngine/JMEApplication_RawProbeDataDisplay/dist/
+/JMonkeyEngine/CMDApplication_Testing/nbproject/private/
+/JMonkeyEngine/CMDApplication_Testing/build/

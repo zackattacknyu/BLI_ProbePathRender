@@ -23,13 +23,6 @@ public class SerialDataPoint {
     //says the delimiter used to separate parts of the serial data string
     public static final String SERIAL_DATA_STRING_DELIMITER = ",";
     
-    /**
-     *Min number of data parts before it parses the string.
-     *      This prevents small strings from the serial reading
-     *      being parsed and causing errors
-     */
-    public static final int MIN_NUM_DATA_PARTS = 8;
-    
     //default field value if not specified by data string
     public static final float DEFAULT_FIELD_VALUE = Float.NaN;
     
@@ -48,7 +41,7 @@ public class SerialDataPoint {
         dataParts = data.split(SERIAL_DATA_STRING_DELIMITER);
         
         //make sure we currently have enough data
-        if(dataParts.length >= MIN_NUM_DATA_PARTS){
+        if(dataParts.length >= dataLocations.size()){
             x = getPart(DataLocationsMap.X_KEY);
             y = getPart(DataLocationsMap.Y_KEY);
             yaw = getPart(DataLocationsMap.YAW_KEY);
