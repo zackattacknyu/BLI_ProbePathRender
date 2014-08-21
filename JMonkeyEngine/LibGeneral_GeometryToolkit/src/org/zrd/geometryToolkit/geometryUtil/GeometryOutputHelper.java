@@ -20,8 +20,6 @@ public class GeometryOutputHelper {
         int rollInDegs = BasicAngleHelper.convertRadiansToIntDegrees(rollInRadians);
         
         return String.format("(Yaw,Pitch,Roll) = (%s,%s,%s)", yawInDegs,pitchInDegs,rollInDegs);
-        
-        //return "(Yaw,Pitch,Roll) = (" + yawInDegs + "," + pitchInDegs + "," + rollInDegs + ")";
     }
 
     public static String getXYZDisplayString(Vector3f position) {
