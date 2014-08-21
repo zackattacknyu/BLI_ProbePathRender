@@ -19,7 +19,15 @@ public class GeometryOutputHelper {
         float pitchInDegs = BasicAngleHelper.convertRadiansToDegrees(pitchInRadians);
         float rollInDegs = BasicAngleHelper.convertRadiansToDegrees(rollInRadians);
         
-        return String.format("(Yaw,Pitch,Roll) = (%1$.0f,%2$.0f,%3$.0f)", yawInDegs,pitchInDegs,rollInDegs);
+        int displayYaw = roundToNearestEven(yawInDegs);
+        int displayPitch = roundToNearestEven(pitchInDegs);
+        int displayRoll = roundToNearestEven(rollInDegs);
+        
+        return String.format("(Yaw,Pitch,Roll) = (%1$d,%2$d,%3$d)", displayYaw,displayPitch,displayRoll);
+    }
+    
+    public static int roundToNearestEven(float num){
+        return 2*((int)Math.floor(num/2.0));
     }
 
     public static String getXYZDisplayString(Vector3f position) {
