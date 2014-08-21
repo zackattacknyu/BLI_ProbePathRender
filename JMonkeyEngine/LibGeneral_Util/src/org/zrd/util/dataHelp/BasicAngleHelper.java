@@ -21,4 +21,8 @@ public class BasicAngleHelper {
         return radians*RAD_TO_DEG_FACTOR;
     }
     
+    public static int convertRadiansToIntDegrees(float radians){
+        return Math.round(convertRadiansToDegrees(radians));
+    }
+    
 }

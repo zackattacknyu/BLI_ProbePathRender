@@ -14,8 +14,14 @@ import org.zrd.util.dataHelp.BasicAngleHelper;
 public class GeometryOutputHelper {
 
     public static String getYawPitchRollDisplayString(float yawInRadians, float pitchInRadians, float rollInRadians) {
-        Vector3f orientationPoint = new Vector3f(BasicAngleHelper.convertRadiansToDegrees(yawInRadians), BasicAngleHelper.convertRadiansToDegrees(pitchInRadians), BasicAngleHelper.convertRadiansToDegrees(rollInRadians));
-        return "(Yaw,Pitch,Roll) = " + orientationPoint;
+        
+        int yawInDegs = BasicAngleHelper.convertRadiansToIntDegrees(yawInRadians);
+        int pitchInDegs = BasicAngleHelper.convertRadiansToIntDegrees(pitchInRadians);
+        int rollInDegs = BasicAngleHelper.convertRadiansToIntDegrees(rollInRadians);
+        
+        return String.format("(Yaw,Pitch,Roll) = (%s,%s,%s)", yawInDegs,pitchInDegs,rollInDegs);
+        
+        //return "(Yaw,Pitch,Roll) = (" + yawInDegs + "," + pitchInDegs + "," + rollInDegs + ")";
     }
 
     public static String getXYZDisplayString(Vector3f position) {
