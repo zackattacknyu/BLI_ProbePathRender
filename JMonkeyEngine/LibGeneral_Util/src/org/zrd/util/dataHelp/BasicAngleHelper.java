@@ -25,4 +25,10 @@ public class BasicAngleHelper {
         return Math.round(convertRadiansToDegrees(radians));
     }
     
+    public static boolean hasAngleChangedEnough(float oldAngleRads, float newAngleRads){
+        float diffInRadians = Math.abs(oldAngleRads-newAngleRads);
+        float diffInDegs = convertRadiansToDegrees(diffInRadians);
+        return (diffInDegs > 2);
+    }
+    
 }

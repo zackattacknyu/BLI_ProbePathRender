@@ -17,6 +17,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.AbstractSerialInputToWorldC
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
+import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.stats.QualityStatistics;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
@@ -35,6 +36,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private final Vector3f startingPosition;
     
     private float currentYaw=0,currentPitch = 0,currentRoll = 0;
+    private float lastYaw,lastPitch,lastRoll;
+    private String lastOutputText;
     
     private Quaternion rotationFromData;
     
@@ -252,8 +255,24 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     @Override
     public String getYawPitchRollText(){
-        return GeometryOutputHelper.getYawPitchRollDisplayString(currentYaw, currentPitch, currentRoll);
+        if(lastOutputText == null ||
+                BasicAngleHelper.hasAngleChangedEnough(lastYaw, currentYaw) ||
+                BasicAngleHelper.hasAngleChangedEnough(lastRoll, currentRoll) ||
+                BasicAngleHelper.hasAngleChangedEnough(lastPitch, currentPitch)
+                ){
+            
+            lastOutputText = GeometryOutputHelper.getYawPitchRollDisplayString(currentYaw, currentPitch, currentRoll);
+            lastYaw = currentYaw;
+            lastRoll = currentRoll;
+            lastPitch = currentPitch;
+            return lastOutputText;
+        }else{
+            
+            return lastOutputText;
+            
+        }
     }
+    
     
     public float getCurrentYaw() {
         return currentYaw;
