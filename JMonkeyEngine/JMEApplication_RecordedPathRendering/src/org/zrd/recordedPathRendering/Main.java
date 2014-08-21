@@ -17,6 +17,7 @@ import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
+import org.zrd.util.fileHelper.MeshInteractionFiles;
 
 /**
  * test
@@ -44,8 +45,9 @@ public class Main extends SimpleApplication {
         Node shootables = currentSession.getShootableMesh();
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         TriangleSet meshInfo = currentSession.getMeshInfo();
+        MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
 
-        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam);
+        CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         
         rootNode.attachChild(shootables);
         
@@ -53,6 +55,8 @@ public class Main extends SimpleApplication {
         lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
         pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
+        
+        rootNode.attachChild(currentSession.getFixedPointNode());
     }
 
     @Override
