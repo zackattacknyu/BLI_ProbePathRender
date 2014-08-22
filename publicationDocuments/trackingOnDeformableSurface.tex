@@ -53,6 +53,13 @@ This paper presents two algorithms. The first one takes a path that almost follo
 
 \section*{Related Work}
 
+Real-time location systems would not work for our needs due to the lack of accuracy. 
+\begin{verbatim}
+http://www.ekahau.com/real-time-location-system/technology/how-rtls-works#!key-considerations-3
+http://www.ekahau.com/real-time-location-system/technology/wi-fi-tags#!location-beacons-2
+http://research.microsoft.com/en-us/projects/ez/
+\end{verbatim}
+
 Commercial motion tracking for professional film makers use image-based tracking techniques \cite{trackingwebsite}. This method has some serious disadvantages for our application. Being that is designed for use by artists, it does not have a guarantee of measurement accuracy, which is necessary for our case. Additionally, the fact that it is image based means the probe would always have to be in the view of the camera and in a clinical setting that can be hard to ensure. The post-processing of the images can be time consuming and in a clinical setting the results should come quickly. Finally, training the medical technicians taking the data to do all the steps that would be required is impractical. \\
 \\
 Using the Kinect for tracking would have some advantages over image-based tracking. Because the Kinect gives us a depth map, we could more easily ensure measurement accuracy. Additionally, there would be much less processing required to get a final motion path. It still has the disadvantage that the probe would always have to be in view of the camera. It also has the disadvantage that the result is dependent on the shape of the probe. For this application, we do not know the shape of the final probe and it is impractical to try and accommodate all the different probe shapes.\\
