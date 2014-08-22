@@ -13,6 +13,17 @@ import java.util.Collection;
  * @author BLI
  */
 public class OutputHelper {
+    
+    
+    public static int getCorrectMod(int number, int mod){
+        mod = Math.abs(mod);
+        while(number<0){
+            number += mod;
+        }
+        return number%mod;
+    }
+    
+    
     /**
      * In each line of the output, this is the character
      *      that separates each value. Change this variable

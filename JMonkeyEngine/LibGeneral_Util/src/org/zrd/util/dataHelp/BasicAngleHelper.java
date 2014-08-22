@@ -22,7 +22,8 @@ public class BasicAngleHelper {
     }
     
     public static int convertRadiansToIntDegrees(float radians){
-        return Math.round(convertRadiansToDegrees(radians));
+        int degress = (int) Math.floor(convertRadiansToDegrees(radians));
+        return OutputHelper.getCorrectMod(degress, 360);
     }
     
     public static boolean hasAngleChangedEnough(float oldAngleRads, float newAngleRads){

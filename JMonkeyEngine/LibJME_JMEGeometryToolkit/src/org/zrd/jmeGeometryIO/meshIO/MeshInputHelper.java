@@ -240,7 +240,6 @@ public class MeshInputHelper {
     
     public static MeshInteractionFiles obtainAllFiles(File initImportDirectory, String defaultFileSuffix) {
         
-        JOptionPane.showMessageDialog(null, "Please choose an OBJ File for the 3D Model");
         File objFile = GeneralFileHelper.importPathUsingFileSelector(initImportDirectory,"obj");
         
         if(objFile == null){

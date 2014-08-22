@@ -15,11 +15,11 @@ public class GeometryOutputHelper {
 
     public static String getYawPitchRollDisplayString(float yawInRadians, float pitchInRadians, float rollInRadians) {
         
-        float yawInDegs = BasicAngleHelper.convertRadiansToDegrees(yawInRadians);
-        float pitchInDegs = BasicAngleHelper.convertRadiansToDegrees(pitchInRadians);
-        float rollInDegs = BasicAngleHelper.convertRadiansToDegrees(rollInRadians);
+        int yawInDegs = BasicAngleHelper.convertRadiansToIntDegrees(yawInRadians);
+        int pitchInDegs = BasicAngleHelper.convertRadiansToIntDegrees(pitchInRadians);
+        int rollInDegs = BasicAngleHelper.convertRadiansToIntDegrees(rollInRadians);
         
-        return String.format("(Yaw,Pitch,Roll) = (%1$.0f,%2$.0f,%3$.0f)", yawInDegs,pitchInDegs,rollInDegs);
+        return String.format("(Yaw,Pitch,Roll) = (%s,%s,%s)", yawInDegs,pitchInDegs,rollInDegs);
     }
 
     public static String getXYZDisplayString(Vector3f position) {
