@@ -7,7 +7,9 @@ package org.zrd.geometryToolkit.probeCalibration;
 import com.jme3.math.Quaternion;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
+import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
@@ -21,6 +23,8 @@ public class CalibrationHelper {
     public static void writeCalibrationResults(float uniformScaleFactor, 
             Quaternion rotationCalibration,
             ArrayList<String> qualityStats, Path resultFolder) {
+        
+        AngleAxisRotation rotCalib = new AngleAxisRotation(rotationCalibration);
         
         ArrayList<String> resultText = new ArrayList<String>(10);
         resultText.add("Uniform Scale Factor: ");
@@ -36,6 +40,10 @@ public class CalibrationHelper {
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(0)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(1)));
         resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(2)));
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
+        resultText.add("Rotation Calibration Axis: " + rotCalib.getAxis());
+        resultText.add("Rotation Calibration Angle: " + BasicAngleHelper.convertRadiansToDegrees(rotCalib.getAngle()));
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.addAll(qualityStats);
                 
         FileDataHelper.exportLinesToFile(resultText,GeneralFileHelper.getNewDataFilePath(resultFolder, "CalibrationResults"));
