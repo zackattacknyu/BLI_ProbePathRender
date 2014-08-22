@@ -23,10 +23,12 @@ public class CMDApplication_Testing {
         System.out.println("Q1 to Q2 slerp: " + q1.slerp(q1, q2, 0.5f));
         System.out.println("Q3: " + q3);*/
         
-        float yawInDegs = 27.568956f;
+        /*float yawInDegs = 27.568956f;
         float pitchInDegs = 85.6923f;
         float rollInDegs = 120.569874f;
         
-        System.out.println(String.format("(Yaw,Pitch,Roll) = (%1$.1f,%2$.1f,%3$.1f)", yawInDegs,pitchInDegs,rollInDegs));
+        System.out.println(String.format("(Yaw,Pitch,Roll) = (%1$.1f,%2$.1f,%3$.1f)", yawInDegs,pitchInDegs,rollInDegs));*/
+        
+        System.out.println((400)%360);
     }
 }
