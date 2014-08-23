@@ -42,6 +42,9 @@ public class DataLocationsMap {
     public static final String PITCH_KEY = "pitch";
     public static final String X_KEY = "x";
     
+    public static final String X_HIGH_KEY="xhigh";
+    public static final String Y_HIGH_KEY="yhigh";
+    
     
     private HashMap<String,Integer> dataLocations;
     private Properties propsMap;
@@ -63,6 +66,9 @@ public class DataLocationsMap {
         putLocationIntoMap(ROLL_KEY);
         putLocationIntoMap(DATAFIELD_KEY);
         putLocationIntoMap(QUALITY_KEY);
+        
+        putLocationIntoMap(X_HIGH_KEY);
+        putLocationIntoMap(Y_HIGH_KEY);
     }
     
     /**
