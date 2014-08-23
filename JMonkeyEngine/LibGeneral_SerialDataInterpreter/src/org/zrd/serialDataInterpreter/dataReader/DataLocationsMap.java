@@ -42,7 +42,9 @@ public class DataLocationsMap {
     public static final String PITCH_KEY = "pitch";
     public static final String X_KEY = "x";
     
+    public static final String X_LOW_KEY="xlow";
     public static final String X_HIGH_KEY="xhigh";
+    public static final String Y_LOW_KEY="ylow";
     public static final String Y_HIGH_KEY="yhigh";
     
     
@@ -59,14 +61,16 @@ public class DataLocationsMap {
         
         //this makes the map
         putLocationIntoMap(TIMESTAMP_KEY);
-        putLocationIntoMap(X_KEY);
-        putLocationIntoMap(Y_KEY);
+        //putLocationIntoMap(X_KEY);
+        //putLocationIntoMap(Y_KEY);
         putLocationIntoMap(YAW_KEY);
         putLocationIntoMap(PITCH_KEY);
         putLocationIntoMap(ROLL_KEY);
         putLocationIntoMap(DATAFIELD_KEY);
         putLocationIntoMap(QUALITY_KEY);
         
+        putLocationIntoMap(X_LOW_KEY);
+        putLocationIntoMap(Y_LOW_KEY);
         putLocationIntoMap(X_HIGH_KEY);
         putLocationIntoMap(Y_HIGH_KEY);
     }

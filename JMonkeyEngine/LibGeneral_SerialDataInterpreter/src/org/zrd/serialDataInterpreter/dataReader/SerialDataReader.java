@@ -40,6 +40,8 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
     private String currentSerialOutput, previousSerialOutput;
     private float deltaX,deltaY,currentYaw,currentPitch,currentRoll,currentQuality;
     
+    private float deltaXlow,deltaXhigh,deltaYlow,deltaYhigh;
+    
     /**flag for whether or not to parse the output. If not parsed, raw string is shown*/
     private boolean parseOutput;
     
@@ -125,8 +127,13 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
                     
                     currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
                     
-                    deltaX = currentSerialData.getX();
-                    deltaY = currentSerialData.getY();
+                    //deltaX = currentSerialData.getX();
+                    //deltaY = currentSerialData.getY();
+                    
+                    deltaXlow = currentSerialData.getXlow();
+                    deltaXhigh = currentSerialData.getXhigh();
+                    deltaYlow = currentSerialData.getYlow();
+                    deltaYhigh = currentSerialData.getYhigh();
 
                     currentPitch = currentSerialData.getPitch();
                     currentRoll = currentSerialData.getRoll();
@@ -171,6 +178,22 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
             currentRecorder = new RawSerialRecorder(recordingFilePath);
             recordingRawData = true;
         }
+    }
+
+    public float getDeltaXlow() {
+        return deltaXlow;
+    }
+
+    public float getDeltaXhigh() {
+        return deltaXhigh;
+    }
+
+    public float getDeltaYlow() {
+        return deltaYlow;
+    }
+
+    public float getDeltaYhigh() {
+        return deltaYhigh;
     }
     
     /**

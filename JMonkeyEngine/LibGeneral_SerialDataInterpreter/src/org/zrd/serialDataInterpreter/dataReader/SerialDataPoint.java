@@ -27,6 +27,7 @@ public class SerialDataPoint {
     public static final float DEFAULT_FIELD_VALUE = Float.NaN;
     
     private float timestamp,x,y,yaw,pitch,roll,datafield,quality;
+    private float xlow,xhigh,ylow,yhigh;
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
@@ -42,14 +43,19 @@ public class SerialDataPoint {
         
         //make sure we currently have enough data
         if(dataParts.length >= dataLocations.size()){
-            x = getPart(DataLocationsMap.X_KEY);
-            y = getPart(DataLocationsMap.Y_KEY);
+            //x = getPart(DataLocationsMap.X_KEY);
+            //y = getPart(DataLocationsMap.Y_KEY);
             yaw = getPart(DataLocationsMap.YAW_KEY);
             pitch = getPart(DataLocationsMap.PITCH_KEY);
             roll = getPart(DataLocationsMap.ROLL_KEY);
             timestamp = getPart(DataLocationsMap.TIMESTAMP_KEY);
             datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
             quality = getPart(DataLocationsMap.QUALITY_KEY);
+            
+            xlow = getPart(DataLocationsMap.X_LOW_KEY);
+            xhigh = getPart(DataLocationsMap.X_HIGH_KEY);
+            ylow = getPart(DataLocationsMap.Y_LOW_KEY);
+            yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);
         }
     }
     
@@ -85,6 +91,22 @@ public class SerialDataPoint {
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality);
+    }
+
+    public float getXlow() {
+        return xlow;
+    }
+
+    public float getXhigh() {
+        return xhigh;
+    }
+
+    public float getYlow() {
+        return ylow;
+    }
+
+    public float getYhigh() {
+        return yhigh;
     }
     
     /**

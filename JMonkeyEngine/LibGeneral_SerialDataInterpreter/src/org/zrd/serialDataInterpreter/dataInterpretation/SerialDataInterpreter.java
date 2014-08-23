@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.serialDataInterpreter.dataReader.SerialDataReader;
 import org.zrd.util.dataHelp.BasicAngleHelper;
+import org.zrd.util.dataHelp.DisplacementHelper;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
@@ -91,8 +92,8 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
          *      it should change, then this code should call
          *      a method for that.
          */
-        deltaX = serial.getDeltaX();
-        deltaY = serial.getDeltaY();
+        deltaX = DisplacementHelper.getDisplacement(serial.getDeltaXlow(), serial.getDeltaXhigh());
+        deltaY = DisplacementHelper.getDisplacement(serial.getDeltaYlow(), serial.getDeltaYhigh());
 
         /*
          * if we are recording the data, this adds the current data
