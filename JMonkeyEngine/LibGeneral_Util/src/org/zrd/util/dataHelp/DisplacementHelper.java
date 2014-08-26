@@ -12,11 +12,29 @@ public class DisplacementHelper {
     
     public static float getDisplacement(float lowByte, float highByte){
         
-        if(highByte > 127){
-            highByte = highByte - 256;
+        float total = highByte*256 + lowByte;
+        if(total > 32767){
+            total = total - 65536;
         }
         
-        return highByte*256+lowByte;
+        /*float highByteSign = 1;
+        if(highByte > 127){
+            highByte = highByte - 256;
+            highByteSign = -1;
+        }
+        
+        float highByteMag = Math.abs(highByte);
+        
+        float totalDisp = highByteSign*(highByteMag*256 + lowByte);
+        
+        if(Math.abs(totalDisp) > 0){
+            System.out.println("HighMag=" + highByteMag + " lowMag=" + lowByte + " total=" + totalDisp);
+        }
+        
+        float totalDisp = highByte*256 + lowByte;
+        */
+        
+        return total;
         
     }
     
