@@ -1,0 +1,29 @@
+Uniform Scale Factor: 
+1.1122165
+ 
+Rotation Calibration Quat: 
+(-0.071577065, -0.77894264, -0.55966127, 0.27368662)
+ 
+#Add this next block to properties file if this is the desired rotation calibration
+initQuat.w=0.27368662
+initQuat.x=-0.071577065
+initQuat.y=-0.77894264
+initQuat.z=-0.55966127
+ 
+Rotation Calibration Matrix: 
+(-0.8399447, 0.41785243, -0.34625453)
+(-0.19483474, 0.36331195, 0.9110674)
+(0.5064902, 0.83270866, -0.22374976)
+ 
+Rotation Calibration Axis: (-0.07441844, -0.8098641, -0.581878)
+Rotation Calibration Angle: 148.23248
+ 
+ 
+Quality Statistics for Path: 
+Mean: 39.909866
+Mean Error: 3.2884552
+Variance: 16.773342
+Standard Deviation: 4.095527
+Min: 28.0
+Max: 57.0
+ 
