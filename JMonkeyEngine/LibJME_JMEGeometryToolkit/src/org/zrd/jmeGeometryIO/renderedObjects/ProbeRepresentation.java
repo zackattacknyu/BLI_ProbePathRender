@@ -64,8 +64,8 @@ public class ProbeRepresentation {
     
     private Spatial initZLine(Material ballMat){
         ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
-        zLineVertices.add(new Vector3f(0,0,-4f));
-        zLineVertices.add(new Vector3f(0,0,0.2f));
+        zLineVertices.add(new Vector3f(0,0,4f));
+        zLineVertices.add(new Vector3f(0,0,-0.2f));
         return PathRenderHelper.createLineFromVertices(zLineVertices,ballMat);
     }
     
