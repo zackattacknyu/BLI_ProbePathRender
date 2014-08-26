@@ -96,6 +96,8 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
             currentPickedPoint = pointOnMesh.clone();
             currentPickedTriangle = triangleOnMesh.clone();
             
+            System.out.println("Triangle Normal: " + triangleOnMesh.getTriangleData().getNormal());
+            
             activeTracker.setCurrentPosition(currentPickedPoint);
             activeTracker.setCurrentTriangle(currentPickedTriangle);
         }
