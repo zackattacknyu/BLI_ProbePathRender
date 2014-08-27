@@ -240,8 +240,14 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     public void setCurrentPosition(Vector3f position){
         
         Vector3f currentNormal = new Vector3f(0,0,1);
+        Vector3f currentX = new Vector3f(1,0,0);
+        Vector3f currentY = new Vector3f(0,1,0);
         currentNormal = getLocalRotation().mult(currentNormal);
+        currentX = getLocalRotation().mult(currentX);
+        currentY = getLocalRotation().mult(currentY);
         System.out.println("Current Normal from probe: " + currentNormal);
+        System.out.println("Current X: " + currentX);
+        System.out.println("Current Y: " + currentY);
         
         currentPosition = position;
         
