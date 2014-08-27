@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
 import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
+import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
 import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
@@ -37,9 +38,7 @@ public class CalibrationHelper {
         resultText.addAll(CalibrationProperties.getCalibrationPropertiesStrings(rotationCalibration));
         resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Matrix: ");
-        resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(0)));
-        resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(1)));
-        resultText.add(String.valueOf(rotationCalibration.toRotationMatrix().getRow(2)));
+        resultText.addAll(GeometryOutputHelper.getMatrixDisplayStrings(rotationCalibration.toRotationMatrix()));
         resultText.add(OutputHelper.EMPTY_LINE_STRING);
         resultText.add("Rotation Calibration Axis: " + rotCalib.getAxis());
         resultText.add("Rotation Calibration Angle: " + BasicAngleHelper.convertRadiansToDegrees(rotCalib.getAngle()));
