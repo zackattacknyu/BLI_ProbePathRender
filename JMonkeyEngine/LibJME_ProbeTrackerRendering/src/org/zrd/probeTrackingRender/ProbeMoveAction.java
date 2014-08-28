@@ -9,10 +9,13 @@ import org.zrd.geometryToolkit.pointTools.MeshPointHandler;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Matrix4f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
+import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -20,6 +23,7 @@ import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.pointTools.PointsOnMeshTracker;
 import org.zrd.jmeGeometryIO.meshIO.MeshInputHelper;
 import org.zrd.jmeUtil.mouseKeyboard.GeneralKeyboardActionMethod;
+import org.zrd.util.dataHelp.OutputHelper;
 
 /**
  *
@@ -96,7 +100,15 @@ public class ProbeMoveAction extends GeneralKeyboardActionMethod implements Mesh
             currentPickedPoint = pointOnMesh.clone();
             currentPickedTriangle = triangleOnMesh.clone();
             
-            System.out.println("Triangle Normal: " + triangleOnMesh.getTriangleData().getNormal());
+            Vector3f triangleNormal = triangleOnMesh.getTriangleData().getNormal();
+            Vector3f probeNormal = activeTracker.getTrackerNormal();
+            Quaternion rotationOfNormal = RotationTransformHelper.getRotationFromVectors(probeNormal, triangleNormal);
+            
+            System.out.println("Probe Normal: " + probeNormal);
+            System.out.println("Triangle Normal: " + triangleNormal);
+            System.out.println("Rotation to apply: " + rotationOfNormal);
+            OutputHelper.printStringCollection(CalibrationProperties.
+                    getCalibrationPropertiesStrings(rotationOfNormal));
             
             activeTracker.setCurrentPosition(currentPickedPoint);
             activeTracker.setCurrentTriangle(currentPickedTriangle);

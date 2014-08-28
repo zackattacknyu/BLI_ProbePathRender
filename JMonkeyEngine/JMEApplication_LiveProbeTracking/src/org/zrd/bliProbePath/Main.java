@@ -95,7 +95,7 @@ public class Main extends SimpleApplication {
         
         //initialize tracker
         CalibrationProperties results = CalibrationProperties.
-                obtainCalibrationProperties(props, currentSession.getCalibrationProperties());
+                obtainCalibrationProperties(currentSession.getCalibrationProperties(),props);
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager,props,results);
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(
                 assetManager,results.getScaleFactorX(),

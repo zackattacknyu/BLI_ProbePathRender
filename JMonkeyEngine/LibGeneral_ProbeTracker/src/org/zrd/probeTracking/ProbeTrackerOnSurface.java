@@ -173,6 +173,11 @@ public class ProbeTrackerOnSurface implements LocationTracker{
         return currentRecordingPathOnMesh.getVertices();
     }
 
+    @Override
+    public Vector3f getTrackerNormal() {
+        return locationTracker.getTrackerNormal();
+    }
+
     
     
 }

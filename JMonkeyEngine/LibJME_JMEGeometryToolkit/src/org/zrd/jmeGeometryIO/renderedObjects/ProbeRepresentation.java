@@ -67,8 +67,8 @@ public class ProbeRepresentation {
         ArrayList<Vector3f> xLineVertices = new ArrayList<>();
         //xLineVertices.add(new Vector3f(getPositiveValue(scaleX),0,0));
         //xLineVertices.add(new Vector3f(getNegativeValue(scaleX),0,0));
-        xLineVertices.add(new Vector3f(0,4f,0));
-        xLineVertices.add(new Vector3f(0,-0.2f,0));
+        xLineVertices.add(new Vector3f(4f,0,0));
+        xLineVertices.add(new Vector3f(-0.2f,0,0));
         return PathRenderHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
