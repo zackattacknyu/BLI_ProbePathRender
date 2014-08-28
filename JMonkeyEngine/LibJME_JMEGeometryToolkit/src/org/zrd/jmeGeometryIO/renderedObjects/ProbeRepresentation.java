@@ -25,16 +25,24 @@ public class ProbeRepresentation {
     
     private Node probeRep;
     
-    public ProbeRepresentation(AssetManager assetManager){
+    /*
+     * The magnitude of the lines that point in the positive/negative
+     *      displacement directions. 
+     * Magnitude here means multiple of the scale factor
+     */
+    private static final float POSITIVE_LINE_MAGNITUDE = 200000;
+    private static final float NEGATIVE_LINE_MAGNITUDE = -2000;
+    
+    private ProbeRepresentation(AssetManager assetManager, float scaleX, float scaleY, float scaleNormal){
         
         Material redMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Red);
         Material orangeMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Orange);
         Material greenMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Green);
         
         
-        Spatial xAxisLine = initXLine(redMaterial);
-        Spatial yAxisLine = initYLine(orangeMaterial);
-        Spatial zAxisLine = initZLine(greenMaterial);
+        Spatial xAxisLine = initXLine(redMaterial,scaleX);
+        Spatial yAxisLine = initYLine(orangeMaterial,scaleY);
+        Spatial zAxisLine = initZLine(greenMaterial,scaleNormal);
         
         probeRep = new Node("probeRep");
         probeRep.attachChild(xAxisLine);
@@ -43,27 +51,40 @@ public class ProbeRepresentation {
         
     }
     
-    public static Node getProbeRepresentation(AssetManager assetManager){
-        ProbeRepresentation probe = new ProbeRepresentation(assetManager);
+    public static Node getProbeRepresentation(AssetManager assetManager, float scaleX, float scaleY, float scaleNormal){
+        ProbeRepresentation probe = new ProbeRepresentation(assetManager,scaleX,scaleY,scaleNormal);
         return probe.probeRep;
     }
     
-    private Spatial initXLine(Material ballMat){
-        ArrayList<Vector3f> xLineVertices = new ArrayList<Vector3f>();
-        xLineVertices.add(new Vector3f(4f,0,0));
-        xLineVertices.add(new Vector3f(-0.2f,0,0));
+    private static float getPositiveValue(float scale){
+        return POSITIVE_LINE_MAGNITUDE*scale;
+    }
+    private static float getNegativeValue(float scale){
+        return NEGATIVE_LINE_MAGNITUDE*scale;
+    }
+    
+    private Spatial initXLine(Material ballMat, float scaleX){
+        ArrayList<Vector3f> xLineVertices = new ArrayList<>();
+        //xLineVertices.add(new Vector3f(getPositiveValue(scaleX),0,0));
+        //xLineVertices.add(new Vector3f(getNegativeValue(scaleX),0,0));
+        xLineVertices.add(new Vector3f(0,4f,0));
+        xLineVertices.add(new Vector3f(0,-0.2f,0));
         return PathRenderHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
-    private Spatial initYLine(Material ballMat){
-        ArrayList<Vector3f> yLineVertices = new ArrayList<Vector3f>();
+    private Spatial initYLine(Material ballMat, float scaleY){
+        ArrayList<Vector3f> yLineVertices = new ArrayList<>();
+        //yLineVertices.add(new Vector3f(0,getPositiveValue(scaleY),0));
+        //yLineVertices.add(new Vector3f(0,getNegativeValue(scaleY),0));
         yLineVertices.add(new Vector3f(0,4f,0));
         yLineVertices.add(new Vector3f(0,-0.2f,0));
         return PathRenderHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
-    private Spatial initZLine(Material ballMat){
-        ArrayList<Vector3f> zLineVertices = new ArrayList<Vector3f>();
+    private Spatial initZLine(Material ballMat, float scaleNormal){
+        ArrayList<Vector3f> zLineVertices = new ArrayList<>();
+        //zLineVertices.add(new Vector3f(0,0,getPositiveValue(scaleNormal)));
+        //zLineVertices.add(new Vector3f(0,0,getNegativeValue(scaleNormal)));
         zLineVertices.add(new Vector3f(0,0,4f));
         zLineVertices.add(new Vector3f(0,0,-0.2f));
         return PathRenderHelper.createLineFromVertices(zLineVertices,ballMat);

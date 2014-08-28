@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
+import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
 import org.zrd.geometryToolkit.locationTracking.LocationTracker;
 import org.zrd.jmeGeometryIO.renderedObjects.ProbeRepresentation;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -82,7 +83,6 @@ public class Main extends SimpleApplication {
         boolean showTriangleNormals = PropertiesHelper.getBooleanValueProperty(props, "showTriangleNormals");
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
-        Node moveableObject = ProbeRepresentation.getProbeRepresentation(assetManager);
         boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
         outputText = new LiveTrackingText(guiNode,assetManager);
         
@@ -94,9 +94,12 @@ public class Main extends SimpleApplication {
         TriangleSet meshInfo = currentSession.getMeshInfo();
         
         //initialize tracker
-        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(
-                inputManager,props,
-                currentSession.getCalibrationProperties());
+        CalibrationProperties results = CalibrationProperties.
+                obtainCalibrationProperties(props, currentSession.getCalibrationProperties());
+        probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager,props,results);
+        Node moveableObject = ProbeRepresentation.getProbeRepresentation(
+                assetManager,results.getScaleFactorX(),
+                results.getScaleFactorY(),results.getScaleFactor());
         
         //initialize the defaults
         viewPort.setBackgroundColor(ApplicationHelper.BACKGROUND_COLOR);

@@ -22,7 +22,8 @@ import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
  */
 public class ProbeTracker_BLIProbePath {
 
-    public static ProbeTracker createNewProbeTracker(InputManager manager, Properties trackerProps, Properties specificCalibProps){
+    public static ProbeTracker createNewProbeTracker(InputManager manager, 
+            Properties trackerProps, CalibrationProperties results){
         
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
@@ -38,8 +39,6 @@ public class ProbeTracker_BLIProbePath {
 
         displacementMode = Short.parseShort(
                 trackerProps.getProperty("trackDisplacementMode"));
-
-        CalibrationProperties results = CalibrationProperties.obtainCalibrationProperties(specificCalibProps, trackerProps);
 
         float finalScaleX = results.getScaleFactorX();
         float finalScaleY = results.getScaleFactorY();
