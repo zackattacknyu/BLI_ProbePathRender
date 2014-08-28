@@ -7,6 +7,7 @@ package org.zrd.geometryToolkit.geometryUtil;
 import com.jme3.math.Quaternion;
 import java.util.ArrayList;
 import java.util.Properties;
+import org.zrd.util.dataHelp.DisplacementHelper;
 import org.zrd.util.properties.PropertiesHelper;
 
 /**
@@ -18,6 +19,11 @@ public class CalibrationProperties {
     private Quaternion rotationCalib;
     private Float realToProbeFactor;
     private Float virtualToRealFactor;
+    private Float scaleFactor;
+    private Float scaleFactorX;
+    private Float scaleFactorY;
+    private boolean reflectX;
+    private boolean reflectY;
     
     public static final String REAL_TO_PROBE_FACTOR_NAME = "scaleFactor.realToProbe";
     public static final String VIRTUAL_TO_REAL_FACTOR_NAME = "scaleFactor.virtualToReal";
@@ -26,6 +32,9 @@ public class CalibrationProperties {
     public static final String QUATERNION_X_FACTOR_NAME = "initQuat.x";
     public static final String QUATERNION_Y_FACTOR_NAME = "initQuat.y";
     public static final String QUATERNION_Z_FACTOR_NAME = "initQuat.z";
+    
+    public static final String REFLECT_X_FACTOR_NAME = "reflectionCalib.negateX";
+    public static final String REFLECT_Y_FACTOR_NAME = "reflectionCalib.negateY";
     
     public static CalibrationProperties obtainCalibrationProperties(Properties specificProps, Properties defaultProps){
         
@@ -39,13 +48,22 @@ public class CalibrationProperties {
         Float outputVirtualToProbe = (Float)chooseSpecificOrDefault(
                 specificP.virtualToRealFactor,defaultP.virtualToRealFactor);
         
-        return new CalibrationProperties(outputRotCalib,outputRealToProbe,outputVirtualToProbe);
+        Boolean reflectX = (Boolean)chooseSpecificOrDefault(specificP.reflectX,defaultP.reflectX);
+        Boolean reflectY = (Boolean)chooseSpecificOrDefault(specificP.reflectY,defaultP.reflectY);
+        
+        return new CalibrationProperties(outputRotCalib,outputRealToProbe,outputVirtualToProbe,reflectX,reflectY);
     }
     
-    private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, Float virtualToRealFactor){
+    private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, Float virtualToRealFactor, Boolean reflectX, Boolean reflectY){
         this.realToProbeFactor = realToProbeFactor;
         this.rotationCalib = rotationCalib;
         this.virtualToRealFactor = virtualToRealFactor;
+        this.reflectX = reflectX;
+        this.reflectY = reflectY;
+        
+        scaleFactor = realToProbeFactor*virtualToRealFactor;
+        scaleFactorX = DisplacementHelper.negativeIfTrue(scaleFactor, reflectX);
+        scaleFactorY = DisplacementHelper.negativeIfTrue(scaleFactor, reflectY);
     }
     
     private CalibrationProperties(Properties props){
@@ -57,6 +75,13 @@ public class CalibrationProperties {
         }
         if(props.containsKey(VIRTUAL_TO_REAL_FACTOR_NAME)){
             virtualToRealFactor = PropertiesHelper.getFloatValueProperty(props, VIRTUAL_TO_REAL_FACTOR_NAME);
+        }
+        
+        if(props.containsKey(REFLECT_X_FACTOR_NAME)){
+            reflectX = PropertiesHelper.getBooleanValueProperty(props, REFLECT_X_FACTOR_NAME);
+        }
+        if(props.containsKey(REFLECT_Y_FACTOR_NAME)){
+            reflectY = PropertiesHelper.getBooleanValueProperty(props, REFLECT_Y_FACTOR_NAME);
         }
         
         if(props.containsKey(QUATERNION_W_FACTOR_NAME) && 
@@ -98,17 +123,16 @@ public class CalibrationProperties {
     public Quaternion getRotationCalib() {
         return rotationCalib;
     }
-
-    public Float getRealToProbeFactor() {
-        return realToProbeFactor;
-    }
-
-    public Float getVirtualToRealFactor() {
-        return virtualToRealFactor;
+    
+    public Float getScaleFactor(){
+        return scaleFactor;
     }
     
-    public Float getScaleCalibration(){
-        return realToProbeFactor*virtualToRealFactor;
+    public Float getScaleFactorX(){
+        return scaleFactorX;
     }
     
+    public Float getScaleFactorY(){
+        return scaleFactorY;
+    }
 }

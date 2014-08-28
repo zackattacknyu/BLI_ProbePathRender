@@ -41,8 +41,8 @@ public class ProbeTracker_BLIProbePath {
 
         CalibrationProperties results = CalibrationProperties.obtainCalibrationProperties(specificCalibProps, trackerProps);
 
-        float finalScaleX = results.getScaleCalibration();
-        float finalScaleY = results.getScaleCalibration();
+        float finalScaleX = results.getScaleFactorX();
+        float finalScaleY = results.getScaleFactorY();
         
         //gets the starting position
         float startX = Float.parseFloat(

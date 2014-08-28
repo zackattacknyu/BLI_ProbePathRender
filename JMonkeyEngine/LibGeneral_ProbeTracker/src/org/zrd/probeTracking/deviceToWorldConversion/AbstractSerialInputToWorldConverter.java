@@ -31,10 +31,15 @@ public abstract class AbstractSerialInputToWorldConverter {
     //      should only be called after scale factors have been applied
     protected Quaternion rotationCalibration = new Quaternion();
     
-    //scale factor for x coordinate. should be same as one for y coordinate
+    /*
+     * The scale factors for x and y coordinates. The absolute value of them
+     *      should match.
+     * If one of the scale factors is set to be negative, then that coordinate
+     *      is getting reflected before the rotation is done. 
+     * Reflection is NOT a rotation, thus we need to account for it, and to do
+     *      that we are implementing negative scale factors. 
+     */      
     protected float scaleFactorX = 1.0f;
-    
-    //scale factor for y coordinate. should be same as one for x coordinate
     protected float scaleFactorY = 1.0f;
     
     public Vector3f getXYZDisplacement(float deltaX, float deltaY, 
@@ -42,12 +47,6 @@ public abstract class AbstractSerialInputToWorldConverter {
         
         float xChangeMagnitude = deltaX*scaleFactorX;
         float yChangeMagnitude = deltaY*scaleFactorY;
-        
-        //boolean negateXDisp = true;
-        boolean negateXDisp = false;
-        if(negateXDisp){
-            xChangeMagnitude = -xChangeMagnitude;
-        }
         
         Vector3f initDisplacementVector = new Vector3f(xChangeMagnitude,yChangeMagnitude,0);
         

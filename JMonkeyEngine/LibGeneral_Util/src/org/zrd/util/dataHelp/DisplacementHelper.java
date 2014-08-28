@@ -10,6 +10,10 @@ package org.zrd.util.dataHelp;
  */
 public class DisplacementHelper {
     
+    public static float negativeIfTrue(float number, boolean negate){
+        return negate ? -1*number : number;
+    }
+    
     public static float getDisplacement(float lowByte, float highByte){
         
         float total = highByte*256 + lowByte;
