@@ -180,6 +180,10 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         coordConverter.setScaleFactorY(scaleFactor*scaleY);
     }
     
+    public Quaternion getRotationCalibration(){
+        return coordConverter.getRotationCalibration();
+    }
+    
     public void setRotationCalibration(Quaternion rotation){
         coordConverter.setRotationCalibration(rotation);
     }
@@ -187,11 +191,6 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     public void setScale(float scaleFactor){
         coordConverter.setScaleFactorX(scaleFactor);
         coordConverter.setScaleFactorY(scaleFactor);
-    }
-    
-    public void addendRotationCalibration(Quaternion rotation){
-        Quaternion newRotationCalibration = rotation.mult(coordConverter.getRotationCalibration());
-        coordConverter.setRotationCalibration(newRotationCalibration);
     }
     
     @Override

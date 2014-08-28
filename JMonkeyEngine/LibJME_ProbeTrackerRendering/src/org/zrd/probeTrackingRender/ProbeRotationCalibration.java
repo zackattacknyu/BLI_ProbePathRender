@@ -82,7 +82,7 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     }
 
     @Override
-    protected void handleEndPointResult(Vector3f endPoint, ScaleCalibration scaleCalib, PathOnMeshCalculator rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
+    protected void handleEndPointResult(Vector3f endPoint,ScaleCalibration scaleCalib, PathOnMeshCalculator rotCalib, ArrayList<Vector3f> scaledAndRotatedPath) {
         System.out.println("End Point set at: " + endPoint);
         
         rotationCalibrationDone = true;
@@ -93,7 +93,9 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
         //probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
         CalibrationHelper.writeCalibrationResults(scaleCalib.getUniformScaleFactor(),
-                rotCalib.getAggregateRotation(),probeTracker.getCurrentQualityResults(),resultFilePath);
+                probeTracker.getRotationCalibration(),
+                rotCalib.getAggregateRotation(),
+                probeTracker.getCurrentQualityResults(),resultFilePath);
         probeTracker.setCurrentPosition(endPoint);
     }
 
