@@ -43,6 +43,12 @@ public abstract class AbstractSerialInputToWorldConverter {
         float xChangeMagnitude = deltaX*scaleFactorX;
         float yChangeMagnitude = deltaY*scaleFactorY;
         
+        //boolean negateXDisp = true;
+        boolean negateXDisp = false;
+        if(negateXDisp){
+            xChangeMagnitude = -xChangeMagnitude;
+        }
+        
         Vector3f initDisplacementVector = new Vector3f(xChangeMagnitude,yChangeMagnitude,0);
         
         /*rotation matrix for most recent yaw, pitch, roll numbers
