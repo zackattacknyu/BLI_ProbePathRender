@@ -7,7 +7,9 @@ package org.zrd.cmdapplication_testing;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
+import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 
 /**
@@ -32,28 +34,19 @@ public class CMDApplication_Testing {
         float rollInDegs = 120.569874f;
         
         System.out.println(String.format("(Yaw,Pitch,Roll) = (%1$.1f,%2$.1f,%3$.1f)", yawInDegs,pitchInDegs,rollInDegs));*/
+               
+        //rotate the normal of the probe to match a triangle normal
+        Vector3f triangleNorm = new Vector3f(-0.0745382f, -0.80956864f, -0.5822738f);
+        Vector3f probeNormal = new Vector3f(-0.06540184f, -0.06040227f, 0.99602926f);
+        Quaternion q1 = RotationTransformHelper.getRotationFromVectors(probeNormal, triangleNorm);
         
-        Quaternion q1 = new Quaternion(0.9011022f,-0.07613133f,-0.009502405f,0.42676535f);
+        //rotate the yaw angle to match the correct one
+        AngleAxisRotation rotNormal = new AngleAxisRotation(triangleNorm, 
+                BasicAngleHelper.convertDegreesToRadians(106));
+        Quaternion q2 = rotNormal.getQuat();
         
-        //rotate 90 degrees by normal as axis
-        AngleAxisRotation rot90normal = new AngleAxisRotation(
-                new Vector3f(-0.0745382f, -0.80956864f, -0.5822738f), 
-                (float) (Math.PI/2));
-        Quaternion q2 = rot90normal.getQuat();
-
-        //rotate 180 degress by x-axis
-        /*AngleAxisRotation rot180x = new AngleAxisRotation(
-                new Vector3f(-0.7600107f, 0.4200855f, -0.4958947f), 
-                (float) (Math.PI));*/
-        AngleAxisRotation rot180x = new AngleAxisRotation(
-                new Vector3f(0.7600107f, -0.4200855f, 0.4958947f), 
-                (float) (-Math.PI));
-        Quaternion q3 = rot180x.getQuat();
-        
-        AngleAxisRotation rot90y = new AngleAxisRotation(new Vector3f(-0.58160686f, -0.43028995f, 0.69035107f),(float)(Math.PI/2));
-        Quaternion q4 = rot90y.getQuat();
-        
-        Quaternion rotCalib = q4.mult(q3.mult(q2.mult(q1)));
+        //rotation calibration
+        Quaternion rotCalib = q2.mult(q1);
         
         OutputHelper.printStringCollection(CalibrationProperties.getCalibrationPropertiesStrings(rotCalib));
     }

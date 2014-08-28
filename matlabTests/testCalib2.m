@@ -1,11 +1,11 @@
-probeNormal=[0.07973032, 0.8208056, 0.56561625];
-probeX=[-0.7769739, 0.4066394, -0.48057938];
-probeY=[-0.624464, -0.40115222, 0.67016584];
+probeNormal=[-0.07499722;-0.8226994;-0.5635085];
+probeX=[0.5684231;-0.49957043;0.6537013];
+probeY=[-0.81931156;-0.27128536;0.5051075];
 
-currentCoord = [probeNormal' probeX' probeY'];
+probeXneg = -probeX;
 
-probeNormalNeg = -probeNormal;
+actualCoords = [probeX probeY probeNormal];
+desiredCoords = [probeXneg probeY probeNormal];
 
-desiredCoord = [probeNormalNeg' probeX' probeY'];
+conversionMatrix = actualCoords/desiredCoords;
 
-conversionMatrix = currentCoord/desiredCoord;
