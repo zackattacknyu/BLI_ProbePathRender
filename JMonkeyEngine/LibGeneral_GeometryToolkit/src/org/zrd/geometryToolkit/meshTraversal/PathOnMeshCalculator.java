@@ -125,6 +125,10 @@ public class PathOnMeshCalculator {
     public Quaternion getAggregateRotation(){
         return aggregateRotation;
     }
+
+    public ArrayList<Vector3f> getInitPath() {
+        return initPath;
+    }
     
     /**
      * This does (rotation)*(currentRotation) and uses the value

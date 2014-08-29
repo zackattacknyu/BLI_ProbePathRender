@@ -5,6 +5,8 @@
 package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector3f;
+import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 
 /**
  *
@@ -31,5 +33,13 @@ public class ReflectionCalibration {
     
     
     private Matrix3f coordMatrix;
+    
+    public ReflectionCalibration(Vector3f xVector, Vector3f yVector, Vector3f normalVector){
+        coordMatrix = TransformHelper.getCoordinateTransformation(xVector, yVector, normalVector);
+    }
+    
+    public Vector3f getModifiedVector(Vector3f originalVector){
+        return coordMatrix.mult(originalVector);
+    }
     
 }

@@ -46,6 +46,11 @@ public class SegmentSet {
         this.dataAtVertices = dataAtVertices;
     }
     
+    public static Vector3f getFirstSegment(ArrayList<Vector3f> pathVertices){
+        SegmentSet set = new SegmentSet(pathVertices);
+        return set.getSegmentVectors().get(0);
+    }
+    
     private void constructSegmentList(){
         //gets the diff vector array
         segmentVectors = new ArrayList<Vector3f>(pathVertices.size());

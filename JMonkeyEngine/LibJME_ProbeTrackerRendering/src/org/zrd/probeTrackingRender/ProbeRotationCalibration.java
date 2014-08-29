@@ -16,7 +16,9 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.probeCalibration.CalibrationHelper;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
+import org.zrd.geometryToolkit.probeCalibration.ReflectionCalibration;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickTwoPointsOnMesh;
 import org.zrd.probeTracking.ProbeTracker;
@@ -100,6 +102,16 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
                 probeTracker.getRotationCalibration(),
                 rotCalib.getAggregateRotation(),
                 probeTracker.getCurrentQualityResults(),resultFilePath);
+        
+        ReflectionCalibration reflectionCalib = new ReflectionCalibration(initX,initY,initNormal);
+        Vector3f originalStartVector = SegmentSet.getFirstSegment(rotCalib.getInitPath());
+        Vector3f newStartVector = SegmentSet.getFirstSegment(rotCalib.getCurrentRotatedPath());
+        System.out.println("Original Start: " + originalStartVector);
+        System.out.println("New Start: " + newStartVector);
+        System.out.println("Original Start (new coords): " + reflectionCalib.getModifiedVector(originalStartVector));
+        System.out.println("New Start (new coords): " + reflectionCalib.getModifiedVector(newStartVector));
+        
+        
         probeTracker.setCurrentPosition(endPoint);
     }
 
