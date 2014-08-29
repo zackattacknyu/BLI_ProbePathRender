@@ -30,8 +30,8 @@ public class ProbeRepresentation {
      *      displacement directions. 
      * Magnitude here means multiple of the scale factor
      */
-    private static final float POSITIVE_LINE_MAGNITUDE = 200000;
-    private static final float NEGATIVE_LINE_MAGNITUDE = -2000;
+    private static final float POSITIVE_LINE_MAGNITUDE = 100000;
+    private static final float NEGATIVE_LINE_MAGNITUDE = -8000;
     
     private ProbeRepresentation(AssetManager assetManager, float scaleX, float scaleY, float scaleNormal){
         
@@ -65,28 +65,22 @@ public class ProbeRepresentation {
     
     private Spatial initXLine(Material ballMat, float scaleX){
         ArrayList<Vector3f> xLineVertices = new ArrayList<>();
-        //xLineVertices.add(new Vector3f(getPositiveValue(scaleX),0,0));
-        //xLineVertices.add(new Vector3f(getNegativeValue(scaleX),0,0));
-        xLineVertices.add(new Vector3f(4f,0,0));
-        xLineVertices.add(new Vector3f(-0.2f,0,0));
+        xLineVertices.add(new Vector3f(getPositiveValue(scaleX),0,0));
+        xLineVertices.add(new Vector3f(getNegativeValue(scaleX),0,0));
         return PathRenderHelper.createLineFromVertices(xLineVertices,ballMat);
     }
     
     private Spatial initYLine(Material ballMat, float scaleY){
         ArrayList<Vector3f> yLineVertices = new ArrayList<>();
-        //yLineVertices.add(new Vector3f(0,getPositiveValue(scaleY),0));
-        //yLineVertices.add(new Vector3f(0,getNegativeValue(scaleY),0));
-        yLineVertices.add(new Vector3f(0,4f,0));
-        yLineVertices.add(new Vector3f(0,-0.2f,0));
+        yLineVertices.add(new Vector3f(0,getPositiveValue(scaleY),0));
+        yLineVertices.add(new Vector3f(0,getNegativeValue(scaleY),0));
         return PathRenderHelper.createLineFromVertices(yLineVertices,ballMat);
     }
     
     private Spatial initZLine(Material ballMat, float scaleNormal){
         ArrayList<Vector3f> zLineVertices = new ArrayList<>();
-        //zLineVertices.add(new Vector3f(0,0,getPositiveValue(scaleNormal)));
-        //zLineVertices.add(new Vector3f(0,0,getNegativeValue(scaleNormal)));
-        zLineVertices.add(new Vector3f(0,0,4f));
-        zLineVertices.add(new Vector3f(0,0,-0.2f));
+        zLineVertices.add(new Vector3f(0,0,getPositiveValue(scaleNormal)));
+        zLineVertices.add(new Vector3f(0,0,getNegativeValue(scaleNormal)));
         return PathRenderHelper.createLineFromVertices(zLineVertices,ballMat);
     }
     
