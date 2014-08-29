@@ -177,6 +177,16 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     public Vector3f getTrackerNormal() {
         return locationTracker.getTrackerNormal();
     }
+    
+    @Override
+    public Vector3f getTrackerX(){
+        return locationTracker.getTrackerX();
+    }
+    
+    @Override
+    public Vector3f getTrackerY(){
+        return locationTracker.getTrackerY();
+    }
 
     
     

@@ -38,6 +38,8 @@ public interface LocationTracker {
     void startStopRecording();
     boolean isNewPathExists();
     ArrayList<Vector3f> getCurrentPathVertices();
-    Vector3f getTrackerNormal();
     
+    Vector3f getTrackerNormal();
+    Vector3f getTrackerX();
+    Vector3f getTrackerY();
 }

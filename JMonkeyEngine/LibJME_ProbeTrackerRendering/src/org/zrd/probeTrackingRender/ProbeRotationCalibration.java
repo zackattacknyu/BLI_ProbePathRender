@@ -47,6 +47,8 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     private TriangleSet meshInfo;
     private Vector3f calibEndPoint;
     
+    private Vector3f initX,initY,initNormal;
+    
     public ProbeRotationCalibration(InputManager inputManager, Camera cam, 
             Node shootableMesh, ProbeTracker probeTracker, TriangleSet meshInfo,
             Path resultFilePath, FixedPointPicker fixedPtPicker){
@@ -79,6 +81,10 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         System.out.println("Hit space bar before selecting the end point");
         probeTracker.setCurrentPosition(startPoint);
         probeTracker.startStopRecording();
+        
+        initX = probeTracker.getTrackerX().clone();
+        initY = probeTracker.getTrackerY().clone();
+        initNormal = probeTracker.getTrackerNormal().clone();
     }
 
     @Override
@@ -90,8 +96,6 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         calibEndPoint = endPoint.clone();
         
         probeTracker.startStopRecording();
-        //probeTracker.rescaleCoordinates(scaleCalib.getUniformScaleFactor());
-        //probeTracker.addendRotationCalibration(rotCalib.getAggregateRotation());
         CalibrationHelper.writeCalibrationResults(scaleCalib.getUniformScaleFactor(),
                 probeTracker.getRotationCalibration(),
                 rotCalib.getAggregateRotation(),
@@ -104,18 +108,22 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         return probeTracker.getCurrentPathVertices();
     }
 
+    @Override
     public boolean isCalibrationDone() {
         return rotationCalibrationDone;
     }
 
+    @Override
     public boolean isCalibrationNewlyFinished() {
         return arePointsNewlyPicked();
     }
 
+    @Override
     public MeshTriangle getTriangleAtEndPoint() {
         return getEndingTriangle();
     }
 
+    @Override
     public Vector3f getCalibEndPoint() {
         return calibEndPoint;
     }

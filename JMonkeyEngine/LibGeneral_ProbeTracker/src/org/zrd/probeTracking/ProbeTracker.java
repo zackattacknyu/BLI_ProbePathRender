@@ -36,6 +36,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private final Vector3f startingPosition;
     
     private final Vector3f baseNormal = new Vector3f(0,0,1);
+    private final Vector3f baseX = new Vector3f(1,0,0);
+    private final Vector3f baseY = new Vector3f(0,1,0);
     
     private float currentYaw=0,currentPitch = 0,currentRoll = 0;
     private float lastYaw,lastPitch,lastRoll;
@@ -246,6 +248,16 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     @Override
     public Vector3f getTrackerNormal(){
         return getLocalRotation().mult(baseNormal);
+    }
+    
+    @Override
+    public Vector3f getTrackerX(){
+        return getLocalRotation().mult(baseX);
+    }
+    
+    @Override
+    public Vector3f getTrackerY(){
+        return getLocalRotation().mult(baseY);
     }
     
     public void setRotation(float yaw, float pitch, float roll){
