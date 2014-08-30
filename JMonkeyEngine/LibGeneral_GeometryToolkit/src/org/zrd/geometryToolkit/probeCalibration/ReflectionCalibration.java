@@ -7,6 +7,7 @@ package org.zrd.geometryToolkit.probeCalibration;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
@@ -100,12 +101,16 @@ public class ReflectionCalibration {
         return shouldNegateY;
     }
     
-    public void displayResults(){
+    public ArrayList<String> getResults(){
         
-        System.out.println("X accuracy: " + negatedXaccuracy);
-        System.out.println("Should negate X: " + shouldNegateX);
+        ArrayList<String> results = new ArrayList<>(4);
         
-        System.out.println("Y accuracy: " + negatedYaccuracy);
-        System.out.println("Should negate Y: " + shouldNegateY);
+        results.add("X accuracy: " + negatedXaccuracy);
+        results.add("Should negate X: " + shouldNegateX);
+        
+        results.add("Y accuracy: " + negatedYaccuracy);
+        results.add("Should negate Y: " + shouldNegateY);
+        
+        return results;
     }
 }

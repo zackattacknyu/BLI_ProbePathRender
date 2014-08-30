@@ -98,17 +98,15 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         calibEndPoint = endPoint.clone();
         
         probeTracker.startStopRecording();
+        ReflectionCalibration reflectionCalib = new ReflectionCalibration(initX,initY,initNormal,rotCalib);
         CalibrationHelper.writeCalibrationResults(
                 scaleCalib.getUniformScaleFactor(),
                 probeTracker.getRotationCalibration(),
                 rotCalib.getAggregateRotation(),
                 probeTracker.getCurrentQualityResults(),
+                reflectionCalib.getResults(),
                 resultFilePath);
-        
-        ReflectionCalibration reflectionCalib = new ReflectionCalibration(initX,initY,initNormal,rotCalib);
-        reflectionCalib.displayResults();
-        
-        
+
         probeTracker.setCurrentPosition(endPoint);
     }
 

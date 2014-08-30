@@ -21,10 +21,13 @@ import org.zrd.util.fileHelper.GeneralFileHelper;
  */
 public class CalibrationHelper {
     
-    public static void writeCalibrationResults(float uniformScaleFactor, 
+    public static void writeCalibrationResults(
+            float uniformScaleFactor, 
             Quaternion previousRotCalibration,
             Quaternion newRotation,
-            ArrayList<String> qualityStats, Path resultFolder) {
+            ArrayList<String> qualityStats, 
+            ArrayList<String> reflectionCalibResults, 
+            Path resultFolder) {
         
         AngleAxisRotation rotCalib = new AngleAxisRotation(newRotation);
         Quaternion currentRotCalib = newRotation.clone().mult(previousRotCalibration.clone());
@@ -48,6 +51,10 @@ public class CalibrationHelper {
         
         resultText.add("#Add this next block to properties file if this is the desired rotation calibration");
         resultText.addAll(CalibrationProperties.getCalibrationPropertiesStrings(currentRotCalib));
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
+        
+        resultText.add("Here are the reflection calibration results:");
+        resultText.addAll(reflectionCalibResults);
         resultText.add(OutputHelper.EMPTY_LINE_STRING);
         
         resultText.addAll(qualityStats);
