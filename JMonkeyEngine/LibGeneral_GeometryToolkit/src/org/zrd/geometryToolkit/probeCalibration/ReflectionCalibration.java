@@ -5,8 +5,11 @@
 package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
+import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 
 /**
  *
@@ -32,14 +35,77 @@ import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 public class ReflectionCalibration {
     
     
-    private Matrix3f coordMatrix;
+    private float negatedXaccuracy;
+    private float negatedYaccuracy;
     
-    public ReflectionCalibration(Vector3f xVector, Vector3f yVector, Vector3f normalVector){
-        coordMatrix = TransformHelper.getCoordinateTransformation(xVector, yVector, normalVector);
+    private boolean shouldNegateX;
+    private boolean shouldNegateY;
+    
+    public static final float ACCURACY_REQUIRED_FOR_NEGATION_RECOMMENDATION = 0.5f;
+    
+    public ReflectionCalibration(Vector3f xVector, Vector3f yVector, Vector3f normalVector, 
+            Vector3f originalVector, Vector3f modifiedVector){
+        
+        Matrix3f coordMatrix = TransformHelper.getCoordinateTransformation(xVector, yVector, normalVector);
+        
+        Vector2f originalXYVectorInNewCoords = TransformHelper.getXYVectorInNewCoords(coordMatrix, originalVector);
+        Vector2f modifiedXYVectorInNewCoords = TransformHelper.getXYVectorInNewCoords(coordMatrix, modifiedVector);
+        
+        Vector2f modifiedVectorIfXNegated = originalXYVectorInNewCoords.clone();
+        modifiedVectorIfXNegated.setX(originalXYVectorInNewCoords.getX()*-1);
+        
+        Vector2f modifiedVectorIfYNegated = originalXYVectorInNewCoords.clone();
+        modifiedVectorIfYNegated.setY(originalXYVectorInNewCoords.getY()*-1);
+        
+        negatedXaccuracy = modifiedVectorIfXNegated.distance(modifiedXYVectorInNewCoords);
+        negatedYaccuracy = modifiedVectorIfYNegated.distance(modifiedXYVectorInNewCoords);
+        
+        shouldNegateX = shouldRecommendNegation(negatedXaccuracy);
+        shouldNegateY = shouldRecommendNegation(negatedYaccuracy);
     }
     
-    public Vector3f getModifiedVector(Vector3f originalVector){
-        return coordMatrix.mult(originalVector);
+    public ReflectionCalibration(Vector3f xVector, Vector3f yVector, Vector3f normalVector, PathOnMeshCalculator rotCalib){
+        this(xVector,yVector,normalVector,
+                SegmentSet.getStartToEndUnitVector(rotCalib.getInitPath()),
+                SegmentSet.getStartToEndUnitVector(rotCalib.getCurrentRotatedPath()));
     }
     
+    public static boolean shouldRecommendNegation(float accuracy){
+        return (accuracy<ACCURACY_REQUIRED_FOR_NEGATION_RECOMMENDATION);
+    }
+
+    /**
+     * This simply gets the euclidean distance between the 
+     *      modified vector and the vector if x was negated.
+     * @return  accuracy of just negating x
+     */
+    public float getNegatedXaccuracy() {
+        return negatedXaccuracy;
+    }
+
+    /**
+     * This simply gets the euclidean distance between the 
+     *      modified vector and the vector if y was negated.
+     * @return  accuracy of just negating y
+     */
+    public float getNegatedYaccuracy() {
+        return negatedYaccuracy;
+    }
+
+    public boolean shouldNegateX() {
+        return shouldNegateX;
+    }
+
+    public boolean shouldNegateY() {
+        return shouldNegateY;
+    }
+    
+    public void displayResults(){
+        
+        System.out.println("X accuracy: " + negatedXaccuracy);
+        System.out.println("Should negate X: " + shouldNegateX);
+        
+        System.out.println("Y accuracy: " + negatedYaccuracy);
+        System.out.println("Should negate Y: " + shouldNegateY);
+    }
 }

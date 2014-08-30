@@ -5,6 +5,7 @@
 package org.zrd.geometryToolkit.geometricCalculations;
 
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
 /**
@@ -32,6 +33,20 @@ public class TransformHelper {
         coordMatrix.set(coords);
         coordMatrix.invertLocal();
         return coordMatrix;
+    }
+    
+    /**
+     * This takes in a coord transform matrix and the vector to be put
+     *      in new coordinates and then finds the vector in the new coordinate
+     *      system. This is used for cases where the z coordinate 
+     *      should be near zero, so this method only returns the x,y 
+     *      coordinates in the new system. 
+     * @param coordMatrix       change of coordinate matrix
+     * @param originalVector    vector in standard basis
+     */
+    public static Vector2f getXYVectorInNewCoords(Matrix3f coordMatrix, Vector3f originalVector){
+        Vector3f modVector = coordMatrix.mult(originalVector);
+        return new Vector2f(modVector.getX(),modVector.getY());
     }
     
 }
