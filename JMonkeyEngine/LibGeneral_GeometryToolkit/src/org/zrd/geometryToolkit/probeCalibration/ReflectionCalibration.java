@@ -105,10 +105,10 @@ public class ReflectionCalibration {
         
         ArrayList<String> results = new ArrayList<>(4);
         
-        results.add("X accuracy: " + negatedXaccuracy);
+        results.add("Negated X accuracy: " + negatedXaccuracy);
         results.add("Should negate X: " + shouldNegateX);
         
-        results.add("Y accuracy: " + negatedYaccuracy);
+        results.add("Negated Y accuracy: " + negatedYaccuracy);
         results.add("Should negate Y: " + shouldNegateY);
         
         return results;
