@@ -6,6 +6,7 @@ package org.zrd.geometryToolkit.pathDataStructure;
 
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.OutputHelper;
 
 /**
@@ -46,9 +47,21 @@ public class SegmentSet {
         this.dataAtVertices = dataAtVertices;
     }
     
-    public static Vector3f getFirstSegment(ArrayList<Vector3f> pathVertices){
-        SegmentSet set = new SegmentSet(pathVertices);
-        return set.getSegmentVectors().get(0);
+    public static Vector3f getStartToEndUnitVector(ArrayList<Vector3f> pathVertices){
+        return getStartToEndVector(pathVertices).clone().normalize();
+    }
+    
+    public static Vector3f getStartToEndVector(ArrayList<Vector3f> pathVertices){
+        return PathHelper.getLastPoint(pathVertices).subtract(PathHelper.getFirstPoint(pathVertices));
+    }
+    
+    /**
+     * This returns the Euclidean distance between the start and end points
+     *      of the path
+     * @return 
+     */
+    public static float getStartToEndDistance(ArrayList<Vector3f> pathVertices){
+        return getStartToEndVector(pathVertices).length();
     }
     
     private void constructSegmentList(){
@@ -62,14 +75,7 @@ public class SegmentSet {
         }
     }
     
-    /**
-     * This returns the Euclidean distance between the start and end points
-     *      of the path
-     * @return 
-     */
-    public float getStartToEndDistance(){
-        return pathVertices.get(0).distance(pathVertices.get(pathVertices.size()-1));
-    }
+    
     
     public ArrayList<String> getResultStrings(){
         ArrayList<String> resultStrings = new ArrayList<String>(10);
@@ -78,7 +84,7 @@ public class SegmentSet {
         resultStrings.add(String.valueOf(arcLength));
         resultStrings.add(OutputHelper.EMPTY_LINE_STRING);
         resultStrings.add("Length between start and end points");
-        resultStrings.add(String.valueOf(getStartToEndDistance()));
+        resultStrings.add(String.valueOf(getStartToEndDistance(pathVertices)));
         resultStrings.add(OutputHelper.EMPTY_LINE_STRING);
         return resultStrings;
     }
