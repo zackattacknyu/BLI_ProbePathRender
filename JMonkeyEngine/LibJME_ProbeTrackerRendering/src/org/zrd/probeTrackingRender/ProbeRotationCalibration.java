@@ -81,6 +81,7 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
     protected void handleStartPoint(Vector3f startPoint) {
         System.out.println("Start Point set at: " + startPoint);
         System.out.println("Hit space bar before selecting the end point");
+        System.out.println("Press B to cancel and only produce the align normal calibration");
         probeTracker.setCurrentPosition(startPoint);
         probeTracker.startStopRecording();
 
