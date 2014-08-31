@@ -39,8 +39,8 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     private boolean twoPointPickEnabled = false;
     private boolean onStartPoint = true;
     private Vector3f lastPointClicked;
-    private MeshTriangle startingTriangle;
-    private MeshTriangle endingTriangle;
+    protected MeshTriangle startingTriangle;
+    protected MeshTriangle endingTriangle;
     private TriangleSet meshInfo;
     private SpacebarHitImpl spacebarHit;
     

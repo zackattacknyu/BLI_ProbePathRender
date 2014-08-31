@@ -83,6 +83,11 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         System.out.println("Hit space bar before selecting the end point");
         probeTracker.setCurrentPosition(startPoint);
         probeTracker.startStopRecording();
+
+        CalibrationHelper.writeAlignNormalResults(
+                startingTriangle.getNormal(), 
+                probeTracker.getTrackerNormal(), 
+                resultFilePath);
         
         initX = probeTracker.getTrackerX().clone().normalize();
         initY = probeTracker.getTrackerY().clone().normalize();

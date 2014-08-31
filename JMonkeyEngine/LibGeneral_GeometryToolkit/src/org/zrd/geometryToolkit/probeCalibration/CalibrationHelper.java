@@ -5,9 +5,11 @@
 package org.zrd.geometryToolkit.probeCalibration;
 
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometricCalculations.AngleAxisRotation;
+import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
 import org.zrd.geometryToolkit.geometryUtil.GeometryOutputHelper;
 import org.zrd.util.dataHelp.BasicAngleHelper;
@@ -59,7 +61,27 @@ public class CalibrationHelper {
         
         resultText.addAll(qualityStats);
                 
-        FileDataHelper.exportLinesToFile(resultText,GeneralFileHelper.getNewDataFilePath(resultFolder, "CalibrationResults"));
+        exportCalibrationInfo(resultText,resultFolder,"CalibrationResults");
+        
+    }
+    
+    public static void writeAlignNormalResults(Vector3f triangleNormal, Vector3f probeNormal,Path resultFolder){
+        Quaternion rotationOfNormal = RotationTransformHelper.getRotationFromVectors(probeNormal, triangleNormal);
+
+        ArrayList<String> resultText = new ArrayList<>(10);
+        resultText.add("Probe Normal: " + probeNormal);
+        resultText.add("Triangle Normal: " + triangleNormal);
+        resultText.add("Rotation to apply: " + rotationOfNormal);
+        resultText.add(OutputHelper.EMPTY_LINE_STRING);
+        resultText.add("#Add this next block to properties file to align normals at chosen point");
+        resultText.addAll(CalibrationProperties.getCalibrationPropertiesStrings(rotationOfNormal));
+        
+        exportCalibrationInfo(resultText,resultFolder,"AlignNormalResults");
+    }
+    
+    public static void exportCalibrationInfo(ArrayList<String> resultText,Path resultFolder, String prefix){
+        FileDataHelper.exportLinesToFile(
+                resultText,GeneralFileHelper.getNewDataFilePath(resultFolder, prefix));
     }
     
 }
