@@ -85,8 +85,8 @@ public class ProbeRotationCalibration extends PickTwoPointsOnMesh implements Rot
         probeTracker.startStopRecording();
 
         CalibrationHelper.writeAlignNormalResults(
-                startingTriangle.getNormal(), 
-                probeTracker.getTrackerNormal(), 
+                probeTracker.getTrackerNormal().clone(),
+                startingTriangle.getNormal().clone(), 
                 resultFilePath);
         
         initX = probeTracker.getTrackerX().clone().normalize();

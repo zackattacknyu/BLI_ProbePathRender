@@ -65,7 +65,7 @@ public class CalibrationHelper {
         
     }
     
-    public static void writeAlignNormalResults(Vector3f triangleNormal, Vector3f probeNormal,Path resultFolder){
+    public static void writeAlignNormalResults(Vector3f probeNormal,Vector3f triangleNormal,Path resultFolder){
         Quaternion rotationOfNormal = RotationTransformHelper.getRotationFromVectors(probeNormal, triangleNormal);
 
         ArrayList<String> resultText = new ArrayList<>(10);
