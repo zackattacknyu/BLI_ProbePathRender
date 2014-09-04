@@ -52,8 +52,16 @@ Our process started with taking a 3D scan of the surface to get the mesh. After 
 
 \section*{Calibration Overview}
 
-The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions.  
+The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions.  \\
 \\
+The probe gives us $x,y$ displacements, so we get the vector $(x,y,0)$ from the probe data. We use the orientation angles to get a rotation matrix and then apply the rotation matrix to that vector and obtain $(x,y,z)$ in the probe coordinate system. We then need to translate that to the virtual coordinate system. They are both orthogonal coordinate systems so an orthogonal matrix will allow us to transform between them. \\
+\\
+**MENTION SCALING**
+\\
+**MENTION ROTATION AND REFLECTION**
+
+\section*{Calibration Details}
+
 In order to calibrate the scale, we used a two-step process. In the first step, we figured out the factor to go from displacement units on the probe to millimeters. We did this by moving the probe 100 mm and then seeing the total displacement read by the probe. In the second step, we measured distances between points in the model in the real world and in the virtual world. This gave us a millimeter in the real world to virtual world unit conversion factor. We combined the two conversion factors to obtain the probe unit to virtual unit conversion factor. This procedure ended up giving us a very accurate scale factor for displacement. \\
 \\
 Calibrating the rotation and following the surface was a more difficult obstacle. With the probe, we have 3 orthonormal vectors. There is a vector for the x displacement, a vector for the y displacement, and vector for the normal. Using the orientation data, we can rotate these vectors. We then find to find the corresponding orthonormal vectors in the virtual world. We thus need to get a linear transformation between two sets of orthonormal vectors, which is either a rotation or reflection **PROVE THIS**.
