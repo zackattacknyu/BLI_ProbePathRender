@@ -48,11 +48,16 @@ In various medical applications, a probe moves across a patient's body and takes
 Our process started with taking a 3D scan of the surface to get the mesh. After creating and refining the 3D mesh, we loaded it into a video game style environment that allowed us to produce live updates. Every few milliseconds we obtained displacement and orientation readings from the probe and we used those to update the visualization of the location of the probe in the virtual environment. In order for this to work properly, we needed to know how to convert between the displacement readings from the probe and the displacement in the virtual world. We also needed to know how to convert between the rotation read by the probe and the rotation that corresponds to in the virtual world. Finally, due to the deformability of the surface, we needed an algorithm to approximate the probe's location on the surface in the virtual world.\\
 \\
 **SHOW PICTURE OF PROBE IN REAL WORLD**\\
-**SHOW PICTURE OF PROBE IN VIRTUAL WORLD**\\
+**SHOW PICTURE OF PROBE IN VIRTUAL WORLD**
+
+\section*{Calibration Overview}
+
+The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions.  
 \\
 In order to calibrate the scale, we used a two-step process. In the first step, we figured out the factor to go from displacement units on the probe to millimeters. We did this by moving the probe 100 mm and then seeing the total displacement read by the probe. In the second step, we measured distances between points in the model in the real world and in the virtual world. This gave us a millimeter in the real world to virtual world unit conversion factor. We combined the two conversion factors to obtain the probe unit to virtual unit conversion factor. This procedure ended up giving us a very accurate scale factor for displacement. \\
 \\
 Calibrating the rotation and following the surface was a more difficult obstacle. With the probe, we have 3 orthonormal vectors. There is a vector for the x displacement, a vector for the y displacement, and vector for the normal. Using the orientation data, we can rotate these vectors. We then find to find the corresponding orthonormal vectors in the virtual world. We thus need to get a linear transformation between two sets of orthonormal vectors, which is either a rotation or reflection **PROVE THIS**.
+
 \section*{Implementation Details}
 
 We use a Kinect to get the data and then used software that worked on top of the Point Cloud Library \cite{pointcloudlibrary} to take the data and get a mesh and texture from it. We then edited the mesh using Meshlab \cite{meshlab}. We took out some of the noisy areas and using the Quadric Edge Collapse Decimation filter, which is an implementation of QSlim \cite{qslim}, to refine and simplify the mesh. After that, we load the mesh into our tracking environment. Our tracking environment is an application that takes in the mesh as well as probe data readings and gives live updates as to the probe's position and data. It operates similarly to a video game and was developed using JMonkeyEngine **INSERT DETAIL**, a video game library written in Java that is similar to Ogre **INSERT REFERENCE**. \\
