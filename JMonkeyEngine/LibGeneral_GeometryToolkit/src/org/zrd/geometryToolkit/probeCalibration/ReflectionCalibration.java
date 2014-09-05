@@ -67,8 +67,8 @@ public class ReflectionCalibration {
     
     public ReflectionCalibration(Vector3f xVector, Vector3f yVector, Vector3f normalVector, PathOnMeshCalculator rotCalib){
         this(xVector,yVector,normalVector,
-                SegmentSet.getStartToEndUnitVector(rotCalib.getInitPath()),
-                SegmentSet.getStartToEndUnitVector(rotCalib.getCurrentRotatedPath()));
+                SegmentSet.getFirstSegmentUnitVector(rotCalib.getInitPath()),
+                SegmentSet.getFirstSegmentUnitVector(rotCalib.getCurrentRotatedPath()));
     }
     
     public static boolean shouldRecommendNegation(float accuracy){

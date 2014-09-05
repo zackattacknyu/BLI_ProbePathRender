@@ -55,6 +55,14 @@ public class SegmentSet {
         return PathHelper.getLastPoint(pathVertices).subtract(PathHelper.getFirstPoint(pathVertices));
     }
     
+    public static Vector3f getFirstSegmentUnitVector(ArrayList<Vector3f> pathVertices){
+        return getFirstSegment(pathVertices).normalize();
+    }
+    
+    public static Vector3f getFirstSegment(ArrayList<Vector3f> pathVertices){
+        return PathHelper.getSecondPoint(pathVertices).subtract(PathHelper.getFirstPoint(pathVertices));
+    }
+    
     /**
      * This returns the Euclidean distance between the start and end points
      *      of the path
