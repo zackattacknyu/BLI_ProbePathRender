@@ -56,11 +56,13 @@ The basic problem we have is that we are given 5 values from the probe, $(x_{pro
 \\
 The mouse sensor gives us $x,y$ values for each displacement. Thus the positive x-vector corresponds to an $x$ displacement read by the mouse sensor and the positive y-vector corresponds to a $y$ displacement read by the mouse sensor. The negative z-direction corresponds to the direction that the mouse sensor points which in practice will be the direction towards the surface. Thus the positive z-axis will point away from the surface. Due to the nature of the hardware, we can assume that these vectors are orthogonal to each other.\\
 \\
-The probe gives us orientation data in the form of yaw, pitch, and roll angles. We want to combine this with the $x,y$ data to get the proper displacement vector. We will thus define a probe coordinate system. In this system, the $x,y,z$ vectors are the same as for the mouse sensor system if all the angles are $0$. Also, in this system, the yaw angle means a rotation about the $z-axis$. The pitch angle is a rotation about the $x-axis$. The roll angle is a rotation about the $y-axis$. \\
+The probe gives us orientation data in the form of yaw, pitch, and roll angles. We want to combine this with the $x,y$ data to get the proper displacement vector. We will thus define a probe coordinate system. In this system, the $x,y,z$ vectors are the same as for the mouse sensor system if all the angles are $0$. Also, in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
 \\
 The real world coordinate system has the units in millimeters and corresponds to displacements from an origin point. The virtual world will be virtual displacements from an origin point on the scanned model. For the sake of the simplicity, the $x,y,z$ directions in the real world system will be the same as in the virtual world system. The point of keeping track of the real world coordinates will just be scaling the displacements. \\
 \\
-
+There are a few assumptions we can make that simplify the process of converting between coordinate systems. All of the basis vectors are orthogonal in each of the coordinate systems. Therefore any conversions between them is an orthogonal matrix. Every orthogonal matrix is the product of one rotation and one reflection, which simplifies the process of finding out which orthogonal matrix will do the conversion we need. \\
+\\
+We also have rigid motion so the probe coordinate system and the virtual coordinate system stay constant. Additionally, any changes in the probe's position only come from the $x,y$ data. The angle data only gives us the orientation when there is a change in position registered. This means that we can equivalently formulate the problem as taking the $x,y,z$ vectors from the mouse sensor space and finding their equivalent orthogonal vectors in the virtual space given particular $\theta$ values for the angles. If there is a reflection then, it would only be one about the $y-z$ plane to flip the x-axis or about the $x-z$ plane to flip the y-axis. 
 
 \section*{Calibration Details}
 
