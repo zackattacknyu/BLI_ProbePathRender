@@ -64,6 +64,29 @@ There are a few assumptions we can make that simplify the process of converting 
 \\
 We also have rigid motion so the probe coordinate system and the virtual coordinate system stay constant. Additionally, any changes in the probe's position only come from the $x,y$ data. The angle data only gives us the orientation when there is a change in position registered. This means that we can equivalently formulate the problem as taking the $x,y,z$ vectors from the mouse sensor space and finding their equivalent orthogonal vectors in the virtual space given particular $\theta$ values for the angles. If there is a reflection then, it would only be one about the $y-z$ plane to flip the x-axis or about the $x-z$ plane to flip the y-axis. 
 
+\section*{Scaling calibration}
+
+In order to do scale calibration, I just consider $x,y$ displacement without any angles being involved. In order to simplify the calibration factor, I find two linear transformation $S_1,S_2$ such that 
+\[
+S_1(x,y,0)_m = (x,y,0)_k
+\]
+\[
+S_2(x,y,z)_k = (x,y,z)_w
+\]
+For $S_1$ we only care about $x,y$ scale, so it is a diagonal matrix. We measure a certain distance in the real world and find out the total displacement in probe coordinates. We repeat this for both $x,y$ and this allows us to get $s_{1x},s_{1y}$, the scale factors for $x,y$ respectively. \\
+\\
+For $S_2$, we are assuming that the real world and virtual world are scaled uniformly. Therefore, we measure the euclidean distance between points in the virtual world and points in the real world and assume that the factor we get can be uniformly applied to the 3 coordinates. Once we get that factor $s_2$, we make $S_2$ as the diagonal matrix with only $s$ on the diagonal. \\
+\\
+We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. For the rest of this paper, when we talk about $(x,y,0)_m$ will be the scaled $x,y$ coordinates obtained by applying the matrix $S$ to it. We will apply the scaling in the beginning so that we only have to worry about calibrating directions as we continue. 
+
+\section*{Rotation Calibration}
+
+**INSERT DETAILS**
+
+\section*{Reflection Calibration}
+
+**INSERT DETAILS**
+
 \section*{Calibration Details}
 
 In order to calibrate the scale, we used a two-step process. In the first step, we figured out the factor to go from displacement units on the probe to millimeters. We did this by moving the probe 100 mm and then seeing the total displacement read by the probe. In the second step, we measured distances between points in the model in the real world and in the virtual world. This gave us a millimeter in the real world to virtual world unit conversion factor. We combined the two conversion factors to obtain the probe unit to virtual unit conversion factor. This procedure ended up giving us a very accurate scale factor for displacement. \\
