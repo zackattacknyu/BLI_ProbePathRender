@@ -81,11 +81,18 @@ We then find $S=S_2S_1$ although order does not matter since we have diagonal ma
 
 \section*{Rotation Calibration}
 
-**INSERT DETAILS**
+Now that the scale is calibrated, the rest of the process of chaning coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
+1. The normal to the plane in both probe and virtual coordinates\\
+2. A path from A to a point B on the surface in probe and virtual coordinates\\
+3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
+\\
+To reconcile 1, we just have two vectors, so we can come up with a rotation matrix $R_1$ to go from one vector to another. This means that one of the unit vectors has been reconciled. \\
+\\
+To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. 
 
 \section*{Reflection Calibration}
 
-**INSERT DETAILS**
+We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. 
 
 \section*{Calibration Details}
 
