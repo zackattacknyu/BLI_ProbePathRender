@@ -52,7 +52,11 @@ Our process started with taking a 3D scan of the surface to get the mesh. After 
 
 \section*{Calibration Overview}
 
-The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems. The first coordinate system is the mouse sensor coordinate system, abbreviated with subscript $m$. The next one is the probe coordinate system, abbreviated with subscript $p$. We will then need to translate that to the real world coordinate system, abbreviated by $k$. Lastly, we will translate that to the virtual coordinate system, abbreviated by $w$.\\
+The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems:\\
+1. Mouse sensor coordinate system, subscript $m$\\
+2. Probe coordinate system,  subscript $p$\\
+3. Real world coordinate system, subscript $k$\\
+4. Virtual coordinate system, subscript $w$.\\
 \\
 The mouse sensor gives us $x,y$ values for each displacement. Thus the positive x-vector corresponds to an $x$ displacement read by the mouse sensor and the positive y-vector corresponds to a $y$ displacement read by the mouse sensor. The negative z-direction corresponds to the direction that the mouse sensor points which in practice will be the direction towards the surface. Thus the positive z-axis will point away from the surface. Due to the nature of the hardware, we can assume that these vectors are orthogonal to each other.\\
 \\
@@ -77,22 +81,23 @@ For $S_1$ we only care about $x,y$ scale, so it is a diagonal matrix. We measure
 \\
 For $S_2$, we are assuming that the real world and virtual world are scaled uniformly. Therefore, we measure the euclidean distance between points in the virtual world and points in the real world and assume that the factor we get can be uniformly applied to the 3 coordinates. Once we get that factor $s_2$, we make $S_2$ as the diagonal matrix with only $s$ on the diagonal. \\
 \\
-We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. For the rest of this paper, when we talk about $(x,y,0)_m$ will be the scaled $x,y$ coordinates obtained by applying the matrix $S$ to it. We will apply the scaling in the beginning so that we only have to worry about calibrating directions as we continue. 
+We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. We will now let
+\[
+(x',y',0)_m = S(x,y,0)_m = (x \cdot s_x, y \cdot s_y, 0)_m
+\]
 
-\section*{Rotation Calibration}
+\section*{Rotation and Reflection Calibration}
 
-Now that the scale is calibrated, the rest of the process of chaning coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
+Now that the scale is calibrated, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
 1. The normal to the plane in both probe and virtual coordinates\\
 2. A path from A to a point B on the surface in probe and virtual coordinates\\
 3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
 \\
 To reconcile 1, we just have two vectors, so we can come up with a rotation matrix $R_1$ to go from one vector to another. This means that one of the unit vectors has been reconciled. \\
 \\
-To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. 
-
-\section*{Reflection Calibration}
-
-We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. 
+To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. \\
+\\
+We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. This gives us a reflection matrix $K$ which is the reflection of the $x$ or $y$ axis at the original point.
 
 \section*{Calibration Details}
 
