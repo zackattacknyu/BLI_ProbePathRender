@@ -86,6 +86,10 @@ We then find $S=S_2S_1$ although order does not matter since we have diagonal ma
 (x',y',0)_m = S(x,y,0)_m = (x \cdot s_x, y \cdot s_y, 0)_m
 \]
 
+\section*{Mouse Sensor to Probe Coordinates}
+
+Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis.
+
 \section*{Rotation and Reflection Calibration}
 
 Now that the scale is calibrated, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
