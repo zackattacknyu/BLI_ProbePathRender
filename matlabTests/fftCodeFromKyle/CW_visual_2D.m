@@ -3,7 +3,7 @@
 
 %% Load in Data
 clear
-cd C:\Users\BLI\Desktop\Downloads; % path folder
+%cd C:\Users\BLI\Desktop\Downloads; % path folder
 load cw_tracker2.mat; % import data
 data = data3; % renaming probe output
 peaks = peaks3; % renaming fft output
