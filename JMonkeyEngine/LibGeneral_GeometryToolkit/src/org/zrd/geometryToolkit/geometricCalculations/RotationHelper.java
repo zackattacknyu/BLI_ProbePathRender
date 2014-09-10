@@ -23,24 +23,9 @@ public class RotationHelper {
     
     public static Quaternion getQuaternion(float yawInRadians, 
             float pitchInRadians, float rollInRadians){
-        
-        /*Quaternion rotation = new Quaternion();
-        rotation.fromAngles(pitchInRadians, rollInRadians, yawInRadians);
-        return rotation;*/
-        
-        
-        Quaternion yaw = new Quaternion();
-        yaw.fromAngleAxis(yawInRadians, Vector3f.UNIT_Z);
-        
-        Quaternion pitch = new Quaternion();
-        pitch.fromAngleAxis(pitchInRadians, Vector3f.UNIT_X);
-        
-        Quaternion roll = new Quaternion();
-        roll.fromAngleAxis(rollInRadians, Vector3f.UNIT_Y);
-        
-        return (yaw.mult(pitch)).mult(roll);
-        
-        //return (roll.mult(pitch)).mult(yaw);
+
+        Quaternion rot = new Quaternion();
+        return rot.fromAngles(pitchInRadians, rollInRadians, yawInRadians);
         
         
     }
