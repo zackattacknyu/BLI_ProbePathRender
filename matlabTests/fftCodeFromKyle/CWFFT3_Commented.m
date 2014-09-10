@@ -14,7 +14,7 @@ function [peak,freq]=CWFFT3_Commented(w,res)
 Fs = 3.5e5;           
 
 % Time between samples
-T = 1/Fs;             
+%T = 1/Fs;             
 
 % Length of the input waveform
 L = size(w,1);                     
@@ -31,21 +31,21 @@ w=w-shift; %subtracts average from whole waveform
 
 % Different windowing functions
 % hamming() returns periodic hamming window with length L
-h1=hamming(L,'periodic');
+%h1=hamming(L,'periodic');
 % blackman() returns periodic blackman window with length L
 b1=blackman(L,'periodic');
 % flattopwin() returns periodic blackman window with length L
-f1=flattopwin(L,'periodic');
+%f1=flattopwin(L,'periodic');
 
 % multiply the window function with waveform
-wh1=h1(:).*w(:);
+%wh1=h1(:).*w(:);
 wb1=b1(:).*w(:);
-wf1=f1(:).*w(:);
+%wf1=f1(:).*w(:);
 
 % apples a Savitzky-Golay FIR smoothing filter to data in w
 % sgolayfilt ( sample, polynomial order, frame size(must be less than k and
 % odd)
-ws=sgolayfilt(w,3,7);
+%ws=sgolayfilt(w,3,7);
 
 % Sum of a 50 Hz sinusoid and a 120 Hz sinusoid
 % x = 0.1636*sin(2*pi*2e4*t); 
@@ -61,11 +61,11 @@ NFFT = 2^res; % Next power of 2 from length of y
 % Y = fft(y,NFFT)/L;
 
 % Y1 through Y5 compute fft on original, windowed, and filtered data
-Y1=fft(w,NFFT)/L;
-Y2=fft(wh1,NFFT)/L;
+%Y1=fft(w,NFFT)/L;
+%Y2=fft(wh1,NFFT)/L;
 Y3=fft(wb1,NFFT)/L;
-Y4=fft(wf1,NFFT)/L;
-Y5=fft(ws,NFFT)/L;
+%Y4=fft(wf1,NFFT)/L;
+%Y5=fft(ws,NFFT)/L;
 
 % f is the frequency array that corresponds to the sampling rate and length
 % linspace gives an evenly distributed array from a to b with x data points
@@ -76,10 +76,10 @@ f = Fs/2*linspace(0,1,NFFT/2);
 % windowed, original, filtered
 
 powY3=sqrt(real(Y3(1:NFFT/2)).^2+imag(Y3(1:NFFT/2)).^2)/NFFT;
-powY1=sqrt(real(Y1(1:NFFT/2)).^2+imag(Y1(1:NFFT/2)).^2)/NFFT;
-powY2=sqrt(real(Y2(1:NFFT/2)).^2+imag(Y2(1:NFFT/2)).^2)/NFFT;
-powY4=sqrt(real(Y4(1:NFFT/2)).^2+imag(Y4(1:NFFT/2)).^2)/NFFT;
-powY5=sqrt(real(Y5(1:NFFT/2)).^2+imag(Y5(1:NFFT/2)).^2)/NFFT;
+%powY1=sqrt(real(Y1(1:NFFT/2)).^2+imag(Y1(1:NFFT/2)).^2)/NFFT;
+%powY2=sqrt(real(Y2(1:NFFT/2)).^2+imag(Y2(1:NFFT/2)).^2)/NFFT;
+%powY4=sqrt(real(Y4(1:NFFT/2)).^2+imag(Y4(1:NFFT/2)).^2)/NFFT;
+%powY5=sqrt(real(Y5(1:NFFT/2)).^2+imag(Y5(1:NFFT/2)).^2)/NFFT;
 
  
 % Peak is the db (20*log(x) of the max computed power
