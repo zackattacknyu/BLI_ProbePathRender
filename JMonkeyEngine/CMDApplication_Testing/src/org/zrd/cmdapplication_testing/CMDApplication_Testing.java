@@ -15,8 +15,14 @@ public class CMDApplication_Testing {
      */
     public static void main(String[] args) {
         
-        FFT.testFFT(32);
+        int n = 16;
         
+        FFT.testFFT(n);
+        double[] blackmanWindow = WindowFunction.generateBlackmanWindow(n);
+        
+        for(double windowVal: blackmanWindow){
+            System.out.print(windowVal + " ");
+        }
         
     }
 
