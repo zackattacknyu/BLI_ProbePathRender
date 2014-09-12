@@ -88,7 +88,9 @@ We then find $S=S_2S_1$ although order does not matter since we have diagonal ma
 
 \section*{Mouse Sensor to Probe Coordinates}
 
-Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis.
+Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. In this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
+\\
+We use an Euler Angle to Quaternion conversion to get the rotation we should apply to the mouse sensor coordinate system in order to obtain coordinates in the probe coordinate system. The API that we used had a method \cite{jmonkeyrotation} and the logic used in the method is a common one to go from Euler Angles to Quaternions \cite{quaternionTextboook}.
 
 \section*{Rotation and Reflection Calibration}
 
