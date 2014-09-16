@@ -5,6 +5,7 @@
 package org.zrd.cmdapplication_testing;
 
 import java.util.Arrays;
+import org.zrd.util.stats.IndexEntry;
 import org.zrd.util.stats.StatHelper;
 
 /**
@@ -64,8 +65,26 @@ public class CWFFT {
             fftData[i] = fftData[i].divides(waveformDataSize);
         }
         
+        //obtains the frequencies array
         int fftLengthUse = (int)(Math.pow(2, resolution-1));
+        double increment = (CW_SAMPLING_FREQUENCY/2.0)*(1.0/fftLengthUse);
         double[] frequencies = new double[fftLengthUse+1];
+        for(int j = 0; j <= fftLengthUse; j++){
+            frequencies[j] = j*increment;
+        }
+        
+        //gets the power at each of the frequencies
+        Double[] powerAtFreqs = new Double[fftLengthUse+1];
+        for(int i = 0; i <= fftLengthUse; i++){
+            powerAtFreqs[i] = fftData[i].abs()/fftLengthUse;
+        }
+        
+        //gets the peak and the frequency at that peak
+        IndexEntry maxPower = StatHelper.getMax(powerAtFreqs);
+        double peak = Math.log10(maxPower.getEntry())*20.0;
+        double frequencyAtPeak = frequencies[maxPower.getIndex()];
+        
+        return new CWData(peak,frequencyAtPeak);
         
     }
 }

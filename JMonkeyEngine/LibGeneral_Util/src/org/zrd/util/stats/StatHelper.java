@@ -19,4 +19,16 @@ public class StatHelper {
         return totalVal/numVals;
     }
     
+    public static IndexEntry getMax(Double[] values){
+        int index = 0;
+        double value = Double.MIN_VALUE;
+        for(int i = 0; i < values.length; i++){
+            if(values[i] > value){
+                value = values[i];
+                index = i;
+            }
+        }
+        return new IndexEntry(index,value);
+    }
+    
 }
