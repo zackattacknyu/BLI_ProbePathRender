@@ -21,7 +21,7 @@ Fs = 3.5e5;
 %T = 1/Fs;             
 
 % Length of the input waveform
-L = size(w,1);                     
+L = size(w,2);                     
 
 % t = (0:L-1)*T;                % Time vector
 % shift=(min(w)+max(w))/2;

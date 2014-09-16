@@ -14,7 +14,7 @@ import org.zrd.util.stats.StatHelper;
  */
 public class CWFFT {
     
-    public static final double CW_SAMPLING_FREQUENCY = Math.pow(10, -5);
+    public static final double CW_SAMPLING_FREQUENCY = 3.5*(Math.pow(10, 5));
     
     public static CWData getCWFFTData(double[] waveform, int resolution){
         
@@ -74,9 +74,9 @@ public class CWFFT {
         }
         
         //gets the power at each of the frequencies
-        Double[] powerAtFreqs = new Double[fftLengthUse+1];
-        for(int i = 0; i <= fftLengthUse; i++){
-            powerAtFreqs[i] = fftData[i].abs()/fftLengthUse;
+        Double[] powerAtFreqs = new Double[fftLengthUse];
+        for(int i = 0; i < fftLengthUse; i++){
+            powerAtFreqs[i] = fftData[i].abs()/fftLength;
         }
         
         //gets the peak and the frequency at that peak
