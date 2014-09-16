@@ -10,7 +10,7 @@ package org.zrd.util.stats;
  */
 public class StatHelper {
     
-    public static double getMean(Double[] values){
+    public static double getMean(double[] values){
         double totalVal = 0;
         for(Double val: values){
             totalVal += val;

@@ -16,7 +16,7 @@ public class CWFFT {
     
     public static final double CW_SAMPLING_FREQUENCY = Math.pow(10, -5);
     
-    public static CWData getCWFFTData(Double[] waveform, int resolution){
+    public static CWData getCWFFTData(double[] waveform, int resolution){
         
         int waveformSize = waveform.length;
         
