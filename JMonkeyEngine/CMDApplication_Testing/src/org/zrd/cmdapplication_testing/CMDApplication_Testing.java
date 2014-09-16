@@ -4,6 +4,11 @@
  */
 package org.zrd.cmdapplication_testing;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -15,7 +20,7 @@ public class CMDApplication_Testing {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         /*int n = 16;
         FFT.testFFT(n);
@@ -23,14 +28,14 @@ public class CMDApplication_Testing {
         for(double windowVal: blackmanWindow){
             System.out.print(windowVal + " ");
         }*/
-        
-        //data at index 4 in the CW data
-        double[] waveform1 = {2004,1944,1889,1838,1806,1793,1801,1823,1865,1919,
-            1979,2034,2070,2096,2098,2083,2049,2004,1949,1894,1847,1816,1799,1803,
-            1826,1869,1922,1976,2024,2064,2088,2094,2081,2049,2006,1955,1902,1857,
-            1819,1797,1805,1827,1862,1912,1965,2017,2058,2083,2095,2082,1963,
-            2027,2084,2147,2200,2237
-            };
+
+        ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(Paths.get("input.txt"),StandardCharsets.US_ASCII);
+        String line1 = lines.get(0);
+        String[] vals = line1.split(",");
+        double[] waveform1 = new double[vals.length];
+        for(int i = 0; i < vals.length; i++){
+            waveform1[i] = Double.parseDouble(vals[i]);
+        }
         
         long beforeCalc = Calendar.getInstance().getTimeInMillis();
         CWData data = CWFFT.getCWFFTData(waveform1, 14);
