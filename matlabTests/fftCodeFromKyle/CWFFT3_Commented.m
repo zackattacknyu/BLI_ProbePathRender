@@ -70,7 +70,7 @@ Y3=fft(wb1,NFFT)/L;
 % f is the frequency array that corresponds to the sampling rate and length
 % linspace gives an evenly distributed array from a to b with x data points
 % linspace (a,b,x)
-f = Fs/2*linspace(0,1,NFFT/2);
+f = Fs/2*linspace(0,1,NFFT/2 + 1);
 
 % Compute the power at each frequency using different FFT results
 % windowed, original, filtered
