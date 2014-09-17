@@ -21,15 +21,14 @@ public class CMDApplication_Testing {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        
-        /*int n = 16;
-        FFT.testFFT(n);
-        double[] blackmanWindow = WindowFunction.generateBlackmanWindow(n);
-        for(double windowVal: blackmanWindow){
-            System.out.print(windowVal + " ");
-        }*/
 
-        ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(Paths.get("input.txt"),StandardCharsets.US_ASCII);
+        processData("input1.txt");
+        processData("input2.txt");
+        
+    }
+    
+    public static void processData(String textFile) throws IOException{
+        ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(Paths.get(textFile),StandardCharsets.US_ASCII);
         String line1 = lines.get(0);
         String[] vals = line1.split(",");
         double[] waveform1 = new double[vals.length];
@@ -44,7 +43,6 @@ public class CMDApplication_Testing {
         System.out.println("Peak Power: " + data.getPower());
         System.out.println("Frequency at Peak: " + data.getFrequency());
         System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
-        
     }
 
 }
