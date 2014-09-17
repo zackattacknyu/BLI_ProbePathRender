@@ -4,6 +4,8 @@
  */
 package org.zrd.cmdapplication_testing;
 
+import org.zrd.signalProcessingTools.fftTools.CWData;
+import org.zrd.signalProcessingTools.fftTools.CWFFT;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

@@ -2,9 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.cmdapplication_testing;
+package org.zrd.signalProcessingTools.fftTools;
 
+import org.zrd.signalProcessingTools.generalMath.WindowFunction;
+import org.zrd.signalProcessingTools.generalMath.Complex;
 import java.util.Calendar;
+import org.zrd.signalProcessingTools.generalMath.PowersOf2;
 import org.zrd.util.stats.IndexEntry;
 import org.zrd.util.stats.StatHelper;
 
@@ -24,8 +27,8 @@ public class CWFFT {
     
     public CWFFT(int waveformSize, int resolution){
         this.waveformSize = waveformSize;
-        fftLength = getPowerOf2(resolution);
-        fftLengthHalf = divideBy2(fftLength);
+        fftLength = PowersOf2.getPowerOf2(resolution);
+        fftLengthHalf = PowersOf2.divideBy2(fftLength);
         
         //generate the blackman window
         blackmanWindow = WindowFunction.generateBlackmanWindow(waveformSize);
@@ -36,14 +39,6 @@ public class CWFFT {
         for(int j = 0; j <= fftLengthHalf; j++){
             frequencies[j] = j*increment;
         }
-    }
-
-    private static int getPowerOf2(int exponent){
-        return (1 << exponent);
-    }
-    
-    private static int divideBy2(int divisor){
-        return divisor >> 1;
     }
     
     public CWData getCWData(double[] waveform){

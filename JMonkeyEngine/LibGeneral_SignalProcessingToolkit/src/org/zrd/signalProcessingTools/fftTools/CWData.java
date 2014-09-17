@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.cmdapplication_testing;
+package org.zrd.signalProcessingTools.fftTools;
 
 import java.util.logging.Logger;
 

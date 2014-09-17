@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zrd.cmdapplication_testing;
+package org.zrd.signalProcessingTools.generalMath;
 
 /*
  * This code comes directly from Google Code. This is the web page:
