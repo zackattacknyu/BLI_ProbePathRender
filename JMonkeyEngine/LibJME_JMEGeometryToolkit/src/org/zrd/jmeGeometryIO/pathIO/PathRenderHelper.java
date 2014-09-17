@@ -37,12 +37,11 @@ public class PathRenderHelper {
      * @param assetManager  the application's asset manager
      * @return              a Node containing all the rendered segments
      */
-    public static Node createLineFromVerticesWithData(SegmentSet lineWithData, AssetManager assetManager){
+    public static Node createLineFromVerticesWithData(SegmentSet lineWithData, 
+            AssetManager assetManager, StringToColorConversion converter){
         Node outputNode = new Node();
         Spatial currentSeg;
         Material currentMaterial;
-        float currentBrightness;
-        ColorRGBA currentColor;
         
         ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
         ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
@@ -54,13 +53,9 @@ public class PathRenderHelper {
         //goes through each path vertices
         for(int index = 1; index < pathVertices.size()-1;index++){
             currentPath.add(pathVertices.get(index));
-            
-            //uses the data to get the brightness value
-            currentBrightness = Float.parseFloat(dataAtVertices.get(index-1));
-            
-            //transfers the brightness value to a color
-            currentColor = new ColorRGBA(1-currentBrightness,0f,currentBrightness,1.0f);
-            currentMaterial = MaterialHelper.getColorMaterial(assetManager,currentColor);
+
+            currentMaterial = MaterialHelper.getColorMaterial(assetManager,
+                    converter.convertStringToColor(dataAtVertices.get(index-1)));
 
             //creates the line using the vertices and color
             currentSeg = createLineFromVertices(currentPath, currentMaterial);

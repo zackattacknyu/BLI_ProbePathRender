@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
+import org.zrd.jmeGeometryIO.pathIO.FloatToRedBlueGradient;
 import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 
 /**
@@ -28,7 +29,8 @@ public class TestPathWithData {
         
         SegmentSet pathSegment = new SegmentSet(pathVertices,dataAtVertices);
         
-        return PathRenderHelper.createLineFromVerticesWithData(pathSegment, assetManager);
+        return PathRenderHelper.createLineFromVerticesWithData(pathSegment, 
+                assetManager, new FloatToRedBlueGradient());
     }
     
     public static float getBrightness(float index, float totalLength){
