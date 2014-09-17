@@ -42,6 +42,7 @@ public class PathRenderHelper {
         Spatial currentSeg;
         Material currentMaterial;
         float currentBrightness;
+        ColorRGBA currentColor;
         
         ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
         ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
@@ -58,7 +59,8 @@ public class PathRenderHelper {
             currentBrightness = dataAtVertices.get(index-1);
             
             //transfers the brightness value to a color
-            currentMaterial = MaterialHelper.getColorMaterial(1-currentBrightness, 0, currentBrightness, assetManager);
+            currentColor = new ColorRGBA(1-currentBrightness,0f,currentBrightness,1.0f);
+            currentMaterial = MaterialHelper.getColorMaterial(assetManager,currentColor);
 
             //creates the line using the vertices and color
             currentSeg = createLineFromVertices(currentPath, currentMaterial);
