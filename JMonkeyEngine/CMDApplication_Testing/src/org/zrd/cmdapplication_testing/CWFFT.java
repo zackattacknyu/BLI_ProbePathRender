@@ -5,6 +5,7 @@
 package org.zrd.cmdapplication_testing;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import org.zrd.util.stats.IndexEntry;
 import org.zrd.util.stats.StatHelper;
 
@@ -19,6 +20,8 @@ public class CWFFT {
     public static CWData getCWFFTData(double[] waveform, int resolution){
         
         int waveformSize = waveform.length;
+        int fftLength = (int)Math.pow(2, resolution);
+        int fftLengthUse = (int)(Math.pow(2, resolution-1));
         
         double meanWaveformValue = StatHelper.getMean(waveform);
         
@@ -41,7 +44,7 @@ public class CWFFT {
             windowedWaveform[i] = new Complex(waveform[i],0);
         }
         
-        int fftLength = (int)Math.pow(2, resolution);
+        
         
         /*
          * Gets the waveform padded or truncated to match
@@ -56,7 +59,10 @@ public class CWFFT {
         }
         
         //does the FFT
+        //long beforeFFT = Calendar.getInstance().getTimeInMillis();
         Complex[] fftData = FFT.fft(windowedWaveformAdj);
+        //long afterFFT = Calendar.getInstance().getTimeInMillis();
+        //System.out.println("Time for FFT: " + (afterFFT-beforeFFT) + " ms");
         
         //divides the results by the size
         Complex waveformDataSize = new Complex(waveformSize,0);
@@ -65,7 +71,7 @@ public class CWFFT {
         }
         
         //obtains the frequencies array
-        int fftLengthUse = (int)(Math.pow(2, resolution-1));
+        
         double increment = (CW_SAMPLING_FREQUENCY/2.0)*(1.0/fftLengthUse);
         double[] frequencies = new double[fftLengthUse+1];
         for(int j = 0; j <= fftLengthUse; j++){
