@@ -17,11 +17,19 @@ public class CWFFT {
     
     public static final double CW_SAMPLING_FREQUENCY = 3.5*(Math.pow(10, 5));
     
+    public static int getPowerOf2(int exponent){
+        return (1 << exponent);
+    }
+    
+    public static int divideBy2(int divisor){
+        return divisor >> 1;
+    }
+    
     public static CWData getCWFFTData(double[] waveform, int resolution){
         
         int waveformSize = waveform.length;
-        int fftLength = (int)Math.pow(2, resolution);
-        int fftLengthUse = (int)(Math.pow(2, resolution-1));
+        int fftLength = getPowerOf2(resolution);
+        int fftLengthToUse = divideBy2(fftLength);
         
         double meanWaveformValue = StatHelper.getMean(waveform);
         
@@ -72,15 +80,15 @@ public class CWFFT {
         
         //obtains the frequencies array
         
-        double increment = (CW_SAMPLING_FREQUENCY/2.0)*(1.0/fftLengthUse);
-        double[] frequencies = new double[fftLengthUse+1];
-        for(int j = 0; j <= fftLengthUse; j++){
+        double increment = (CW_SAMPLING_FREQUENCY/2.0)*(1.0/fftLengthToUse);
+        double[] frequencies = new double[fftLengthToUse+1];
+        for(int j = 0; j <= fftLengthToUse; j++){
             frequencies[j] = j*increment;
         }
         
         //gets the power at each of the frequencies
-        Double[] powerAtFreqs = new Double[fftLengthUse];
-        for(int i = 0; i < fftLengthUse; i++){
+        Double[] powerAtFreqs = new Double[fftLengthToUse];
+        for(int i = 0; i < fftLengthToUse; i++){
             powerAtFreqs[i] = fftData[i].abs()/fftLength;
         }
         
