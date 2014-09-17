@@ -188,4 +188,9 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
     public float getTrackingQuality() {
         return serial.getCurrentQuality();
     }
+
+    @Override
+    public String getCurrentDataString() {
+        return serial.getCurrentDataString();
+    }
 }
