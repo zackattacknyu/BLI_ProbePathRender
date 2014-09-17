@@ -4,6 +4,7 @@
  */
 package org.zrd.cmdapplication_testing;
 
+import java.util.Calendar;
 import org.zrd.util.stats.IndexEntry;
 import org.zrd.util.stats.StatHelper;
 
@@ -75,7 +76,10 @@ public class CWFFT {
         }
         
         //does the FFT
+        long beforeFFT = Calendar.getInstance().getTimeInMillis();
         Complex[] fftData = FFT.fft(windowedWaveform);
+        long afterFFT = Calendar.getInstance().getTimeInMillis();
+        System.out.println("FFT Time: " + (afterFFT-beforeFFT) + " ms");
         
         //gets the power at each of the frequencies
         Double[] powerAtFreqs = new Double[fftLengthHalf];

@@ -27,30 +27,20 @@ public class CMDApplication_Testing {
         long afterInit = Calendar.getInstance().getTimeInMillis();
         System.out.println("Time for Init: " + (afterInit-beforeInit) + " ms");
         
+        processData("input1.txt",currentSession);
+        processData("input2.txt",currentSession);
+        processData("input3.txt",currentSession);
+        
+    }
+    
+    public static void processData(String textFile,CWFFT currentSession) throws IOException{
         long beforeCalc = Calendar.getInstance().getTimeInMillis();
-        CWData data = currentSession.getCWData(getWaveform("input1.txt"));
+        CWData data = currentSession.getCWData(getWaveform(textFile));
         long afterCalc = Calendar.getInstance().getTimeInMillis();
         
         System.out.println("Peak Power: " + data.getPower());
         System.out.println("Frequency at Peak: " + data.getFrequency());
         System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
-        
-        beforeCalc = Calendar.getInstance().getTimeInMillis();
-        data = currentSession.getCWData(getWaveform("input2.txt"));
-        afterCalc = Calendar.getInstance().getTimeInMillis();
-        
-        System.out.println("Peak Power: " + data.getPower());
-        System.out.println("Frequency at Peak: " + data.getFrequency());
-        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
-        
-        beforeCalc = Calendar.getInstance().getTimeInMillis();
-        data = currentSession.getCWData(getWaveform("input3.txt"));
-        afterCalc = Calendar.getInstance().getTimeInMillis();
-        
-        System.out.println("Peak Power: " + data.getPower());
-        System.out.println("Frequency at Peak: " + data.getFrequency());
-        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
-        
     }
     
     public static double[] getWaveform(String textFile) throws IOException{
