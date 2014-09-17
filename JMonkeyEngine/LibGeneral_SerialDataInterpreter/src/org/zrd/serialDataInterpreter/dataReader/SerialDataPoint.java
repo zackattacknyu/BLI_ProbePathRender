@@ -31,6 +31,10 @@ public class SerialDataPoint {
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
+    private String dataAtPoint;
+    private int dataIndexStart = 4;
+    private int dataIndexEnd = 6;
+    
     /**
      * Constructs the data point from the string and map
      * @param data              the data string
@@ -57,6 +61,18 @@ public class SerialDataPoint {
             ylow = getPart(DataLocationsMap.Y_LOW_KEY);
             yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);
         }
+        
+        StringBuilder dataBuilder = new StringBuilder(5*(dataIndexEnd-dataIndexStart));
+        if(dataParts.length-1 >= dataIndexEnd){
+            for(int i = dataIndexStart; i <= dataIndexEnd; i++){
+                dataBuilder.append(dataParts[i]);
+            }
+        }
+        dataAtPoint = dataBuilder.toString();
+    }
+
+    public String getDataAtPoint() {
+        return dataAtPoint;
     }
     
     /**
@@ -90,7 +106,8 @@ public class SerialDataPoint {
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.X_KEY,x) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield) +
-                OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality);
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality) + 
+                "totalData=" + dataAtPoint;
     }
 
     public float getXlow() {
