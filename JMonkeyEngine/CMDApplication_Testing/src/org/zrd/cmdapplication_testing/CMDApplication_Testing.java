@@ -22,12 +22,38 @@ public class CMDApplication_Testing {
      */
     public static void main(String[] args) throws IOException {
 
-        processData("input1.txt");
-        processData("input2.txt");
+        long beforeInit = Calendar.getInstance().getTimeInMillis();
+        CWFFT currentSession = new CWFFT(50,14);
+        long afterInit = Calendar.getInstance().getTimeInMillis();
+        System.out.println("Time for Init: " + (afterInit-beforeInit) + " ms");
+        
+        long beforeCalc = Calendar.getInstance().getTimeInMillis();
+        CWData data = currentSession.getCWData(getWaveform("input1.txt"));
+        long afterCalc = Calendar.getInstance().getTimeInMillis();
+        
+        System.out.println("Peak Power: " + data.getPower());
+        System.out.println("Frequency at Peak: " + data.getFrequency());
+        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
+        
+        beforeCalc = Calendar.getInstance().getTimeInMillis();
+        data = currentSession.getCWData(getWaveform("input2.txt"));
+        afterCalc = Calendar.getInstance().getTimeInMillis();
+        
+        System.out.println("Peak Power: " + data.getPower());
+        System.out.println("Frequency at Peak: " + data.getFrequency());
+        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
+        
+        beforeCalc = Calendar.getInstance().getTimeInMillis();
+        data = currentSession.getCWData(getWaveform("input3.txt"));
+        afterCalc = Calendar.getInstance().getTimeInMillis();
+        
+        System.out.println("Peak Power: " + data.getPower());
+        System.out.println("Frequency at Peak: " + data.getFrequency());
+        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
         
     }
     
-    public static void processData(String textFile) throws IOException{
+    public static double[] getWaveform(String textFile) throws IOException{
         ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(Paths.get(textFile),StandardCharsets.US_ASCII);
         String line1 = lines.get(0);
         String[] vals = line1.split(",");
@@ -35,14 +61,8 @@ public class CMDApplication_Testing {
         for(int i = 0; i < vals.length; i++){
             waveform1[i] = Double.parseDouble(vals[i]);
         }
-        
-        long beforeCalc = Calendar.getInstance().getTimeInMillis();
-        CWData data = CWFFT.getCWFFTData(waveform1, 14);
-        long afterCalc = Calendar.getInstance().getTimeInMillis();
-        
-        System.out.println("Peak Power: " + data.getPower());
-        System.out.println("Frequency at Peak: " + data.getFrequency());
-        System.out.println("Time For Calculation: " + (afterCalc-beforeCalc) + " ms");
+        return waveform1;
     }
+    
 
 }

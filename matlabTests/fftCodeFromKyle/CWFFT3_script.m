@@ -1,10 +1,10 @@
 load cw_tracker2.mat
-waveform1 = data3(5,10:60);
+waveform1 = data3(6,61:110);
 res = 14;
 w = waveform1;
 
 %to put into java folder for testing
-dlmwrite('input2.txt',waveform1,',');
+dlmwrite('input3.txt',waveform1,',');
 
 % Inputs ( variable length sampled waveform , bitwise
 % resolution of the FFT i.e. 8 is an FFT of 2^8 points)
