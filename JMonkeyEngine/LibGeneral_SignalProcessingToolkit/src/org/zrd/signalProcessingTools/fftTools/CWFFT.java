@@ -71,10 +71,10 @@ public class CWFFT {
         }
         
         //does the FFT
-        long beforeFFT = Calendar.getInstance().getTimeInMillis();
+        //long beforeFFT = Calendar.getInstance().getTimeInMillis();
         Complex[] fftData = FFT.fft(windowedWaveform);
-        long afterFFT = Calendar.getInstance().getTimeInMillis();
-        System.out.println("FFT Time: " + (afterFFT-beforeFFT) + " ms");
+        //long afterFFT = Calendar.getInstance().getTimeInMillis();
+        //System.out.println("FFT Time: " + (afterFFT-beforeFFT) + " ms");
         
         //gets the power at each of the frequencies
         Double[] powerAtFreqs = new Double[fftLengthHalf];
