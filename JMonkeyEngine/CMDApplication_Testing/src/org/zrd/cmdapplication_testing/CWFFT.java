@@ -31,15 +31,14 @@ public class CWFFT {
         double[] blackmanWindow = WindowFunction.generateBlackmanWindow(waveformSize);
         
         //multiply waveform by blackman window to get waveform to put through FFT
-        double[] modifiedWaveform = new double[waveformSize];
         for(int i = 0; i < waveformSize; i++){
-            modifiedWaveform[i] = waveform[i]*blackmanWindow[i];
+            waveform[i] = waveform[i]*blackmanWindow[i];
         }
         
         //convert them to Complex to do FFT operation
         Complex[] windowedWaveform = new Complex[waveformSize];
         for(int i = 0; i < waveformSize; i++){
-            windowedWaveform[i] = new Complex(modifiedWaveform[i],0);
+            windowedWaveform[i] = new Complex(waveform[i],0);
         }
         
         int fftLength = (int)Math.pow(2, resolution);
