@@ -1,7 +1,10 @@
 load cw_tracker2.mat
-waveform1 = data3(4,10:65);
+waveform1 = data3(5,61:110);
 res = 14;
 w = waveform1;
+
+%to put into java folder for testing
+dlmwrite('input.txt',waveform1,',');
 
 % Inputs ( variable length sampled waveform , bitwise
 % resolution of the FFT i.e. 8 is an FFT of 2^8 points)
@@ -89,7 +92,7 @@ powY3=sqrt(real(Y3(1:NFFT/2)).^2+imag(Y3(1:NFFT/2)).^2)/NFFT;
 % Peak is the db (20*log(x) of the max computed power
 
 % Outputs the peak power to [peak]
-peak=20*log10(max(powY3));
+peak=20*log10(max(powY3))
 
 % Outputs the frequency of the peak power to [freq]
-freq=f(find(powY3==max(powY3)));
+freq=f(find(powY3==max(powY3)))
