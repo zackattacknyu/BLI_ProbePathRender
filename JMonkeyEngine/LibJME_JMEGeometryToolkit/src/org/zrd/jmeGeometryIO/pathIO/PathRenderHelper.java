@@ -46,7 +46,7 @@ public class PathRenderHelper {
         
         ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
         ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
-        ArrayList<Float> dataAtVertices = lineWithData.getDataAtVertices();
+        ArrayList<String> dataAtVertices = lineWithData.getDataAtVertices();
         
         
         currentPath.add(pathVertices.get(0).clone());
@@ -56,7 +56,7 @@ public class PathRenderHelper {
             currentPath.add(pathVertices.get(index));
             
             //uses the data to get the brightness value
-            currentBrightness = dataAtVertices.get(index-1);
+            currentBrightness = Float.parseFloat(dataAtVertices.get(index-1));
             
             //transfers the brightness value to a color
             currentColor = new ColorRGBA(1-currentBrightness,0f,currentBrightness,1.0f);
