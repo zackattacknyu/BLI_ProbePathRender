@@ -46,37 +46,26 @@ public class CWFFT {
             waveform[i] = waveform[i]*blackmanWindow[i];
         }
         
-        //convert them to Complex to do FFT operation
-        Complex[] windowedWaveform = new Complex[waveformSize];
+        /*
+         * Convert to complex numbers to do the FFT and make sure
+         *      the length is correct
+         */
+        Complex[] windowedWaveform = new Complex[fftLength];
         for(int i = 0; i < waveformSize; i++){
             windowedWaveform[i] = new Complex(waveform[i],0);
         }
-        
-        
-        
-        /*
-         * Gets the waveform padded or truncated to match
-         *      the FFT length
-         */
-        Complex[] windowedWaveformAdj = Arrays.copyOf(windowedWaveform, fftLength);
         if(fftLength > waveformSize){
             //pads the end with zeros if need be
             for(int i = waveformSize; i < fftLength; i++){
-                windowedWaveformAdj[i] = new Complex(0,0);
+                windowedWaveform[i] = new Complex(0,0);
             }
         }
         
         //does the FFT
         //long beforeFFT = Calendar.getInstance().getTimeInMillis();
-        Complex[] fftData = FFT.fft(windowedWaveformAdj);
+        Complex[] fftData = FFT.fft(windowedWaveform);
         //long afterFFT = Calendar.getInstance().getTimeInMillis();
         //System.out.println("Time for FFT: " + (afterFFT-beforeFFT) + " ms");
-        
-        //divides the results by the size
-        Complex waveformDataSize = new Complex(waveformSize,0);
-        for(int i = 0; i < fftLength; i++){
-            fftData[i] = fftData[i].divides(waveformDataSize);
-        }
         
         //obtains the frequencies array
         
@@ -89,7 +78,7 @@ public class CWFFT {
         //gets the power at each of the frequencies
         Double[] powerAtFreqs = new Double[fftLengthToUse];
         for(int i = 0; i < fftLengthToUse; i++){
-            powerAtFreqs[i] = fftData[i].abs()/fftLength;
+            powerAtFreqs[i] = fftData[i].abs()/(fftLength*waveformSize);
         }
         
         //gets the peak and the frequency at that peak

@@ -15,20 +15,23 @@ public class StatHelper {
         for(Double val: values){
             totalVal += val;
         }
-        double numVals = values.length;
-        return totalVal/numVals;
+        return totalVal/values.length;
     }
     
-    public static IndexEntry getMax(Double[] values){
+    public static IndexEntry getMax(Double[] values, int start, int end){
         int index = 0;
         double value = Double.MIN_VALUE;
-        for(int i = 0; i < values.length; i++){
+        for(int i = start; i < end; i++){
             if(values[i] > value){
                 value = values[i];
                 index = i;
             }
         }
         return new IndexEntry(index,value);
+    }
+    
+    public static IndexEntry getMax(Double[] values){
+        return getMax(values,0,values.length);
     }
     
 }
