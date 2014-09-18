@@ -62,19 +62,6 @@ public class SerialDataPoint {
             ylow = getPart(DataLocationsMap.Y_LOW_KEY);
             yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);
         }
-     
-        
-        /*double[] wave1Data = new double[100];
-        double[] wave2Data = new double[100];
-        for(int i = 0; i < 100; i++){
-            wave1Data[i] = Double.parseDouble(dataParts[dataIndexStart + i]);
-            wave2Data[i] = Double.parseDouble(dataParts[dataIndexStart + 100 + i]);
-        }
-        CWFFT fftProcessor = new CWFFT(100,14);
-        CWData peak1Data = fftProcessor.getCWData(wave1Data);
-        CWData peak2Data = fftProcessor.getCWData(wave2Data);
-        dataAtPoint = " Peak1Freq: " + peak1Data.getFrequency() + ", Peak1Power: " + peak1Data.getPower() +
-                " Peak2Freq: " + peak2Data.getFrequency() + ", Peak2Power: " + peak2Data.getPower();*/
         
         dataAtPoint = Arrays.copyOfRange(dataParts, dataIndexStart, dataIndexEnd+1);
     }

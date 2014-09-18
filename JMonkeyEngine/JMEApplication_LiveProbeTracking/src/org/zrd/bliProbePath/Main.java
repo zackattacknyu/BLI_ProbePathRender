@@ -46,6 +46,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     private LiveTrackingText outputText;
+    private SignalTracking signalTracker;
     
     private boolean renderPathsDuringRecording = false;
     
@@ -138,6 +139,9 @@ public class Main extends SimpleApplication {
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
         
+        //makes the signal tracker
+        signalTracker = new SignalTracking(100,14);
+        
     }
 
     @Override
@@ -168,6 +172,6 @@ public class Main extends SimpleApplication {
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
         
-        outputText.setDataText("Data: " + activeTracker.getCurrentDataStrings());
+        outputText.setDataText(signalTracker.getSignalTrackingInfo(activeTracker.getCurrentDataStrings()));
     }
 }
