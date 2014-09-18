@@ -32,8 +32,8 @@ public class SerialDataPoint {
     private HashMap<String,Integer> dataLocations;
     
     private String dataAtPoint;
-    private int dataIndexStart = 4;
-    private int dataIndexEnd = 6;
+    private int dataIndexStart = 8;
+    private int dataIndexEnd = 207;
     
     /**
      * Constructs the data point from the string and map
@@ -65,7 +65,7 @@ public class SerialDataPoint {
         StringBuilder dataBuilder = new StringBuilder(5*(dataIndexEnd-dataIndexStart));
         if(dataParts.length-1 >= dataIndexEnd){
             for(int i = dataIndexStart; i <= dataIndexEnd; i++){
-                dataBuilder.append(dataParts[i]);
+                dataBuilder.append(dataParts[i] + ",");
             }
         }
         dataAtPoint = dataBuilder.toString();
