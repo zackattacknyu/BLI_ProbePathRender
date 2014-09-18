@@ -61,18 +61,18 @@ public class DataLocationsMap {
         
         //this makes the map
         putLocationIntoMap(TIMESTAMP_KEY);
-        //putLocationIntoMap(X_KEY);
-        //putLocationIntoMap(Y_KEY);
+        putLocationIntoMap(X_KEY);
+        putLocationIntoMap(Y_KEY);
         putLocationIntoMap(YAW_KEY);
         putLocationIntoMap(PITCH_KEY);
         putLocationIntoMap(ROLL_KEY);
         putLocationIntoMap(DATAFIELD_KEY);
         putLocationIntoMap(QUALITY_KEY);
         
-        putLocationIntoMap(X_LOW_KEY);
+        /*putLocationIntoMap(X_LOW_KEY);
         putLocationIntoMap(Y_LOW_KEY);
         putLocationIntoMap(X_HIGH_KEY);
-        putLocationIntoMap(Y_HIGH_KEY);
+        putLocationIntoMap(Y_HIGH_KEY);*/
     }
     
     /**
