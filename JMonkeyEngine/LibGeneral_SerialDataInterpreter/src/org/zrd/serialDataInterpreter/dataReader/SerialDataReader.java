@@ -128,13 +128,13 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
                     
                     currentSerialData = new SerialDataPoint(currentSerialOutput,dataLocations);
                     
-                    //deltaX = currentSerialData.getX();
-                    //deltaY = currentSerialData.getY();
+                    deltaX = currentSerialData.getX();
+                    deltaY = currentSerialData.getY();
                     
-                    deltaXlow = currentSerialData.getXlow();
+                    /*deltaXlow = currentSerialData.getXlow();
                     deltaXhigh = currentSerialData.getXhigh();
                     deltaYlow = currentSerialData.getYlow();
-                    deltaYhigh = currentSerialData.getYhigh();
+                    deltaYhigh = currentSerialData.getYhigh();*/
 
                     currentPitch = currentSerialData.getPitch();
                     currentRoll = currentSerialData.getRoll();
@@ -187,7 +187,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
         }
     }
 
-    public float getDeltaXlow() {
+    /*public float getDeltaXlow() {
         return deltaXlow;
     }
 
@@ -201,7 +201,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
 
     public float getDeltaYhigh() {
         return deltaYhigh;
-    }
+    }*/
     
     /**
      * This returns the current serial data from the probe

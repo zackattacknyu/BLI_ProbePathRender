@@ -33,6 +33,10 @@ public class CMDApplication_Testing {
         processData("input2.txt",currentSession);
         processData("input3.txt",currentSession);
         
+        double val = 23.4557;
+        double val2 = 45.6799;
+        System.out.println(String.format("Peak1Power: %.2f Peak2Pow: %.2f", val,val2));
+        
     }
     
     public static void processData(String textFile,CWFFT currentSession) throws IOException{

@@ -48,8 +48,8 @@ public class SerialDataPoint {
         
         //make sure we currently have enough data
         if(dataParts.length >= dataLocations.size()){
-            //x = getPart(DataLocationsMap.X_KEY);
-            //y = getPart(DataLocationsMap.Y_KEY);
+            x = getPart(DataLocationsMap.X_KEY);
+            y = getPart(DataLocationsMap.Y_KEY);
             yaw = getPart(DataLocationsMap.YAW_KEY);
             pitch = getPart(DataLocationsMap.PITCH_KEY);
             roll = getPart(DataLocationsMap.ROLL_KEY);
@@ -57,10 +57,10 @@ public class SerialDataPoint {
             datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
             quality = getPart(DataLocationsMap.QUALITY_KEY);
             
-            xlow = getPart(DataLocationsMap.X_LOW_KEY);
+            /*xlow = getPart(DataLocationsMap.X_LOW_KEY);
             xhigh = getPart(DataLocationsMap.X_HIGH_KEY);
             ylow = getPart(DataLocationsMap.Y_LOW_KEY);
-            yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);
+            yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);*/
         }
         
         dataAtPoint = Arrays.copyOfRange(dataParts, dataIndexStart, dataIndexEnd+1);

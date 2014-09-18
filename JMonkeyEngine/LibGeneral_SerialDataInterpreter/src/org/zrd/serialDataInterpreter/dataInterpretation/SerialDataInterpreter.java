@@ -92,8 +92,10 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
          *      it should change, then this code should call
          *      a method for that.
          */
-        deltaX = DisplacementHelper.getDisplacement(serial.getDeltaXlow(), serial.getDeltaXhigh());
-        deltaY = DisplacementHelper.getDisplacement(serial.getDeltaYlow(), serial.getDeltaYhigh());
+        deltaX = serial.getDeltaX();
+        deltaY = serial.getDeltaY();
+        //deltaX = DisplacementHelper.getDisplacement(serial.getDeltaXlow(), serial.getDeltaXhigh());
+        //deltaY = DisplacementHelper.getDisplacement(serial.getDeltaYlow(), serial.getDeltaYhigh());
 
         /*
          * if we are recording the data, this adds the current data
