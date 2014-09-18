@@ -190,7 +190,7 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
     }
 
     @Override
-    public String getCurrentDataString() {
+    public String[] getCurrentDataString() {
         return serial.getCurrentDataString();
     }
 }

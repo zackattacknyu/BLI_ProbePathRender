@@ -4,6 +4,7 @@
  */
 package org.zrd.serialDataInterpreter.dataReader;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import org.zrd.util.dataHelp.OutputHelper;
 
@@ -31,7 +32,7 @@ public class SerialDataPoint {
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
     
-    private String dataAtPoint;
+    private String[] dataAtPoint;
     private int dataIndexStart = 8;
     private int dataIndexEnd = 207;
     
@@ -61,17 +62,24 @@ public class SerialDataPoint {
             ylow = getPart(DataLocationsMap.Y_LOW_KEY);
             yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);
         }
+     
         
-        StringBuilder dataBuilder = new StringBuilder(5*(dataIndexEnd-dataIndexStart));
-        if(dataParts.length-1 >= dataIndexEnd){
-            for(int i = dataIndexStart; i <= dataIndexEnd; i++){
-                dataBuilder.append(dataParts[i] + ",");
-            }
+        /*double[] wave1Data = new double[100];
+        double[] wave2Data = new double[100];
+        for(int i = 0; i < 100; i++){
+            wave1Data[i] = Double.parseDouble(dataParts[dataIndexStart + i]);
+            wave2Data[i] = Double.parseDouble(dataParts[dataIndexStart + 100 + i]);
         }
-        dataAtPoint = dataBuilder.toString();
+        CWFFT fftProcessor = new CWFFT(100,14);
+        CWData peak1Data = fftProcessor.getCWData(wave1Data);
+        CWData peak2Data = fftProcessor.getCWData(wave2Data);
+        dataAtPoint = " Peak1Freq: " + peak1Data.getFrequency() + ", Peak1Power: " + peak1Data.getPower() +
+                " Peak2Freq: " + peak2Data.getFrequency() + ", Peak2Power: " + peak2Data.getPower();*/
+        
+        dataAtPoint = Arrays.copyOfRange(dataParts, dataIndexStart, dataIndexEnd+1);
     }
 
-    public String getDataAtPoint() {
+    public String[] getDataAtPoint() {
         return dataAtPoint;
     }
     
@@ -99,7 +107,7 @@ public class SerialDataPoint {
      */
     @Override
     public String toString() {
-        return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
+        /*return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.YAW_KEY,yaw) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.PITCH_KEY,pitch) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.ROLL_KEY,roll) +
@@ -107,7 +115,9 @@ public class SerialDataPoint {
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality) + 
-                "totalData=" + dataAtPoint;
+                "totalData: " + dataAtPoint;*/
+        return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) + 
+                " " + dataAtPoint;
     }
 
     public float getXlow() {

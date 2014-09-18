@@ -60,8 +60,9 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
     }
 
     @Override
-    public String getCurrentDataString() {
-        return "null";
+    public String[] getCurrentDataString() {
+        String[] ret = {"null"};
+        return ret;
     }
     
 }

@@ -14,7 +14,7 @@ package org.zrd.util.trackingInterface;
  */
 public interface AbstractInputSourceTracker {
     
-    String getCurrentDataString();
+    String[] getCurrentDataString();
     
     float getTrackingQuality();
     

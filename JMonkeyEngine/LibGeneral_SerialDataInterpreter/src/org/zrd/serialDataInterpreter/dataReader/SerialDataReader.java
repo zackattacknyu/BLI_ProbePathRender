@@ -55,7 +55,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
     private boolean recordingRawData = false;
     private RawSerialRecorder currentRecorder;
     private Path recordingFilePath;
-    private String currentDataString;
+    private String[] currentDataString;
 
     /**
      * This initializes the serial data reader. It is a private constructor
@@ -169,7 +169,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
         }
     }
 
-    public String getCurrentDataString() {
+    public String[] getCurrentDataString() {
         return currentDataString;
     }
     
