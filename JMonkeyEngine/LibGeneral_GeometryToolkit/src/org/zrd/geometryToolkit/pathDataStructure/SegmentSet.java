@@ -25,7 +25,7 @@ public class SegmentSet {
      * Each segment will be rendered with the data
      *      at the starting point of the segment
      */
-    private ArrayList<String> dataAtVertices;
+    private ArrayList<String[]> dataAtVertices;
     
     /**
      * This is the same path, but with a start point
@@ -42,7 +42,7 @@ public class SegmentSet {
         constructSegmentList();
     }
     
-    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String> dataAtVertices){
+    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices){
         this(pathVertices);
         this.dataAtVertices = dataAtVertices;
     }
@@ -113,7 +113,7 @@ public class SegmentSet {
         return segmentVectors;
     }
 
-    public ArrayList<String> getDataAtVertices() {
+    public ArrayList<String[]> getDataAtVertices() {
         return dataAtVertices;
     }
     

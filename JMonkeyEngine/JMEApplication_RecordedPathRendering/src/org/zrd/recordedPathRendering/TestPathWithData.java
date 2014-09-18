@@ -20,11 +20,14 @@ public class TestPathWithData {
     
     public static Node getPathSpatialWithSampleData(ArrayList<Vector3f> pathVertices, AssetManager assetManager){
         
-        ArrayList<String> dataAtVertices = new ArrayList<String>(pathVertices.size());
-        dataAtVertices.add(String.valueOf(0));
+        ArrayList<String[]> dataAtVertices = new ArrayList<String[]>(pathVertices.size());
+        String[] data = {String.valueOf(0)};
+        dataAtVertices.add(data);
       
         for(int index = 1; index < pathVertices.size()-1;index++){
-            dataAtVertices.add(String.valueOf(getBrightness(index,pathVertices.size())));
+            data = new String[1];
+            data[0] = String.valueOf(getBrightness(index,pathVertices.size()));
+            dataAtVertices.add(data);
         }
         
         SegmentSet pathSegment = new SegmentSet(pathVertices,dataAtVertices);

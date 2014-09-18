@@ -13,8 +13,8 @@ import com.jme3.math.ColorRGBA;
 public class FloatToRedBlueGradient implements StringToColorConversion{
 
     @Override
-    public ColorRGBA convertStringToColor(String data) {
-        float brightness = Float.parseFloat(data);
+    public ColorRGBA convertStringToColor(String[] data) {
+        float brightness = Float.parseFloat(data[0]);
         return new ColorRGBA(1-brightness,0f,brightness,1.0f);
     }
     

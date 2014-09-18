@@ -12,6 +12,6 @@ import com.jme3.math.ColorRGBA;
  */
 public interface StringToColorConversion {
     
-    ColorRGBA convertStringToColor(String data);
+    ColorRGBA convertStringToColor(String[] data);
     
 }
