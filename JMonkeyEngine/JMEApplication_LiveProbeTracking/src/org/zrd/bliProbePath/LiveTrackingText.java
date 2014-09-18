@@ -16,7 +16,8 @@ import com.jme3.scene.Node;
  */
 public class LiveTrackingText {
     
-    private BitmapText yawPitchRollText, xyzText, recordingText, resetProbeText, probeMoveModeText;
+    private BitmapText yawPitchRollText, xyzText, recordingText, 
+            resetProbeText, probeMoveModeText, dataText;
     
     private Node guiNode;
     private BitmapFont guiFont;
@@ -41,6 +42,9 @@ public class LiveTrackingText {
         this.probeMoveModeText.setText(probeMoveModeText);
     }
     
+    public void setDataText(String dataText){
+        this.dataText.setText(dataText);
+    }
 
     
     public LiveTrackingText(Node guiNode, AssetManager assetManager){
@@ -65,6 +69,9 @@ public class LiveTrackingText {
         currentStartY = currentStartY + xyzText.getLineHeight();
         
         probeMoveModeText = initializeNewText(currentStartY);
+        currentStartY = currentStartY + xyzText.getLineHeight();
+        
+        dataText = initializeNewText(currentStartY);
     }
     
     private BitmapText initializeNewText(float currentStartY){

@@ -15,6 +15,8 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
  */
 public interface LocationTracker {
     
+    String[] getCurrentDataStrings();
+    
     float getTrackingQuality();
     
     Vector3f getCurrentPosition();

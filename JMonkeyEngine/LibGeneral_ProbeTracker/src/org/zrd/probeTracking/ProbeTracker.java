@@ -349,6 +349,11 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     public void setCurrentTriangle(MeshTriangle triangle) {
     }
 
+    @Override
+    public String[] getCurrentDataStrings() {
+        return currentSourceTracker.getCurrentDataString();
+    }
+
     
     
     

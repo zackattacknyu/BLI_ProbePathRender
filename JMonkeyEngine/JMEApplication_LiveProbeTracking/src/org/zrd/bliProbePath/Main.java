@@ -167,5 +167,7 @@ public class Main extends SimpleApplication {
         outputText.setXyzText(activeTracker.getXYZtext());
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
+        
+        outputText.setDataText("Data: " + activeTracker.getCurrentDataStrings());
     }
 }

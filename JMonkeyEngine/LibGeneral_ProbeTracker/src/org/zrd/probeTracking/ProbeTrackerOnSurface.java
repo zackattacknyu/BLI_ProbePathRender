@@ -188,6 +188,11 @@ public class ProbeTrackerOnSurface implements LocationTracker{
         return locationTracker.getTrackerY();
     }
 
+    @Override
+    public String[] getCurrentDataStrings() {
+        return locationTracker.getCurrentDataStrings();
+    }
+
     
     
 }
