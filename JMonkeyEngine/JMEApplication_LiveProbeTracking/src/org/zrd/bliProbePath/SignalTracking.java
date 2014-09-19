@@ -34,8 +34,10 @@ public class SignalTracking {
         CWData peak1Data = fftProcessor.getCWData(wave1Data);
         CWData peak2Data = fftProcessor.getCWData(wave2Data);
         
-        return String.format("Peak1Power=%.2f Peak2Power=%.2f Peak1Freq=%.2f Peak2Freq=%.2f", 
-                peak1Data.getPower(), peak2Data.getPower(), peak1Data.getFrequency(), peak2Data.getFrequency());
+        return String.format("Peak1Power=%.2f Peak2Power=%.2f "
+                + "Peak1Freq=%.2f Peak2Freq=%.2f", 
+                peak1Data.getPower(), peak2Data.getPower(), 
+                peak1Data.getFrequency(), peak2Data.getFrequency());
         
         
     }
