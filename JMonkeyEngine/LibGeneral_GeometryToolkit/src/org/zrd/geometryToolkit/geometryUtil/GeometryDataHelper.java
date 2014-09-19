@@ -8,6 +8,8 @@ import com.jme3.math.Vector3f;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.fileHelper.FileDataHelper;
 
@@ -38,6 +40,27 @@ public class GeometryDataHelper {
         }
         
         return lineVertices;
+    }
+    
+    public static SegmentSet getSegmentSetFromFile(File dataFile){
+        ArrayList<String> lines = FileDataHelper.getLinesFromFile(dataFile);
+        ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
+        ArrayList<String[]> dataAtLines = new ArrayList<String[]>(lines.size());
+        String previousLine = "";
+        for(String line: lines){
+            if(!line.equals(previousLine)){
+                lineVertices.add(getVertexFromLine(line));
+                dataAtLines.add(getDataInLine(line));
+            }
+            previousLine = line;
+        }
+        
+        return new SegmentSet(lineVertices,dataAtLines);
+    }
+    
+    public static String[] getDataInLine(String line){
+        String[] parts = line.split(",");
+        return Arrays.copyOfRange(parts, 8, 207);
     }
     
     public static Vector3f getVertexFromLine(String line){

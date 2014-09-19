@@ -67,7 +67,8 @@ public class PathImport extends GeneralKeyboardActionMethod{
         
         //puts the new path into the recorded path set for later rendering
         if(newPathExists){
-            recordedPathSet.addPath(GeometryDataHelper.getVerticesFromFile(selectedFile));
+            //recordedPathSet.addPath(GeometryDataHelper.getVerticesFromFile(selectedFile));
+            recordedPathSet.addPath(GeometryDataHelper.getSegmentSetFromFile(selectedFile));
         }
     }
 

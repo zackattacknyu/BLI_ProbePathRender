@@ -30,6 +30,7 @@ public class Main extends SimpleApplication {
     private LineMoveAction lineMoveAction;
     private LineMoveAction lineMoveActionToFixedPt;
     private PathImport pathImport;
+    private SignalProcess signalProcessor;
 
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
@@ -38,6 +39,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        signalProcessor = new SignalProcess(100,14);
         recordedPathSet = new RecordedPathSet();
         ApplicationHelper.setBackgroundColor(viewPort);
         
@@ -73,10 +75,10 @@ public class Main extends SimpleApplication {
         }
         
         if(pathImport.isNewPathExists()){
-            displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
-            
-            rootNode.attachChild(TestPathWithData.getPathSpatialWithSampleData(recordedPathSet.getCurrentPath(), assetManager));
-            
+            //displayPath(PathRenderHelper.createLineFromVertices(recordedPathSet.getCurrentPath(), lineMaterial));
+            //rootNode.attachChild(TestPathWithData.getPathSpatialWithSampleData(recordedPathSet.getCurrentPath(), assetManager));
+            rootNode.attachChild(PathRenderHelper.createLineFromVerticesWithData(
+                    recordedPathSet.getCurrentSegment(), assetManager, signalProcessor));
         }
         
     }

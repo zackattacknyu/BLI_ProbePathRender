@@ -21,8 +21,16 @@ public class RecordedPathSet {
     }
     
     public void addPath(ArrayList<Vector3f> path){
-        currentSegment = new SegmentSet(path);
+        addPath(new SegmentSet(path));
+    }
+    
+    public void addPath(SegmentSet path){
+        this.currentSegment = path;
         pathSet.add(currentSegment);
+    }
+
+    public SegmentSet getCurrentSegment() {
+        return currentSegment;
     }
     
     public ArrayList<Vector3f> getCurrentPath(){
