@@ -4,8 +4,10 @@
  */
 package org.zrd.bliProbePath;
 
+import java.util.ArrayList;
 import org.zrd.signalProcessingTools.fftTools.CWData;
 import org.zrd.signalProcessingTools.fftTools.CWFFT;
+import org.zrd.signalProcessingTools.fftTools.SignalDataTracking;
 
 /**
  *
@@ -13,34 +15,24 @@ import org.zrd.signalProcessingTools.fftTools.CWFFT;
  */
 public class SignalTracking {
     
-    private CWFFT fftProcessor;
-    private int waveformSize;
+    private SignalDataTracking dataTracker;
     
     public SignalTracking(int size, int resolution){
-        fftProcessor = new CWFFT(size,resolution);
-        waveformSize = size;
+        int numWaves = 2;
+        int indexStart = 0;
+        dataTracker = new SignalDataTracking(size,resolution,numWaves,indexStart);
     }
     
     public String getSignalTrackingInfo(String[] data){
-        if(data == null || data.length < waveformSize){
-            return "empty";
-        }
-        double[] wave1Data = new double[waveformSize];
-        double[] wave2Data = new double[waveformSize];
-        for(int i = 0; i < waveformSize; i++){
-            wave1Data[i] = Double.parseDouble(data[i]);
-            wave2Data[i] = Double.parseDouble(data[i + waveformSize]);
-        }
-        CWData peak1Data = fftProcessor.getCWData(wave1Data);
-        CWData peak2Data = fftProcessor.getCWData(wave2Data);
         
-        //return String.format("Peak1Power=%.2f Peak1Freq=%.2f", 
-                //peak1Data.getPower(),peak1Data.getFrequency());
+        StringBuilder retString = new StringBuilder();
+        ArrayList<CWData> signalData = dataTracker.getCWTrackingData(data);
+        for(CWData currentData: signalData){
+            retString.append(String.format("PeakPower=%.2f PeakFreq=%.2f ; ",
+                currentData.getPower(), currentData.getFrequency()));
+        }
         
-        return String.format("Peak1Power=%.2f Peak2Power=%.2f "
-                + "Peak1Freq=%.2f Peak2Freq=%.2f", 
-                peak1Data.getPower(), peak2Data.getPower(), 
-                peak1Data.getFrequency(), peak2Data.getFrequency());
+        return retString.toString();
         
         
     }

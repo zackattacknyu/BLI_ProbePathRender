@@ -4,6 +4,7 @@
  */
 package org.zrd.util.dataHelp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -32,6 +33,24 @@ public class SignalDataProcessor {
         
         this.totalNumEntries = waveformSize*numWaveforms;
         this.dataStartIndex = dataStart;
+    }
+    
+    public ArrayList<double[]> getWaveformData(String dataString){
+        String[] dataParts = getDataFromRawString(dataString);
+        return getWaveformData(dataParts);
+    }
+    
+    public ArrayList<double[]> getWaveformData(String[] dataParts){
+        ArrayList<double[]> returnList = new ArrayList<double[]>(numWaveforms);
+        for(int waveNum = 0; waveNum < numWaveforms; waveNum++){
+            
+            double[] currentWave = new double[waveformSize];
+            for(int index = 0; index < waveformSize; index++){
+                currentWave[index] = Double.parseDouble(dataParts[index + waveformSize*waveNum]);
+            }
+            returnList.add(currentWave);
+        }
+        return returnList;
     }
     
     public String[] getDataFromRawString(String dataString){

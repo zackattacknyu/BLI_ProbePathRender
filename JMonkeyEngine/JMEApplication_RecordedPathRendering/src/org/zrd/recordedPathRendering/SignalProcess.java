@@ -5,9 +5,11 @@
 package org.zrd.recordedPathRendering;
 
 import com.jme3.math.ColorRGBA;
+import java.util.ArrayList;
 import org.zrd.jmeGeometryIO.pathIO.StringToColorConversion;
 import org.zrd.signalProcessingTools.fftTools.CWData;
 import org.zrd.signalProcessingTools.fftTools.CWFFT;
+import org.zrd.signalProcessingTools.fftTools.SignalDataTracking;
 
 /**
  *
@@ -15,31 +17,17 @@ import org.zrd.signalProcessingTools.fftTools.CWFFT;
  */
 public class SignalProcess implements StringToColorConversion{
     
-    private CWFFT fftProcessor;
-    private int waveformSize;
+    private SignalDataTracking dataTracker;
     
     public SignalProcess(int size, int resolution){
-        fftProcessor = new CWFFT(size,resolution);
-        waveformSize = size;
+        int numWaves = 2;
+        int indexStart = 0;
+        dataTracker = new SignalDataTracking(size,resolution,numWaves,indexStart);
     }
     
     public double getWavePeak(String[] data){
-        //if(data == null || data.length < waveformSize*2){
-        if(data == null || data.length < waveformSize){
-            //System.out.println("Data Array Length = " + data.length);
-            return 0;
-        }
-        double[] wave1Data = new double[waveformSize];
-        //double[] wave2Data = new double[waveformSize];
-        for(int i = 0; i < waveformSize; i++){
-            wave1Data[i] = Double.parseDouble(data[i]);
-            //wave2Data[i] = Double.parseDouble(data[i + waveformSize]);
-        }
-        CWData peak1Data = fftProcessor.getCWData(wave1Data);
-        //CWData peak2Data = fftProcessor.getCWData(wave2Data);
-        
-        return peak1Data.getPower();
-        
+        ArrayList<CWData> signalData = dataTracker.getCWTrackingData(data);
+        return signalData.get(0).getPower();
         
     }
 
