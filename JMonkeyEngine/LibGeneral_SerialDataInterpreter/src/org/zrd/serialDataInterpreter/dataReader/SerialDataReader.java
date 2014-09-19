@@ -9,6 +9,7 @@ import org.zrd.serialInterface.arduinoReading.SerialReader;
 import java.util.HashMap;
 import java.util.Properties;
 import org.zrd.serialInterface.arduinoReading.DataReading;
+import org.zrd.serialInterface.arduinoReading.FileDataReader;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.dataStreaming.StreamQualityTracker;
 
@@ -47,6 +48,7 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
     /**flag for whether or not to show each line of the output to the user*/
     private boolean showOutput;
     
+    
     /**the data locations hashmap used to go from string to data*/
     private HashMap<String,Integer> dataLocations;
     
@@ -63,13 +65,17 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
      * @param trackerProps      properties that say data locations as well as serial reading properties
      * @param parseOutput       whether or not to parse the output
      */
-    private SerialDataReader(Properties trackerProps, boolean parseOutput) {
-        this(SerialReader.startNewReader(trackerProps),trackerProps,parseOutput);
-    }
-    
-    private SerialDataReader(DataReading dataReader, Properties trackerProps, 
-            boolean parseOutput) {
-        serial = dataReader;
+    private SerialDataReader(Properties trackerProps,boolean parseOutput) {
+        
+        boolean runSimulation = Boolean.parseBoolean(
+                trackerProps.getProperty("serialSimulation.runSimulation"));
+        
+        if(runSimulation){
+            serial = new FileDataReader(trackerProps);
+        }else{
+            serial = SerialReader.startNewReader(trackerProps);
+        }
+
         this.parseOutput = parseOutput;
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
         System.out.println("Waiting to receive input...");
