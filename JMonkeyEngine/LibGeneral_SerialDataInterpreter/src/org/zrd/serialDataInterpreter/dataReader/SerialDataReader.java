@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import org.zrd.serialInterface.arduinoReading.SerialReader;
 import java.util.HashMap;
 import java.util.Properties;
+import org.zrd.serialInterface.arduinoReading.DataReading;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.dataStreaming.StreamQualityTracker;
 
@@ -34,13 +35,11 @@ import org.zrd.util.dataStreaming.StreamQualityTracker;
  */
 public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
 
-    private SerialReader serial;
+    private DataReading serial;
     
     private SerialDataPoint currentSerialData;
     private String currentSerialOutput, previousSerialOutput;
     private float deltaX,deltaY,currentYaw,currentPitch,currentRoll,currentQuality;
-    
-    private float deltaXlow,deltaXhigh,deltaYlow,deltaYhigh;
     
     /**flag for whether or not to parse the output. If not parsed, raw string is shown*/
     private boolean parseOutput;
@@ -65,19 +64,21 @@ public class SerialDataReader implements ProbeDataStream,StreamQualityTracker{
      * @param parseOutput       whether or not to parse the output
      */
     private SerialDataReader(Properties trackerProps, boolean parseOutput) {
+        this(SerialReader.startNewReader(trackerProps),trackerProps,parseOutput);
+    }
+    
+    private SerialDataReader(DataReading dataReader, Properties trackerProps, 
+            boolean parseOutput) {
+        serial = dataReader;
         this.parseOutput = parseOutput;
-        
         dataLocations = DataLocationsMap.getDataLocationMap(trackerProps);
-        serial = SerialReader.startNewReader(trackerProps);
-        
         System.out.println("Waiting to receive input...");
-        
         showOutput = Boolean.parseBoolean(
                 trackerProps.getProperty(
                 "arduinoData.showOutput"));
     }
     
-    public SerialReader getSerialInterface(){
+    public DataReading getSerialInterface(){
         return serial;
     }
     

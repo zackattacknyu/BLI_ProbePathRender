@@ -34,7 +34,7 @@ import java.util.Properties;
  */
 
 
-public class SerialReader implements SerialPortEventListener {
+public class SerialReader implements SerialPortEventListener,DataReading {
 	SerialPort serialPort;
         
         /** The port we're normally going to use. */
@@ -161,6 +161,7 @@ public class SerialReader implements SerialPortEventListener {
          *      sent the 'r' command, it resets. This simply sends
          *      that command to the probe through its output stream.
          */
+        @Override
         public void reset(){
             int rInt = 'r';
             if(output == null) return;
@@ -214,6 +215,7 @@ public class SerialReader implements SerialPortEventListener {
          * This returns the current string being read from Arduino
          * @return      current string from arduino
          */
+        @Override
         public String getCurrentOutput() {
             return currentArdOutput;
         }
