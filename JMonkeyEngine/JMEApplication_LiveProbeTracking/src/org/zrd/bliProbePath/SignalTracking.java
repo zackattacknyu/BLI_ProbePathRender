@@ -6,7 +6,6 @@ package org.zrd.bliProbePath;
 
 import java.util.ArrayList;
 import org.zrd.signalProcessingTools.fftTools.CWData;
-import org.zrd.signalProcessingTools.fftTools.CWFFT;
 import org.zrd.signalProcessingTools.fftTools.SignalDataTracking;
 
 /**
@@ -16,6 +15,10 @@ import org.zrd.signalProcessingTools.fftTools.SignalDataTracking;
 public class SignalTracking {
     
     private SignalDataTracking dataTracker;
+
+    public SignalDataTracking getDataTracker() {
+        return dataTracker;
+    }
     
     public SignalTracking(int size, int resolution){
         int numWaves = 2;

@@ -8,6 +8,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 
 /**
  *
@@ -16,6 +17,8 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 public interface LocationTracker {
     
     String[] getCurrentDataStrings();
+    
+    void setDataArrayToStringConvertor(DataArrayToStringConversion converter);
     
     float getTrackingQuality();
     

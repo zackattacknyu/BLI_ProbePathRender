@@ -120,6 +120,10 @@ public class Main extends SimpleApplication {
         probeTrackerOnSurface = new ProbeTrackerOnSurface(probeTracker,meshInfo,FilePathHelper.getDefaultOutputFolder());
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
+        //makes the signal tracker
+        signalTracker = new SignalTracking(100,14);
+        activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
+        
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
         new ProbeTrackerRecording(inputManager,recordedPathSet,activeTracker);
@@ -139,8 +143,7 @@ public class Main extends SimpleApplication {
         //initialize mesh session recording
         new RecordMeshSessionInfo(inputManager,meshInterFiles);
         
-        //makes the signal tracker
-        signalTracker = new SignalTracking(100,14);
+        
         
     }
 

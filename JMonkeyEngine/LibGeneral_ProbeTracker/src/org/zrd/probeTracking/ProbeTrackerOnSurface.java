@@ -14,6 +14,7 @@ import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathProjectionOntoMesh;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 
 /**
  *
@@ -191,6 +192,11 @@ public class ProbeTrackerOnSurface implements LocationTracker{
     @Override
     public String[] getCurrentDataStrings() {
         return locationTracker.getCurrentDataStrings();
+    }
+
+    @Override
+    public void setDataArrayToStringConvertor(DataArrayToStringConversion converter) {
+        locationTracker.setDataArrayToStringConvertor(converter);
     }
 
     

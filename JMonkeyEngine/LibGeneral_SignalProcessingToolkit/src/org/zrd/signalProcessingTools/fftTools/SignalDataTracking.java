@@ -5,13 +5,14 @@
 package org.zrd.signalProcessingTools.fftTools;
 
 import java.util.ArrayList;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.SignalDataProcessor;
 
 /**
  *
  * @author Zach
  */
-public class SignalDataTracking {
+public class SignalDataTracking implements DataArrayToStringConversion{
     
     private CWFFT fftProcessor;
     private SignalDataProcessor dataProcessor;
@@ -19,6 +20,19 @@ public class SignalDataTracking {
     public SignalDataTracking(int size, int resolution, int numWaves, int dataStart){
         fftProcessor = new CWFFT(size,resolution);
         dataProcessor = new SignalDataProcessor(numWaves,size,dataStart);
+    }
+    
+    @Override
+    public String getTextFileStringFromData(String[] data){
+        ArrayList<CWData> peakData = getCWTrackingData(data);
+        StringBuilder textFileString = new StringBuilder();
+        for(CWData peak: peakData){
+            textFileString.append(peak.getPower());
+            textFileString.append(",");
+            textFileString.append(peak.getFrequency());
+            textFileString.append(",");
+        }
+        return textFileString.toString();
     }
     
     public ArrayList<CWData> getCWTrackingData(String[] data){

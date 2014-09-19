@@ -18,6 +18,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo2DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputTo3DConverter;
 import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConverter;
 import org.zrd.util.dataHelp.BasicAngleHelper;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataStreaming.ProbeDataStream;
 import org.zrd.util.stats.QualityStatistics;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
@@ -54,6 +55,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private boolean recordingPath = false;
     
     private PathRecorder currentRecordingPath;
+    private DataArrayToStringConversion arrayToStringConverter;
     private Path pathRecordingFilePath = null;
     
     private boolean newPathExists = false;
@@ -208,7 +210,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         }else{
             System.out.println("Now Recording new path");
             newPathExists = false;
-            currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath);
+            currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath,false,arrayToStringConverter);
             currentQualityStats = new QualityStatistics();
             recordingPath = true;
         }
@@ -353,6 +355,11 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     @Override
     public String[] getCurrentDataStrings() {
         return currentSourceTracker.getCurrentDataString();
+    }
+
+    @Override
+    public void setDataArrayToStringConvertor(DataArrayToStringConversion converter) {
+        this.arrayToStringConverter = converter;
     }
 
     

@@ -12,6 +12,7 @@ import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.dataWriting.TimeHelper;
@@ -30,7 +31,10 @@ public class PathRecorder {
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     private ProbeDataWriter xyzSignalWriter;
+    private ProbeDataWriter xyzSignalDataWriter;
     private Path pathRecordingFilePath;
+    
+    private DataArrayToStringConversion convertor;
 
     private float arcLengthSinceLastRead = 0;
     private Vector3f lastPosition;
@@ -81,6 +85,16 @@ public class PathRecorder {
         pathSpecified = true;
     }
     
+    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
+            boolean pathIsOnMesh, DataArrayToStringConversion convertor){
+        this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
+        this.convertor = convertor;
+        xyzSignalDataWriter = ProbeDataWriter.getNewWriter(
+                pathRecordingFilePath, 
+                timestampSuffix, "xyzVerticesAndSignalInfo");
+        
+    }
+    
     private void setFilePrefixes(){
         pathVertexFilePrefix = pathIsOnMesh ? 
                 "pathOnMeshVertices" : "pathVertices";
@@ -116,7 +130,7 @@ public class PathRecorder {
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyzVertexWriter);
         ProbeDataWriter.closeWriter(xyzSignalWriter);
-        
+        ProbeDataWriter.closeWriter(xyzSignalDataWriter);
         if(!pathIsOnMesh){
             ProbeDataWriter.closeWriter(xyVertexWriter);
             ProbeDataWriter.closeWriter(yawPitchRollWriter);
@@ -179,7 +193,13 @@ public class PathRecorder {
             signalPart.append(entry);
         }
         
+        if(convertor != null){
+            String signalInfoPart = convertor.getTextFileStringFromData(signalData);
+            ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + signalInfoPart);
+        }
+        
         ProbeDataWriter.writeLineInWriter(xyzSignalWriter, vertexPart + signalPart);
+        
     }
 
     void addToPath(Vector3f currentPosition, 
