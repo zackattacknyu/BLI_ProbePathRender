@@ -60,7 +60,7 @@ public class GeometryDataHelper {
     
     public static String[] getDataInLine(String line){
         String[] parts = line.split(",");
-        return Arrays.copyOfRange(parts, 8, 207);
+        return Arrays.copyOfRange(parts, 3, 203);
     }
     
     public static Vector3f getVertexFromLine(String line){
