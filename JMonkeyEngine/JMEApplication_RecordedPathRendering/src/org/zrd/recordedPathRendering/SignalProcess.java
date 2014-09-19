@@ -24,7 +24,9 @@ public class SignalProcess implements StringToColorConversion{
     }
     
     public double getWavePeak(String[] data){
-        if(data == null || data.length < waveformSize*2){
+        //if(data == null || data.length < waveformSize*2){
+        if(data == null || data.length < waveformSize){
+            //System.out.println("Data Array Length = " + data.length);
             return 0;
         }
         double[] wave1Data = new double[waveformSize];
@@ -43,7 +45,10 @@ public class SignalProcess implements StringToColorConversion{
 
     public ColorRGBA convertStringToColor(String[] data) {
         double dataPeak = getWavePeak(data);
-        float brightness = (float)(dataPeak/(-60.0));
+        
+        float brightness = (float)((dataPeak+87)/1.8);
+        
+        System.out.println("Brightness: " + brightness);
         return new ColorRGBA(1-brightness,0f,brightness,1.0f);
     }
     
