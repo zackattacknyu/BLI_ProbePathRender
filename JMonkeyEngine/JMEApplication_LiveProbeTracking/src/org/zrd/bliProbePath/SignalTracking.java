@@ -26,21 +26,21 @@ public class SignalTracking {
             return "empty";
         }
         double[] wave1Data = new double[waveformSize];
-        //double[] wave2Data = new double[waveformSize];
+        double[] wave2Data = new double[waveformSize];
         for(int i = 0; i < waveformSize; i++){
             wave1Data[i] = Double.parseDouble(data[i]);
-            //wave2Data[i] = Double.parseDouble(data[i + waveformSize]);
+            wave2Data[i] = Double.parseDouble(data[i + waveformSize]);
         }
         CWData peak1Data = fftProcessor.getCWData(wave1Data);
-        //CWData peak2Data = fftProcessor.getCWData(wave2Data);
+        CWData peak2Data = fftProcessor.getCWData(wave2Data);
         
-        return String.format("Peak1Power=%.2f Peak1Freq=%.2f", 
-                peak1Data.getPower(),peak1Data.getFrequency());
+        //return String.format("Peak1Power=%.2f Peak1Freq=%.2f", 
+                //peak1Data.getPower(),peak1Data.getFrequency());
         
-        /*return String.format("Peak1Power=%.2f Peak2Power=%.2f "
+        return String.format("Peak1Power=%.2f Peak2Power=%.2f "
                 + "Peak1Freq=%.2f Peak2Freq=%.2f", 
                 peak1Data.getPower(), peak2Data.getPower(), 
-                peak1Data.getFrequency(), peak2Data.getFrequency());*/
+                peak1Data.getFrequency(), peak2Data.getFrequency());
         
         
     }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.util.dataHelp.OutputHelper;
+import org.zrd.util.dataHelp.SignalDataProcessor;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -46,21 +47,22 @@ public class GeometryDataHelper {
         ArrayList<String> lines = FileDataHelper.getLinesFromFile(dataFile);
         ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
         ArrayList<String[]> dataAtLines = new ArrayList<String[]>(lines.size());
+        
+        int numWaves = 2;
+        int waveformSize = 100;
+        int dataIndexStart = 3;
+        SignalDataProcessor dataProcesor = new SignalDataProcessor(numWaves, waveformSize, dataIndexStart);
+        
         String previousLine = "";
         for(String line: lines){
             if(!line.equals(previousLine)){
                 lineVertices.add(getVertexFromLine(line));
-                dataAtLines.add(getDataInLine(line));
+                dataAtLines.add(dataProcesor.getDataFromRawString(line));
             }
             previousLine = line;
         }
         
         return new SegmentSet(lineVertices,dataAtLines);
-    }
-    
-    public static String[] getDataInLine(String line){
-        String[] parts = line.split(",");
-        return Arrays.copyOfRange(parts, 3, 203);
     }
     
     public static Vector3f getVertexFromLine(String line){

@@ -7,6 +7,7 @@ package org.zrd.serialDataInterpreter.dataReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import org.zrd.util.dataHelp.OutputHelper;
+import org.zrd.util.dataHelp.SignalDataProcessor;
 
 /**
  * This class represents a single point in the serial data
@@ -34,7 +35,10 @@ public class SerialDataPoint {
     
     private String[] dataAtPoint;
     private int dataIndexStart = 8;
-    private int dataIndexEnd = 207;
+    private int numWaveforms = 2;
+    private int waveformSize = 100;
+    private SignalDataProcessor dataProcessor = 
+            new SignalDataProcessor(numWaveforms,waveformSize,dataIndexStart);
     
     /**
      * Constructs the data point from the string and map
@@ -63,7 +67,7 @@ public class SerialDataPoint {
             yhigh = getPart(DataLocationsMap.Y_HIGH_KEY);*/
         }
         
-        dataAtPoint = Arrays.copyOfRange(dataParts, dataIndexStart, dataIndexEnd+1);
+        dataAtPoint = dataProcessor.getDataFromRawString(data);
     }
 
     public String[] getDataAtPoint() {
