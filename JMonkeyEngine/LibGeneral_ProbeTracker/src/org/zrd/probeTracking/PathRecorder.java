@@ -29,6 +29,7 @@ public class PathRecorder {
     private ProbeDataWriter xyzVertexWriter;
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
+    private ProbeDataWriter xyzSignalWriter;
     private Path pathRecordingFilePath;
 
     private float arcLengthSinceLastRead = 0;
@@ -65,6 +66,9 @@ public class PathRecorder {
         
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, timestampSuffix,pathVertexFilePrefix);
+        xyzSignalWriter = ProbeDataWriter.getNewWriter(
+                pathRecordingFilePath, 
+                timestampSuffix, "xyzVerticesAndSignalData");
         
         if(!pathIsOnMesh){
             xyVertexWriter = ProbeDataWriter.getNewWriter(
@@ -111,6 +115,7 @@ public class PathRecorder {
     
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyzVertexWriter);
+        ProbeDataWriter.closeWriter(xyzSignalWriter);
         
         if(!pathIsOnMesh){
             ProbeDataWriter.closeWriter(xyVertexWriter);
@@ -160,6 +165,21 @@ public class PathRecorder {
         
         vertices.add(currentPosition.clone());
         verticesSinceLastRead.add(currentPosition.clone());
+    }
+    
+    void addToPath(String[] signalData, Vector3f currentPosition, 
+            Vector2f currentXYPosition, 
+            float currentYaw, float currentPitch, float currentRoll){
+        addToPath(currentPosition,currentXYPosition,currentYaw,currentPitch,currentRoll);
+        
+        String vertexPart = getPositionOutputText(currentPosition);
+        StringBuilder signalPart = new StringBuilder(signalData.length*5);
+        for(String entry: signalData){
+            signalPart.append(",");
+            signalPart.append(entry);
+        }
+        
+        ProbeDataWriter.writeLineInWriter(xyzSignalWriter, vertexPart + signalPart);
     }
 
     void addToPath(Vector3f currentPosition, 

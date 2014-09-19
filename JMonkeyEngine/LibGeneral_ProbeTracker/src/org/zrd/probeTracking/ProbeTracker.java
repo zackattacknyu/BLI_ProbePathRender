@@ -154,7 +154,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
 
         //here we record the xyz path
         if(recordingPath){
-            currentRecordingPath.addToPath(currentPosition,currentXYPosition,
+            currentRecordingPath.addToPath(currentSourceTracker.getCurrentDataString(),
+                    currentPosition,currentXYPosition,
                     currentYaw, currentPitch, currentRoll);
             currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
         }
