@@ -85,7 +85,12 @@ public class SerialDataPoint {
      */
     private float getPart(String partName){
         if(dataLocations.containsKey(partName)){
-            return Float.parseFloat(dataParts[dataLocations.get(partName)]);
+            String num = dataParts[dataLocations.get(partName)];
+            if(num.toLowerCase().equals("nan")){
+                return 0;
+            }else{
+                return Float.parseFloat(dataParts[dataLocations.get(partName)]);
+            }
         }else{
             return DEFAULT_FIELD_VALUE;
         }

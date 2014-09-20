@@ -195,7 +195,7 @@ public class PathRecorder {
         
         if(convertor != null){
             String signalInfoPart = convertor.getTextFileStringFromData(signalData);
-            ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + signalInfoPart);
+            ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + "," + signalInfoPart);
         }
         
         ProbeDataWriter.writeLineInWriter(xyzSignalWriter, vertexPart + signalPart);

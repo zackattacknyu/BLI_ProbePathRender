@@ -50,7 +50,7 @@ public class GeometryDataHelper {
         
         int numWaves = 2;
         int waveformSize = 100;
-        int dataIndexStart = 3;
+        int dataIndexStart = 8;
         SignalDataProcessor dataProcesor = new SignalDataProcessor(numWaves, waveformSize, dataIndexStart);
         
         String previousLine = "";
