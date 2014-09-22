@@ -66,6 +66,9 @@ public class FileDataReader implements DataReading {
         private void readCurrentLine(){
             try {
                 currentArdOutput = input.readLine();
+                if(!String.valueOf(currentArdOutput).toLowerCase().equals("null")){
+                    System.out.println(currentArdOutput);
+                }
             } catch (IOException ex) {
                 System.out.println("Error reading line in file: " + ex);
             }
