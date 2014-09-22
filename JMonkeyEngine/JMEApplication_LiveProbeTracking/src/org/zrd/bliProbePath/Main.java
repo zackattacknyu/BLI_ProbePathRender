@@ -46,7 +46,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     private LiveTrackingText outputText;
-    private SignalTracking signalTracker;
+    private SignalTracking_BLIProbePath signalTracker;
     
     private boolean renderPathsDuringRecording = false;
     
@@ -121,7 +121,7 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         //makes the signal tracker
-        signalTracker = new SignalTracking(100,14);
+        signalTracker = new SignalTracking_BLIProbePath(100,14);
         activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
         
         //initialize tracker actions

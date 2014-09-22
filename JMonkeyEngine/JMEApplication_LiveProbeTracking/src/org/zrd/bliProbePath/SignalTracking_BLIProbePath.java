@@ -12,7 +12,7 @@ import org.zrd.signalProcessingTools.fftTools.SignalDataTracking;
  *
  * @author BLI
  */
-public class SignalTracking {
+public class SignalTracking_BLIProbePath {
     
     private SignalDataTracking dataTracker;
 
@@ -20,7 +20,7 @@ public class SignalTracking {
         return dataTracker;
     }
     
-    public SignalTracking(int size, int resolution){
+    public SignalTracking_BLIProbePath(int size, int resolution){
         int numWaves = 2;
         int indexStart = 0;
         dataTracker = new SignalDataTracking(size,resolution,numWaves,indexStart);
