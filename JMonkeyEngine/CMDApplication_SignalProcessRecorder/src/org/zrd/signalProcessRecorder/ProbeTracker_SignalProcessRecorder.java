@@ -42,6 +42,7 @@ public class ProbeTracker_SignalProcessRecorder {
                 new SignalTracking_SignalProcessRecorder(100,14);
         activeTracker.setDataArrayToStringConvertor(
                 signalTracker.getDataTracker());
+        activeTracker.setShowDataArrayInfo(true);
         
         return activeTracker;
     }

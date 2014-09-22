@@ -59,6 +59,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private Path pathRecordingFilePath = null;
     
     private boolean newPathExists = false;
+    private boolean showDataArrayInfo = false;
+    
     private float currentDeltaX=0,currentDeltaY=0;
     private AbstractInputSourceTracker currentSourceTracker;
     private AbstractSerialInputToWorldConverter coordConverter;
@@ -120,6 +122,10 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         pathRecordingFilePath = filePath;
         
     }
+
+    public void setShowDataArrayInfo(boolean showDataArrayInfo) {
+        this.showDataArrayInfo = showDataArrayInfo;
+    }
     
     public void resetProbeReader(){
         currentSourceTracker.resetProbeReader();
@@ -160,6 +166,13 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
                     currentPosition,currentXYPosition,
                     currentYaw, currentPitch, currentRoll);
             currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
+        }
+        
+        //show the data string info if desired
+        if(showDataArrayInfo && arrayToStringConverter != null){
+            System.out.println("Data Array Info: " + 
+                    arrayToStringConverter.getTextFileStringFromData(
+                    currentSourceTracker.getCurrentDataString()));
         }
         
     }
