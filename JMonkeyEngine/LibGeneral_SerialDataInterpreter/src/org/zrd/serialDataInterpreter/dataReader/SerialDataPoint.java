@@ -103,17 +103,13 @@ public class SerialDataPoint {
      */
     @Override
     public String toString() {
-        /*return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
+        return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.YAW_KEY,yaw) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.PITCH_KEY,pitch) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.ROLL_KEY,roll) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.X_KEY,x) +
                 OutputHelper.makeNameValueDisplay(DataLocationsMap.Y_KEY,y) +
-                OutputHelper.makeNameValueDisplay(DataLocationsMap.DATAFIELD_KEY,datafield) +
-                OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality) + 
-                "totalData: " + dataAtPoint;*/
-        return OutputHelper.makeNameValueDisplay(DataLocationsMap.TIMESTAMP_KEY,timestamp) + 
-                " " + dataAtPoint;
+                OutputHelper.makeNameValueDisplay(DataLocationsMap.QUALITY_KEY, quality);
     }
 
     public float getXlow() {
