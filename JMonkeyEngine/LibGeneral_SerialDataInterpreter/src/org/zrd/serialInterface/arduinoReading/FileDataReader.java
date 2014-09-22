@@ -37,6 +37,8 @@ public class FileDataReader implements DataReading {
         
         private long lastLineReadTime;
         
+        private boolean showRawOutput = false;
+        
         /*
          * Time between line reads for simulation (in milliseconds)
          */
@@ -44,6 +46,9 @@ public class FileDataReader implements DataReading {
         
         public FileDataReader(Properties props){
             this.serialProperties = props;
+            
+            showRawOutput = Boolean.parseBoolean(
+                    serialProperties.getProperty("fileData.readRawOutput"));
             
             String fileName = serialProperties.getProperty("serialSimulation.fileName");
             simulationFile = Paths.get(fileName).toFile();
@@ -66,7 +71,7 @@ public class FileDataReader implements DataReading {
         private void readCurrentLine(){
             try {
                 currentArdOutput = input.readLine();
-                if(!String.valueOf(currentArdOutput).toLowerCase().equals("null")){
+                if(showRawOutput && !String.valueOf(currentArdOutput).toLowerCase().equals("null")){
                     System.out.println(currentArdOutput);
                 }
             } catch (IOException ex) {
