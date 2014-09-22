@@ -11,6 +11,7 @@ import java.util.Properties;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
 import org.zrd.util.fileHelper.FilePathHelper;
+import org.zrd.util.properties.PropertiesHelper;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
 /**
@@ -24,7 +25,7 @@ public class ProbeTracker_SignalProcessRecorder {
     public static final float INIT_SCALE_X = 0.00001f,INIT_SCALE_Y = 0.00001f;
     
     public static ProbeTracker createNewProbeTracker(){
-        Properties trackerProps = Properties_SignalProcessRecorder.getProperties();
+        Properties trackerProps = PropertiesHelper.getDefaultProperties();
         AbstractInputSourceTracker currentSourceTracker;
         short displacementMode;
         
