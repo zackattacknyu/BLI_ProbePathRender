@@ -45,9 +45,12 @@ public class SignalDataProcessor {
         for(int waveNum = 0; waveNum < numWaveforms; waveNum++){
             
             double[] currentWave = new double[waveformSize];
-            for(int index = 0; index < waveformSize; index++){
-                currentWave[index] = Double.parseDouble(dataParts[index + waveformSize*waveNum]);
+            if(dataParts != null && dataParts.length >= waveformSize){
+                for(int index = 0; index < waveformSize; index++){
+                    currentWave[index] = Double.parseDouble(dataParts[index + waveformSize*waveNum]);
+                }
             }
+            
             returnList.add(currentWave);
         }
         return returnList;
