@@ -117,7 +117,7 @@ We use an Euler Angle to Quaternion conversion to get the rotation we should app
 
 \section{Rotation and Reflection Calibration}
 
-Now that the scale is calibrated, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
+Now that the scale is calibrated and we have a direction for the displacement, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
 1. The normal to the plane in both probe and virtual coordinates\\
 2. A path from A to a point B on the surface in probe and virtual coordinates\\
 3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
@@ -128,17 +128,9 @@ To reconcile 2, we just have to rotate the path along the normal until the desir
 \\
 We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. This gives us a reflection matrix $K$ which is the reflection of the $x$ or $y$ axis at the original point.
 
-\section{Calibration Details}
-
-In order to calibrate the scale, we used a two-step process. In the first step, we figured out the factor to go from displacement units on the probe to millimeters. We did this by moving the probe 100 mm and then seeing the total displacement read by the probe. In the second step, we measured distances between points in the model in the real world and in the virtual world. This gave us a millimeter in the real world to virtual world unit conversion factor. We combined the two conversion factors to obtain the probe unit to virtual unit conversion factor. This procedure ended up giving us a very accurate scale factor for displacement. \\
-\\
-Calibrating the rotation and following the surface was a more difficult obstacle. With the probe, we have 3 orthonormal vectors. There is a vector for the x displacement, a vector for the y displacement, and vector for the normal. Using the orientation data, we can rotate these vectors. We then find to find the corresponding orthonormal vectors in the virtual world. We thus need to get a linear transformation between two sets of orthonormal vectors, which is either a rotation or reflection **PROVE THIS**.
-
 \section{Implementation Details}
 
 We use a Kinect to get the data and then used software that worked on top of the Point Cloud Library \cite{pointcloudlibrary} to take the data and get a mesh and texture from it. We then edited the mesh using Meshlab \cite{meshlab}. We took out some of the noisy areas and using the Quadric Edge Collapse Decimation filter, which is an implementation of QSlim \cite{qslim}, to refine and simplify the mesh. After that, we load the mesh into our tracking environment. Our tracking environment is an application that takes in the mesh as well as probe data readings and gives live updates as to the probe's position and data. It operates similarly to a video game and was developed using JMonkeyEngine **INSERT DETAIL**, a video game library written in Java that is similar to Ogre **INSERT REFERENCE**. \\
-\\
-The first step is to make sure the scale is calibrated. This is done in two steps. We move the probe a certain distance and see what the total displacement outputted by the mouse sensor was. We then measure the distance between known points on the surface in the virtual world and the real world and see what the ratio is. We then combine the two ratios so that we have a scale factor to go from displacement units read by the probe to displacement units in the virtual world. \\
 \\
 Once the scale is calibrated we know that we have accurate displacements. We know need to ensure that the displacement goes in the right direction. The orientation data from the probe gives us a set of orthogonal vectors. We then need to transform this set into the virtual world.\\
 \\
