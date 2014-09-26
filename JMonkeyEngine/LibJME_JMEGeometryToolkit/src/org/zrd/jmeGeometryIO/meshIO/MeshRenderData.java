@@ -26,6 +26,8 @@ import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
  */
 public class MeshRenderData{
     
+    private boolean flattenMesh = false;
+    
     protected Spatial renderedMesh;
     protected TriangleSet finalMeshInfo;
     protected Material meshMaterial;
@@ -113,7 +115,11 @@ public class MeshRenderData{
         ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(finalMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
-        correctedMesh = ModelCorrection.flattenTrianglesUsingRandomVertices(correctedMesh);
+        
+        if(flattenMesh){
+            correctedMesh = ModelCorrection.flattenTrianglesUsingRandomVertices(correctedMesh);
+        }
+        
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         renderedMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, meshMaterial);
         finalMeshInfo = correctedMesh;
