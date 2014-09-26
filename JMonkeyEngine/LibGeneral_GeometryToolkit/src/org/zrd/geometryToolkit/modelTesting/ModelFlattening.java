@@ -32,12 +32,13 @@ public class ModelFlattening {
     private Matrix4f totalTransform;
 
     public TriangleSet getOutputSet() {
-        return activeTriSet;
+        return outputSet;
     }
     
     int numVertices;
     
     private TriangleSet activeTriSet;
+    private TriangleSet outputSet;
     
     public ModelFlattening(TriangleSet triangles){
         activeTriSet = triangles;
@@ -46,6 +47,8 @@ public class ModelFlattening {
     }
     
     private void modifyOutputSet(){
+        
+        outputSet = new TriangleSet();
         
         for(MeshTriangle baseTriangle : activeTriSet.getTriangleList()){
             
@@ -57,9 +60,9 @@ public class ModelFlattening {
             Vector3f vertex2Trans = totalTransform.mult(vert2.clone());
             Vector3f vertex3Trans = totalTransform.mult(vert3.clone());
             
-            baseTriangle.setVertex1Coord(vertex1Trans);
-            baseTriangle.setVertex2Coord(vertex2Trans);
-            baseTriangle.setVertex3Coord(vertex3Trans);
+            MeshTriangle newTri = new MeshTriangle(vertex1Trans,vertex2Trans,vertex3Trans);
+            newTri.setTextureCoords(baseTriangle.getTextureCoords());
+            outputSet.addTriangle(newTri);
             
         }
     }
