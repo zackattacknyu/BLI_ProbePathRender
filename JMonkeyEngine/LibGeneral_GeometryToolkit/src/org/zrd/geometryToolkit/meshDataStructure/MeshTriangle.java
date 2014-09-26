@@ -129,6 +129,18 @@ public class MeshTriangle {
         return vertices;
     }
 
+    public void setVertex1Coord(Vector3f vertex1) {
+        this.vertex1.setVertex(vertex1);
+    }
+
+    public void setVertex2Coord(Vector3f vertex2) {
+        this.vertex2.setVertex(vertex2);
+    }
+
+    public void setVertex3Coord(Vector3f vertex3) {
+        this.vertex3.setVertex(vertex3);
+    }
+
     @Override
     public int hashCode() {
         return vertex1.hashCode() 

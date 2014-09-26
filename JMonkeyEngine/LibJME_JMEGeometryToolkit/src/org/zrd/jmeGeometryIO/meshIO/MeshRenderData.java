@@ -113,6 +113,7 @@ public class MeshRenderData{
         ConnectedComponent mainComponent = ModelCorrection.getLargestComponent(finalMeshInfo);
         TriangleSet correctedMesh = mainComponent.getComponentTriangleSet();
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
+        //ModelCorrection.flattenTrianglesUsingRandomVertices(correctedMesh);
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");
         renderedMesh = MeshRenderHelper.createMeshFromTriangles(correctedMesh, meshMaterial);
         finalMeshInfo = correctedMesh;

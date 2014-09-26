@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.zrd.geometryToolkit.meshDataStructure.ConnectedComponent;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
+import org.zrd.geometryToolkit.meshDataStructure.MeshVertex;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 
 /**
@@ -18,6 +19,16 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
  * @author BLI
  */
 public class ModelCorrection {
+    
+    /**
+     * This will take 3 random vertices and use them as the plane.
+     *      The rest of the vertices will be forced to lie on this plane.
+     * @param triangles
+     * @return 
+     */
+    public static void flattenTrianglesUsingRandomVertices(TriangleSet triangles){
+        ModelFlattening flattened = new ModelFlattening(triangles);
+    }
     
     public static TriangleSet getSmoothedTriangleSet(TriangleSet triangles){
         Vector3f baseNormal;

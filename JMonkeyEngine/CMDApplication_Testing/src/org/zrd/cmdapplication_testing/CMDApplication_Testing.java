@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  *
@@ -24,7 +26,7 @@ public class CMDApplication_Testing {
      */
     public static void main(String[] args) throws IOException {
 
-        long beforeInit = Calendar.getInstance().getTimeInMillis();
+        /*long beforeInit = Calendar.getInstance().getTimeInMillis();
         CWFFT currentSession = new CWFFT(50,14);
         long afterInit = Calendar.getInstance().getTimeInMillis();
         System.out.println("Time for Init: " + (afterInit-beforeInit) + " ms");
@@ -35,7 +37,16 @@ public class CMDApplication_Testing {
         
         double val = 23.4557;
         double val2 = 45.6799;
-        System.out.println(String.format("Peak1Power: %.2f Peak2Pow: %.2f", val,val2));
+        System.out.println(String.format("Peak1Power: %.2f Peak2Pow: %.2f", val,val2));*/
+        
+        Set<Integer> randomNums = new HashSet<Integer>();
+        while(randomNums.size() < 4){
+            randomNums.add((int)(Math.random()*10));
+        }
+        for(Integer num: randomNums){
+            System.out.println(num);
+        }
+        
         
     }
     

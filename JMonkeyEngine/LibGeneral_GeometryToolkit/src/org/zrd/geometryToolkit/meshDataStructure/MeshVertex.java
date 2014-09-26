@@ -16,6 +16,10 @@ public class MeshVertex {
     private Vector3f vertex;
     private int vertexIndex;
     private Vector2f textureCoord;
+
+    public void setVertex(Vector3f vertex) {
+        this.vertex = vertex;
+    }
     
     public MeshVertex(Vector3f vertex){
         this.vertex = vertex;
