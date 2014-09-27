@@ -58,7 +58,7 @@ public class Main extends SimpleApplication {
         pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         
-        rootNode.attachChild(currentSession.getFixedPointNode());
+        //rootNode.attachChild(currentSession.getFixedPointNode());
     }
 
     @Override
