@@ -46,7 +46,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     private LiveTrackingText outputText;
-    private SignalTracking_BLIProbePath signalTracker;
+    private SignalTracking_BLIProbePath_Threaded signalTracker;
     
     private boolean renderPathsDuringRecording = false;
     
@@ -121,8 +121,10 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         //makes the signal tracker
-        signalTracker = new SignalTracking_BLIProbePath(100,14);
+        signalTracker = new SignalTracking_BLIProbePath_Threaded(100,14);
         activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
+        Thread t = new Thread(signalTracker);
+        t.start();
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
@@ -175,6 +177,7 @@ public class Main extends SimpleApplication {
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
         
-        outputText.setDataText(signalTracker.getSignalTrackingInfo(activeTracker.getCurrentDataStrings()));
+        signalTracker.setData(activeTracker.getCurrentDataStrings());
+        outputText.setDataText(signalTracker.getCurrentOutput());
     }
 }
