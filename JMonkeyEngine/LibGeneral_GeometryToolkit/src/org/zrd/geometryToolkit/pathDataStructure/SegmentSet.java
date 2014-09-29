@@ -37,6 +37,17 @@ public class SegmentSet {
     //arc length of segment
     private float arcLength = 0;
     
+    public SegmentSet(int estimatedSize){
+        pathVertices = new ArrayList<Vector3f>(estimatedSize);
+        dataAtVertices = new ArrayList<String[]>(estimatedSize);
+    }
+    public void addToSet(Vector3f vertex){
+        pathVertices.add(vertex);
+    }
+    public void finalizeSegment(){
+        constructSegmentList();
+    }
+    
     public SegmentSet(ArrayList<Vector3f> pathVertices){
         this.pathVertices = pathVertices;
         constructSegmentList();

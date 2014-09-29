@@ -25,7 +25,7 @@ import org.zrd.util.fileHelper.GeneralFileHelper;
  */
 public class PathRecorder {
 
-    private ArrayList<Vector3f> vertices;
+    private SegmentSet pathInformation;
     private boolean pathSpecified = false;
     private ProbeDataWriter xyzVertexWriter;
     private ProbeDataWriter xyVertexWriter;
@@ -50,10 +50,10 @@ public class PathRecorder {
     private boolean pathIsOnMesh = false;
     
     public PathRecorder(Vector3f startingPosition){
-        vertices = new ArrayList<Vector3f>(100);
+        pathInformation = new SegmentSet(100);
         verticesSinceLastRead = new ArrayList<Vector3f>(100);
         
-        vertices.add(startingPosition.clone());
+        pathInformation.addToSet(startingPosition.clone());
         verticesSinceLastRead.add(startingPosition.clone());
         
         lastPosition = startingPosition.clone();
@@ -124,7 +124,7 @@ public class PathRecorder {
                 yaw, pitch, roll);
     }
     public ArrayList<Vector3f> getVertices() {
-        return vertices;
+        return pathInformation.getPathVertices();
     }
     
     public void closeRecording(){
@@ -135,11 +135,11 @@ public class PathRecorder {
             ProbeDataWriter.closeWriter(xyVertexWriter);
             ProbeDataWriter.closeWriter(yawPitchRollWriter);
         }
-        
+        pathInformation.finalizeSegment();
         
         //write the compressed path
         ArrayList<Vector3f> compressedVertices = PathCompression.
-            getCompressedPath(vertices,PathHelper.MIN_SEGMENT_LENGTH);
+            getCompressedPath(pathInformation.getPathVertices(),PathHelper.MIN_SEGMENT_LENGTH);
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
         GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
@@ -177,7 +177,7 @@ public class PathRecorder {
         arcLengthSinceLastRead += segLength;
         lastPosition = currentPosition.clone();
         
-        vertices.add(currentPosition.clone());
+        pathInformation.addToSet(currentPosition.clone());
         verticesSinceLastRead.add(currentPosition.clone());
     }
     
