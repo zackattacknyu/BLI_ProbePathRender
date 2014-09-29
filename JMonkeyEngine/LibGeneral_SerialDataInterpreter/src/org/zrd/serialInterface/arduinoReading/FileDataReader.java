@@ -103,6 +103,7 @@ public class FileDataReader implements DataReading {
             long timeNow = getTimeNow();
             if(timeNow-lastLineReadTime >= TIME_BETWEEN_LINE_READS){
                 readCurrentLine();
+                lastLineReadTime = timeNow;
             }
             return currentArdOutput;
         }
