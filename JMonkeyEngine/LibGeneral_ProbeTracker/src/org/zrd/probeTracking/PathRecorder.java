@@ -141,15 +141,13 @@ public class PathRecorder {
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
         
-        //write the compressed path and signal info
-        SegmentSet compressedFileAndSignalInfo = PathCompression.getCompressedPath(
-                pathInformation, PathHelper.MIN_SEGMENT_LENGTH);
-        GeometryDataHelper.writeVerticesToFile(compressedFileAndSignalInfo.getPathVertices(), compressedPathFile);
-        GeometryDataHelper.writeSegmentSetInfoToFile(compressedFileAndSignalInfo, convertor,compressedPathAndSignalFile);
+        //runs the post-processor
+        PathPostProcessing processor = new PathPostProcessing(recordedPathStats,
+                compressedPathAndSignalFile,compressedPathFile,pathInformation,
+                PathHelper.MIN_SEGMENT_LENGTH,convertor);
+        Thread postProcess = new Thread(processor);
+        postProcess.start();
         
-        //write the path arc length
-        FileDataHelper.exportLinesToFile(compressedFileAndSignalInfo.getResultStrings(), recordedPathStats);
-        OutputHelper.printStringCollection(compressedFileAndSignalInfo.getResultStrings());
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){
