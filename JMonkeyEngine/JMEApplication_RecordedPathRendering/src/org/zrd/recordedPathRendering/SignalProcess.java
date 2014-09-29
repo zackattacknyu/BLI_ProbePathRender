@@ -26,9 +26,15 @@ public class SignalProcess implements StringToColorConversion{
     }
     
     public double getWavePeak(String[] data){
+        
+        /*
+         * CODE IF DATA CONTAINS THE WAVEFORM DATA
         ArrayList<CWData> signalData = dataTracker.getCWTrackingData(data);
         return signalData.get(1).getPower();
+        */
         
+        //data contains peak
+        return Double.parseDouble(data[0]);
     }
 
     public ColorRGBA convertStringToColor(String[] data) {
@@ -36,11 +42,11 @@ public class SignalProcess implements StringToColorConversion{
         //System.out.println("Peak=" + dataPeak);
         float brightness = (float)(dataPeak*-1);
         if(brightness < 50){
-            brightness = 0;
-        }else if(brightness > 70){
             brightness = 1;
+        }else if(brightness > 70){
+            brightness = 0;
         }else{
-            brightness = (brightness-50)/20;
+            brightness = 1 - (brightness-50)/20;
         }
         
         System.out.println("Brightness: " + brightness);
