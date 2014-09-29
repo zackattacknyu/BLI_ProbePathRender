@@ -51,8 +51,17 @@ public class SegmentSet {
     public void addToSet(String[] data){
         dataAtVertices.add(data);
     }
+    public void addToSet(SegmentData data){
+        addToSet(data.getVertex(),data.getData());
+    }
     public void finalizeSegment(){
         constructSegmentList();
+    }
+    public int getSize(){
+        return pathVertices.size();
+    }
+    public SegmentData getDataAtIndex(int index){
+        return new SegmentData(pathVertices.get(index),dataAtVertices.get(index));
     }
     
     public SegmentSet(ArrayList<Vector3f> pathVertices){
