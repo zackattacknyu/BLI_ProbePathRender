@@ -44,6 +44,13 @@ public class SegmentSet {
     public void addToSet(Vector3f vertex){
         pathVertices.add(vertex);
     }
+    public void addToSet(Vector3f vertex,String[] data){
+        pathVertices.add(vertex);
+        dataAtVertices.add(data);
+    }
+    public void addToSet(String[] data){
+        dataAtVertices.add(data);
+    }
     public void finalizeSegment(){
         constructSegmentList();
     }

@@ -45,6 +45,8 @@ public class PathRecorder {
     private String compressedPathFilePrefix;
     private String compressedPathInfoFilePrefix;
     
+    private boolean hasSignalData = false;
+    
     
     //whether or not we are recording the path that is explictly following the mesh
     private boolean pathIsOnMesh = false;
@@ -86,9 +88,10 @@ public class PathRecorder {
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
-            boolean pathIsOnMesh, DataArrayToStringConversion convertor){
+            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor){
         this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
         this.convertor = convertor;
+        pathInformation.addToSet(startingData);
         xyzSignalInfoWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, 
                 timestampSuffix, "xyzVerticesAndSignalInfo");
@@ -193,6 +196,7 @@ public class PathRecorder {
             signalPart.append(entry);
         }
         
+        pathInformation.addToSet(signalData);
         if(convertor != null){
             //String signalInfoPart = convertor.getTextFileStringFromData(signalData);
             //ProbeDataWriter.writeLineInWriter(xyzSignalInfoWriter, vertexPart + "," + signalInfoPart);
