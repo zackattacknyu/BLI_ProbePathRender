@@ -61,7 +61,12 @@ public class SegmentSet {
         return pathVertices.size();
     }
     public SegmentData getDataAtIndex(int index){
-        return new SegmentData(pathVertices.get(index),dataAtVertices.get(index));
+        if(dataAtVertices != null && dataAtVertices.size() > 0){
+            return new SegmentData(pathVertices.get(index),dataAtVertices.get(index));
+        }
+        else{
+            return new SegmentData(pathVertices.get(index),null);
+        }
     }
     
     public SegmentSet(ArrayList<Vector3f> pathVertices){

@@ -8,12 +8,10 @@ import com.jme3.math.Vector3f;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataHelp.SignalDataProcessor;
-import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -23,17 +21,12 @@ import org.zrd.util.fileHelper.FileDataHelper;
 public class GeometryDataHelper {
     
     public static void writeVerticesToFile(ArrayList<Vector3f> vertices, Path filePath){
-        ArrayList<String> vertexStrings = new ArrayList<String>(vertices.size());
-        for(Vector3f vertex: vertices){
-            vertexStrings.add(OutputHelper.getPositionOutputText(
-                    vertex.getX(), vertex.getY(), vertex.getZ()));
-        }
-        FileDataHelper.exportLinesToFile(vertexStrings, filePath);
+        writeSegmentSetInfoToFile(new SegmentSet(vertices),null,filePath);
     }
     
     public static void writeSegmentSetInfoToFile(SegmentSet segments, DataArrayToStringConversion converter, Path filePath){
         ArrayList<String> dataStrings = new ArrayList<String>(segments.getSize());
-        String signalInfoPart;
+        String signalInfoPart = "";
         String vertexPart;
         String[] signalData;
         Vector3f vertex;
@@ -41,10 +34,12 @@ public class GeometryDataHelper {
             vertex = segments.getDataAtIndex(index).getVertex();
             vertexPart = OutputHelper.getPositionOutputText(vertex.getX(), vertex.getY(), vertex.getZ());
             
-            signalData = segments.getDataAtIndex(index).getData();
-            signalInfoPart = converter.getTextFileStringFromData(signalData);
+            if(converter != null){
+                signalData = segments.getDataAtIndex(index).getData();
+                signalInfoPart = "," + converter.getTextFileStringFromData(signalData);
+            }
             
-            dataStrings.add(vertexPart + "," + signalInfoPart);
+            dataStrings.add(vertexPart + signalInfoPart);
         }
         FileDataHelper.exportLinesToFile(dataStrings, filePath);
     }
