@@ -27,7 +27,7 @@ public class DataWritingConstants {
      *      alphabetical order, the files line up
      *      in descending order by time
      */
-    public static final String TIMESTAMP_SUFFIX_FORMAT = "yyyy_MM_dd__kk_mm_ss";
+    public static final String TIMESTAMP_SUFFIX_FORMAT = "yyyy_MM_dd__HH_mm_ss";
     
     /**
      * Used to seperate the prefix saying what the file is
