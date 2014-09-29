@@ -31,7 +31,6 @@ public class PathRecorder {
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
     private ProbeDataWriter xyzSignalDataWriter;
-    private ProbeDataWriter xyzSignalInfoWriter;
     private Path pathRecordingFilePath;
     
     private DataArrayToStringConversion convertor;
@@ -44,8 +43,6 @@ public class PathRecorder {
     private String pathVertexFilePrefix;
     private String compressedPathFilePrefix;
     private String compressedPathInfoFilePrefix;
-    
-    private boolean hasSignalData = false;
     
     
     //whether or not we are recording the path that is explictly following the mesh
@@ -92,9 +89,6 @@ public class PathRecorder {
         this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
         this.convertor = convertor;
         pathInformation.addToSet(startingData);
-        xyzSignalInfoWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, 
-                timestampSuffix, "xyzVerticesAndSignalInfo");
         
     }
     
@@ -133,7 +127,6 @@ public class PathRecorder {
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyzVertexWriter);
         ProbeDataWriter.closeWriter(xyzSignalDataWriter);
-        ProbeDataWriter.closeWriter(xyzSignalInfoWriter);
         if(!pathIsOnMesh){
             ProbeDataWriter.closeWriter(xyVertexWriter);
             ProbeDataWriter.closeWriter(yawPitchRollWriter);
@@ -146,6 +139,13 @@ public class PathRecorder {
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
         GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
+        
+        //write the compressed path and signal info
+        SegmentSet compressedFileAndSignalInfo = PathCompression.getCompressedPath(
+                pathInformation, PathHelper.MIN_SEGMENT_LENGTH);
+        Path compressedPathAndSignalFile = GeneralFileHelper.getNewDataFilePath(
+                pathRecordingFilePath,timestampSuffix, "compressedVerticesAndSignalInfo");
+        GeometryDataHelper.writeSegmentSetInfoToFile(compressedFileAndSignalInfo, convertor,compressedPathAndSignalFile);
         
         //write the path arc length
         SegmentSet recordedPath = new SegmentSet(compressedVertices);
@@ -197,11 +197,7 @@ public class PathRecorder {
         }
         
         pathInformation.addToSet(signalData);
-        if(convertor != null){
-            //String signalInfoPart = convertor.getTextFileStringFromData(signalData);
-            //ProbeDataWriter.writeLineInWriter(xyzSignalInfoWriter, vertexPart + "," + signalInfoPart);
-        }
-        
+
         ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + signalPart);
         
     }

@@ -10,8 +10,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
+import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataHelp.SignalDataProcessor;
+import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.fileHelper.FileDataHelper;
 
 /**
@@ -27,6 +29,24 @@ public class GeometryDataHelper {
                     vertex.getX(), vertex.getY(), vertex.getZ()));
         }
         FileDataHelper.exportLinesToFile(vertexStrings, filePath);
+    }
+    
+    public static void writeSegmentSetInfoToFile(SegmentSet segments, DataArrayToStringConversion converter, Path filePath){
+        ArrayList<String> dataStrings = new ArrayList<String>(segments.getSize());
+        String signalInfoPart;
+        String vertexPart;
+        String[] signalData;
+        Vector3f vertex;
+        for(int index = 0; index < segments.getSize(); index++){
+            vertex = segments.getDataAtIndex(index).getVertex();
+            vertexPart = OutputHelper.getPositionOutputText(vertex.getX(), vertex.getY(), vertex.getZ());
+            
+            signalData = segments.getDataAtIndex(index).getData();
+            signalInfoPart = converter.getTextFileStringFromData(signalData);
+            
+            dataStrings.add(vertexPart + "," + signalInfoPart);
+        }
+        FileDataHelper.exportLinesToFile(dataStrings, filePath);
     }
 
     public static ArrayList<Vector3f> getVerticesFromFile(File dataFile){
