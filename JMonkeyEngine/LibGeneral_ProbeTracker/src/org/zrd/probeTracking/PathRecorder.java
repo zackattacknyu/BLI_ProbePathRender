@@ -30,8 +30,8 @@ public class PathRecorder {
     private ProbeDataWriter xyzVertexWriter;
     private ProbeDataWriter xyVertexWriter;
     private ProbeDataWriter yawPitchRollWriter;
-    private ProbeDataWriter xyzSignalWriter;
     private ProbeDataWriter xyzSignalDataWriter;
+    private ProbeDataWriter xyzSignalInfoWriter;
     private Path pathRecordingFilePath;
     
     private DataArrayToStringConversion convertor;
@@ -70,7 +70,7 @@ public class PathRecorder {
         
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, timestampSuffix,pathVertexFilePrefix);
-        xyzSignalWriter = ProbeDataWriter.getNewWriter(
+        xyzSignalDataWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, 
                 timestampSuffix, "xyzVerticesAndSignalData");
         
@@ -89,7 +89,7 @@ public class PathRecorder {
             boolean pathIsOnMesh, DataArrayToStringConversion convertor){
         this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
         this.convertor = convertor;
-        xyzSignalDataWriter = ProbeDataWriter.getNewWriter(
+        xyzSignalInfoWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, 
                 timestampSuffix, "xyzVerticesAndSignalInfo");
         
@@ -129,8 +129,8 @@ public class PathRecorder {
     
     public void closeRecording(){
         ProbeDataWriter.closeWriter(xyzVertexWriter);
-        ProbeDataWriter.closeWriter(xyzSignalWriter);
         ProbeDataWriter.closeWriter(xyzSignalDataWriter);
+        ProbeDataWriter.closeWriter(xyzSignalInfoWriter);
         if(!pathIsOnMesh){
             ProbeDataWriter.closeWriter(xyVertexWriter);
             ProbeDataWriter.closeWriter(yawPitchRollWriter);
@@ -195,10 +195,10 @@ public class PathRecorder {
         
         if(convertor != null){
             //String signalInfoPart = convertor.getTextFileStringFromData(signalData);
-            //ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + "," + signalInfoPart);
+            //ProbeDataWriter.writeLineInWriter(xyzSignalInfoWriter, vertexPart + "," + signalInfoPart);
         }
         
-        ProbeDataWriter.writeLineInWriter(xyzSignalWriter, vertexPart + signalPart);
+        ProbeDataWriter.writeLineInWriter(xyzSignalDataWriter, vertexPart + signalPart);
         
     }
 
