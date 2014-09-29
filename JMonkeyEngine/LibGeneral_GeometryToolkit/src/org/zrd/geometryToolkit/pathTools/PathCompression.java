@@ -47,6 +47,7 @@ public class PathCompression {
         for(Integer index: compressedPathVertexIndices){
             newPath.addToSet(inputPath.getDataAtIndex(index));
         }
+        newPath.finalizeSegment();
         return newPath;
     }
     

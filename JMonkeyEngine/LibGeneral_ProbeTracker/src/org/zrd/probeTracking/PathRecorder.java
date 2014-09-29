@@ -133,26 +133,23 @@ public class PathRecorder {
         }
         pathInformation.finalizeSegment();
         
-        //write the compressed path
-        ArrayList<Vector3f> compressedVertices = PathCompression.
-            getCompressedPath(pathInformation.getPathVertices(),PathHelper.MIN_SEGMENT_LENGTH);
+        //gets the post-processing text file paths
+        Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(
+                pathRecordingFilePath,timestampSuffix, compressedPathInfoFilePrefix);
+        Path compressedPathAndSignalFile = GeneralFileHelper.getNewDataFilePath(
+                pathRecordingFilePath,timestampSuffix, "compressedVerticesAndSignalInfo");
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
-        GeometryDataHelper.writeVerticesToFile(compressedVertices, compressedPathFile);
         
         //write the compressed path and signal info
         SegmentSet compressedFileAndSignalInfo = PathCompression.getCompressedPath(
                 pathInformation, PathHelper.MIN_SEGMENT_LENGTH);
-        Path compressedPathAndSignalFile = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, "compressedVerticesAndSignalInfo");
+        GeometryDataHelper.writeVerticesToFile(compressedFileAndSignalInfo.getPathVertices(), compressedPathFile);
         GeometryDataHelper.writeSegmentSetInfoToFile(compressedFileAndSignalInfo, convertor,compressedPathAndSignalFile);
         
         //write the path arc length
-        SegmentSet recordedPath = new SegmentSet(compressedVertices);
-        Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, compressedPathInfoFilePrefix);
-        FileDataHelper.exportLinesToFile(recordedPath.getResultStrings(), recordedPathStats);
-        OutputHelper.printStringCollection(recordedPath.getResultStrings());
+        FileDataHelper.exportLinesToFile(compressedFileAndSignalInfo.getResultStrings(), recordedPathStats);
+        OutputHelper.printStringCollection(compressedFileAndSignalInfo.getResultStrings());
     }
     
     public ArrayList<Vector3f> getMostRecentVertices(){
