@@ -73,71 +73,6 @@ Our process started with taking a 3D scan of the surface to get the mesh. After 
 **SHOW PICTURE OF PROBE IN REAL WORLD**\\
 **SHOW PICTURE OF PROBE IN VIRTUAL WORLD**
 
-\section{Calibration Overview}
-
-The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems:\\
-1. Mouse sensor coordinate system, subscript $m$\\
-2. Probe coordinate system,  subscript $p$\\
-3. Real world coordinate system, subscript $k$\\
-4. Virtual coordinate system, subscript $w$.\\
-\\
-The mouse sensor gives us $x,y$ values for each displacement. Thus the positive x-vector corresponds to an $x$ displacement read by the mouse sensor and the positive y-vector corresponds to a $y$ displacement read by the mouse sensor. The negative z-direction corresponds to the direction that the mouse sensor points which in practice will be the direction towards the surface. Thus the positive z-axis will point away from the surface. Due to the nature of the hardware, we can assume that these vectors are orthogonal to each other.\\
-\\
-The probe gives us orientation data in the form of yaw, pitch, and roll angles. We want to combine this with the $x,y$ data to get the proper displacement vector. We will thus define a probe coordinate system. In this system, the $x,y,z$ vectors are the same as for the mouse sensor system if all the angles are $0$. Also, in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
-\\
-The real world coordinate system has the units in millimeters and corresponds to displacements from an origin point. The virtual world will be virtual displacements from an origin point on the scanned model. For the sake of the simplicity, the $x,y,z$ directions in the real world system will be the same as in the virtual world system. The point of keeping track of the real world coordinates will just be scaling the displacements. \\
-\\
-There are a few assumptions we can make that simplify the process of converting between coordinate systems. All of the basis vectors are orthogonal in each of the coordinate systems. Therefore any conversions between them is an orthogonal matrix. Every orthogonal matrix is the product of one rotation and one reflection, which simplifies the process of finding out which orthogonal matrix will do the conversion we need. \\
-\\
-We also have rigid motion so the probe coordinate system and the virtual coordinate system stay constant. Additionally, any changes in the probe's position only come from the $x,y$ data. The angle data only gives us the orientation when there is a change in position registered. This means that we can equivalently formulate the problem as taking the $x,y,z$ vectors from the mouse sensor space and finding their equivalent orthogonal vectors in the virtual space given particular $\theta$ values for the angles. If there is a reflection then, it would only be one about the $y-z$ plane to flip the x-axis or about the $x-z$ plane to flip the y-axis. 
-
-\section{Scaling calibration}
-
-In order to do scale calibration, I just consider $x,y$ displacement without any angles being involved. In order to simplify the calibration factor, I find two linear transformation $S_1,S_2$ such that 
-\[
-S_1(x,y,0)_m = (x,y,0)_k
-\]
-\[
-S_2(x,y,z)_k = (x,y,z)_w
-\]
-For $S_1$ we only care about $x,y$ scale, so it is a diagonal matrix. We measure a certain distance in the real world and find out the total displacement in probe coordinates. We repeat this for both $x,y$ and this allows us to get $s_{1x},s_{1y}$, the scale factors for $x,y$ respectively. \\
-\\
-For $S_2$, we are assuming that the real world and virtual world are scaled uniformly. Therefore, we measure the euclidean distance between points in the virtual world and points in the real world and assume that the factor we get can be uniformly applied to the 3 coordinates. Once we get that factor $s_2$, we make $S_2$ as the diagonal matrix with only $s$ on the diagonal. \\
-\\
-We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. We will now let
-\[
-(x',y',0)_m = S(x,y,0)_m = (x \cdot s_x, y \cdot s_y, 0)_m
-\]
-
-\section{Mouse Sensor to Probe Coordinates}
-
-Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. In this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
-\\
-We use an Euler Angle to Quaternion conversion to get the rotation we should apply to the mouse sensor coordinate system in order to obtain coordinates in the probe coordinate system. The API that we used had a method \cite{jmonkeyrotation} and the logic used in the method is a common one to go from Euler Angles to Quaternions \cite{quaternionTextboook}.
-
-\section{Rotation and Reflection Calibration}
-
-Now that the scale is calibrated and we have a direction for the displacement, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
-1. The normal to the plane in both probe and virtual coordinates\\
-2. A path from A to a point B on the surface in probe and virtual coordinates\\
-3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
-\\
-To reconcile 1, we just have two vectors, so we can come up with a rotation matrix $R_1$ to go from one vector to another. This means that one of the unit vectors has been reconciled. \\
-\\
-To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. \\
-\\
-We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. This gives us a reflection matrix $K$ which is the reflection of the $x$ or $y$ axis at the original point.
-
-\section{Implementation Details}
-
-We use a Kinect to get the data and then used software that worked on top of the Point Cloud Library \cite{pointcloudlibrary} to take the data and get a mesh and texture from it. We then edited the mesh using Meshlab \cite{meshlab}. We took out some of the noisy areas and using the Quadric Edge Collapse Decimation filter, which is an implementation of QSlim \cite{qslim}, to refine and simplify the mesh. After that, we load the mesh into our tracking environment. Our tracking environment is an application that takes in the mesh as well as probe data readings and gives live updates as to the probe's position and data. It operates similarly to a video game and was developed using JMonkeyEngine **INSERT DETAIL**, a video game library written in Java that is similar to Ogre **INSERT REFERENCE**. \\
-\\
-Once the scale is calibrated we know that we have accurate displacements. We know need to ensure that the displacement goes in the right direction. The orientation data from the probe gives us a set of orthogonal vectors. We then need to transform this set into the virtual world.\\
-\\
-Once the scale is calibrated, we start recording paths on the mesh itself. We then have a problem. Because the rotation has not been calibrated, it is likely that the paths will have a shape similar to the part of the mesh they were on but they will not actually be on the mesh **INSERT PICTURE OF THIS**. We thus need to figure out what rotation to apply to the probe reading's rotation in order to get the rotation in the virtual world. After that though, there is still a problem. Because the surface is deformable, the path would still not perfectly follow the mesh. We thus need an algorithm that will approximate the probe's position on the mesh given the deformability. \\
-\\
-This paper presents two algorithms. The first one takes a path that almost follows the mesh and projects it onto the mesh in such a way that preserves its orientation along the mesh as well as its arc length. The second one takes a recorded 3D path between two known points on the mesh and figures out how to rotate it and project it onto the mesh so that its start and end points match the ones on the mesh. The rotation found by the second algorithm gives us the rotation calibration we need. Once the rotation is calibration is found, we can then live track the probe and use the first algorithm to keep it along the mesh. 
-
 \section{Related Work}
 
 Real-time location systems would not work for our needs due to the lack of accuracy. 
@@ -159,7 +94,35 @@ Current work on deformable surface tracking is focused on tracking the deformati
 \\
 Being that we are tracking on a 2D surface embedded into 3D space, we thought about trying to flatten the mesh first and then track on it. We considered using a mesh flattening algorithm that used topological surgery \cite{meshunfolding}. Even though the mesh flattening does not have any holes or gaps when using this algorithm, there is no way to assure that our path will not leave the boundary of the flattened mesh. Additionally, we need an algorithm to work on arbitrary meshes and the mesh flattening was only proven to work with a handful of meshes. Due to these difficulties, we decided not to flatten the entire mesh and only do local flattening when we want the path to follow the mesh, which means we care about the triangle where the path is currently as well as its neighboring triangles. 
 
-\section{Following a Deformable mesh}
+\section{Tracking Algorithm}
+
+\subsection{Coordinate Systems}
+
+The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems:\\
+1. Mouse sensor coordinate system, subscript $m$\\
+2. Probe coordinate system,  subscript $p$\\
+3. Real world coordinate system, subscript $k$\\
+4. Virtual coordinate system, subscript $w$.\\
+\\
+The mouse sensor gives us $x,y$ values for each displacement. Thus the positive x-vector corresponds to an $x$ displacement read by the mouse sensor and the positive y-vector corresponds to a $y$ displacement read by the mouse sensor. The negative z-direction corresponds to the direction that the mouse sensor points which in practice will be the direction towards the surface. Thus the positive z-axis will point away from the surface. Due to the nature of the hardware, we can assume that these vectors are orthogonal to each other.\\
+\\
+The probe gives us orientation data in the form of yaw, pitch, and roll angles. We want to combine this with the $x,y$ data to get the proper displacement vector. We will thus define a probe coordinate system. In this system, the $x,y,z$ vectors are the same as for the mouse sensor system if all the angles are $0$. Also, in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
+\\
+The real world coordinate system has the units in millimeters and corresponds to displacements from an origin point. The virtual world will be virtual displacements from an origin point on the scanned model. For the sake of the simplicity, the $x,y,z$ directions in the real world system will be the same as in the virtual world system. The point of keeping track of the real world coordinates will just be scaling the displacements. \\
+\\
+There are a few assumptions we can make that simplify the process of converting between coordinate systems. All of the basis vectors are orthogonal in each of the coordinate systems. Therefore any conversions between them is an orthogonal matrix. Every orthogonal matrix is the product of one rotation and one reflection, which simplifies the process of finding out which orthogonal matrix will do the conversion we need. \\
+\\
+We also have rigid motion so the probe coordinate system and the virtual coordinate system stay constant. Additionally, any changes in the probe's position only come from the $x,y$ data. The angle data only gives us the orientation when there is a change in position registered. This means that we can equivalently formulate the problem as taking the $x,y,z$ vectors from the mouse sensor space and finding their equivalent orthogonal vectors in the virtual space given particular $\theta$ values for the angles. If there is a reflection then, it would only be one about the $y-z$ plane to flip the x-axis or about the $x-z$ plane to flip the y-axis. 
+
+\subsection{Mouse Sensor to Probe Coordinates}
+
+Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. In this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
+\\
+We use an Euler Angle to Quaternion conversion to get the rotation we should apply to the mouse sensor coordinate system in order to obtain coordinates in the probe coordinate system. The API that we used had a method \cite{jmonkeyrotation} and the logic used in the method is a common one to go from Euler Angles to Quaternions \cite{quaternionTextboook}.
+
+\section{Mesh Traversal Algorithms}
+
+\subsection{Following a Deformable mesh}
 
 For the purposes of our application, we need to have paths on the mesh itself so that we know the location on the mesh of particular data points. Due to the deformability, the paths ends up being close to the mesh, but not on the mesh itself, no matter how accurate the calibration was. Additionally, in order to do the calibration, we need the path to follow the mesh itself so that the end points line up. We thus came up with an algorithm for projecting a path onto the triangles of the mesh. \\
 \\
@@ -179,7 +142,7 @@ When finding the triangle and segment intersection, we had a triangle in a 3D sp
 \\
 The above procedure describes what we did with a single segment. With paths, we just iterated this procedure for each segment of the path. We assumed that the important aspect of each segment is its vector and not its origin point, since that is what we get from the probe. This meant that the end point of a projected segment was treated as the start point for the rest of the path when doing the loop to project the entire path onto the mesh.
 
-\section{Calibration of Rotation and Scale}
+\subsection{Calibration of Rotation and Scale}
 
 After taking a 3D scan and importing the mesh into our environment, we have our object in a virtual world with a virtual coordinate system. Our probe operates in the real world. We thus need to know how to translate between the two in order to get an accurate visualization. We first needed to translate displacement readings from the probe to displacement in the virtual world. Afterwards, we needed to get rotation and reflection calibrated so that the displacement vectors went in accurate directions in the virtual world. \\
 \\
@@ -211,6 +174,49 @@ where T is the angle and E is the axis
 Output the quaternion Q such that P' = Q*P
 
 \end{verbatim}
+
+\section{Calibration Steps}
+
+\subsection{Scaling calibration}
+
+In order to do scale calibration, I just consider $x,y$ displacement without any angles being involved. In order to simplify the calibration factor, I find two linear transformation $S_1,S_2$ such that 
+\[
+S_1(x,y,0)_m = (x,y,0)_k
+\]
+\[
+S_2(x,y,z)_k = (x,y,z)_w
+\]
+For $S_1$ we only care about $x,y$ scale, so it is a diagonal matrix. We measure a certain distance in the real world and find out the total displacement in probe coordinates. We repeat this for both $x,y$ and this allows us to get $s_{1x},s_{1y}$, the scale factors for $x,y$ respectively. \\
+\\
+For $S_2$, we are assuming that the real world and virtual world are scaled uniformly. Therefore, we measure the euclidean distance between points in the virtual world and points in the real world and assume that the factor we get can be uniformly applied to the 3 coordinates. Once we get that factor $s_2$, we make $S_2$ as the diagonal matrix with only $s$ on the diagonal. \\
+\\
+We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. We will now let
+\[
+(x',y',0)_m = S(x,y,0)_m = (x \cdot s_x, y \cdot s_y, 0)_m
+\]
+
+\subsection{Rotation and Reflection Calibration}
+
+Now that the scale is calibrated and we have a direction for the displacement, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
+1. The normal to the plane in both probe and virtual coordinates\\
+2. A path from A to a point B on the surface in probe and virtual coordinates\\
+3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
+\\
+To reconcile 1, we just have two vectors, so we can come up with a rotation matrix $R_1$ to go from one vector to another. This means that one of the unit vectors has been reconciled. \\
+\\
+To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. \\
+\\
+We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. This gives us a reflection matrix $K$ which is the reflection of the $x$ or $y$ axis at the original point.
+
+\section{Implementation Details}
+
+We use a Kinect to get the data and then used software that worked on top of the Point Cloud Library \cite{pointcloudlibrary} to take the data and get a mesh and texture from it. We then edited the mesh using Meshlab \cite{meshlab}. We took out some of the noisy areas and using the Quadric Edge Collapse Decimation filter, which is an implementation of QSlim \cite{qslim}, to refine and simplify the mesh. After that, we load the mesh into our tracking environment. Our tracking environment is an application that takes in the mesh as well as probe data readings and gives live updates as to the probe's position and data. It operates similarly to a video game and was developed using JMonkeyEngine **INSERT DETAIL**, a video game library written in Java that is similar to Ogre **INSERT REFERENCE**. \\
+\\
+Once the scale is calibrated we know that we have accurate displacements. We know need to ensure that the displacement goes in the right direction. The orientation data from the probe gives us a set of orthogonal vectors. We then need to transform this set into the virtual world.\\
+\\
+Once the scale is calibrated, we start recording paths on the mesh itself. We then have a problem. Because the rotation has not been calibrated, it is likely that the paths will have a shape similar to the part of the mesh they were on but they will not actually be on the mesh **INSERT PICTURE OF THIS**. We thus need to figure out what rotation to apply to the probe reading's rotation in order to get the rotation in the virtual world. After that though, there is still a problem. Because the surface is deformable, the path would still not perfectly follow the mesh. We thus need an algorithm that will approximate the probe's position on the mesh given the deformability. \\
+\\
+This paper presents two algorithms. The first one takes a path that almost follows the mesh and projects it onto the mesh in such a way that preserves its orientation along the mesh as well as its arc length. The second one takes a recorded 3D path between two known points on the mesh and figures out how to rotate it and project it onto the mesh so that its start and end points match the ones on the mesh. The rotation found by the second algorithm gives us the rotation calibration we need. Once the rotation is calibration is found, we can then live track the probe and use the first algorithm to keep it along the mesh. 
 
 \section{Experimental Results}
 
