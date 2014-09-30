@@ -127,6 +127,13 @@ Now that we have scaling, we only have to worry about direction. The map from th
 \\
 We use an Euler Angle to Quaternion conversion to get the rotation we should apply to the mouse sensor coordinate system in order to obtain coordinates in the probe coordinate system. The API that we used had a method \cite{jmonkeyrotation} and the logic used in the method is a common one to go from Euler Angles to Quaternions \cite{quaternionTextboook}.
 
+\subsection{Path Recording Algorithm}
+
+**INCORPORATE THIS BETTER. TALKS ABOUT THE COMPRESSION ALGORITHM**. \\
+\\
+Due to the nature of the recording, we need a way to compress the vertex list to be meaningful so all the vertices are distinct and no segment is too little. This is the algorithm I used: \\
+**INSERT COMPRESSION ALGORITHM**
+
 \section{Mesh Traversal Algorithms}
 
 \subsection{Following a Deformable mesh}
