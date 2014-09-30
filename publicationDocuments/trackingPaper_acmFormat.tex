@@ -82,13 +82,12 @@ Once the calibration steps are done, reasonably approximate paths of the probe o
 
 \section{Related Work}
 
-Real-time location systems would not work for our needs due to the lack of accuracy. 
-\begin{verbatim}
-http://www.ekahau.com/real-time-location-system/technology/how-rtls-works#!key-considerations-3
-http://www.ekahau.com/real-time-location-system/technology/wi-fi-tags#!location-beacons-2
-http://research.microsoft.com/en-us/projects/ez/
-\end{verbatim}
+\subsection{Location Tracking}
 
+Various solutions have been proposed for tracking objects in 3D space. For the clinical setting, we needed a solution that was simple to implement, inexpensive, and provided millimeter level accuracy. We investigated a few systems that provide 3D locations, including RF location, motion tracking, motion capture, magnetic tracking, and Kinect tracking and found that they were all lacking in some way. \\
+\\
+Real-time RF location systems would not work for our needs due to the lack of accuracy. Chintalapudi et al \cite{ezlocation} described the EZ location by Microsoft as well as other location systems. \\
+\\
 Commercial motion tracking for professional film makers use image-based tracking techniques \cite{trackingwebsite}. This method has some serious disadvantages for our application. Being that is designed for use by artists, it does not have a guarantee of measurement accuracy, which is necessary for our case. Additionally, the fact that it is image based means the probe would always have to be in the view of the camera and in a clinical setting that can be hard to ensure. The post-processing of the images can be time consuming and in a clinical setting the results should come quickly. Finally, training the medical technicians taking the data to do all the steps that would be required is impractical. \\
 \\
 Using the Kinect for tracking would have some advantages over image-based tracking. Because the Kinect gives us a depth map, we could more easily ensure measurement accuracy. Additionally, there would be much less processing required to get a final motion path. It still has the disadvantage that the probe would always have to be in view of the camera. It also has the disadvantage that the result is dependent on the shape of the probe. For this application, we do not know the shape of the final probe and it is impractical to try and accommodate all the different probe shapes.\\
@@ -97,8 +96,14 @@ Motion Capture is a popular technique for film making that tracks a character's 
 \\
 There is work being done on using magnets for motion tracking \cite{magnetictracking}. While we could get measurement accuracy with this method and the setup would not be too difficult, the system would be cumbersome for patients. It would also only be limited to tracking across an area as big as the magnetic coils. The method we are proposing can be used on any mesh that is scanned in 3D. Additionally, we want to easily be able to track across the entire mesh that was scanned.\\
 \\
+
+\subsection{Deformable Surface Tracking}
+
 Current work on deformable surface tracking is focused on tracking the deformations of the surface itself \cite{deformableobjecttracking,convexopt}. This paper focuses on deformable surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
 \\
+
+\subsection{Mesh Unfolding}
+
 Being that we are tracking on a 2D surface embedded into 3D space, we thought about trying to flatten the mesh first and then track on it. We considered using a mesh flattening algorithm that used topological surgery \cite{meshunfolding}. Even though the mesh flattening does not have any holes or gaps when using this algorithm, there is no way to assure that our path will not leave the boundary of the flattened mesh. Additionally, we need an algorithm to work on arbitrary meshes and the mesh flattening was only proven to work with a handful of meshes. Due to these difficulties, we decided not to flatten the entire mesh and only do local flattening when we want the path to follow the mesh, which means we care about the triangle where the path is currently as well as its neighboring triangles. 
 
 \section{Tracking Algorithm}
