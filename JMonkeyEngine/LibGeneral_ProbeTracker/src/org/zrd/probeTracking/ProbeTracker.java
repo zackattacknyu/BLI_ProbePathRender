@@ -43,6 +43,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private float currentYaw=0,currentPitch = 0,currentRoll = 0;
     private float lastYaw,lastPitch,lastRoll;
     private String lastOutputText;
+    private long previousTimestamp;
+    private long currentTimestamp;
     
     private Quaternion rotationFromData;
     
@@ -112,6 +114,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             Vector3f startingPosition, Path filePath){
         this.coordConverter = coordConvertor;
         this.currentSourceTracker = currentSourceTracker;
+        previousTimestamp = currentSourceTracker.getTimestamp();
+        currentTimestamp = currentSourceTracker.getTimestamp();
         
         this.startingPosition = startingPosition;
         
@@ -136,43 +140,51 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         
         currentSourceTracker.updateData();
         
-        currentYaw = currentSourceTracker.getCurrentYawRadians();
-        currentPitch = currentSourceTracker.getCurrentPitchRadians();
-        currentRoll = currentSourceTracker.getCurrentRollRadians();
+        currentTimestamp = currentSourceTracker.getTimestamp();
+        
+        //makes sure there is new data that we care about
+        if(currentTimestamp > previousTimestamp){
+            
+            currentYaw = currentSourceTracker.getCurrentYawRadians();
+            currentPitch = currentSourceTracker.getCurrentPitchRadians();
+            currentRoll = currentSourceTracker.getCurrentRollRadians();
 
-        currentDeltaX = currentSourceTracker.getDeltaX();
-        currentDeltaY = currentSourceTracker.getDeltaY();
-        
-        rotationFromData = RotationHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
-        
-        //gets the current displacement vector
-        currentDisplacement = coordConverter.getXYZDisplacement(
-                currentDeltaX, currentDeltaY, 
-                currentYaw, currentPitch, currentRoll);
-        
-        //adds the displacement to current position
-        currentPosition.addLocal(currentDisplacement.clone());
-        displacementSinceLastPoint.addLocal(currentDisplacement.clone());
-        
-        //gets the xy displacement vector
-        Vector2f currentXYDisp = coordConverter.getXYDisplacement(
-                currentDeltaX, currentDeltaY);
-        
-        currentXYPosition.addLocal(currentXYDisp);
+            currentDeltaX = currentSourceTracker.getDeltaX();
+            currentDeltaY = currentSourceTracker.getDeltaY();
 
-        //here we record the xyz path
-        if(recordingPath){
-            currentRecordingPath.addToPath(currentSourceTracker.getCurrentDataString(),
-                    currentPosition,currentXYPosition,
-                    currentYaw, currentPitch, currentRoll,currentSourceTracker.getTimestamp());
-            currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
-        }
-        
-        //show the data string info if desired
-        if(showDataArrayInfo && arrayToStringConverter != null){
-            System.out.println("Data Array Info: " + 
-                    arrayToStringConverter.getTextFileStringFromData(
-                    currentSourceTracker.getCurrentDataString()));
+            rotationFromData = RotationHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
+
+            //gets the current displacement vector
+            currentDisplacement = coordConverter.getXYZDisplacement(
+                    currentDeltaX, currentDeltaY, 
+                    currentYaw, currentPitch, currentRoll);
+
+            //adds the displacement to current position
+            currentPosition.addLocal(currentDisplacement.clone());
+            displacementSinceLastPoint.addLocal(currentDisplacement.clone());
+
+            //gets the xy displacement vector
+            Vector2f currentXYDisp = coordConverter.getXYDisplacement(
+                    currentDeltaX, currentDeltaY);
+
+            currentXYPosition.addLocal(currentXYDisp);
+
+            //here we record the xyz path
+            if(recordingPath){
+                currentRecordingPath.addToPath(currentSourceTracker.getCurrentDataString(),
+                        currentPosition,currentXYPosition,
+                        currentYaw, currentPitch, currentRoll,currentTimestamp);
+                currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
+            }
+
+            //show the data string info if desired
+            if(showDataArrayInfo && arrayToStringConverter != null){
+                System.out.println("Data Array Info: " + 
+                        arrayToStringConverter.getTextFileStringFromData(
+                        currentSourceTracker.getCurrentDataString()));
+            }
+            
+            previousTimestamp = currentTimestamp;
         }
         
     }
