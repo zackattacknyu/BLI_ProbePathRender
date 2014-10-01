@@ -17,16 +17,16 @@ import org.zrd.util.properties.PropertiesHelper;
 public class CalibrationProperties {
     
     private Quaternion rotationCalib;
-    private Float realToProbeFactor;
-    private Float virtualToRealFactor;
+    private Float probeToRealFactor;
+    private Float realToVirtualFactor;
     private Float scaleFactor;
     private Float scaleFactorX;
     private Float scaleFactorY;
     private boolean reflectX;
     private boolean reflectY;
     
-    public static final String REAL_TO_PROBE_FACTOR_NAME = "scaleFactor.realToProbe";
-    public static final String VIRTUAL_TO_REAL_FACTOR_NAME = "scaleFactor.virtualToReal";
+    public static final String PROBE_TO_REAL_FACTOR_NAME = "scaleFactor.probeToReal";
+    public static final String REAL_TO_VIRTUAL_FACTOR_NAME = "scaleFactor.realToVirtual";
     
     public static final String QUATERNION_W_FACTOR_NAME = "initQuat.w";
     public static final String QUATERNION_X_FACTOR_NAME = "initQuat.x";
@@ -44,9 +44,9 @@ public class CalibrationProperties {
         Quaternion outputRotCalib = (Quaternion)chooseSpecificOrDefault(
                 specificP.rotationCalib,defaultP.rotationCalib);
         Float outputRealToProbe = (Float)chooseSpecificOrDefault(
-                specificP.realToProbeFactor,defaultP.realToProbeFactor);
+                specificP.probeToRealFactor,defaultP.probeToRealFactor);
         Float outputVirtualToProbe = (Float)chooseSpecificOrDefault(
-                specificP.virtualToRealFactor,defaultP.virtualToRealFactor);
+                specificP.realToVirtualFactor,defaultP.realToVirtualFactor);
         
         Boolean reflectX = (Boolean)chooseSpecificOrDefault(specificP.reflectX,defaultP.reflectX);
         Boolean reflectY = (Boolean)chooseSpecificOrDefault(specificP.reflectY,defaultP.reflectY);
@@ -55,9 +55,9 @@ public class CalibrationProperties {
     }
     
     private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, Float virtualToRealFactor, Boolean reflectX, Boolean reflectY){
-        this.realToProbeFactor = realToProbeFactor;
+        this.probeToRealFactor = realToProbeFactor;
         this.rotationCalib = rotationCalib;
-        this.virtualToRealFactor = virtualToRealFactor;
+        this.realToVirtualFactor = virtualToRealFactor;
         this.reflectX = reflectX;
         this.reflectY = reflectY;
         
@@ -70,11 +70,11 @@ public class CalibrationProperties {
         
         if(props == null) return;
         
-        if(props.containsKey(REAL_TO_PROBE_FACTOR_NAME)){
-            realToProbeFactor = PropertiesHelper.getFloatValueProperty(props, REAL_TO_PROBE_FACTOR_NAME);
+        if(props.containsKey(PROBE_TO_REAL_FACTOR_NAME)){
+            probeToRealFactor = PropertiesHelper.getFloatValueProperty(props, PROBE_TO_REAL_FACTOR_NAME);
         }
-        if(props.containsKey(VIRTUAL_TO_REAL_FACTOR_NAME)){
-            virtualToRealFactor = PropertiesHelper.getFloatValueProperty(props, VIRTUAL_TO_REAL_FACTOR_NAME);
+        if(props.containsKey(REAL_TO_VIRTUAL_FACTOR_NAME)){
+            realToVirtualFactor = PropertiesHelper.getFloatValueProperty(props, REAL_TO_VIRTUAL_FACTOR_NAME);
         }
         
         if(props.containsKey(REFLECT_X_FACTOR_NAME)){
