@@ -5,8 +5,6 @@
 package org.zrd.signalProcessRecorder;
 
 import com.jme3.math.Vector3f;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
