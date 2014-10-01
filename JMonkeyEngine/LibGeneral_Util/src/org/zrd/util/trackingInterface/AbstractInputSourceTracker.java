@@ -16,6 +16,8 @@ public interface AbstractInputSourceTracker {
     
     String[] getCurrentDataString();
     
+    long getTimestamp();
+    
     float getTrackingQuality();
     
     /**

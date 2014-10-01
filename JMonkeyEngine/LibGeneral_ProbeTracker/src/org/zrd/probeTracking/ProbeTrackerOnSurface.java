@@ -86,7 +86,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
         }
         
         if(recordingPath){
-            currentRecordingPathOnMesh.addToPath(currentPositionOnMesh);
+            currentRecordingPathOnMesh.addToPath(currentPositionOnMesh,0);
         }
         
         

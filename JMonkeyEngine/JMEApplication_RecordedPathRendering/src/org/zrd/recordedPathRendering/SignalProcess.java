@@ -34,7 +34,7 @@ public class SignalProcess implements StringToColorConversion{
         */
         
         //data contains peak
-        return Double.parseDouble(data[0]);
+        return Double.parseDouble(data[2]);
     }
 
     public ColorRGBA convertStringToColor(String[] data) {
@@ -43,7 +43,7 @@ public class SignalProcess implements StringToColorConversion{
         float brightness = (float)(dataPeak*-1);
         if(brightness < 50){
             brightness = 1;
-        }else if(brightness > 70){
+        }else if(brightness > 50){
             brightness = 0;
         }else{
             brightness = 1 - (brightness-50)/20;

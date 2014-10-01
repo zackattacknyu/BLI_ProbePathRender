@@ -28,7 +28,8 @@ public class SerialDataPoint {
     //default field value if not specified by data string
     public static final float DEFAULT_FIELD_VALUE = Float.NaN;
     
-    private float timestamp,x,y,yaw,pitch,roll,datafield,quality;
+    private float x,y,yaw,pitch,roll,datafield,quality;
+    private long timestamp;
     private float xlow,xhigh,ylow,yhigh;
     private String[] dataParts;
     private HashMap<String,Integer> dataLocations;
@@ -57,7 +58,7 @@ public class SerialDataPoint {
             yaw = getPart(DataLocationsMap.YAW_KEY);
             pitch = getPart(DataLocationsMap.PITCH_KEY);
             roll = getPart(DataLocationsMap.ROLL_KEY);
-            timestamp = getPart(DataLocationsMap.TIMESTAMP_KEY);
+            timestamp = getLongPart(DataLocationsMap.TIMESTAMP_KEY);
             datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
             quality = getPart(DataLocationsMap.QUALITY_KEY);
             
@@ -93,6 +94,19 @@ public class SerialDataPoint {
             }
         }else{
             return DEFAULT_FIELD_VALUE;
+        }
+    }
+    
+    private long getLongPart(String partName){
+        if(dataLocations.containsKey(partName)){
+            String num = dataParts[dataLocations.get(partName)];
+            if(num.toLowerCase().equals("nan")){
+                return 0;
+            }else{
+                return Long.parseLong(dataParts[dataLocations.get(partName)]);
+            }
+        }else{
+            return 0;
         }
     }
 
@@ -132,7 +146,7 @@ public class SerialDataPoint {
      * The timestamp at this particular data point
      * @return      timestamp in the string
      */    
-    public float getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
@@ -179,5 +193,4 @@ public class SerialDataPoint {
     public float getQuality() {
         return quality;
     }
-    
 }

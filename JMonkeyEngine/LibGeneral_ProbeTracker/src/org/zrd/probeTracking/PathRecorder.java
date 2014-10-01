@@ -161,13 +161,13 @@ public class PathRecorder {
         return arcLengthSinceLastRead;
     }
     
-    void addToPath(Vector3f currentPosition){
+    void addToPath(Vector3f currentPosition, long timestamp){
         
         if(pathSpecified){
             
             ProbeDataWriter.writeLineInWriter(
                     xyzVertexWriter, 
-                    getPositionOutputText(currentPosition));
+                    getPositionOutputText(currentPosition) + "," + timestamp);
             
         }
 
@@ -181,8 +181,8 @@ public class PathRecorder {
     
     void addToPath(String[] signalData, Vector3f currentPosition, 
             Vector2f currentXYPosition, 
-            float currentYaw, float currentPitch, float currentRoll){
-        addToPath(currentPosition,currentXYPosition,currentYaw,currentPitch,currentRoll);
+            float currentYaw, float currentPitch, float currentRoll, long timestamp){
+        addToPath(currentPosition,currentXYPosition,currentYaw,currentPitch,currentRoll,timestamp);
         
         String vertexPart = getPositionOutputText(currentPosition);
         StringBuilder signalPart = new StringBuilder(signalData.length*5);
@@ -199,9 +199,9 @@ public class PathRecorder {
 
     void addToPath(Vector3f currentPosition, 
             Vector2f currentXYPosition, 
-            float currentYaw, float currentPitch, float currentRoll) {
+            float currentYaw, float currentPitch, float currentRoll, long timestamp) {
         
-        addToPath(currentPosition);
+        addToPath(currentPosition,timestamp);
         
         if(pathSpecified){
         

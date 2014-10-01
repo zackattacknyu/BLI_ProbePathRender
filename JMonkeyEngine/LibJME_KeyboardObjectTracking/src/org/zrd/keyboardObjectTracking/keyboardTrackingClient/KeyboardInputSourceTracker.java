@@ -64,5 +64,10 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
         String[] ret = {"null"};
         return ret;
     }
+
+    @Override
+    public long getTimestamp() {
+        return 0;
+    }
     
 }
