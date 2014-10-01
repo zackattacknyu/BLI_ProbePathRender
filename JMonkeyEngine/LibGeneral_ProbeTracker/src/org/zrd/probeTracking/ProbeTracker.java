@@ -46,7 +46,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private long previousTimestamp;
     private long currentTimestamp;
     
-    private Quaternion rotationFromData;
+    private Quaternion rotationFromData = new Quaternion();
     
     
     private Vector3f currentPosition;
