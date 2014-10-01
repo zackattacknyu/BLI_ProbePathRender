@@ -1,0 +1,16 @@
+This is the order that the paths appear in
+   from earliest to latest in the timestamp order:
+   
+0 to 1
+0 to 2
+0 to 3
+0 to 4
+
+1 to 2
+1 to 3
+1 to 4
+
+2 to 3
+2 to 4
+
+3 to 4
