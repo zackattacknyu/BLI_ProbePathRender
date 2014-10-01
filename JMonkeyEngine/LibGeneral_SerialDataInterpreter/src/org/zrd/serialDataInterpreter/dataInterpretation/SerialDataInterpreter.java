@@ -159,6 +159,10 @@ public class SerialDataInterpreter implements ProbeDataStream,AbstractInputSourc
         return outputRollRadians;
     }
     
+    public long getTimestamp(){
+        return serial.getCurrentSerialData().getTimestamp();
+    }
+    
     /**
      * This gets the delta X from the probe
      * @return  delta X from probe

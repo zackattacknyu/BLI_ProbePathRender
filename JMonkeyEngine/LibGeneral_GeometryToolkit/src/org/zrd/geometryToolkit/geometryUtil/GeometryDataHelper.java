@@ -38,6 +38,9 @@ public class GeometryDataHelper {
                 signalData = segments.getDataAtIndex(index).getData();
                 signalInfoPart = "," + converter.getTextFileStringFromData(signalData);
             }
+            if(index % 20 == 0){
+                System.out.println("Finished converting point " + (index+1) + " of " + segments.getSize());
+            }
             
             dataStrings.add(vertexPart + signalInfoPart);
         }

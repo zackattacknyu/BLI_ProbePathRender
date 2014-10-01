@@ -30,7 +30,7 @@ public class DataStreamRecorder {
             public void run() {
                 while (true) {
                     try {
-                        sleep(30);
+                        sleep(20);
                         dataStream.updateData();
                     } catch (InterruptedException ex) {
                         break;
