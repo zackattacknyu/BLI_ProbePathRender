@@ -6,6 +6,7 @@ package org.zrd.keyboardObjectTracking.keyboardTrackingClient;
 
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 import com.jme3.input.InputManager;
+import java.util.Calendar;
 import org.zrd.keyboardObjectTracking.keyboardTrackingReadImpl.KeyboardTrackingImpl;
 
 /**
@@ -67,7 +68,7 @@ public class KeyboardInputSourceTracker implements AbstractInputSourceTracker{
 
     @Override
     public long getTimestamp() {
-        return 0;
+        return Calendar.getInstance().getTimeInMillis();
     }
     
 }
