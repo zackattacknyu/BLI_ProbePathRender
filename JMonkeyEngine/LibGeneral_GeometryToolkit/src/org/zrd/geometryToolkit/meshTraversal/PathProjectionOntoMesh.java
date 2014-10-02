@@ -77,9 +77,15 @@ public class PathProjectionOntoMesh {
     public static ArrayList<Vector3f> getPathProjectedOntoMesh(ArrayList<Vector3f> path, 
             MeshTriangle initTriangle, TriangleSet triangleSet) {
         
+        return getPathProjectedOntoMesh(new SegmentSet(path),initTriangle,triangleSet).getPathVertices();
+    }
+    
+    public static SegmentSet getPathProjectedOntoMesh(SegmentSet path, 
+            MeshTriangle initTriangle, TriangleSet triangleSet) {
+        
         //makes a path projection class
         PathProjectionOntoMesh newProjection = new PathProjectionOntoMesh(
-                initTriangle,PathHelper.getFirstPoint(path),triangleSet);
+                initTriangle,PathHelper.getFirstPoint(path.getPathVertices()),triangleSet);
         
         //returns the path projection
         return newProjection.findCurrentPathProjectionOntoMesh(path);
@@ -94,13 +100,12 @@ public class PathProjectionOntoMesh {
      * @param path      input path
      * @return          input path projected onto the mesh
      */
-    private ArrayList<Vector3f> findCurrentPathProjectionOntoMesh(ArrayList<Vector3f> path){
-        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(path.size());
-        
-        //makes the set of segments for the path
-        SegmentSet currentPath = new SegmentSet(path);
+    private SegmentSet findCurrentPathProjectionOntoMesh(SegmentSet currentPath){
+        ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(currentPath.getSize());
+        ArrayList<String[]> finalPathData = new ArrayList<String[]>(currentPath.getSize());
         
         ArrayList<Vector3f> currentProjectedPath;
+        int index = 0;
         
         //goes through each segment
         for(Vector3f segmentVec: currentPath.getSegmentVectors()){
@@ -110,12 +115,24 @@ public class PathProjectionOntoMesh {
             
             //adds the projection to the final output path
             finalPath.addAll(currentProjectedPath);
+            
+            //repeatedly adds the data for the new points added in projection
+            if(currentPath.getDataAtVertices() != null){
+                for(int i = 0; i < currentProjectedPath.size(); i++){
+                    finalPathData.add(currentPath.getDataAtVertices().get(index));
+                }
+                index++;
+            }
+            
         }
         
         //makes sure the end point gets added
         finalPath.add(currentStartPoint);
+        if(currentPath.getDataAtVertices() != null){
+            finalPathData.add(currentPath.getDataAtVertices().get(currentPath.getSize()-1));
+        }
         
-        return finalPath;
+        return new SegmentSet(finalPath,finalPathData);
     }
     
     /**

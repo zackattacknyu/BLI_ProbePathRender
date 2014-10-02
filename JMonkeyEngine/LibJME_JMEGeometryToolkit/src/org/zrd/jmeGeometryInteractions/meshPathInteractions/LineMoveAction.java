@@ -15,6 +15,7 @@ import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
 /**
@@ -28,7 +29,7 @@ import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 public class LineMoveAction extends PickTwoPointsOnMesh{
     
     private RecordedPathSet recordedPathSet;
-    private ArrayList<Vector3f> currentPath;
+    private SegmentSet currentSegmentSet;
     
     /**
      * Name of the action hitting the keyboard to signify
@@ -124,10 +125,12 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     protected void handleStartPoint(Vector3f startPoint) {
         
         //gets the current pre-recorded path
-        currentPath = recordedPathSet.getCurrentPath();
+        currentSegmentSet = recordedPathSet.getCurrentSegment();
         
         //moves the current path so its start point matches the one given
-        currentPath = PathTransformHelper.movePathStartPoint(currentPath, startPoint);
+        currentSegmentSet = new SegmentSet(
+                PathTransformHelper.movePathStartPoint(currentSegmentSet.getPathVertices(), startPoint),
+                currentSegmentSet.getDataAtVertices());
         
         System.out.println("Hit spacebar before selecting end point");
     }
@@ -145,9 +148,9 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
     protected void handleEndPointResult(Vector3f endPoint, 
         ScaleCalibration scaleCalib, 
         PathOnMeshCalculator rotCalib, 
-        ArrayList<Vector3f> scaledAndRotatedPath) {
+        SegmentSet scaledAndRotatedPath) {
         
-        currentPath = scaledAndRotatedPath;
+        currentSegmentSet = scaledAndRotatedPath;
     }
 
     /**
@@ -155,16 +158,16 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
      * @return      the current path as list of vertices
      */
     @Override
-    protected ArrayList<Vector3f> getActivePathAtEndpoint() {
-        return currentPath;
+    protected SegmentSet getActivePathAtEndpoint() {
+        return currentSegmentSet;
     }
     
     /**
      * returns the current active path as list of vertices
      * @return  current path as list of vertices
      */
-    public ArrayList<Vector3f> getCurrentPath() {
-        return currentPath;
+    public SegmentSet getCurrentSegment() {
+        return currentSegmentSet;
     }
     
 }

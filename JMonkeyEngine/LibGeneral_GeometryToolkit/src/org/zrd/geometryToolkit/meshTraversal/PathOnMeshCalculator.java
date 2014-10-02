@@ -13,6 +13,7 @@ import org.zrd.geometryToolkit.geometricCalculations.MathHelper;
 import org.zrd.geometryToolkit.geometricCalculations.RotationTransformHelper;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.geometryToolkit.pathTools.PathTransformHelper;
 
@@ -73,7 +74,7 @@ public class PathOnMeshCalculator {
      *      so that it's start point matches the desired
      *      start point.
      */
-    private ArrayList<Vector3f> initPath;
+    private SegmentSet initSegmentSet;
     
     /*
      * This is the aggregate of all the rotations done. 
@@ -94,10 +95,10 @@ public class PathOnMeshCalculator {
      * @param startingTriangle      initial triangle on mesh
      * @param meshInfo              mesh to track on
      */
-    public PathOnMeshCalculator(ArrayList<Vector3f> initPath, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
+    public PathOnMeshCalculator(SegmentSet initSegmentSet, Vector3f endPoint, MeshTriangle startingTriangle, TriangleSet meshInfo){
         aggregateRotation = new Quaternion();
-        this.initPath = initPath;
-        startingPoint = PathHelper.getFirstPoint(initPath);
+        this.initSegmentSet = initSegmentSet;
+        startingPoint = PathHelper.getFirstPoint(initSegmentSet.getPathVertices());
         initTriangleNormal = startingTriangle.getNormal();
         this.startingTriangle = startingTriangle;
         this.endPoint = endPoint;
@@ -112,7 +113,7 @@ public class PathOnMeshCalculator {
      */
     private void performRotationOntoInitialPlane(){
 
-        Vector3f initEndPoint = PathHelper.getSecondPoint(initPath);
+        Vector3f initEndPoint = PathHelper.getSecondPoint(initSegmentSet.getPathVertices());
         preMultiplyNewRotation(
                 RotationTransformHelper.getRotationOntoPlane(
                 initTriangleNormal, startingPoint, initEndPoint));
@@ -127,7 +128,7 @@ public class PathOnMeshCalculator {
     }
 
     public ArrayList<Vector3f> getInitPath() {
-        return initPath;
+        return initSegmentSet.getPathVertices();
     }
     
     /**
@@ -149,7 +150,7 @@ public class PathOnMeshCalculator {
      */
     public ArrayList<Vector3f> getCurrentRotatedPath(){
         return PathTransformHelper.getTransformedVertices(
-                PathHelper.getCopyOfPath(initPath), 
+                PathHelper.getCopyOfPath(initSegmentSet.getPathVertices()), 
                 RotationTransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation));
     }
     
@@ -161,6 +162,11 @@ public class PathOnMeshCalculator {
     public ArrayList<Vector3f> getCurrentPathOnSurface(){
         return PathProjectionOntoMesh.getPathProjectedOntoMesh(
                 getCurrentRotatedPath(), startingTriangle, meshInfo);
+    }
+    
+    public SegmentSet getCurrentSegmentSetOnSurface(){
+        SegmentSet segSetToProject = new SegmentSet(getCurrentRotatedPath(),initSegmentSet.getDataAtVertices());
+        return PathProjectionOntoMesh.getPathProjectedOntoMesh(segSetToProject, startingTriangle, meshInfo);
     }
     
     /**

@@ -16,6 +16,7 @@ import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
+import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.probeCalibration.ScaleCalibration;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
@@ -121,14 +122,14 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
     protected abstract void handleEndPointResult(Vector3f endPoint,
             ScaleCalibration scaleCalib, 
             PathOnMeshCalculator rotCalib, 
-            ArrayList<Vector3f> scaledAndRotatedPath);
+            SegmentSet scaledAndRotatedPath);
     
     /**
      * This must be called by a subclass and it gets whatever path
      *      is the one we are about when we click the endpoint
      * @return 
      */
-    protected abstract ArrayList<Vector3f> getActivePathAtEndpoint();
+    protected abstract SegmentSet getActivePathAtEndpoint();
     
     /**
      * This gets the MeshTriangle at the end point
@@ -190,18 +191,18 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     endingTriangle = triangleOnMesh.clone();
                     
                     //gets the active pre-transformed path
-                    ArrayList<Vector3f> activePath = getActivePathAtEndpoint();
+                    SegmentSet activeSegmentSet = getActivePathAtEndpoint();
                     
                     //gets the calibrations
-                    ScaleCalibration currentScaleCalib = new ScaleCalibration(activePath,endPoint);
+                    ScaleCalibration currentScaleCalib = new ScaleCalibration(activeSegmentSet.getPathVertices(),endPoint);
                     //activePath = currentScaleCalib.getScaledPath();
-                    activePath = PathCompression.getCompressedPath(activePath,PathHelper.MIN_SEGMENT_LENGTH);
+                    activeSegmentSet = PathCompression.getCompressedPath(activeSegmentSet,PathHelper.MIN_SEGMENT_LENGTH);
                     PathOnMeshCalculator currentRotCalib = 
-                            new PathOnMeshCalculator(activePath,endPoint,startingTriangle,meshInfo);
-                    activePath = currentRotCalib.getCurrentPathOnSurface();
+                            new PathOnMeshCalculator(activeSegmentSet,endPoint,startingTriangle,meshInfo);
+                    activeSegmentSet = currentRotCalib.getCurrentSegmentSetOnSurface();
                     
                     //calls the method that handles the result
-                    handleEndPointResult(endPoint,currentScaleCalib,currentRotCalib,activePath);
+                    handleEndPointResult(endPoint,currentScaleCalib,currentRotCalib,activeSegmentSet);
                     
                     twoPointPickEnabled = false;
                     onStartPoint = true;

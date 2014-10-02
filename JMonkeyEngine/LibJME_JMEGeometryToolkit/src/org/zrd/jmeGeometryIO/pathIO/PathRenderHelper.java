@@ -46,7 +46,8 @@ public class PathRenderHelper {
         ArrayList<Vector3f> currentPath = new ArrayList<Vector3f>(2);
         ArrayList<Vector3f> pathVertices = lineWithData.getPathVertices();
         ArrayList<String[]> dataAtVertices = lineWithData.getDataAtVertices();
-        
+        System.out.println("Path Vertices Size: " + pathVertices.size());
+        System.out.println("Data At Vertices size: " + dataAtVertices.size());
         
         currentPath.add(pathVertices.get(0).clone());
         
