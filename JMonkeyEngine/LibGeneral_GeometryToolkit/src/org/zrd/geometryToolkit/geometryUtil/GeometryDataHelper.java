@@ -27,6 +27,7 @@ public class GeometryDataHelper {
     public static void writeSegmentSetInfoToFile(SegmentSet segments, DataArrayToStringConversion converter, Path filePath){
         ArrayList<String> dataStrings = new ArrayList<String>(segments.getSize());
         String signalInfoPart = "";
+        String timePart;
         String vertexPart;
         String[] signalData;
         Vector3f vertex;
@@ -36,13 +37,13 @@ public class GeometryDataHelper {
             
             if(converter != null){
                 signalData = segments.getDataAtIndex(index).getData();
-                signalInfoPart = "," + converter.getTextFileStringFromData(signalData);
+                signalInfoPart = converter.getTextFileStringFromData(signalData);
             }
             if(index % 20 == 0){
                 System.out.println("Finished converting point " + (index+1) + " of " + segments.getSize());
             }
-            
-            dataStrings.add(vertexPart + signalInfoPart);
+            timePart = String.valueOf(segments.getDataAtIndex(index).getTimestamp());
+            dataStrings.add(vertexPart + "," + signalInfoPart + "," + timePart);
         }
         FileDataHelper.exportLinesToFile(dataStrings, filePath);
     }

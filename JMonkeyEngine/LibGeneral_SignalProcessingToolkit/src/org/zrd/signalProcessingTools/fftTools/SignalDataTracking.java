@@ -32,6 +32,9 @@ public class SignalDataTracking implements DataArrayToStringConversion{
             textFileString.append(peak.getFrequency());
             textFileString.append(",");
         }
+        
+        //removes the last comma
+        textFileString.deleteCharAt(textFileString.length()-1);
         return textFileString.toString();
     }
     

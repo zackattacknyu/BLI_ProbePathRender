@@ -247,7 +247,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             System.out.println("Now Recording new path");
             newPathExists = false;
             currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath,false,
-                    currentSourceTracker.getCurrentDataString(),arrayToStringConverter);
+                    currentSourceTracker.getCurrentDataString(),arrayToStringConverter,currentTimestamp);
             currentQualityStats = new QualityStatistics();
             recordingPath = true;
         }

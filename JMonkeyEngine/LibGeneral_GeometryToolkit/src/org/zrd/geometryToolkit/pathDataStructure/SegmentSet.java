@@ -34,25 +34,36 @@ public class SegmentSet {
     private Vector3f startPoint;
     private ArrayList<Vector3f> segmentVectors;
     
+    private ArrayList<Long> timestamps;
+
+    public ArrayList<Long> getTimestamps() {
+        return timestamps;
+    }
+    
     //arc length of segment
     private float arcLength = 0;
     
     public SegmentSet(int estimatedSize){
         pathVertices = new ArrayList<Vector3f>(estimatedSize);
         dataAtVertices = new ArrayList<String[]>(estimatedSize);
+        timestamps = new ArrayList<Long>(estimatedSize);
     }
     public void addToSet(Vector3f vertex){
         pathVertices.add(vertex);
     }
-    public void addToSet(Vector3f vertex,String[] data){
+    public void addToSet(Vector3f vertex,String[] data,long timestamp){
         pathVertices.add(vertex);
         dataAtVertices.add(data);
+        timestamps.add(timestamp);
+    }
+    public void addToSet(long timestamp){
+        timestamps.add(timestamp);
     }
     public void addToSet(String[] data){
         dataAtVertices.add(data);
     }
     public void addToSet(SegmentData data){
-        addToSet(data.getVertex(),data.getData());
+        addToSet(data.getVertex(),data.getData(),data.getTimestamp());
     }
     public void finalizeSegment(){
         constructSegmentList();
@@ -62,7 +73,12 @@ public class SegmentSet {
     }
     public SegmentData getDataAtIndex(int index){
         if(dataAtVertices != null && dataAtVertices.size() > 0){
-            return new SegmentData(pathVertices.get(index),dataAtVertices.get(index));
+            
+            if(timestamps != null && timestamps.size() > 0){
+                return new SegmentData(pathVertices.get(index),dataAtVertices.get(index),timestamps.get(index));
+            }else{
+                return new SegmentData(pathVertices.get(index),dataAtVertices.get(index));
+            }
         }
         else{
             return new SegmentData(pathVertices.get(index),null);
@@ -71,6 +87,7 @@ public class SegmentSet {
     
     public SegmentSet(ArrayList<Vector3f> pathVertices){
         this.pathVertices = pathVertices;
+        timestamps = new ArrayList<Long>(pathVertices.size());
         constructSegmentList();
     }
     

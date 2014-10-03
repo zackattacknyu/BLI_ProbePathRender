@@ -8,15 +8,12 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
-import org.zrd.geometryToolkit.pathTools.PathCompression;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
 import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataWriting.ProbeDataWriter;
 import org.zrd.util.dataWriting.TimeHelper;
-import org.zrd.util.fileHelper.FileDataHelper;
 import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
@@ -85,11 +82,11 @@ public class PathRecorder {
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
-            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor){
+            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor, long initTimestamp){
         this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
         this.convertor = convertor;
         pathInformation.addToSet(startingData);
-        
+        pathInformation.addToSet(initTimestamp);
     }
     
     private void setFilePrefixes(){
@@ -138,12 +135,14 @@ public class PathRecorder {
                 pathRecordingFilePath,timestampSuffix, compressedPathInfoFilePrefix);
         Path compressedPathAndSignalFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, "compressedVerticesAndSignalInfo");
+        Path allVerticesAndSignalFile = GeneralFileHelper.getNewDataFilePath(
+                pathRecordingFilePath,timestampSuffix, "xyzVerticesTimestampSignalInfo");
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
                 pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
         
         //runs the post-processor
         PathPostProcessing processor = new PathPostProcessing(recordedPathStats,
-                compressedPathAndSignalFile,compressedPathFile,pathInformation,
+                compressedPathAndSignalFile,compressedPathFile,allVerticesAndSignalFile,pathInformation,
                 PathHelper.MIN_SEGMENT_LENGTH,convertor);
         Thread postProcess = new Thread(processor);
         postProcess.start();
@@ -176,6 +175,7 @@ public class PathRecorder {
         lastPosition = currentPosition.clone();
         
         pathInformation.addToSet(currentPosition.clone());
+        pathInformation.addToSet(timestamp);
         verticesSinceLastRead.add(currentPosition.clone());
     }
     

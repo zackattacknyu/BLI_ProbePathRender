@@ -23,15 +23,16 @@ public class PathPostProcessing implements Runnable{
     private Path recordedPathStats;
     private Path compressedPathAndSignalFile;
     private Path compressedPathFile;
+    private Path allPathSignalInfoFile;
     
     private SegmentSet originalPathInformation;
     private float minSegmentLength;
     private DataArrayToStringConversion convertor;
 
     public PathPostProcessing(Path recordedPathStats, Path compressedPathAndSignalFile, 
-            Path compressedPathFile, SegmentSet originalPathInformation, 
+            Path compressedPathFile, Path allPathSignalInfoFile, SegmentSet originalPathInformation, 
             float minSegmentLength, DataArrayToStringConversion convertor) {
-        
+        this.allPathSignalInfoFile = allPathSignalInfoFile;
         this.recordedPathStats = recordedPathStats;
         this.compressedPathAndSignalFile = compressedPathAndSignalFile;
         this.compressedPathFile = compressedPathFile;
@@ -42,7 +43,9 @@ public class PathPostProcessing implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Now beginning path post-processing. Please wait until it's over to end program.");
+        System.out.println("Now beginning path post-processing. WAIT UNTIL THIS FINISHES TO STOP THE PROGRAM");
+        
+        GeometryDataHelper.writeSegmentSetInfoToFile(originalPathInformation, convertor, allPathSignalInfoFile);
         
         //write the compressed path and signal info
         SegmentSet compressedFileAndSignalInfo = PathCompression.getCompressedPath(
