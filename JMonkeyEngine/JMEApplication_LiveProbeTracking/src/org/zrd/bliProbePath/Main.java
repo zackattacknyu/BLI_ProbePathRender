@@ -1,5 +1,6 @@
 package org.zrd.bliProbePath;
 
+import org.zrd.signalProcessingTools.fftTools.SignalProcessingOutput_Threaded;
 import org.zrd.meshSessionTools.MeshSession;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordMeshSessionInfo;
 import org.zrd.jmeGeometryInteractions.meshInteraction.RecordFixedPoints;
@@ -46,7 +47,7 @@ public class Main extends SimpleApplication {
     private ProbeTrackerOnSurface probeTrackerOnSurface;
     
     private LiveTrackingText outputText;
-    private SignalTracking_BLIProbePath_Threaded signalTracker;
+    private SignalProcessingOutput_Threaded signalTracker;
     
     private boolean renderPathsDuringRecording = false;
     
@@ -121,10 +122,9 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         //makes the signal tracker
-        signalTracker = new SignalTracking_BLIProbePath_Threaded(100,14);
+        signalTracker = new SignalProcessingOutput_Threaded(100,14);
         activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
-        Thread t = new Thread(signalTracker);
-        t.start();
+        activeTracker.setOutputStreaming(signalTracker);
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
@@ -177,7 +177,7 @@ public class Main extends SimpleApplication {
         outputText.setYawPitchRollText(activeTracker.getYawPitchRollText());
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
         
-        signalTracker.setData(activeTracker.getCurrentDataStrings());
-        outputText.setDataText(signalTracker.getCurrentOutput());
+        //signalTracker.setData(activeTracker.getCurrentDataStrings());
+        outputText.setDataText(activeTracker.getStreamingOutput());
     }
 }

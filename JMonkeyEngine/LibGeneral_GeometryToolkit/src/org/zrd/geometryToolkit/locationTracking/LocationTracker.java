@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.util.dataHelp.DataArrayToStringConversion;
+import org.zrd.util.dataStreaming.ThreadedOutput;
 
 /**
  *
@@ -21,6 +22,8 @@ public interface LocationTracker {
     void setDataArrayToStringConvertor(DataArrayToStringConversion converter);
     
     float getTrackingQuality();
+    String getStreamingOutput();
+    void setOutputStreaming(ThreadedOutput outputStreaming);
     
     Vector3f getCurrentPosition();
     Vector3f getCurrentDisplacement();

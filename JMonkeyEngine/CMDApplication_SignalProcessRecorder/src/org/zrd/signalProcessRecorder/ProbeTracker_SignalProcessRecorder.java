@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import java.util.Properties;
 import org.zrd.probeTracking.ProbeTracker;
 import org.zrd.serialDataInterpreter.dataInterpretation.SerialDataInterpreter;
+import org.zrd.signalProcessingTools.fftTools.SignalProcessingOutput_Threaded;
 import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.properties.PropertiesHelper;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
@@ -37,11 +38,12 @@ public class ProbeTracker_SignalProcessRecorder {
                 INIT_SCALE_X, INIT_SCALE_Y, STARTING_POSITION);
 
         //makes the signal tracker
-        SignalTracking_SignalProcessRecorder signalTracker = 
-                new SignalTracking_SignalProcessRecorder(100,14);
+        SignalProcessingOutput_Threaded signalTracker = 
+                new SignalProcessingOutput_Threaded(100,14);
         activeTracker.setDataArrayToStringConvertor(
                 signalTracker.getDataTracker());
-        activeTracker.setShowDataArrayInfo(true);
+        activeTracker.setOutputStreaming(signalTracker);
+        signalTracker.setDisplayOutput(true);
         
         return activeTracker;
     }

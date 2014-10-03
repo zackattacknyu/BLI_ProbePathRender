@@ -20,6 +20,7 @@ import org.zrd.probeTracking.deviceToWorldConversion.SerialInputToRotated2DConve
 import org.zrd.util.dataHelp.BasicAngleHelper;
 import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataStreaming.ProbeDataStream;
+import org.zrd.util.dataStreaming.ThreadedOutput;
 import org.zrd.util.stats.QualityStatistics;
 import org.zrd.util.trackingInterface.AbstractInputSourceTracker;
 
@@ -61,13 +62,14 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private Path pathRecordingFilePath = null;
     
     private boolean newPathExists = false;
-    private boolean showDataArrayInfo = false;
     
     private float currentDeltaX=0,currentDeltaY=0;
     private AbstractInputSourceTracker currentSourceTracker;
     private AbstractSerialInputToWorldConverter coordConverter;
     private QualityStatistics currentQualityStats;
     private ArrayList<String> currentQualityResults;
+    
+    public ThreadedOutput outputStreaming;
     
     public static ProbeTracker initializeProbeTracker(
             AbstractInputSourceTracker currentSourceTracker, 
@@ -126,10 +128,6 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         pathRecordingFilePath = filePath;
         
     }
-
-    public void setShowDataArrayInfo(boolean showDataArrayInfo) {
-        this.showDataArrayInfo = showDataArrayInfo;
-    }
     
     public void resetProbeReader(){
         currentSourceTracker.resetProbeReader();
@@ -176,17 +174,30 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
                         currentYaw, currentPitch, currentRoll,currentTimestamp);
                 currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
             }
-
-            //show the data string info if desired
-            if(showDataArrayInfo && arrayToStringConverter != null){
-                System.out.println("Data Array Info: " + 
-                        arrayToStringConverter.getTextFileStringFromData(
-                        currentSourceTracker.getCurrentDataString()));
+            
+            if(outputStreaming != null){
+                outputStreaming.setData(currentSourceTracker.getCurrentDataString());
             }
             
             previousTimestamp = currentTimestamp;
         }
         
+    }
+    
+    @Override
+    public String getStreamingOutput(){
+        if(outputStreaming == null){
+            return "";
+        }else{
+            return outputStreaming.getCurrentOutput();
+        }
+    }
+
+    @Override
+    public void setOutputStreaming(ThreadedOutput outputStreaming) {
+        this.outputStreaming = outputStreaming;
+        Thread t = new Thread(this.outputStreaming);
+        t.start();
     }
     
     @Override
