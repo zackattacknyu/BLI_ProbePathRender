@@ -40,6 +40,9 @@ public class ModelFlattening {
     private TriangleSet activeTriSet;
     private TriangleSet outputSet;
     
+    private Integer[] vertexIndicesToUse = {4084,1662,2192};
+    //private Integer[] vertexIndicesToUse;
+    
     public ModelFlattening(TriangleSet triangles){
         activeTriSet = triangles;
         obtainTransform();
@@ -71,6 +74,27 @@ public class ModelFlattening {
         return (int) ((Math.random())*numVertices);
     }
     
+    private Integer[] getIndices(){
+        if(vertexIndicesToUse == null){
+            
+            //gets 3 random, distinct vertex indices
+            Set<Integer> indices = new HashSet<Integer>();
+            while(indices.size() < 3){
+                indices.add(getRandomIndex());
+            }
+            Integer[] vertexIndices = new Integer[3];
+            vertexIndices = indices.toArray(vertexIndices);
+            /*for(Integer index: vertexIndices){
+                System.out.println("VERTEX INDEX: " + index);
+            }*/
+            return vertexIndices;
+            
+        }else{
+            return vertexIndicesToUse;
+        }
+        
+    }
+    
     private void obtainTransform(){
         //makes the vertex array
         Set<MeshVertex> vertexSet = activeTriSet.getTrianglesByVert().keySet();
@@ -79,13 +103,7 @@ public class ModelFlattening {
         
         numVertices = vertices.length;
         
-        //gets 3 random, distinct vertex indices
-        Set<Integer> indices = new HashSet<Integer>();
-        while(indices.size() < 3){
-            indices.add(getRandomIndex());
-        }
-        Integer[] vertexIndices = new Integer[3];
-        vertexIndices = indices.toArray(vertexIndices);
+        Integer[] vertexIndices = getIndices();
         
         //makes the mesh vertices
         vertex1 = vertices[vertexIndices[0]];
