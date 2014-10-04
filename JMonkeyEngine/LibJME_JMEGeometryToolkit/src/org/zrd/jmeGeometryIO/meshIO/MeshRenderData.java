@@ -26,7 +26,7 @@ import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
  */
 public class MeshRenderData{
     
-    private boolean flattenMesh = false;
+    private boolean flattenMesh = true;
     
     protected Spatial renderedMesh;
     protected TriangleSet finalMeshInfo;
