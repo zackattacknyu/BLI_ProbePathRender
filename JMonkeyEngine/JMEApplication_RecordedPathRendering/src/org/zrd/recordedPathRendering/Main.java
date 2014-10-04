@@ -34,7 +34,7 @@ public class Main extends SimpleApplication {
 
     private boolean meshIsFlat = true;
     
-    private boolean hideInitialPaths = true;
+    private boolean hideInitialPaths = false;
     
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
