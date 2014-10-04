@@ -28,6 +28,9 @@ public class Main extends SimpleApplication {
     private LineMoveAction lineMoveActionToFixedPt;
     private PathImport pathImport;
     private SignalProcess signalProcessor;
+    
+    private Node shootables;
+    private Node paths;
 
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
@@ -41,7 +44,7 @@ public class Main extends SimpleApplication {
         ApplicationHelper.setBackgroundColor(viewPort);
         
         MeshSession currentSession = new MeshSession(assetManager,cam);
-        Node shootables = currentSession.getShootableMesh();
+        shootables = currentSession.getShootableMesh();
         //shootables.setQueueBucket(RenderQueue.Bucket.Transparent);
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         TriangleSet meshInfo = currentSession.getMeshInfo();
@@ -56,6 +59,9 @@ public class Main extends SimpleApplication {
         pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         
         //rootNode.attachChild(currentSession.getFixedPointNode());
+        
+        paths = new Node();
+        rootNode.attachChild(paths);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class Main extends SimpleApplication {
     }
     
     private void displaySegment(SegmentSet segment){
-        rootNode.attachChild(PathRenderHelper.createLineFromVerticesWithData(segment, assetManager, signalProcessor));
+        paths.attachChild(PathRenderHelper.createLineFromVerticesWithData(segment, assetManager, signalProcessor));
     }
 
     @Override
