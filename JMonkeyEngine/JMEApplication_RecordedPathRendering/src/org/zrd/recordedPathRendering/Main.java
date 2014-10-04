@@ -2,6 +2,7 @@ package org.zrd.recordedPathRendering;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import org.zrd.meshSessionTools.MeshSession;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
@@ -41,6 +42,7 @@ public class Main extends SimpleApplication {
         
         MeshSession currentSession = new MeshSession(assetManager,cam);
         Node shootables = currentSession.getShootableMesh();
+        //shootables.setQueueBucket(RenderQueue.Bucket.Transparent);
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         TriangleSet meshInfo = currentSession.getMeshInfo();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
