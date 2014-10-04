@@ -34,6 +34,8 @@ public class Main extends SimpleApplication {
 
     private boolean meshIsFlat = true;
     
+    private boolean hideInitialPaths = true;
+    
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
     }
@@ -81,7 +83,7 @@ public class Main extends SimpleApplication {
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
-        if(pathImport.isNewPathExists()){
+        if(!hideInitialPaths && pathImport.isNewPathExists()){
             displaySegment(recordedPathSet.getCurrentSegment());
         }
         
