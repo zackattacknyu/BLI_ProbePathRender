@@ -32,6 +32,8 @@ public class Main extends SimpleApplication {
     private Node shootables;
     private Node paths;
 
+    private boolean meshIsFlat = true;
+    
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
     }
@@ -45,7 +47,11 @@ public class Main extends SimpleApplication {
         
         MeshSession currentSession = new MeshSession(assetManager,cam);
         shootables = currentSession.getShootableMesh();
-        shootables.setQueueBucket(RenderQueue.Bucket.Sky);
+        
+        if(meshIsFlat){
+            shootables.setQueueBucket(RenderQueue.Bucket.Sky);
+        }
+        
         FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
         TriangleSet meshInfo = currentSession.getMeshInfo();
         MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
@@ -62,7 +68,6 @@ public class Main extends SimpleApplication {
         
         paths = new Node();
         rootNode.attachChild(paths);
-        //paths.setQueueBucket(RenderQueue.Bucket.Transparent);
     }
 
     @Override
