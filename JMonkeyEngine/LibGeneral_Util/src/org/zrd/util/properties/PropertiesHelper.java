@@ -22,6 +22,19 @@ public class PropertiesHelper {
     
     public static final String DEFAULT_PROPERTIES_FILE_NAME = "tracker.properties";
     
+    public static Integer[] getIntegerArrayValueProperty(Properties props,String propertyName){
+        String propValue = props.getProperty(propertyName);
+        
+        if(propValue == null) return null;
+        
+        String[] integerParts = propValue.split(",");
+        Integer[] theIntegers = new Integer[integerParts.length];
+        for(int index = 0; index < integerParts.length; index++){
+            theIntegers[index] = Integer.valueOf(integerParts[index]);
+        }
+        return theIntegers;
+    }
+    
     public static float getFloatValueProperty(Properties props,String propertyName){
         return Float.valueOf(props.getProperty(propertyName));
     }

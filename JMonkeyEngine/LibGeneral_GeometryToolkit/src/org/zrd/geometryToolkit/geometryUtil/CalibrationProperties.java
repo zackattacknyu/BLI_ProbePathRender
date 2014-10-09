@@ -25,6 +25,12 @@ public class CalibrationProperties {
     private boolean reflectX;
     private boolean reflectY;
     
+    private Boolean flattenMesh;
+    private Integer[] flattenVertexIndices;
+    
+    public static final String FLATTEN_MESH_NAME = "meshFlattening.flattenMesh";
+    public static final String FLATTEN_MESH_VERTEX_INDICES_NAME = "meshFlattening.vertexIndicesToUse";
+    
     public static final String PROBE_TO_REAL_FACTOR_NAME = "scaleFactor.probeToReal";
     public static final String REAL_TO_VIRTUAL_FACTOR_NAME = "scaleFactor.realToVirtual";
     
@@ -51,7 +57,14 @@ public class CalibrationProperties {
         Boolean reflectX = (Boolean)chooseSpecificOrDefault(specificP.reflectX,defaultP.reflectX);
         Boolean reflectY = (Boolean)chooseSpecificOrDefault(specificP.reflectY,defaultP.reflectY);
         
-        return new CalibrationProperties(outputRotCalib,outputRealToProbe,outputVirtualToProbe,reflectX,reflectY);
+        CalibrationProperties returnProps = 
+                new CalibrationProperties(outputRotCalib,outputRealToProbe,outputVirtualToProbe,reflectX,reflectY);
+        
+        //properties that only a mesh should contain
+        returnProps.flattenMesh = specificP.flattenMesh;
+        returnProps.flattenVertexIndices = specificP.flattenVertexIndices;
+                
+        return returnProps;
     }
     
     private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, Float virtualToRealFactor, Boolean reflectX, Boolean reflectY){
@@ -69,6 +82,14 @@ public class CalibrationProperties {
     private CalibrationProperties(Properties props){
         
         if(props == null) return;
+        
+        if(props.containsKey(FLATTEN_MESH_NAME)){
+            flattenMesh = PropertiesHelper.getBooleanValueProperty(props, FLATTEN_MESH_NAME);
+        }
+        
+        if(props.containsKey(FLATTEN_MESH_VERTEX_INDICES_NAME)){
+            flattenVertexIndices = PropertiesHelper.getIntegerArrayValueProperty(props, FLATTEN_MESH_VERTEX_INDICES_NAME);
+        }
         
         if(props.containsKey(PROBE_TO_REAL_FACTOR_NAME)){
             probeToRealFactor = PropertiesHelper.getFloatValueProperty(props, PROBE_TO_REAL_FACTOR_NAME);
@@ -126,6 +147,16 @@ public class CalibrationProperties {
     
     public Float getScaleFactor(){
         return scaleFactor;
+    }
+
+    public boolean isFlattenMesh() {
+        if(flattenMesh == null) return false;
+        
+        return flattenMesh;
+    }
+
+    public Integer[] getFlattenVertexIndices() {
+        return flattenVertexIndices;
     }
     
     public Float getScaleFactorX(){

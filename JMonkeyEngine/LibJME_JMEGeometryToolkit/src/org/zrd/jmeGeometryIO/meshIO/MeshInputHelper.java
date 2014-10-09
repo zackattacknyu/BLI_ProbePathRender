@@ -182,6 +182,22 @@ public class MeshInputHelper {
                 meshFiles.getTextureFile(),assetManager);
     }
     
+    public static MeshRenderData generateRenderData(MeshDataFiles meshFiles, AssetManager assetManager,
+            boolean flattenMesh, Integer[] flattenMeshVertexIndices){
+        
+        File objFile = meshFiles.getObjFile();
+        Material objectMaterial = MaterialHelper.getTextureMaterial(assetManager, meshFiles.getTextureFile());
+        //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
+        
+        String objFileLocation = objFile.getName();
+        assetManager.registerLocator(objFile.getParentFile().getAbsolutePath(), FileLocator.class);
+        
+        Spatial sampleMesh = assetManager.loadModel(objFileLocation);
+        sampleMesh.setMaterial(objectMaterial);
+
+        return new MeshRenderData(sampleMesh,objectMaterial,flattenMesh,flattenMeshVertexIndices);
+    }
+    
     public static MeshRenderData selectFilesAndGenerateRenderData(File initImport, AssetManager assetManager){
         MeshInteractionFiles meshFiles = MeshInputHelper.obtainAllFiles(initImport);
         if(meshFiles == null){

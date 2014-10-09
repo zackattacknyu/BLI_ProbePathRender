@@ -63,10 +63,11 @@ public class MeshSession {
         }
         
         allCalibrationProperties = CalibrationProperties.obtainCalibrationProperties(calibPropsFromFile,props);
-
         
         importedMesh = MeshInputHelper.generateRenderData(
-                meshInterFiles.getDataFiles(),assetManager);
+                meshInterFiles.getDataFiles(),assetManager,
+                allCalibrationProperties.isFlattenMesh(),
+                allCalibrationProperties.getFlattenVertexIndices());
         
         if(meshInterFiles.getCameraCoordFile().exists()){
             CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
