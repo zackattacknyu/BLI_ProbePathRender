@@ -57,8 +57,17 @@ public class MeshSession {
         normalLineMaterial = MaterialHelper.getColorMaterial(assetManager, ColorRGBA.Black);
         
         meshInterFiles = MeshInputHelper.obtainAllFiles(meshDataPath.toFile(),defaultSuffix);
+        
+        if(meshInterFiles.getCalibrationProperties().exists()){
+            calibPropsFromFile = PropertiesHelper.getProperties(meshInterFiles.getCalibrationProperties());
+        }
+        
+        allCalibrationProperties = CalibrationProperties.obtainCalibrationProperties(calibPropsFromFile,props);
+
+        
         importedMesh = MeshInputHelper.generateRenderData(
                 meshInterFiles.getDataFiles(),assetManager);
+        
         if(meshInterFiles.getCameraCoordFile().exists()){
             CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
         }
@@ -67,12 +76,7 @@ public class MeshSession {
             fixedPtsToPick = fixedPtsImported.getFixedPtPicker();
             fixedPointNode = FixedPointRender.displayFixedPoints(fixedPtsImported,fixedPtMaterial);
         }
-        if(meshInterFiles.getCalibrationProperties().exists()){
-            calibPropsFromFile = PropertiesHelper.getProperties(meshInterFiles.getCalibrationProperties());
-        }
         
-        allCalibrationProperties = CalibrationProperties.obtainCalibrationProperties(calibPropsFromFile,props);
-
         meshInfo = importedMesh.getActiveMeshInfo();
         
         Spatial surface = importedMesh.getSurfaceMesh();
