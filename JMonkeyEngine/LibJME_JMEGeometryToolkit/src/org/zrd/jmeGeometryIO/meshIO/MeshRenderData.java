@@ -34,6 +34,8 @@ public class MeshRenderData{
     protected Vector3f cameraPosition;
     
     private static final float NORMAL_LINE_MAGNITUDE = 0.2f;
+    
+    private Integer[] flattenVertexIndices;
 
     public static Vector3f getCenterPoint(TriangleSet triSet){
         
@@ -67,19 +69,11 @@ public class MeshRenderData{
         return cameraPosition;
     }
     
-    public MeshRenderData(){
-        
-    }
-    
-    public MeshRenderData(Spatial mesh, Material meshMat, TriangleSet meshInfo){
-        renderedMesh = mesh;
-        finalMeshInfo = meshInfo;
-        meshMaterial = meshMat;
-    }
-    
-    public MeshRenderData(Spatial renderedMesh, Material meshMat){
+    public MeshRenderData(Spatial renderedMesh, Material meshMat, boolean flattenMesh, Integer[] flattenVertexIndices){
         this.renderedMesh = renderedMesh;
         this.meshMaterial = meshMat;
+        this.flattenMesh = flattenMesh;
+        this.flattenVertexIndices = flattenVertexIndices;
         modifyMesh();
     }
     
@@ -117,7 +111,7 @@ public class MeshRenderData{
         correctedMesh = ModelCorrection.getSmoothedTriangleSet(correctedMesh);
         
         if(flattenMesh){
-            correctedMesh = ModelCorrection.flattenTrianglesUsingRandomVertices(correctedMesh);
+            correctedMesh = ModelCorrection.flattenTrianglesUsingVertices(correctedMesh,flattenVertexIndices);
         }
         
         System.out.println("Corrected Mesh has " + correctedMesh.getTriangleList().size() + " triangles ");

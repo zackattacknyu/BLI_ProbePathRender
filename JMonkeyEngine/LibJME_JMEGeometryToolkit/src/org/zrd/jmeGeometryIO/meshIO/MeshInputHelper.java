@@ -146,7 +146,7 @@ public class MeshInputHelper {
             Material ballMat, AssetManager assetManager) {
         Spatial sampleMesh = assetManager.loadModel(objFileLocation);
         sampleMesh.setMaterial(ballMat);
-        return new MeshRenderData(sampleMesh,ballMat);
+        return new MeshRenderData(sampleMesh,ballMat,false,null);
     }
 
     /**

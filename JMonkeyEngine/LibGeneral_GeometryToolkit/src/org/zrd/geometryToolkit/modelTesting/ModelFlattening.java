@@ -40,11 +40,12 @@ public class ModelFlattening {
     private TriangleSet activeTriSet;
     private TriangleSet outputSet;
     
-    private Integer[] vertexIndicesToUse = {4084,1662,2192};
-    //private Integer[] vertexIndicesToUse;
+    //private Integer[] vertexIndicesToUse = {4084,1662,2192};
+    private Integer[] vertexIndicesToUse;
     
-    public ModelFlattening(TriangleSet triangles){
+    public ModelFlattening(TriangleSet triangles, Integer[] indices){
         activeTriSet = triangles;
+        this.vertexIndicesToUse = indices;
         obtainTransform();
         modifyOutputSet();
     }

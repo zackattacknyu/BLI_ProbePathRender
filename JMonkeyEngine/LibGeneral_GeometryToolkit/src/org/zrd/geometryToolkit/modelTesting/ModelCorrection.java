@@ -26,8 +26,8 @@ public class ModelCorrection {
      * @param triangles
      * @return 
      */
-    public static TriangleSet flattenTrianglesUsingRandomVertices(TriangleSet triangles){
-        ModelFlattening flattened = new ModelFlattening(triangles);
+    public static TriangleSet flattenTrianglesUsingVertices(TriangleSet triangles, Integer[] flattenIndices){
+        ModelFlattening flattened = new ModelFlattening(triangles,flattenIndices);
         return flattened.getOutputSet();
     }
     
