@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
+import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
 import org.zrd.geometryToolkit.pointTools.FixedPointIO;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
@@ -37,10 +38,15 @@ public class MeshSession {
     private FixedPointPicker fixedPtsToPick;
     private MeshRenderData importedMesh;
     private Material normalLineMaterial;
-    private Properties calibrationProperties;
+    private Properties calibPropsFromFile;
+    private CalibrationProperties allCalibrationProperties;
     
     public MeshSession(AssetManager assetManager,Camera cam){
         this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
+    }
+
+    public CalibrationProperties getAllCalibrationProperties() {
+        return allCalibrationProperties;
     }
     
     public MeshSession(Path meshDataPath,Properties props,AssetManager assetManager, Camera cam){
@@ -62,8 +68,10 @@ public class MeshSession {
             fixedPointNode = FixedPointRender.displayFixedPoints(fixedPtsImported,fixedPtMaterial);
         }
         if(meshInterFiles.getCalibrationProperties().exists()){
-            calibrationProperties = PropertiesHelper.getProperties(meshInterFiles.getCalibrationProperties());
+            calibPropsFromFile = PropertiesHelper.getProperties(meshInterFiles.getCalibrationProperties());
         }
+        
+        allCalibrationProperties = CalibrationProperties.obtainCalibrationProperties(calibPropsFromFile,props);
 
         meshInfo = importedMesh.getActiveMeshInfo();
         
@@ -104,7 +112,7 @@ public class MeshSession {
     }
 
     public Properties getCalibrationProperties() {
-        return calibrationProperties;
+        return calibPropsFromFile;
     }
     
     

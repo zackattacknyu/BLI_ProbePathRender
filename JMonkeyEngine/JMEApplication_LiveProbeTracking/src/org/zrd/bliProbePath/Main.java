@@ -96,8 +96,7 @@ public class Main extends SimpleApplication {
         TriangleSet meshInfo = currentSession.getMeshInfo();
         
         //initialize tracker
-        CalibrationProperties results = CalibrationProperties.
-                obtainCalibrationProperties(currentSession.getCalibrationProperties(),props);
+        CalibrationProperties results = currentSession.getAllCalibrationProperties();
         probeTracker = ProbeTracker_BLIProbePath.createNewProbeTracker(inputManager,props,results);
         Node moveableObject = ProbeRepresentation.getProbeRepresentation(
                 assetManager,results.getScaleFactorX(),
