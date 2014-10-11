@@ -41,12 +41,23 @@ public class SignalProcess implements StringToColorConversion{
         double dataPeak = getWavePeak(data);
         //System.out.println("Peak=" + dataPeak);
         float brightness = (float)(dataPeak*-1);
+
+        /*
         if(brightness < 45){
             brightness = 1;
         }else if(brightness > 55){
             brightness = 0;
         }else{
             brightness = 1 - (brightness-45)/10;
+        }
+        */
+        
+        if(brightness < 52){
+            brightness = 1;
+        }else if(brightness > 57){
+            brightness = 0;
+        }else{
+            brightness = 1 - (brightness-52)/5;
         }
         
         System.out.println("Brightness: " + brightness);
