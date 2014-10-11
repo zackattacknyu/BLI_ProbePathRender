@@ -218,6 +218,7 @@ public class TriangleSet {
    
    public MeshTriangle getEdgeNeighbor(MeshEdge edge,MeshTriangle triangle){
        MeshEdgeTriangles tris = trianglesByEdge.get(edge);
+       if(tris == null) return null;
        return tris.getOtherTriangle(triangle);
    }
    
