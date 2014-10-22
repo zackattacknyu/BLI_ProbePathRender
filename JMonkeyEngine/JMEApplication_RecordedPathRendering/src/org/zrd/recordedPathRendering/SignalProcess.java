@@ -60,7 +60,7 @@ public class SignalProcess implements StringToColorConversion{
             brightness = 1 - (brightness-52)/5;
         }
         
-        System.out.println("Brightness: " + brightness);
+        //System.out.println("Brightness: " + brightness);
         return new ColorRGBA(1-brightness,0f,brightness,1.0f);
     }
     
