@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.pathDataStructure;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.pathTools.PathHelper;
@@ -19,6 +20,9 @@ public class SegmentSet {
      * This is the x,y,z vertices of the path
      */
     private ArrayList<Vector3f> pathVertices;
+    
+    //the texture coordinates of the path
+    private ArrayList<Vector2f> vertexTextureCoords;
     
     /**
      * This says the data at each point
@@ -47,6 +51,7 @@ public class SegmentSet {
         pathVertices = new ArrayList<Vector3f>(estimatedSize);
         dataAtVertices = new ArrayList<String[]>(estimatedSize);
         timestamps = new ArrayList<Long>(estimatedSize);
+        vertexTextureCoords = new ArrayList<Vector2f>(estimatedSize);
     }
     public void addToSet(Vector3f vertex){
         pathVertices.add(vertex);
