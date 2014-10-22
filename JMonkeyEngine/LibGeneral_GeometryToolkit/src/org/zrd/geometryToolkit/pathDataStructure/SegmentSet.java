@@ -81,7 +81,7 @@ public class SegmentSet {
             }
         }
         else{
-            return new SegmentData(pathVertices.get(index),null);
+            return new SegmentData(pathVertices.get(index));
         }
     }
     
