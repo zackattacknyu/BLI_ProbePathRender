@@ -232,6 +232,10 @@ public class PathProjectionOntoMesh {
             currentEndPoint = currentStartPoint.add(currentVectorOnPlane);
             intersection = new TriangleLineSegmentIntersection(currentTriangle, currentStartPoint, currentEndPoint);
             
+            //gets the texture coord of the start point
+            TriangleTextureCoord tex = new TriangleTextureCoord(currentTriangle,currentStartPoint);
+            System.out.println("Texture Coord: " + tex.getTextureCoordinate());
+            
             //now that the intersection was found, remove the top segment
             remainingSegments.pop();
             

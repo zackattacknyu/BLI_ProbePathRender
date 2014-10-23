@@ -70,6 +70,12 @@ public class TriangleTextureCoord {
        
        //get the current texture coordinates
        TriangleTexture texCoords = currentTri.getTextureCoords();
+       
+       if(texCoords == null){
+           textureCoordinate = new Vector2f();
+           return;
+       }
+       
        Vector2f vertex1tex = texCoords.getVertex1texCoord();
        Vector2f vertex2tex = texCoords.getVertex2texCoord();
        Vector2f vertex3tex = texCoords.getVertex3texCoord();
