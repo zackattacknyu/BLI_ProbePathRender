@@ -4,52 +4,25 @@
  */
 package org.zrd.geometryToolkit.meshTraversal;
 
-import org.zrd.geometryToolkit.meshDataStructure.MeshEdge;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import org.zrd.geometryToolkit.geometricCalculations.MathConstants;
-import org.zrd.geometryToolkit.geometricCalculations.MatrixHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TranslationHelper;
+import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 
 /**
  *
  * @author BLI
  */
-public class TriangleLineSegmentIntersection {
+public class TriangleTextureCoord {
 
-    /*
-     * Let the line segment be described by
-     *      t*p + (1-t)q for two points p,q
-     * The following floats are the values for t
-     *      for each of the edges
-     * If t is less than 0 or greater than 1, then
-     *      we know there is no intersection
-     */
-    private float intersectEdge12,intersectEdge23,intersectEdge13;
+    private Vector2f textureCoordinate;
     
-    private MeshEdge ignoreEdge;
-    
-    private Vector3f lineStart,lineEnd;
-    
-    private float breakpointMag;
-    
-    private MeshTriangle currentTriangle;
-    
-    private int numBadEdges = 0;
-    
-    private boolean segDegenerate = false;
-    
-    public TriangleLineSegmentIntersection(MeshTriangle currentTri, 
-            Vector3f lineSegmentStart, Vector3f lineSegmentEnd){
-        
-        lineStart = lineSegmentStart;
-        lineEnd = lineSegmentEnd;
-        
-        this.currentTriangle = currentTri;
+    public TriangleTextureCoord(MeshTriangle currentTri, 
+            Vector3f originalPointCoord){
 
         //retrieves the vertices to use
        Vector3f vertex1 = currentTri.getVertex1().getVertex();
@@ -63,8 +36,7 @@ public class TriangleLineSegmentIntersection {
        Matrix4f originVertex1 = TranslationHelper.getNewOriginTransform(vertex1);
        Vector3f seg12Vector = originVertex1.mult(vertex2);
        Vector3f seg13Vector = originVertex1.mult(vertex3);
-       Vector3f lineSegStartUse = originVertex1.mult(lineSegmentStart);
-       Vector3f lineSegEndUse = originVertex1.mult(lineSegmentEnd);
+       Vector3f pointCoordToUse = originVertex1.mult(originalPointCoord);
        
        /*
         * This part is necessary due to rounding errors skewing
@@ -76,8 +48,7 @@ public class TriangleLineSegmentIntersection {
        float localMultiplier = (float)Math.pow(10, 5);
        seg12Vector.multLocal(localMultiplier);
        seg13Vector.multLocal(localMultiplier);
-       lineSegStartUse.multLocal(localMultiplier);
-       lineSegEndUse.multLocal(localMultiplier);
+       pointCoordToUse.multLocal(localMultiplier);
        
        /*
         * This finds the vector perpendicular to 12 and 13. 
@@ -93,113 +64,31 @@ public class TriangleLineSegmentIntersection {
         *       t values that we need. 
         */
        Matrix3f coordMatrix = TransformHelper.getCoordinateTransformation(seg12Vector, seg13Vector, newZVector);
-       Vector3f newStart = coordMatrix.mult(lineSegStartUse);
-       Vector3f newEnd = coordMatrix.mult(lineSegEndUse);
-       Vector3f newDir = newEnd.clone().subtract(newStart);
+       Vector3f pointCoordInNewSystem = coordMatrix.mult(pointCoordToUse);
        
-       /*
-        * Finally, we use what we calculated above to easily get the t value
-        *       for each of the intersection points. If the segment happens
-        *       to be parallel to an edge, then we set the float value
-        *       to infinity. 
-        */
-       intersectEdge12 = getIntersection(newStart.getY(),newDir.getY());
-       if(Float.isInfinite(intersectEdge12)) numBadEdges++;
-       intersectEdge13 = getIntersection(newStart.getX(),newDir.getX());
-       if(Float.isInfinite(intersectEdge13)) numBadEdges++;
-       Vector2f intersect23Points = MatrixHelper.solveMatrixEqu(
-               newDir.getX(), -1, 
-               newDir.getY(), 1, 
-               -1*newStart.getX(), 1-newStart.getY());
-       intersectEdge23 = Float.POSITIVE_INFINITY;
-       if(intersect23Points != null) intersectEdge23 = intersect23Points.getX();
-       if(Float.isInfinite(intersectEdge23)) numBadEdges++;
-       //else System.out.println("EDGE 23 WAS NULL!!!");
-       if(numBadEdges>2){
-           System.out.println("THREE BAD EDGES. DEGENERATE SEGMENT!");
-           segDegenerate = true;
-       }
-        
+       Vector2f pointCoordFlat = new Vector2f(pointCoordInNewSystem.getX(),pointCoordInNewSystem.getY());
+       
+       //get the current texture coordinates
+       TriangleTexture texCoords = currentTri.getTextureCoords();
+       Vector2f vertex1tex = texCoords.getVertex1texCoord();
+       Vector2f vertex2tex = texCoords.getVertex2texCoord();
+       Vector2f vertex3tex = texCoords.getVertex3texCoord();
+       
+       //gets the 12 and 13 vectors
+       Vector2f seg12texVector = vertex2tex.subtract(vertex1tex);
+       Vector2f seg13texVector = vertex3tex.subtract(vertex1tex);
+       
+       //gets the point coord as vector from vertex 1 as origin
+       Vector2f pointCoordFlatVector = seg12texVector.mult(pointCoordFlat.getX()).add(
+               seg13texVector.mult(pointCoordFlat.getY()));
+       textureCoordinate = pointCoordFlatVector.add(vertex1tex);
     }
 
-    public boolean isSegDegenerate() {
-        return segDegenerate;
+    public Vector2f getTextureCoordinate() {
+        return textureCoordinate;
     }
     
-    public MeshEdge getIntersectionEdge(MeshEdge edgeToIgnore){
-        if(segDegenerate) return null;
-        ignoreEdge = edgeToIgnore;
-        if(isGoodEdge(intersectEdge12,currentTriangle.getSide12())){
-            breakpointMag = intersectEdge12;
-            return currentTriangle.getSide12();
-        }
-        if(isGoodEdge(intersectEdge13,currentTriangle.getSide13())){
-            breakpointMag = intersectEdge13;
-            return currentTriangle.getSide13();
-        }
-        if(isGoodEdge(intersectEdge23,currentTriangle.getSide23())){
-            breakpointMag = intersectEdge23;
-            return currentTriangle.getSide23();
-        }
-        return null;
-    }
     
-    public Vector3f getBreakpoint(){
-        return getBreakpoint(breakpointMag);
-    }
-    
-    public Vector3f getBreakpoint(float breakpoint){
-        Vector3f deltaVector = getDeltaVector(breakpoint);
-        return lineStart.add(deltaVector);
-    }
-    
-    public Vector3f getDeltaVector(){
-        return getDeltaVector(breakpointMag);
-    }
-    
-    public Vector3f getDeltaVector(float breakpoint){
-        Vector3f lineDir = lineEnd.subtract(lineStart);
-        return lineDir.mult(breakpoint);
-    }
-    
-    private boolean isGoodEdge(float edgeIntersectScaler,MeshEdge originalEdge){
-        if(originalEdge.equals(ignoreEdge)){
-            return false;
-        }
-        if(edgeIntersectScaler >= 0 && edgeIntersectScaler <= 1){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    /**
-     * Used to help us calculate the intersection for edge 12 and 13
-     * @param start
-     * @param dir
-     * @return 
-     */
-    private static float getIntersection(float start, float dir){
-        float absDir = (float)Math.abs(dir);
-        if(absDir<MathConstants.EPSILON){
-            //System.out.println("DIR WAS NEAR ZERO!!!");
-            return Float.POSITIVE_INFINITY;
-        }else{
-            return -1*start/dir;
-        }
-        
-    }
 
-    public float getIntersectEdge12() {
-        return intersectEdge12;
-    }
-
-    public float getIntersectEdge23() {
-        return intersectEdge23;
-    }
-
-    public float getIntersectEdge13() {
-        return intersectEdge13;
-    }
     
 }
