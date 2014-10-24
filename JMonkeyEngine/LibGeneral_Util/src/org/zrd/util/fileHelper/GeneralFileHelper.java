@@ -109,6 +109,10 @@ public class GeneralFileHelper {
         return getNewDataFilePath(folderPath,currentTimestamp,fileNamePrefix);
     }
     
+    public static Path getNewOutputFilePath(String fileNamePrefix){
+        return getNewDataFilePath(FilePathHelper.getDefaultOutputFolder(),fileNamePrefix);
+    }
+    
     /**
      * This takes in the folder path and prefix and constructs the Path object
      *      for the file to be used. Specifically, it constructs a text file

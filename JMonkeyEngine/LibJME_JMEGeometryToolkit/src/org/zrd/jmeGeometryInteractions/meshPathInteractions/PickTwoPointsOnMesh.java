@@ -12,6 +12,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -200,6 +201,9 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     PathOnMeshCalculator currentRotCalib = 
                             new PathOnMeshCalculator(activeSegmentSet,endPoint,startingTriangle,meshInfo);
                     activeSegmentSet = currentRotCalib.getCurrentSegmentSetOnSurface();
+                    
+                    //DEBUG CODE. COMMENT THIS WHEN DONE
+                    GeometryDataHelper.writeTexCoordToDefaultOutputFile(activeSegmentSet.getVertexTextureCoords());
                     
                     //calls the method that handles the result
                     handleEndPointResult(endPoint,currentScaleCalib,currentRotCalib,activeSegmentSet);

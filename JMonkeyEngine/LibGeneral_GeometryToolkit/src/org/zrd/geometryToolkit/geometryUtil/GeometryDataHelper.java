@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.geometryUtil;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.io.File;
 import java.nio.file.Path;
@@ -13,12 +14,32 @@ import org.zrd.util.dataHelp.DataArrayToStringConversion;
 import org.zrd.util.dataHelp.OutputHelper;
 import org.zrd.util.dataHelp.SignalDataProcessor;
 import org.zrd.util.fileHelper.FileDataHelper;
+import org.zrd.util.fileHelper.GeneralFileHelper;
 
 /**
  *
  * @author Zach
  */
 public class GeometryDataHelper {
+    
+    public static void writeTexCoordToDefaultOutputFile(ArrayList<Vector2f> texCoords){
+        writeTexCoordToOutputFile(texCoords,"textureCoordinateOutput");
+    }
+    public static void writeTexCoordToOutputFile(ArrayList<Vector2f> texCoords, String outputFileName){
+        writeTexCoordsToFile(texCoords,GeneralFileHelper.getNewOutputFilePath(outputFileName));
+    }
+    
+    public static void writeTexCoordsToFile(ArrayList<Vector2f> texCoords, Path filePath){
+        ArrayList<String> dataStrings = new ArrayList<String>(texCoords.size());
+        String vertexPart;
+        Vector2f vertex;
+        for(int index = 0; index < texCoords.size(); index++){
+            vertex = texCoords.get(index);
+            vertexPart = OutputHelper.getPositionOutputText(vertex.getX(), vertex.getY());
+            dataStrings.add(vertexPart);
+        }
+        FileDataHelper.exportLinesToFile(dataStrings, filePath);
+    }
     
     public static void writeVerticesToFile(ArrayList<Vector3f> vertices, Path filePath){
         writeSegmentSetInfoToFile(new SegmentSet(vertices),null,filePath);

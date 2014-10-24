@@ -135,7 +135,7 @@ public class PathProjectionOntoMesh {
             finalPathData.add(currentPath.getDataAtVertices().get(currentPath.getSize()-1));
         }
         
-        return new SegmentSet(finalPath,finalPathData);
+        return new SegmentSet(finalPath,finalPathData,finalPathTex);
     }
     
     /**
