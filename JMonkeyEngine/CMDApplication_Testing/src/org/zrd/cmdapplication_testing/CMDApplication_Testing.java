@@ -12,6 +12,10 @@ import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
+import javax.imageio.ImageIO;
+import java.io.*;
+import java.awt.image.*;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -29,10 +33,15 @@ public class CMDApplication_Testing {
         File texCoordFile = inputFilePath.resolve(texCoordFileName).toFile();
         ArrayList<Vector2f> texCoords = GeometryDataHelper.get2DVerticesFromFile(texCoordFile);
         
+        File textureFile = inputFilePath.resolve("sampleTexture.png").toFile();
+        BufferedImage image = ImageIO.read(textureFile);
         
-
+        Graphics2D imageGraphics = image.createGraphics();
+        imageGraphics.draw3DRect(100, 100, 30, 30, true);
         
-        
+        BufferedImage bi = image;
+        File outputfile = FilePathHelper.getDefaultOutputFolder().resolve("sampleOutput.png").toFile();
+        ImageIO.write(bi, "png", outputfile);
     }
 
     
