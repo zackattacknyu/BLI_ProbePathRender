@@ -37,20 +37,36 @@ public class CMDApplication_Testing {
         File texCoordFile = inputFilePath.resolve(texCoordFileName).toFile();
         ArrayList<Vector2f> texCoords = GeometryDataHelper.get2DVerticesFromFile(texCoordFile);
         
+        //filter out (0,0) coords
+        while(texCoords.remove(Vector2f.ZERO));
+        
         File textureFile = inputFilePath.resolve("sampleTexture.png").toFile();
         BufferedImage image = ImageIO.read(textureFile);
         
         Graphics2D imageGraphics = image.createGraphics();
-        Line2D.Float sampleLine = new Line2D.Float(300, 300, 500, 500);
         BasicStroke stroke = new BasicStroke(2.0f);
         imageGraphics.setStroke(stroke);
-        
         imageGraphics.setColor(Color.RED);
-        imageGraphics.draw(sampleLine);
-
-        Line2D.Float sampleLine2 = new Line2D.Float(500, 500, 800, 800);
-        imageGraphics.setColor(Color.BLUE);
-        imageGraphics.draw(sampleLine2);
+        
+        float x1,y1,x2,y2;
+        Vector2f vert1,vert2;
+        for(int index = 1; index < texCoords.size(); index++){
+            vert1 = texCoords.get(index);
+            vert2 = texCoords.get(index-1);
+            
+            x1 = vert1.getX()*image.getWidth();
+            x2 = vert2.getX()*image.getWidth();
+            
+            y1 = (1-vert1.getY())*image.getHeight();
+            y2 = (1-vert2.getY())*image.getHeight();
+            
+            //change line color
+            if(index == 200){
+                imageGraphics.setColor(Color.BLUE);
+            }
+            
+            imageGraphics.draw(new Line2D.Float(x1, y1, x2, y2));
+        }
         
         
         BufferedImage bi = image;
