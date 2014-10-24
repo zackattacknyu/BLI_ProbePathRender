@@ -83,6 +83,20 @@ public class GeometryDataHelper {
         return lineVertices;
     }
     
+    public static ArrayList<Vector2f> get2DVerticesFromFile(File dataFile){
+        ArrayList<String> lines = FileDataHelper.getLinesFromFile(dataFile);
+        ArrayList<Vector2f> lineVertices = new ArrayList<Vector2f>(lines.size());
+        String previousLine = "";
+        for(String line: lines){
+            if(!line.equals(previousLine)){
+                lineVertices.add(get2DVertexFromLine(line));
+            }
+            previousLine = line;
+        }
+        
+        return lineVertices;
+    }
+    
     public static SegmentSet getSegmentSetFromFile(File dataFile){
         ArrayList<String> lines = FileDataHelper.getLinesFromFile(dataFile);
         ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
@@ -103,6 +117,13 @@ public class GeometryDataHelper {
         }
         
         return new SegmentSet(lineVertices,dataAtLines);
+    }
+    
+    public static Vector2f get2DVertexFromLine(String line){
+        String[] parts = line.split(",");
+        Float xPart = Float.valueOf(parts[0]);
+        Float yPart = Float.valueOf(parts[1]);
+        return new Vector2f(xPart,yPart);
     }
     
     public static Vector3f getVertexFromLine(String line){
