@@ -6,16 +6,15 @@ package org.zrd.cmdapplication_testing;
 
 import com.jme3.math.Vector2f;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.io.File;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
 import javax.imageio.ImageIO;
-import java.io.*;
 import java.awt.image.*;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 
 /**
  *
@@ -37,7 +36,8 @@ public class CMDApplication_Testing {
         BufferedImage image = ImageIO.read(textureFile);
         
         Graphics2D imageGraphics = image.createGraphics();
-        imageGraphics.draw3DRect(100, 100, 30, 30, true);
+        Line2D.Float sampleLine = new Line2D.Float(300, 300, 500, 500);
+        imageGraphics.draw(sampleLine);
         
         BufferedImage bi = image;
         File outputfile = FilePathHelper.getDefaultOutputFolder().resolve("sampleOutput.png").toFile();
