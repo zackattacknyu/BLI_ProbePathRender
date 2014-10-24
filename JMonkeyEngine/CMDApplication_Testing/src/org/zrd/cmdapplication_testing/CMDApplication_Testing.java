@@ -4,6 +4,11 @@
  */
 package org.zrd.cmdapplication_testing;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import javax.swing.*;
+
 import com.jme3.math.Vector2f;
 import java.io.IOException;
 import java.nio.file.*;
@@ -37,7 +42,16 @@ public class CMDApplication_Testing {
         
         Graphics2D imageGraphics = image.createGraphics();
         Line2D.Float sampleLine = new Line2D.Float(300, 300, 500, 500);
+        BasicStroke stroke = new BasicStroke(2.0f);
+        imageGraphics.setStroke(stroke);
+        
+        imageGraphics.setColor(Color.RED);
         imageGraphics.draw(sampleLine);
+
+        Line2D.Float sampleLine2 = new Line2D.Float(500, 500, 800, 800);
+        imageGraphics.setColor(Color.BLUE);
+        imageGraphics.draw(sampleLine2);
+        
         
         BufferedImage bi = image;
         File outputfile = FilePathHelper.getDefaultOutputFolder().resolve("sampleOutput.png").toFile();
