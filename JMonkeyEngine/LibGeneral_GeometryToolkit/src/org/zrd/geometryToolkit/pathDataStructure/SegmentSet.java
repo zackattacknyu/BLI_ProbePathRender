@@ -53,6 +53,21 @@ public class SegmentSet {
         timestamps = new ArrayList<Long>(estimatedSize);
         vertexTextureCoords = new ArrayList<Vector2f>(estimatedSize);
     }
+    public SegmentSet(ArrayList<Vector3f> pathVertices){
+        this.pathVertices = pathVertices;
+        timestamps = new ArrayList<Long>(pathVertices.size());
+        constructSegmentList();
+    }
+    
+    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices){
+        this(pathVertices);
+        this.dataAtVertices = dataAtVertices;
+    }
+    
+    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices, ArrayList<Vector2f> texVertices){
+        this(pathVertices,dataAtVertices);
+        vertexTextureCoords = texVertices;
+    }
     public void addToSet(Vector3f vertex){
         pathVertices.add(vertex);
     }
@@ -89,17 +104,12 @@ public class SegmentSet {
             return new SegmentData(pathVertices.get(index));
         }
     }
-    
-    public SegmentSet(ArrayList<Vector3f> pathVertices){
-        this.pathVertices = pathVertices;
-        timestamps = new ArrayList<Long>(pathVertices.size());
-        constructSegmentList();
+
+    public ArrayList<Vector2f> getVertexTextureCoords() {
+        return vertexTextureCoords;
     }
     
-    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices){
-        this(pathVertices);
-        this.dataAtVertices = dataAtVertices;
-    }
+    
     
     public static Vector3f getStartToEndUnitVector(ArrayList<Vector3f> pathVertices){
         return getStartToEndVector(pathVertices).clone().normalize();

@@ -68,7 +68,7 @@ public class ProbeTrackerOnSurface implements LocationTracker{
             Vector3f currentSegment = locationTracker.getDisplacementSinceLastPoint();
             if(currentSegment.length() > PathHelper.MIN_SEGMENT_LENGTH){
 
-                ArrayList<Vector3f> segmentsOnMesh = pathProj.getCurrentProjectedPath(currentSegment);
+                ArrayList<Vector3f> segmentsOnMesh = pathProj.getCurrentProjectedPath(currentSegment).getPathVertices();
                 currentPositionOnMesh = PathHelper.getLastPoint(segmentsOnMesh);
                 locationTracker.resetDisplacementSinceLastPoint();
 

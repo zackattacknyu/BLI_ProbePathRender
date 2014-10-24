@@ -4,6 +4,7 @@
  */
 package org.zrd.geometryToolkit.meshTraversal;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -103,8 +104,9 @@ public class PathProjectionOntoMesh {
     private SegmentSet findCurrentPathProjectionOntoMesh(SegmentSet currentPath){
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>(currentPath.getSize());
         ArrayList<String[]> finalPathData = new ArrayList<String[]>(currentPath.getSize());
+        ArrayList<Vector2f> finalPathTex = new ArrayList<Vector2f>(currentPath.getSize());
         
-        ArrayList<Vector3f> currentProjectedPath;
+        SegmentSet currentProjectedPath;
         int index = 0;
         
         //goes through each segment
@@ -114,11 +116,12 @@ public class PathProjectionOntoMesh {
             currentProjectedPath = getCurrentProjectedPath(segmentVec);
             
             //adds the projection to the final output path
-            finalPath.addAll(currentProjectedPath);
+            finalPath.addAll(currentProjectedPath.getPathVertices());
+            finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
             
             //repeatedly adds the data for the new points added in projection
             if(currentPath.getDataAtVertices() != null){
-                for(int i = 0; i < currentProjectedPath.size(); i++){
+                for(int i = 0; i < currentProjectedPath.getPathVertices().size(); i++){
                     finalPathData.add(currentPath.getDataAtVertices().get(index));
                 }
                 index++;
@@ -149,14 +152,14 @@ public class PathProjectionOntoMesh {
      * @param segmentVector
      * @return 
      */
-    public ArrayList<Vector3f> getCurrentProjectedPath(Vector3f segmentVector){
+    public SegmentSet getCurrentProjectedPath(Vector3f segmentVector){
         if(currentTriangle == null){
             
             /*
              * If no triangle, then just return the start point
              *      plus the segment vector
              */
-            return getPathPoints(segmentVector);
+            return new SegmentSet(getPathPoints(segmentVector));
         }else{
             
             /*
@@ -187,9 +190,12 @@ public class PathProjectionOntoMesh {
      * @param segmentVector     current segment
      * @return                  corresponding path along the mesh for the segment
      */
-    private ArrayList<Vector3f> findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
+    private SegmentSet findCurrentSegmentProjectionOntoMesh(Vector3f segmentVector) {
         //the return path
         ArrayList<Vector3f> finalPath = new ArrayList<Vector3f>();
+        
+        //return path texture coordinates
+        ArrayList<Vector2f> finalPathTex = new ArrayList<Vector2f>();
         
         //the segments that still need to be projected onto the mesh
         Stack<Vector3f> remainingSegments = new Stack<Vector3f>();
@@ -234,6 +240,7 @@ public class PathProjectionOntoMesh {
             
             //gets the texture coord of the start point
             TriangleTextureCoord tex = new TriangleTextureCoord(currentTriangle,currentStartPoint);
+            finalPathTex.add(tex.getTextureCoordinate());
             System.out.println("Texture Coord: " + tex.getTextureCoordinate());
             
             //now that the intersection was found, remove the top segment
@@ -287,8 +294,7 @@ public class PathProjectionOntoMesh {
             //adds the new start point to the return path
             finalPath.add(currentStartPoint);
         }
-        
-        return finalPath;
+        return new SegmentSet(finalPath,null,finalPathTex);
     }
     
     /**
