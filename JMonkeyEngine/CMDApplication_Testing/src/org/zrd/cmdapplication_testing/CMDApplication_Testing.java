@@ -61,17 +61,15 @@ public class CMDApplication_Testing {
             y2 = (1-vert2.getY())*image.getHeight();
             
             //change line color
-            if(index == 200){
+            if(index == 120){
                 imageGraphics.setColor(Color.BLUE);
             }
             
             imageGraphics.draw(new Line2D.Float(x1, y1, x2, y2));
         }
         
-        
-        BufferedImage bi = image;
-        File outputfile = FilePathHelper.getDefaultOutputFolder().resolve("sampleOutput.png").toFile();
-        ImageIO.write(bi, "png", outputfile);
+        File outputfile = FilePathHelper.getDefaultOutputFolder().resolve("sampleOutput3.png").toFile();
+        ImageIO.write(image, "png", outputfile);
     }
 
     
