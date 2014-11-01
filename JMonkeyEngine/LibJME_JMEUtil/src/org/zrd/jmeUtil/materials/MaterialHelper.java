@@ -8,7 +8,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture2D;
 import java.io.File;
+import java.awt.image.*;
+import org.zrd.util.fileHelper.ImageFileHelper;
 
 /**
  *This has methods that help make material objects
@@ -57,6 +61,14 @@ public class MaterialHelper {
         ColorRGBA grayColor = new ColorRGBA(brightness, brightness, brightness, 1.0F);
         outputMaterial.setColor("Color", grayColor);
         return outputMaterial;
+    }
+    
+    public static Material getTextureMaterial(AssetManager assetManager, BufferedImage img){
+        File tempImage = ImageFileHelper.getTempImageFile();
+        ImageFileHelper.writePNGimage(img, tempImage);
+        Material textureMaterial = getTextureMaterial(assetManager,tempImage);
+        ImageFileHelper.deleteTempImage(tempImage);
+        return textureMaterial;
     }
     
     public static Material getTextureMaterial(AssetManager assetManager, String textureFileLocation){
