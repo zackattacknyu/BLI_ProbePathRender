@@ -1,9 +1,11 @@
 package org.zrd.recordedPathRendering;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.material.Material;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import org.zrd.meshSessionTools.MeshSession;
 import org.zrd.cameraTracker.cameraTrackingIO.CameraTrackingIO;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
@@ -14,9 +16,16 @@ import org.zrd.jmeGeometryIO.pathIO.PathRenderHelper;
 import org.zrd.jmeGeometryInteractions.meshPathInteractions.LineMoveAction;
 import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
-import org.zrd.util.fileHelper.FilePathHelper;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 
+import java.nio.file.Path;
+import java.io.File;
+import org.zrd.util.fileHelper.FilePathHelper;
+import javax.imageio.ImageIO;
+import java.awt.image.*;
+import java.io.IOException;
+import java.util.Calendar;
+import org.zrd.jmeUtil.materials.MaterialHelper;
 /**
  * test
  * @author normenhansen
@@ -31,6 +40,12 @@ public class Main extends SimpleApplication {
     
     private Node shootables;
     private Node paths;
+    
+    private Spatial shootableSurface;
+    
+    private long startTime;
+    private boolean changed = false;
+    private File textureFile;
 
     private boolean meshIsFlat = true;
     
@@ -49,6 +64,8 @@ public class Main extends SimpleApplication {
         
         MeshSession currentSession = new MeshSession(assetManager,cam);
         shootables = currentSession.getShootableMesh();
+        
+        shootableSurface = currentSession.getSurface();
         
         if(meshIsFlat){
             shootables.setQueueBucket(RenderQueue.Bucket.Sky);
@@ -70,6 +87,18 @@ public class Main extends SimpleApplication {
         
         paths = new Node();
         rootNode.attachChild(paths);
+        
+        startTime = Calendar.getInstance().getTimeInMillis();
+        
+        Path inputFilePath = FilePathHelper.getDefaultInputFolder();
+        textureFile = inputFilePath.resolve("textureDefinition_phantomToUse_OLD.png").toFile();
+    }
+    
+    public static BufferedImage getNewTexture() throws IOException{
+        Path inputFilePath = FilePathHelper.getDefaultInputFolder();
+        
+        File textureFile = inputFilePath.resolve("textureDefinition_phantomToUse_OLD.png").toFile();
+        return ImageIO.read(textureFile);
     }
 
     @Override
@@ -85,6 +114,18 @@ public class Main extends SimpleApplication {
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
             displaySegment(recordedPathSet.getCurrentSegment());
+        }
+        
+        long timeNow = Calendar.getInstance().getTimeInMillis();
+        if(!changed && (timeNow-startTime > 5000)){
+            System.out.println("NOW CHANGING TEXTURE");
+            try {
+                Material newMaterial = MaterialHelper.getTextureMaterial(assetManager, getNewTexture());
+                shootableSurface.setMaterial(newMaterial);
+            } catch (IOException ex) {
+                System.out.println("Error getting texture" + ex);
+            }
+            changed = true;
         }
         
     }

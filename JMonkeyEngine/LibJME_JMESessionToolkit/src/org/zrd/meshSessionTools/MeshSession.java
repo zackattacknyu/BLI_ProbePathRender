@@ -40,6 +40,7 @@ public class MeshSession {
     private Material normalLineMaterial;
     private Properties calibPropsFromFile;
     private CalibrationProperties allCalibrationProperties;
+    private Spatial surface;
     
     public MeshSession(AssetManager assetManager,Camera cam){
         this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
@@ -80,7 +81,7 @@ public class MeshSession {
         
         meshInfo = importedMesh.getActiveMeshInfo();
         
-        Spatial surface = importedMesh.getSurfaceMesh();
+        surface = importedMesh.getSurfaceMesh();
         shootableMesh = new Node("shootables");
         shootableMesh.attachChild(surface);
         
@@ -106,6 +107,10 @@ public class MeshSession {
 
     public Node getShootableMesh() {
         return shootableMesh;
+    }
+
+    public Spatial getSurface() {
+        return surface;
     }
 
     public Node getFixedPointNode() {
