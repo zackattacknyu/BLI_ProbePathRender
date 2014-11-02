@@ -11,6 +11,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import org.zrd.geometryToolkit.geometricCalculations.TransformHelper;
 import org.zrd.geometryToolkit.geometricCalculations.TranslationHelper;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleTexture;
 
 /**
@@ -72,7 +73,7 @@ public class TriangleTextureCoord {
        TriangleTexture texCoords = currentTri.getTextureCoords();
        
        if(texCoords == null){
-           textureCoordinate = new Vector2f(Float.NaN,Float.NaN);
+           textureCoordinate = GeometryDataHelper.getBadTexCoord();
            return;
        }
        

@@ -117,7 +117,11 @@ public class PathProjectionOntoMesh {
             
             //adds the projection to the final output path
             finalPath.addAll(currentProjectedPath.getPathVertices());
-            finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
+            
+            if(currentProjectedPath.getVertexTextureCoords() != null){
+                finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
+            }
+            
             
             //repeatedly adds the data for the new points added in projection
             if(currentPath.getDataAtVertices() != null){

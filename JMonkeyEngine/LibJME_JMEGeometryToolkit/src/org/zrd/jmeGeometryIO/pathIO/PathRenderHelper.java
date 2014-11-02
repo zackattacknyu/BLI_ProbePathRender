@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.ColorHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
@@ -39,8 +40,20 @@ public class PathRenderHelper {
     public static final float IMAGE_LINE_STROKE_WIDTH = 2.0f;
     
     public static BufferedImage createLineOnImage(BufferedImage image, SegmentSet lineWithData,StringToColorConversion converter){
-        ArrayList<Vector2f> texCoords = lineWithData.getVertexTextureCoords();
-        ArrayList<String[]> dataAtVertices = lineWithData.getDataAtVertices();
+        ArrayList<Vector2f> texCoordsFromData = lineWithData.getVertexTextureCoords();
+        ArrayList<String[]> dataAtVerticesFromObj = lineWithData.getDataAtVertices();
+        
+        //makes copies so that we can delete bad entries
+        ArrayList<Vector2f> texCoords = (ArrayList<Vector2f>) texCoordsFromData.clone();
+        ArrayList<String[]> dataAtVertices = (ArrayList<String[]>) dataAtVerticesFromObj.clone();
+        
+        //deletes bad entries
+        for(int index = 0; index < texCoords.size(); index++){
+            if(texCoords.get(index).equals(GeometryDataHelper.getBadTexCoord())){
+                texCoords.remove(index);
+                dataAtVertices.remove(index);
+            }
+        }
         
         Graphics2D imageGraphics = image.createGraphics();
         BasicStroke stroke = new BasicStroke(IMAGE_LINE_STROKE_WIDTH);
