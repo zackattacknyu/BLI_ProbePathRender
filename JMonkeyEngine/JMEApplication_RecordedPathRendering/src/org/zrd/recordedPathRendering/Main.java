@@ -18,13 +18,8 @@ import org.zrd.jmeGeometryInteractions.pathInteraction.PathImport;
 import org.zrd.jmeUtil.applicationHelp.ApplicationHelper;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 
-import java.nio.file.Path;
-import java.io.File;
 import org.zrd.util.fileHelper.FilePathHelper;
-import javax.imageio.ImageIO;
 import java.awt.image.*;
-import java.io.IOException;
-import java.util.Calendar;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 /**
  * test
@@ -42,10 +37,8 @@ public class Main extends SimpleApplication {
     private Node paths;
     
     private Spatial shootableSurface;
-    
-    private long startTime;
-    private boolean changed = false;
-    private File textureFile;
+    private MeshSession currentMeshSession;
+    private BufferedImage currentTextureImage;
 
     private boolean meshIsFlat = true;
     
@@ -62,18 +55,19 @@ public class Main extends SimpleApplication {
         recordedPathSet = new RecordedPathSet();
         ApplicationHelper.setBackgroundColor(viewPort);
         
-        MeshSession currentSession = new MeshSession(assetManager,cam);
-        shootables = currentSession.getShootableMesh();
+        currentMeshSession = new MeshSession(assetManager,cam);
+        shootables = currentMeshSession.getShootableMesh();
+        currentTextureImage = currentMeshSession.getTextureImage();
         
-        shootableSurface = currentSession.getSurface();
+        shootableSurface = currentMeshSession.getSurface();
         
         if(meshIsFlat){
             shootables.setQueueBucket(RenderQueue.Bucket.Sky);
         }
         
-        FixedPointPicker fixedPtsToPick = currentSession.getFixedPtsToPick();
-        TriangleSet meshInfo = currentSession.getMeshInfo();
-        MeshInteractionFiles meshInterFiles = currentSession.getMeshInterFiles();
+        FixedPointPicker fixedPtsToPick = currentMeshSession.getFixedPtsToPick();
+        TriangleSet meshInfo = currentMeshSession.getMeshInfo();
+        MeshInteractionFiles meshInterFiles = currentMeshSession.getMeshInterFiles();
 
         CameraTrackingIO.initializeCameraTrackingIO(inputManager, cam, flyCam, meshInterFiles);
         
@@ -83,22 +77,10 @@ public class Main extends SimpleApplication {
         lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
         pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         
-        //rootNode.attachChild(currentSession.getFixedPointNode());
+        //rootNode.attachChild(currentMeshSession.getFixedPointNode());
         
         paths = new Node();
         rootNode.attachChild(paths);
-        
-        startTime = Calendar.getInstance().getTimeInMillis();
-        
-        Path inputFilePath = FilePathHelper.getDefaultInputFolder();
-        textureFile = inputFilePath.resolve("textureDefinition_phantomToUse_OLD.png").toFile();
-    }
-    
-    public static BufferedImage getNewTexture() throws IOException{
-        Path inputFilePath = FilePathHelper.getDefaultInputFolder();
-        
-        File textureFile = inputFilePath.resolve("textureDefinition_phantomToUse_OLD.png").toFile();
-        return ImageIO.read(textureFile);
     }
 
     @Override
@@ -106,28 +88,26 @@ public class Main extends SimpleApplication {
         
         if(lineMoveAction.arePointsNewlyPicked()){
             displaySegment(lineMoveAction.getCurrentSegment());
+            attachSegmentToTexture(lineMoveAction.getCurrentSegment());
         }
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
+            attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
             displaySegment(recordedPathSet.getCurrentSegment());
         }
         
-        long timeNow = Calendar.getInstance().getTimeInMillis();
-        if(!changed && (timeNow-startTime > 5000)){
-            System.out.println("NOW CHANGING TEXTURE");
-            try {
-                Material newMaterial = MaterialHelper.getTextureMaterial(assetManager, getNewTexture());
-                shootableSurface.setMaterial(newMaterial);
-            } catch (IOException ex) {
-                System.out.println("Error getting texture" + ex);
-            }
-            changed = true;
-        }
-        
+    }
+    
+    private void attachSegmentToTexture(SegmentSet segment){
+        currentTextureImage = PathRenderHelper.createLineOnImage(
+                currentTextureImage, segment, signalProcessor);
+        Material newMaterial = MaterialHelper.getTextureMaterial(
+                assetManager, currentTextureImage);
+        shootableSurface.setMaterial(newMaterial);
     }
     
     private void displaySegment(SegmentSet segment){

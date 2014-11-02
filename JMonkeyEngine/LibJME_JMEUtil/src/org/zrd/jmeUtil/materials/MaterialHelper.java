@@ -68,6 +68,7 @@ public class MaterialHelper {
         ImageFileHelper.writePNGimage(img, tempImage);
         Material textureMaterial = getTextureMaterial(assetManager,tempImage);
         ImageFileHelper.deleteTempImage(tempImage);
+        ImageFileHelper.deleteTempImageFolder();
         return textureMaterial;
     }
     

@@ -72,7 +72,7 @@ public class TriangleTextureCoord {
        TriangleTexture texCoords = currentTri.getTextureCoords();
        
        if(texCoords == null){
-           textureCoordinate = new Vector2f();
+           textureCoordinate = new Vector2f(Float.NaN,Float.NaN);
            return;
        }
        
