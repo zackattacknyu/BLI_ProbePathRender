@@ -50,6 +50,14 @@ public class PathRenderHelper {
         //deletes bad entries
         for(int index = 0; index < texCoords.size(); index++){
             if(texCoords.get(index).equals(GeometryDataHelper.getBadTexCoord())){
+                /*System.out.println("BAD TEXTURE COORDINATES FOR TRIANGLE");
+                if(index > 0){
+                    System.out.println("Tex Coord Before: " + 
+                            texCoords.get(index-1) + 
+                            "; Tex Coord After: " + 
+                            texCoords.get(index+1));
+                }*/
+                
                 texCoords.remove(index);
                 dataAtVertices.remove(index);
             }
