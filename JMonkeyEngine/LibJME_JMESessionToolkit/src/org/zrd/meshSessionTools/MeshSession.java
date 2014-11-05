@@ -10,6 +10,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.zrd.cameraTracker.cameraCoordIO.CameraCoordProperties;
@@ -22,6 +23,7 @@ import org.zrd.jmeGeometryIO.meshIO.MeshRenderData;
 import org.zrd.jmeGeometryIO.renderedObjects.FixedPointRender;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.FilePathHelper;
+import org.zrd.util.fileHelper.ImageFileHelper;
 import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.util.properties.PropertiesHelper;
 
@@ -41,6 +43,7 @@ public class MeshSession {
     private Properties calibPropsFromFile;
     private CalibrationProperties allCalibrationProperties;
     private Spatial surface;
+    private BufferedImage textureImage;
     
     public MeshSession(AssetManager assetManager,Camera cam){
         this(FilePathHelper.getDefaultInputFolder(),PropertiesHelper.getDefaultProperties(),assetManager,cam);
@@ -70,6 +73,8 @@ public class MeshSession {
                 allCalibrationProperties.isFlattenMesh(),
                 allCalibrationProperties.getFlattenVertexIndices());
         
+        textureImage = ImageFileHelper.readPNGimage(meshInterFiles.getDataFiles().getTextureFile());
+        
         if(meshInterFiles.getCameraCoordFile().exists()){
             CameraCoordProperties.setCameraCoordinatesUsingFile(cam, meshInterFiles.getCameraCoordFile());
         }
@@ -85,6 +90,10 @@ public class MeshSession {
         shootableMesh = new Node("shootables");
         shootableMesh.attachChild(surface);
         
+    }
+
+    public BufferedImage getTextureImage() {
+        return textureImage;
     }
     
     /**

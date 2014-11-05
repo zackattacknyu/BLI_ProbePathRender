@@ -117,7 +117,11 @@ public class PathProjectionOntoMesh {
             
             //adds the projection to the final output path
             finalPath.addAll(currentProjectedPath.getPathVertices());
-            finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
+            
+            if(currentProjectedPath.getVertexTextureCoords() != null){
+                finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
+            }
+            
             
             //repeatedly adds the data for the new points added in projection
             if(currentPath.getDataAtVertices() != null){
@@ -241,7 +245,7 @@ public class PathProjectionOntoMesh {
             //gets the texture coord of the start point
             TriangleTextureCoord tex = new TriangleTextureCoord(currentTriangle,currentStartPoint);
             finalPathTex.add(tex.getTextureCoordinate());
-            System.out.println("Texture Coord: " + tex.getTextureCoordinate());
+            //System.out.println("Texture Coord: " + tex.getTextureCoordinate());
             
             //now that the intersection was found, remove the top segment
             remainingSegments.pop();

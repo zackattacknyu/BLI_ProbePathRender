@@ -22,6 +22,10 @@ import org.zrd.util.fileHelper.GeneralFileHelper;
  */
 public class GeometryDataHelper {
     
+    public static final Vector2f getBadTexCoord(){
+        return new Vector2f(Float.NaN,Float.NaN);
+    }
+    
     public static void writeTexCoordToDefaultOutputFile(ArrayList<Vector2f> texCoords){
         writeTexCoordToOutputFile(texCoords,"textureCoordinateOutput");
     }

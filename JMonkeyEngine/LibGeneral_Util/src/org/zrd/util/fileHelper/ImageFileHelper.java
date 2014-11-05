@@ -26,6 +26,11 @@ public class ImageFileHelper {
         }
     }
     
+    public static void deleteTempImageFolder(){
+        File tempImageFolder = FilePathHelper.getDefaultTempFolder().toFile();
+        deleteTempImage(tempImageFolder);
+    }
+    
     public static File getTempImageFile(){
         Path tempFolder = FilePathHelper.getDefaultTempFolder();
         GeneralFileHelper.createDirectoryIfNone(tempFolder);

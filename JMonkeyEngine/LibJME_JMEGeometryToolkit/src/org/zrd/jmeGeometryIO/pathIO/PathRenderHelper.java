@@ -7,6 +7,7 @@ package org.zrd.jmeGeometryIO.pathIO;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.scene.Geometry;
@@ -15,8 +16,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.util.BufferUtils;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
+import org.zrd.jmeUtil.ColorHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 
 /**
@@ -28,6 +36,59 @@ import org.zrd.jmeUtil.materials.MaterialHelper;
 public class PathRenderHelper {
     public static final float PATH_LINE_WIDTH = 60.0F;
     public static final ColorRGBA LINE_COLOR = ColorRGBA.Black;
+    
+    public static final float IMAGE_LINE_STROKE_WIDTH = 2.0f;
+    
+    public static BufferedImage createLineOnImage(BufferedImage image, SegmentSet lineWithData,StringToColorConversion converter){
+        ArrayList<Vector2f> texCoordsFromData = lineWithData.getVertexTextureCoords();
+        ArrayList<String[]> dataAtVerticesFromObj = lineWithData.getDataAtVertices();
+        
+        //makes copies so that we can delete bad entries
+        ArrayList<Vector2f> texCoords = (ArrayList<Vector2f>) texCoordsFromData.clone();
+        ArrayList<String[]> dataAtVertices = (ArrayList<String[]>) dataAtVerticesFromObj.clone();
+        
+        //deletes bad entries
+        for(int index = 0; index < texCoords.size(); index++){
+            if(texCoords.get(index).equals(GeometryDataHelper.getBadTexCoord())){
+                /*System.out.println("BAD TEXTURE COORDINATES FOR TRIANGLE");
+                if(index > 0){
+                    System.out.println("Tex Coord Before: " + 
+                            texCoords.get(index-1) + 
+                            "; Tex Coord After: " + 
+                            texCoords.get(index+1));
+                }*/
+                
+                texCoords.remove(index);
+                dataAtVertices.remove(index);
+            }
+        }
+        
+        Graphics2D imageGraphics = image.createGraphics();
+        BasicStroke stroke = new BasicStroke(IMAGE_LINE_STROKE_WIDTH);
+        imageGraphics.setStroke(stroke);
+        
+        float x1,y1,x2,y2;
+        Vector2f vert1,vert2;
+        Color currentColor;
+        for(int index = 1; index < texCoords.size(); index++){
+            
+            currentColor = ColorHelper.convertJMEcolorToJavaColor(
+                    converter.convertStringToColor(dataAtVertices.get(index-1)));
+            imageGraphics.setColor(currentColor);
+            vert1 = texCoords.get(index);
+            vert2 = texCoords.get(index-1);
+            
+            x1 = vert1.getX()*image.getWidth();
+            x2 = vert2.getX()*image.getWidth();
+            
+            y1 = (1-vert1.getY())*image.getHeight();
+            y2 = (1-vert2.getY())*image.getHeight();
+            
+            imageGraphics.draw(new Line2D.Float(x1, y1, x2, y2));
+        }
+        
+        return image;
+    }
     
     /**
      * This takes in a segment sets with data and returns a Node which is a set
