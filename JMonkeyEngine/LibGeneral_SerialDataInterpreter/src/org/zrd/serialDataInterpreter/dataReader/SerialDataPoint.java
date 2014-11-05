@@ -35,8 +35,8 @@ public class SerialDataPoint {
     private HashMap<String,Integer> dataLocations;
     
     private String[] dataAtPoint;
-    private int dataIndexStart = 8;
-    private int numWaveforms = 2;
+    private int dataIndexStart = 6;
+    private int numWaveforms = 4;
     private int waveformSize = 100;
     private SignalDataProcessor dataProcessor = 
             new SignalDataProcessor(numWaveforms,waveformSize,dataIndexStart);

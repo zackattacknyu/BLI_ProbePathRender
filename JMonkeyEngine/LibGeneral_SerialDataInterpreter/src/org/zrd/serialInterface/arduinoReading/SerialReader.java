@@ -100,7 +100,7 @@ public class SerialReader implements SerialPortEventListener,DataReading {
                 }*/
             }
             if (portId == null) {
-                System.out.println("Could not find COM port.");
+                System.out.println("Could not find COM port: '" + PORT_NAME + "'");
                 return;
             }
 

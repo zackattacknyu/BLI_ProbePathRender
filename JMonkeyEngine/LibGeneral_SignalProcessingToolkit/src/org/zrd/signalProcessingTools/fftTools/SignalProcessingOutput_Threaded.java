@@ -24,7 +24,8 @@ public class SignalProcessingOutput_Threaded implements ThreadedOutput{
     }
     
     public SignalProcessingOutput_Threaded(int size, int resolution){
-        int numWaves = 2;
+        //int numWaves = 2;
+        int numWaves = 4;
         int indexStart = 0;
         dataTracker = new SignalDataTracking(size,resolution,numWaves,indexStart);
     }
