@@ -23,6 +23,15 @@ public class OutputHelper {
         return number%mod;
     }
     
+    public static String printStringArray(String[] array){
+        StringBuilder sb = new StringBuilder(array.length);
+        for(String entry: array){
+            sb.append(entry);
+            sb.append(";");
+        }
+        return sb.toString();
+    }
+    
     
     /**
      * In each line of the output, this is the character

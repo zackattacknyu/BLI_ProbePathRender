@@ -59,8 +59,8 @@ public class SerialDataPoint {
             pitch = getPart(DataLocationsMap.PITCH_KEY);
             roll = getPart(DataLocationsMap.ROLL_KEY);
             timestamp = getLongPart(DataLocationsMap.TIMESTAMP_KEY);
-            datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
-            quality = getPart(DataLocationsMap.QUALITY_KEY);
+            //datafield = getPart(DataLocationsMap.DATAFIELD_KEY);
+            //quality = getPart(DataLocationsMap.QUALITY_KEY);
             
             /*xlow = getPart(DataLocationsMap.X_LOW_KEY);
             xhigh = getPart(DataLocationsMap.X_HIGH_KEY);

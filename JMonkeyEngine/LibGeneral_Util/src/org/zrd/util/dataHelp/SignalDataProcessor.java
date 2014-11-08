@@ -49,8 +49,14 @@ public class SignalDataProcessor {
             if(dataParts != null && dataParts.length >= waveformSize){
                 for(int index = 0; index < waveformSize; index++){
                     currentNumber = dataParts[index + waveformSize*waveNum];
-                    //System.out.println("Current Number: '" + currentNumber + "'; Current Index: " + index);
-                    currentWave[index] = Double.parseDouble(currentNumber);
+                    try{
+                        currentWave[index] = Double.parseDouble(currentNumber);
+                    }catch(NumberFormatException e){
+                        System.out.println("ERROR CONVERTING WAVEFORM DATA TO DOUBLE: " + e);
+                        System.out.println("AT DATA INDEX " + index + " IN WAVE " + waveNum + " THE WAVEFORM DATA IS '" + currentNumber + "' WHICH IS NOT A DOUBLE");
+                        currentWave[index] = 0;
+                    }
+                    
                 }
             }
             
