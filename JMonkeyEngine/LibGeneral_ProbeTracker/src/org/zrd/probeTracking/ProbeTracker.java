@@ -49,6 +49,10 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     private Quaternion rotationFromData = new Quaternion();
     
+    /*
+     * This is the offset amount
+     * Units are probe units
+     */
     private Vector2f offsetAmount = new Vector2f(1.0f,1.0f);
     
     private Vector3f currentPosition;
@@ -61,6 +65,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     private boolean recordingPath = false;
     
     private PathRecorder currentRecordingPath;
+    private PathRecorder currentRecordingPathWithOffset;
+    
     private DataArrayToStringConversion arrayToStringConverter;
     private Path pathRecordingFilePath = null;
     
@@ -190,6 +196,9 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
                 currentRecordingPath.addToPath(currentSourceTracker.getCurrentDataString(),
                         currentPosition,currentXYPosition,
                         currentYaw, currentPitch, currentRoll,currentTimestamp);
+                currentRecordingPathWithOffset.addToPath(currentSourceTracker.getCurrentDataString(),
+                        currentPositionAfterOffset,currentXYPositionAfterOffset,
+                        currentYaw, currentPitch, currentRoll,currentTimestamp);
                 currentQualityStats.addToStats(currentSourceTracker.getTrackingQuality());
             }
             
@@ -258,6 +267,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         if(recordingPath){
             System.out.println("Recording New Path Stopped");
             currentRecordingPath.closeRecording();
+            currentRecordingPathWithOffset.closeRecording();
             currentQualityResults = currentQualityStats.closeStatRecording();
             newPathExists = true;
             recordingPath = false;
@@ -266,6 +276,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             newPathExists = false;
             currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath,false,
                     currentSourceTracker.getCurrentDataString(),arrayToStringConverter,currentTimestamp);
+            currentRecordingPathWithOffset = new PathRecorder(currentPosition,pathRecordingFilePath,false,
+                    currentSourceTracker.getCurrentDataString(),arrayToStringConverter,currentTimestamp,true);
             currentQualityStats = new QualityStatistics();
             recordingPath = true;
         }

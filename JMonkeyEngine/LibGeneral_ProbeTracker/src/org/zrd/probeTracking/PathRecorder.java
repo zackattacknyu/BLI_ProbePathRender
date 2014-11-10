@@ -94,11 +94,18 @@ public class PathRecorder {
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
-            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor, long initTimestamp){
-        this(startingPosition,pathRecordingFilePath,pathIsOnMesh);
+            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor, 
+            long initTimestamp, boolean offsetPath){
+        this(startingPosition,pathRecordingFilePath,pathIsOnMesh,offsetPath);
         this.convertor = convertor;
         pathInformation.addToSet(startingData);
         pathInformation.addToSet(initTimestamp);
+    }
+    
+    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
+            boolean pathIsOnMesh, String[] startingData, DataArrayToStringConversion convertor, 
+            long initTimestamp){
+        this(startingPosition,pathRecordingFilePath,pathIsOnMesh,startingData,convertor,initTimestamp,false);
     }
     
     private void setFilePrefixes(){
