@@ -49,11 +49,14 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     
     private Quaternion rotationFromData = new Quaternion();
     
+    private Vector2f offsetAmount = new Vector2f(1.0f,1.0f);
     
     private Vector3f currentPosition;
+    private Vector3f currentPositionAfterOffset;
     private Vector3f currentDisplacement;
     private Vector3f displacementSinceLastPoint = new Vector3f();
     private Vector2f currentXYPosition;
+    private Vector2f currentXYPositionAfterOffset;
     
     private boolean recordingPath = false;
     
@@ -122,8 +125,13 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         this.startingPosition = startingPosition;
         
         currentPosition = startingPosition.clone();
+        currentPositionAfterOffset = new Vector3f(
+                startingPosition.getX() + offsetAmount.getX(), 
+                startingPosition.getY() + offsetAmount.getY(),
+                startingPosition.getZ());
         
         currentXYPosition = new Vector2f(startingPosition.getX(),startingPosition.getY());
+        currentXYPositionAfterOffset = currentXYPosition.clone().add(offsetAmount);
         
         pathRecordingFilePath = filePath;
         
@@ -151,21 +159,31 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             currentDeltaY = currentSourceTracker.getDeltaY();
 
             rotationFromData = RotationHelper.getQuaternion(currentYaw,currentPitch,currentRoll);
+            
+            float currentDeltaXWithOffset = currentDeltaX + offsetAmount.getX();
+            float currentDeltaYWithOffset = currentDeltaY + offsetAmount.getY();
 
             //gets the current displacement vector
             currentDisplacement = coordConverter.getXYZDisplacement(
                     currentDeltaX, currentDeltaY, 
                     currentYaw, currentPitch, currentRoll);
+            Vector3f currentDisplacementAfterOffset = coordConverter.getXYZDisplacement(
+                    currentDeltaXWithOffset, currentDeltaYWithOffset, 
+                    currentYaw, currentPitch, currentRoll);
 
             //adds the displacement to current position
             currentPosition.addLocal(currentDisplacement.clone());
+            currentPositionAfterOffset.addLocal(currentDisplacementAfterOffset.clone());
             displacementSinceLastPoint.addLocal(currentDisplacement.clone());
 
             //gets the xy displacement vector
             Vector2f currentXYDisp = coordConverter.getXYDisplacement(
                     currentDeltaX, currentDeltaY);
+            Vector2f currentXYDispAfterOffset = coordConverter.getXYDisplacement(
+                    currentDeltaXWithOffset, currentDeltaYWithOffset);
 
             currentXYPosition.addLocal(currentXYDisp);
+            currentXYPositionAfterOffset.addLocal(currentXYDispAfterOffset);
 
             //here we record the xyz path
             if(recordingPath){
