@@ -19,6 +19,8 @@ public class SignalDataProcessor {
     private int dataStartIndex;
     
     public static final String DATA_DELIMITER = ",";
+    
+    private boolean showError = false;
 
     public SignalDataProcessor(int numWaveforms, int waveformSize) {
         this.numWaveforms = numWaveforms;
@@ -52,8 +54,12 @@ public class SignalDataProcessor {
                     try{
                         currentWave[index] = Double.parseDouble(currentNumber);
                     }catch(NumberFormatException e){
-                        System.out.println("ERROR CONVERTING WAVEFORM DATA TO DOUBLE: " + e);
-                        System.out.println("AT DATA INDEX " + index + " IN WAVE " + waveNum + " THE WAVEFORM DATA IS '" + currentNumber + "' WHICH IS NOT A DOUBLE");
+                        if(showError){
+                            System.out.println("ERROR CONVERTING WAVEFORM DATA TO DOUBLE: " + e);
+                            System.out.println("AT DATA INDEX " + index + " IN WAVE " + 
+                                    waveNum + " THE WAVEFORM DATA IS '" + 
+                                    currentNumber + "' WHICH IS NOT A DOUBLE");
+                        }
                         currentWave[index] = 0;
                     }
                     
