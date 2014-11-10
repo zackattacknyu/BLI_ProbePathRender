@@ -35,7 +35,7 @@ public class PathRecorder {
     private float arcLengthSinceLastRead = 0;
     private Vector3f lastPosition;
     private ArrayList<Vector3f> verticesSinceLastRead;
-    private String timestampSuffix;
+    private String fileNameSuffix;
     
     private String pathVertexFilePrefix;
     private String compressedPathFilePrefix;
@@ -56,29 +56,41 @@ public class PathRecorder {
         pathSpecified = false;
     }
     
-    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, boolean pathIsOnMesh){
+    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
+            boolean pathIsOnMesh, boolean offsetPath){
         this(startingPosition);
+        String timestampSuffix = TimeHelper.getTimestampSuffix();
+        
         this.pathRecordingFilePath = pathRecordingFilePath;
-        this.timestampSuffix = TimeHelper.getTimestampSuffix();
         this.pathIsOnMesh = pathIsOnMesh;
+        
+        if(offsetPath){
+            this.fileNameSuffix = "withOffset_" + timestampSuffix;
+        }else{
+            this.fileNameSuffix = timestampSuffix;
+        }
         
         setFilePrefixes();
         
         xyzVertexWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, timestampSuffix,pathVertexFilePrefix);
+                pathRecordingFilePath, fileNameSuffix,pathVertexFilePrefix);
         xyzSignalDataWriter = ProbeDataWriter.getNewWriter(
                 pathRecordingFilePath, 
-                timestampSuffix, "xyzVerticesAndSignalData");
+                fileNameSuffix, "xyzVerticesAndSignalData");
         
         if(!pathIsOnMesh){
             xyVertexWriter = ProbeDataWriter.getNewWriter(
-                pathRecordingFilePath, timestampSuffix,
+                pathRecordingFilePath, fileNameSuffix,
                 "pathXYvertices");
             yawPitchRollWriter = ProbeDataWriter.getNewWriter(
-                    pathRecordingFilePath, timestampSuffix, "yawPitchRollData");
+                    pathRecordingFilePath, fileNameSuffix, "yawPitchRollData");
         }
         
         pathSpecified = true;
+    }
+    
+    public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, boolean pathIsOnMesh){
+        this(startingPosition,pathRecordingFilePath,pathIsOnMesh,false);
     }
     
     public PathRecorder(Vector3f startingPosition,Path pathRecordingFilePath, 
@@ -132,13 +144,13 @@ public class PathRecorder {
         
         //gets the post-processing text file paths
         Path recordedPathStats = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, compressedPathInfoFilePrefix);
+                pathRecordingFilePath,fileNameSuffix, compressedPathInfoFilePrefix);
         Path compressedPathAndSignalFile = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, "compressedVerticesAndSignalInfo");
+                pathRecordingFilePath,fileNameSuffix, "compressedVerticesAndSignalInfo");
         Path allVerticesAndSignalFile = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, "xyzVerticesTimestampSignalInfo");
+                pathRecordingFilePath,fileNameSuffix, "xyzVerticesTimestampSignalInfo");
         Path compressedPathFile = GeneralFileHelper.getNewDataFilePath(
-                pathRecordingFilePath,timestampSuffix, compressedPathFilePrefix);
+                pathRecordingFilePath,fileNameSuffix, compressedPathFilePrefix);
         
         //runs the post-processor
         PathPostProcessing processor = new PathPostProcessing(recordedPathStats,
