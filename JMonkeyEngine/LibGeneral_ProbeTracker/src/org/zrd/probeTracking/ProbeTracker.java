@@ -52,8 +52,12 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
     /*
      * This is the offset amount
      * Units are probe units
+     * 
+     * In one probe, the offset is 40 mm in y direction. 
+     * Conversion factor is 0.0142857 probe units per mm
+     * Thus the offset is 
      */
-    private Vector2f offsetAmount = new Vector2f(1.0f,1.0f);
+    private Vector2f offsetAmount = new Vector2f(0,0.571428f);
     
     private Vector3f currentPosition;
     private Vector3f currentPositionAfterOffset;
