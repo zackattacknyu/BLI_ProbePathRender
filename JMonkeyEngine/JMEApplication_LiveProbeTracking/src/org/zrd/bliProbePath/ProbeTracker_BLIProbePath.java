@@ -6,6 +6,7 @@ package org.zrd.bliProbePath;
 
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.Properties;
 import org.zrd.geometryToolkit.geometryUtil.CalibrationProperties;
@@ -54,10 +55,12 @@ public class ProbeTracker_BLIProbePath {
         
         Quaternion initQuat = results.getRotationCalib();
         
+        Vector2f offset = results.getOffsetAmount();
+        
         return ProbeTracker.initializeProbeTracker(
                 currentSourceTracker, displacementMode, 
                 FilePathHelper.getDefaultOutputFolder(), 
-                finalScaleX, finalScaleY, startingPosition,initQuat);
+                finalScaleX, finalScaleY, startingPosition,initQuat,offset);
     }
     
 }

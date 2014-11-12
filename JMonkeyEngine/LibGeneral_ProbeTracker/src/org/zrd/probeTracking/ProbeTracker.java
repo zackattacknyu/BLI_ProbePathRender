@@ -57,7 +57,8 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
      * Conversion factor is 0.0142857 probe units per mm
      * Thus the offset is 
      */
-    private Vector2f offsetAmount = new Vector2f(0,0.571428f);
+    //private Vector2f offsetAmount = new Vector2f(0,0.571428f);
+    private Vector2f offsetAmount;
     
     private Vector3f currentPosition;
     private Vector3f currentPositionAfterOffset;
@@ -91,14 +92,26 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         
         return initializeProbeTracker(currentSourceTracker,displacementMode,
                 filePath,scaleFactorX,scaleFactorY,startPosition, 
-                new Quaternion());
+                new Quaternion(),new Vector2f());
+    }
+    
+    public static ProbeTracker initializeProbeTracker(
+            AbstractInputSourceTracker currentSourceTracker, 
+            short displacementMode, Path filePath,
+            float scaleFactorX, float scaleFactorY, Vector3f startPosition, 
+            Vector2f offsetAmount){
+        
+        return initializeProbeTracker(currentSourceTracker,displacementMode,
+                filePath,scaleFactorX,scaleFactorY,startPosition, 
+                new Quaternion(),offsetAmount);
     }
     
     public static ProbeTracker initializeProbeTracker(
             AbstractInputSourceTracker currentSourceTracker, 
             short displacementMode, Path filePath,
             float scaleFactorX, float scaleFactorY, Vector3f startPosition,
-            Quaternion rotationCalibration){
+            Quaternion rotationCalibration,
+            Vector2f offsetAmount){
         AbstractSerialInputToWorldConverter coordConverter;
         
         //default option for coord conversion
@@ -121,18 +134,19 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
         coordConverter.setRotationCalibration(rotationCalibration);
         
         return new ProbeTracker(coordConverter,currentSourceTracker,
-                startPosition,filePath);
+                startPosition,filePath, offsetAmount);
     }
     
     public ProbeTracker(AbstractSerialInputToWorldConverter coordConvertor, 
             AbstractInputSourceTracker currentSourceTracker,
-            Vector3f startingPosition, Path filePath){
+            Vector3f startingPosition, Path filePath, Vector2f offsetAmount){
         this.coordConverter = coordConvertor;
         this.currentSourceTracker = currentSourceTracker;
         previousTimestamp = currentSourceTracker.getTimestamp();
         currentTimestamp = currentSourceTracker.getTimestamp();
         
         this.startingPosition = startingPosition;
+        this.offsetAmount = offsetAmount;
         
         currentPosition = startingPosition.clone();
         currentPositionAfterOffset = new Vector3f(
@@ -280,7 +294,7 @@ public class ProbeTracker implements ProbeDataStream, LocationTracker{
             newPathExists = false;
             currentRecordingPath = new PathRecorder(currentPosition,pathRecordingFilePath,false,
                     currentSourceTracker.getCurrentDataString(),arrayToStringConverter,currentTimestamp);
-            currentRecordingPathWithOffset = new PathRecorder(currentPosition,pathRecordingFilePath,false,
+            currentRecordingPathWithOffset = new PathRecorder(currentPositionAfterOffset,pathRecordingFilePath,false,
                     currentSourceTracker.getCurrentDataString(),arrayToStringConverter,currentTimestamp,true);
             currentQualityStats = new QualityStatistics();
             recordingPath = true;
