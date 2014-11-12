@@ -5,6 +5,7 @@
 package org.zrd.geometryToolkit.geometryUtil;
 
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.zrd.util.dataHelp.DisplacementHelper;
@@ -25,6 +26,9 @@ public class CalibrationProperties {
     private boolean reflectX;
     private boolean reflectY;
     
+    private Vector2f offsetAmountInit;
+    private Vector2f offsetAmount;
+    
     private Boolean flattenMesh;
     private Integer[] flattenVertexIndices;
     
@@ -42,6 +46,9 @@ public class CalibrationProperties {
     public static final String REFLECT_X_FACTOR_NAME = "reflectionCalib.negateX";
     public static final String REFLECT_Y_FACTOR_NAME = "reflectionCalib.negateY";
     
+    public static final String OFFSET_X_FACTOR_NAME = "offsetAmount.x";
+    public static final String OFFSET_Y_FACTOR_NAME = "offsetAmount.y";
+    
     public static CalibrationProperties obtainCalibrationProperties(Properties specificProps, Properties defaultProps){
         
         CalibrationProperties defaultP = new CalibrationProperties(defaultProps);
@@ -57,8 +64,13 @@ public class CalibrationProperties {
         Boolean reflectX = (Boolean)chooseSpecificOrDefault(specificP.reflectX,defaultP.reflectX);
         Boolean reflectY = (Boolean)chooseSpecificOrDefault(specificP.reflectY,defaultP.reflectY);
         
+        Vector2f offsetAmountInit = (Vector2f)chooseSpecificOrDefault(
+                specificP.offsetAmountInit,
+                defaultP.offsetAmountInit);
+        
         CalibrationProperties returnProps = 
-                new CalibrationProperties(outputRotCalib,outputRealToProbe,outputVirtualToProbe,reflectX,reflectY);
+                new CalibrationProperties(outputRotCalib,outputRealToProbe,
+                outputVirtualToProbe,reflectX,reflectY,offsetAmountInit);
         
         //properties that only a mesh should contain
         returnProps.flattenMesh = specificP.flattenMesh;
@@ -67,7 +79,8 @@ public class CalibrationProperties {
         return returnProps;
     }
     
-    private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, Float virtualToRealFactor, Boolean reflectX, Boolean reflectY){
+    private CalibrationProperties(Quaternion rotationCalib, Float realToProbeFactor, 
+            Float virtualToRealFactor, Boolean reflectX, Boolean reflectY, Vector2f offsetAmountInit){
         this.probeToRealFactor = realToProbeFactor;
         this.rotationCalib = rotationCalib;
         this.realToVirtualFactor = virtualToRealFactor;
@@ -77,6 +90,15 @@ public class CalibrationProperties {
         scaleFactor = realToProbeFactor*virtualToRealFactor;
         scaleFactorX = DisplacementHelper.negativeIfTrue(scaleFactor, reflectX);
         scaleFactorY = DisplacementHelper.negativeIfTrue(scaleFactor, reflectY);
+        
+        //gets the scaled offset amount in probe units
+        if(offsetAmountInit == null){
+            this.offsetAmount = new Vector2f();
+        }
+        else{
+            this.offsetAmount = offsetAmountInit.mult(this.probeToRealFactor);
+        }
+        
     }
     
     private CalibrationProperties(Properties props){
@@ -115,6 +137,15 @@ public class CalibrationProperties {
                     PropertiesHelper.getFloatValueProperty(props, QUATERNION_Y_FACTOR_NAME),
                     PropertiesHelper.getFloatValueProperty(props, QUATERNION_Z_FACTOR_NAME),
                     PropertiesHelper.getFloatValueProperty(props, QUATERNION_W_FACTOR_NAME));
+        }
+        
+        if(props.containsKey(OFFSET_X_FACTOR_NAME) &&
+                props.containsKey(OFFSET_Y_FACTOR_NAME)){
+            
+            offsetAmountInit = new Vector2f(
+                    PropertiesHelper.getFloatValueProperty(props, OFFSET_X_FACTOR_NAME),
+                    PropertiesHelper.getFloatValueProperty(props, OFFSET_Y_FACTOR_NAME));
+            
         }
         
         
@@ -161,6 +192,10 @@ public class CalibrationProperties {
     
     public Float getScaleFactorX(){
         return scaleFactorX;
+    }
+
+    public Vector2f getOffsetAmount() {
+        return offsetAmount;
     }
     
     public Float getScaleFactorY(){
