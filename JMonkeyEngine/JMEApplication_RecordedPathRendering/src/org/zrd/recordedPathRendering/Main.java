@@ -88,12 +88,12 @@ public class Main extends SimpleApplication {
         
         if(lineMoveAction.arePointsNewlyPicked()){
             displaySegment(lineMoveAction.getCurrentSegment());
-            attachSegmentToTexture(lineMoveAction.getCurrentSegment());
+            //attachSegmentToTexture(lineMoveAction.getCurrentSegment());
         }
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
-            attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
@@ -112,6 +112,7 @@ public class Main extends SimpleApplication {
     
     private void displaySegment(SegmentSet segment){
         paths.attachChild(PathRenderHelper.createLineFromVerticesWithData(segment, assetManager, signalProcessor));
+        signalProcessor.switchRedBlack();
     }
 
     @Override
