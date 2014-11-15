@@ -19,6 +19,9 @@ public class SignalProcess implements StringToColorConversion{
     
     private SignalDataTracking dataTracker;
     
+    //true is red. black is false
+    private boolean redBlackSwitch = true;
+    
     public SignalProcess(int size, int resolution){
         int numWaves = 2;
         int indexStart = 0;
@@ -61,7 +64,19 @@ public class SignalProcess implements StringToColorConversion{
         }
         
         //System.out.println("Brightness: " + brightness);
-        return new ColorRGBA(1-brightness,0f,brightness,1.0f);
+        //return new ColorRGBA(1-brightness,0f,brightness,1.0f);
+
+        if(redBlackSwitch){
+            return ColorRGBA.Red;
+        }else{
+            return ColorRGBA.Black;
+        }
     }
+
+    public void switchRedBlack() {
+        redBlackSwitch = !redBlackSwitch;
+    }
+    
+    
     
 }
