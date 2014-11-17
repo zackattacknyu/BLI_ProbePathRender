@@ -53,15 +53,19 @@ Even after calibration, due to measurement error and deformability, we have a pa
 \\
 A path is just a series of connected segments and the mesh is just a series of triangles. Thus the input of our algorithm is a segment with a start and end point as well as the triangle where it originates and the triangles neighbors. We need to make sure the projection preserves the length of the segment. We are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
 \\
-If we let $v$ be the segment vector, $N$ be the normal, and $E$ be the resultant vector that is the projection of $v$ onto the plane described by $N$, then the following equation will get us $E$
+We will let $v$ be the segment vector, $N$ be the normal, and $E$ be the resultant vector that is on the plane of $N$ and forms an acute angle with $v$. The following equation will then hold
+\[
+E + proj_N(v) = v
+\]
+**SHOW A DIAGRAM JUSTIFYING THIS EQUATION**\\
+Thus, the following equation will get us $E$
 \[
 E = v - proj_N(v)
 \]
-This can be furthur simplified to say
+This can be further simplified to say
 \[
 E = v - N(v.N)
 \]
-**INSERT FIGURE OF THE VECTORS**
 We then find the intersection of the vector $E$ with the current triangle. If the segment is entirely in the triangle, then we move onto the next segment starting from the endpoint of $E$. If the segment leaves the triangle, then we find which edge the segment intersects and repeat the projection procedure for the end part of the segment that is not in the triangle. This procedure of course relied on finding the intersection of the triangle with the segment which proved to be non-trivial.\\
 \\
 When finding the triangle and segment intersection, we had a triangle in a 3D space as well as a segment that was supposed to be coplanar to the triangle but could be slightly off due to floating-point errors with the coordinates. To find the intersection point, I converted the segment and triangle coordinates to the coordinate system where one of the vertices of the triangle is the origin and the basis vectors are the two vectors made by the segments coming off that vertex as well as the cross product of those vectors. In this coordinate system, the third coordinate should be zero. In practice, it was near zero due to floating point errors. Once in the new coordinate system, we just had to find the 2D intersection of the triangle and the segment. \\
@@ -70,21 +74,23 @@ The above procedure describes what we did with a single segment. With paths, we 
 
 \subsection{Justification}
 
-In Theorem 9.10.11 of \ref{mathText}, the geodesic is defined to be the curve of shortest length between two points on the surface. Each segment of our path represents the distance and direction traveled in a very small amount of time. This segment would be along a geodesic on the surface because the path would be straight in the short amount of time between the points. \\
+%In Theorem 9.10.11 of \ref{mathText}, the geodesic is defined to be the curve of shortest %length between two points on the surface. 
+We have a recorded path and an algorithm to transform that to the surface. Because a path is a series of short segments, we just need to justify that algorithm for a single segment. Each segment of our path represents the distance and direction traveled in a very small amount of time. We are given a start point on the surface and vector and need to calculate the path on the surface. \\
 \\
-IMPROVE THIS WORDING:
-Because it's a geodesic, it goes along the surface of the triangle in a straight line in the direction that we want. We do not know the second point we are aiming for but once we get an endpoint, the path followed will be the geodesic on the surface. Because the force of the human will be on the normal to the surface, we can justifiably rotate along the surface normal. \\
+This tracking system is meant to be used with a system that rapidly samples the location of a probe. This means that an individual segment is thus quite short. Additionally, the surface is generally assumed to a low curvature. The surface we are tracking over must be a manifold. The combination of short segments and low curvature leads to the following assertion that will be used in my justification: {\it If $\epsilon$ is the length of the segment, then the $\epsilon$-neighborhood around the start point of the segment is homeomorphic to $R^2$}\\
 \\
-IMPROVE THIS:
-Because it has a low curvature at a given point, we can locally flatten the triangles into a plane. Thus after following the triangles in the way that we do, when we get the second point, the path that we used will have been the geodesic. \\
+Because the sampling rate was so rapid, we can assert that between samples, a straight line on the surface was followed. We can thus assert the following: {\it The segment follows the geodesic path from start to end point along the surface}. We do not have the end point on the surface but when we assert an end point later, the path that was calculated will be the geodesic path from start to end point along the surface. \\
 \\
-We have 3 cases:\\
-1. Segment is just in one triangle. In this case, it just travels along the triangle's plane\\
-2. Segment is in two triangles. In this case, we can do a simple local flattening of the triangle and it's neighbors which will always exist by our restrictions\\
-3. Segment in in more than two triangles. This can happen but we are assuming that our local area has a low enough curvature that the mesh flattening does exist and the path will be able to follow it\\
+At a given point, the probe is either on the surface or pressing into the surface in the direction of the normal to the surface. This is because when someone is guiding the probe, they are pressing {\it down} on the surface meaning that the pressing is in the direction of the normal. This allows us to assert the following: {\it The transformed segment vector must be perpendicular to the normal. }\\
 \\
-We thus have a recorded segment that starts on a triangle and may travel above or below that triangle and we need to transform it into a geodesic. Because the geodesic is a straight line analog, we flatten our current triangle and the triangles around it. The geodesic would travel along our current triangle and then bend to follow the path of the next triangle.\\
+Because the rotation calibration step takes care of the orientation along the surface, we must transform our vector in such a way that preserves that. We thus assert that we can only rotate the vector in the plane formed by the segment vector and the normal. Rotating it in any other plane would change the orientation along the surface. The transformed vector still needs to be perpendicular to the normal, thus we will have two options for it. We must pick the option that leaves us with an acute angle between the transformed vector and original vector as picking the other one would also change the orientation. We have now justified the following facts that were used to make the formula for the transformed segment vector: \\
+{\it The transformed vector must be rotated along the same plane as the normal and the original vector}\\
+{\it The transformed vector and original vector must form an acute angle}
 \\
+\\
+We have now justified the direction of our transformed vector. We need to preserve arc-length of the path hence the length of our transformed vector will be the same as the length of the segment vector. This could have the implication that the transformed vector goes past the triangle it is located on. If that is the case, then we cut off the segment at the edge and transform the remaining vector. We repeat this procedure until a segment lies entirely in a triangle. \\
+\\
+We finally need to justify that this produces the geodesic in our desired direction on the surface. In the case where the entire segment can be put into its current triangle, this is trivial as we are following the straight line along that part of the surface. We thus need to justify the case where we traverse multiple triangles. Due to the homeomorphism mentioned above, we can locally flatten the triangles and avoid the gaps and overlaps that sometimes happen when there is mesh flattening. At each point in the algorithm, we are putting the path on the plane in the direction of the segment. Thus it is in the straight line direction. This means that when you flatten the triangles, the path will be a straight line in the direction we wanted. It will thus be the shortest path between the start and end points.
 
 
 
