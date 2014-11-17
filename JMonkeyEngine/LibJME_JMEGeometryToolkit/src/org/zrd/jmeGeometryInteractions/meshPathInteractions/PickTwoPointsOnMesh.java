@@ -183,15 +183,7 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
 
             }else{
                 
-                /*
-                 * TODO: CHECK TO SEE WHAT HAPPENS
-                 * WHEN WE DO NOT HAVE FIXED POINTS.
-                 * 
-                 * MAKE SURE THIS IS CALLED
-                 * PROPERLY IN THAT CASE
-                 */
                 
-                //we are at the end point
 
                 Vector3f endPoint = pointOnMesh.clone();
                 if(!endPoint.equals(lastPointClicked) && spacebarHit.wasSpacebarHit()){
