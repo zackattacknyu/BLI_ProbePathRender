@@ -70,7 +70,22 @@ The above procedure describes what we did with a single segment. With paths, we 
 
 \subsection{Justification}
 
-In Theorem 9.10.11 of \ref{mathText}, the geodesic is defined to be the curve of shortest length between two points on the surface. 
+In Theorem 9.10.11 of \ref{mathText}, the geodesic is defined to be the curve of shortest length between two points on the surface. Each segment of our path represents the distance and direction traveled in a very small amount of time. This segment would be along a geodesic on the surface because the path would be straight in the short amount of time between the points. \\
+\\
+IMPROVE THIS WORDING:
+Because it's a geodesic, it goes along the surface of the triangle in a straight line in the direction that we want. We do not know the second point we are aiming for but once we get an endpoint, the path followed will be the geodesic on the surface. Because the force of the human will be on the normal to the surface, we can justifiably rotate along the surface normal. \\
+\\
+IMPROVE THIS:
+Because it has a low curvature at a given point, we can locally flatten the triangles into a plane. Thus after following the triangles in the way that we do, when we get the second point, the path that we used will have been the geodesic. \\
+\\
+We have 3 cases:\\
+1. Segment is just in one triangle. In this case, it just travels along the triangle's plane\\
+2. Segment is in two triangles. In this case, we can do a simple local flattening of the triangle and it's neighbors which will always exist by our restrictions\\
+3. Segment in in more than two triangles. This can happen but we are assuming that our local area has a low enough curvature that the mesh flattening does exist and the path will be able to follow it\\
+\\
+We thus have a recorded segment that starts on a triangle and may travel above or below that triangle and we need to transform it into a geodesic. Because the geodesic is a straight line analog, we flatten our current triangle and the triangles around it. The geodesic would travel along our current triangle and then bend to follow the path of the next triangle.\\
+\\
+
 
 
 \bibliographystyle{acmsiggraph}
