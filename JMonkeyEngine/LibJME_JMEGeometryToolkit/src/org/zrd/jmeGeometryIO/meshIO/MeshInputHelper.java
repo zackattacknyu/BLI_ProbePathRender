@@ -187,7 +187,7 @@ public class MeshInputHelper {
         
         File objFile = meshFiles.getObjFile();
         Material objectMaterial = MaterialHelper.getTextureMaterial(assetManager, meshFiles.getTextureFile());
-        //if(wireframeOn) objectMaterial.getAdditionalRenderState().setWireframe(true);
+        //objectMaterial.getAdditionalRenderState().setWireframe(true);
         
         String objFileLocation = objFile.getName();
         assetManager.registerLocator(objFile.getParentFile().getAbsolutePath(), FileLocator.class);
