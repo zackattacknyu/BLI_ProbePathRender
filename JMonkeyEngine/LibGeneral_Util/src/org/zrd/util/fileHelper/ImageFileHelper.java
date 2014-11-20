@@ -40,6 +40,14 @@ public class ImageFileHelper {
         return tempFolder.resolve(fileName).toFile();
     }
     
+    public static void writePNGimageToDefaultOutputFile(BufferedImage image){
+        writePNGimageToOutputFile(image,"currentTexture");
+    }
+    
+    public static void writePNGimageToOutputFile(BufferedImage image, String prefix){
+        writePNGimage(image,GeneralFileHelper.getNewOutputFilePath(prefix,".png").toFile());
+    }
+    
     public static void writePNGimage(BufferedImage image, File fileToWrite){
         try {
             ImageIO.write(image, "png", fileToWrite);

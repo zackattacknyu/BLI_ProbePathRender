@@ -21,6 +21,7 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.util.fileHelper.FilePathHelper;
 import java.awt.image.*;
 import org.zrd.jmeUtil.materials.MaterialHelper;
+import org.zrd.util.fileHelper.ImageFileHelper;
 /**
  * test
  * @author normenhansen
@@ -87,13 +88,13 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         
         if(lineMoveAction.arePointsNewlyPicked()){
-            displaySegment(lineMoveAction.getCurrentSegment());
-            //attachSegmentToTexture(lineMoveAction.getCurrentSegment());
+            //displaySegment(lineMoveAction.getCurrentSegment());
+            attachSegmentToTexture(lineMoveAction.getCurrentSegment());
         }
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
-            displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
-            //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
+            attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
@@ -105,6 +106,7 @@ public class Main extends SimpleApplication {
     private void attachSegmentToTexture(SegmentSet segment){
         currentTextureImage = PathRenderHelper.createLineOnImage(
                 currentTextureImage, segment, signalProcessor);
+        ImageFileHelper.writePNGimageToDefaultOutputFile(currentTextureImage);
         Material newMaterial = MaterialHelper.getTextureMaterial(
                 assetManager, currentTextureImage);
         shootableSurface.setMaterial(newMaterial);

@@ -94,6 +94,13 @@ public class GeneralFileHelper {
         }
         return copiedFilePath.toFile();
     }
+    
+    public static Path getNewOutputFilePath(String fileNamePrefix){
+        return getNewDataFilePath(FilePathHelper.getDefaultOutputFolder(),fileNamePrefix);
+    }
+    public static Path getNewOutputFilePath(String fileNamePrefix, String extension){
+        return getNewDataFilePath(extension,FilePathHelper.getDefaultOutputFolder(),fileNamePrefix);
+    }
 
     /**
      * This takes in the folder path and prefix and constructs the Path object
@@ -105,14 +112,12 @@ public class GeneralFileHelper {
      * @throws IOException          if there is a problem writing the file
      */
     public static Path getNewDataFilePath(Path folderPath, String fileNamePrefix){
+        return getNewDataFilePath(DataWritingConstants.OUTPUT_FILE_FORMAT,folderPath,fileNamePrefix);
+    }
+    public static Path getNewDataFilePath(String extension, Path folderPath, String fileNamePrefix){
         String currentTimestamp = TimeHelper.getTimestampSuffix();
-        return getNewDataFilePath(folderPath,currentTimestamp,fileNamePrefix);
+        return getNewDataFilePath(extension, folderPath,currentTimestamp,fileNamePrefix);
     }
-    
-    public static Path getNewOutputFilePath(String fileNamePrefix){
-        return getNewDataFilePath(FilePathHelper.getDefaultOutputFolder(),fileNamePrefix);
-    }
-    
     /**
      * This takes in the folder path and prefix and constructs the Path object
      *      for the file to be used. Specifically, it constructs a text file
@@ -123,9 +128,12 @@ public class GeneralFileHelper {
      * @throws IOException          if there is a problem writing the file
      */
     public static Path getNewDataFilePath(Path folderPath, String currentTimestamp, String fileNamePrefix){
-        String fileName = fileNamePrefix + DataWritingConstants.PREFIX_TO_SUFFIX_SEPARATOR + currentTimestamp + DataWritingConstants.OUTPUT_FILE_FORMAT;
+        return getNewDataFilePath(DataWritingConstants.OUTPUT_FILE_FORMAT,folderPath,currentTimestamp,fileNamePrefix);
+    }
+    
+    public static Path getNewDataFilePath(String extension, Path folderPath, String currentTimestamp, String fileNamePrefix){
+        String fileName = fileNamePrefix + DataWritingConstants.PREFIX_TO_SUFFIX_SEPARATOR + currentTimestamp + extension;
         GeneralFileHelper.createDirectoryIfNone(folderPath);
         return folderPath.resolve(fileName);
     }
-    
 }

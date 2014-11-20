@@ -202,7 +202,6 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                             new PathOnMeshCalculator(activeSegmentSet,endPoint,startingTriangle,meshInfo);
                     activeSegmentSet = currentRotCalib.getCurrentSegmentSetOnSurface();
                     
-                    //DEBUG CODE. COMMENT THIS WHEN DONE
                     GeometryDataHelper.writeTexCoordToDefaultOutputFile(activeSegmentSet.getVertexTextureCoords());
                     
                     //calls the method that handles the result
