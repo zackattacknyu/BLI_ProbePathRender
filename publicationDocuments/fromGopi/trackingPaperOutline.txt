@@ -1,0 +1,51 @@
+Section: Introduction
+ (somewhere mention that this is not "capturing or tracking a deformable surface", but it is "tracking ON a deformable surface")
+ - What is the problem? 
+ - Motivate the problem
+ - Summarize the problem in terms of input/output. What does your system is expected to do?
+Part of the related work 
+  - talk about other tracking systems and their shortcomings.  - Why 3D tracking alone will not work and why tracking ON the surface is required.
+
+ - What are the main contributions of the paper? (What are the main obstructions that this paper removes in solving the problem?)
+
+  - talk about the tracking system and the data I get from it --This is not the main part of introduction.  You can mention it in a sentence or two.
+
+  
+Section: Tracker on Deformable Surfaces
+Subsection: Coordinate Systems
+  - the 4 coordinate systems we have
+  - mouse sensor, probe, real world, virtual world
+Subsection: Rigid and Deformable Coordinate Systems Transformations
+ - Using coordinate systems mentioned above, stress the fact that tracking on the surface is required.
+ - Why you also need to find the rotation of the probe on the surface (in the tangent space of the surface).
+ - What else do we need to know to correctly track the probe on the surface.  (For example, for every sweep -- path traversed by the probe without getting out of the surface --  you need to know at least two point coorespondences) 
+ 
+Subsection: Tracking System Components
+  -- Leverage the previous subsection to summarize what kind of sensors, markers, and other components you need to build a successful tracker.
+
+Subsection: System Calibration and Tracking Protocol
+  - {\bf Scale Calibration}
+  - {\bf Rotation Calibration} for flat surfaces
+  - {Tracking Protocol}What should the user (technician) do make the system work (he/she should start from a known point and go to another known point, etc.) 
+
+
+\Section{Tracking the Probe on a Deformable Surface}
+  -- Talk about the process: extracting the 3D surface using Kinect, registering the physical model with that virtual model (make sure you mention that Kinect is not used there after for tracking and why), sensors in the tracker
+  -- Given the sensor inputs, how do you track the probe?
+(describe the mesh following algorithm, and  talk about mesh flattening related papers;  justify the mesh following algorithm -- btw, "justification" should not be explicit. It should flow well with the algorithm;   describe rotation calibration for deformable surfaces and  talk about papers on deformability.)
+
+
+Results  -- VERY VERY INSUFFICIENT.
+  - I will show the results for 4 of our models:
+  - Cardboard Box, Phantom (flat surface examples)  -- FOR WHAT? When we talk about deformable surfaces, why would anyone care about a flat surface?
+  - Medicine Ball, Lola Model (deformable surface results) -- How "deformable" are these models? Don't confuse between "deformable" and "non-flat". How do you quantify "deformability"?
+
+  - Screenshots of the paths will be shown 
+  - I will also take recorded paths between calibration points and compare the end points of the paths with the desired end points on the surface
+  - The distance will be in virtual units. I will convert it to millimeters to show the error we end up getting at the moment
+
+Conclusion & Future Work:
+  - sum up everything accomplished with tracking
+  - mention sources of error that could be improved:
+     - hardware inaccuracies with tracking and 3D scanning
+  - mention idea of modeling the deformation of the surface and using that to produce something more accurate
