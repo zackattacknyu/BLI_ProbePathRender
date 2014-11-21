@@ -47,9 +47,18 @@
 
 
 
-\section{Mesh Traversal Algorithms}
+\section{Tracking the Probe on a Deformable Surface}
 
-\subsection{Following a Deformable mesh}
+\subsection{Mesh Following Algorithm}
+
+After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in figure \ref{pathsAboveAndBelow}. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{pathaboveandbelow.jpg}
+\caption{Path above and below surface}
+\label{pathsAboveAndBelow}
+\end{figure}
 
 Even after calibration, due to measurement error and deformability, when we render the path in the virtual world there will be segments above or below the virtual surface. The overall arc length of the path will still be preserved. The path was still recorded on the real surface and we thus want to have a visualization of where the path was located on that surface. We thus need a method of converting the inaccurate path in the virtual world into a path that follows the virtual surface and shows the locations on the real surface that the probe traversed. \\
 \\
