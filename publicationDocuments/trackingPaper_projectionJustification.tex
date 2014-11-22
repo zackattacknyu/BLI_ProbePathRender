@@ -65,14 +65,14 @@ Our path is defined as a starting point $p$ and a set of $n$ segments $s_0,...,s
 \\
 After finding how the first segment follows the mesh, we will have a new start point on the mesh as well as $n-1$ segments that need to be projected onto the mesh. We can thus have an algorithm that finds a projection for a single vector and starting point and then recursively computes the rest of the path, below:.\\
 \\
-Project( $p$, ${s_0,s_1,...,s_{n-1}}$,$M$ ):\\
+Project( $p$, $\{s_0,s_1,...,s_{n-1}\}$,$M$ ):\\
 -Project $s_0$ onto $M$\\
 -Get new start point $p'$\\
--Project( $p'$, ${s_1,...,s_{n-1}}$,$M$)\\ 
+-Project( $p'$, $\{s_1,...,s_{n-1}\}$,$M$)\\ 
 \\
-The path being referenced is a sequence of connected segments that starts at a specific point on the mesh. . We will repeat our procedure for each segment in the path thus we only need to consider a single segment as our input. This segment has a start point on the mesh as well as a direction and length. We need to make sure the projection preserves the length of the segment. We are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
+When we project the first segment, we want it to follow the geodesic path along the mesh. **JUSTIFY THIS**. We will therefore flatten the mesh around the local area that the segment traverses. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and its neighbors. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
 \\
-We will let $v$ be the vector for our input segment, $N$ be the normal, and $E$ be the resultant vector that is both on the plane formed by $N$ and $v$ and and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
+We will let $v$ be the vector for our input segment, $N$ be the normal of $T$, and $E$ be the resultant vector that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
 E + proj_N(v) = v
 \]
@@ -92,11 +92,47 @@ This can be further simplified to say
 \[
 E = v - N(v.N)
 \]
-We then find the intersection of the vector $E$ with the edges of the current triangle. If the segment is entirely in the triangle, then we move onto the next segment starting from the endpoint of $E$. If the segment leaves the triangle, then we find which edge the segment intersects and repeat the projection procedure for the end part of the segment that is not in the triangle. This procedure of course relied on finding the intersection of the triangle with the segment which proved to be non-trivial.\\
+We will draw $E$ on the mesh $M_0$. If the segment lies entirely inside $M_0$ as in Figure \ref{flatteningDiagram_oneTriangle}, then we are done. Otherwise, we will add triangles to $M_0$, rotate them to be on the same plane as $T$, and extend $E$ onto them, as in Figure \ref{flatteningDiagram_neighborhood}.By the manifold property, the flattening will always exists **JUSTIFY THIS** and this path will thus be a geodesic path **JUSTIFY THIS**. This will leave us with a series of connected points either on the interior or edges of each of the triangles. These points are computed in each triangle's coordinate system, so that the coordinates of these points in $M$ are easily computed and those coordinates are used to get the path that follows the mesh.\\
+In the total, the algorithm takes in a starting point on the mesh $p$, a sequence of segments that starts from that point, and a triangular manifold mesh $M$. It outputs a sequence of points $\{ p_0, p_1, ... , p_m\}$ that lie on the mesh. The pseudo-code is in algorithm \ref{pseudocode}.\\
 \\
-When finding the triangle and segment intersection, we had a triangle in a 3D space as well as a segment that was supposed to be coplanar to the triangle but could be slightly off due to floating-point errors with the coordinates. To find the intersection point, we converted the segment and triangle coordinates to the coordinate system where one of the vertices of the triangle is the origin and the basis vectors are the two vectors made by the segments coming off that vertex as well as the cross product of those vectors. In this coordinate system, the third coordinate should be zero. In practice, it was near zero due to floating point errors. Once in the new coordinate system, we just had to find the 2D intersection of the triangle and the segment. \\
+\begin{algorithm}[t]
+Input: Data units and their access requirements (AR) \;
+\For{start and end unit of each AR i}{
+	Find optimal location $j$ for copy\;
+	Calculate $\Delta EST_M(i,j)$ and insert into $E_M$ \;
+	Calculate $\Delta EST_C(i,j)$ and insert into $E_C$ \;
+}
+\While{{\bf true}}{
+		\While{top element of $E_M$ is positive}{
+			Pop top element and move the data unit to its destination \;
+			Update $E_M$ and $E_C$ \;
+		}
+		\eIf{there is more space for redundancy}{
+		Pop top element and copy the data unit to its destination \;
+		Update $E_M$ and $E_C$ \;
+		}{{\bf break}}
+}
+\caption{Pseudo-code for our algorithm}
+\label{pseudocode}
+\end{algorithm}
+Project( $p$, $\{s_0,s_1,...,s_{n-1}\}$,$M$ ):\\
+-Project $s_0$ onto $M$\\
+-Get new start point $p'$\\
+-Project( $p'$, $\{s_1,...,s_{n-1}\}$,$M$)\\ 
 \\
-The above procedure describes what we did with a single segment. With paths, we just iterated this procedure for each segment of the path. We assumed that the important aspect of each segment is its vector and not its origin point, since that is what we get from the probe. This meant that the end point of a projected segment was treated as the start point for the rest of the path when doing the loop to project the entire path onto the mesh.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{flatteningdiagram_oneTriangleAndNeighbors.jpg}
+\caption{The triangle at $p$ and its neighbors}
+\label{flatteningDiagram_oneTriangle}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{flatteningdiagram_neighborhood.jpg}
+\caption{The triangles in the neighborhood around $p$}
+\label{flatteningDiagram_neighborhood}
+\end{figure}
 
 \subsection{Justification}
 
@@ -121,18 +157,7 @@ Because the sampling rate was so rapid, we can assert that between samples, a st
 We have now justified the direction of our transformed vector. We need to preserve arc-length of the path hence the length of our transformed vector will be the same as the length of the segment vector. This could have the implication that the transformed vector goes past the triangle it is located on. If that is the case, then we cut off the segment at the edge and transform the remaining vector. We repeat this procedure until a segment lies entirely in a triangle. \\
 \\
 We finally need to justify that this produces the geodesic in our desired direction on the surface. In the case where the entire segment can be put into its current triangle, this is trivial as we are following the straight line along that part of the surface. We thus need to justify the case where we traverse multiple triangles. Due to the homeomorphism mentioned above, we can locally flatten the triangles and avoid the gaps and overlaps that sometimes happen when there is mesh flattening. At each point in the algorithm, we are putting the path on the plane in the direction of the segment. Thus it is in the straight line direction. This means that when you flatten the triangles, the path will be a straight line in the direction we wanted. It will thus be the shortest path between the start and end points. This is illustrated in figure \ref{flatteningDiagram_oneTriangle} and figure \ref{flatteningDiagram_neighborhood}. 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\columnwidth]{flatteningdiagram_oneTriangleAndNeighbors.jpg}
-\caption{The triangle at $p$ and its neighbors}
-\label{flatteningDiagram_oneTriangle}
-\end{figure}
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\columnwidth]{flatteningdiagram_neighborhood.jpg}
-\caption{The triangles in the neighborhood around $p$}
-\label{flatteningDiagram_neighborhood}
-\end{figure}
+
 
 
 
