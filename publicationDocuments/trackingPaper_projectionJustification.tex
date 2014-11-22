@@ -11,6 +11,7 @@
 \documentclass[conference]{acmsiggraph}
 
 \usepackage{authblk}
+\usepackage[]{algorithm2e}
 
 \TOGonlineid{45678}
 \TOGvolume{0}
@@ -51,7 +52,7 @@
 
 \subsection{Mesh Following Algorithm}
 
-After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in figure \ref{pathsAboveAndBelow}. 
+After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. We thus need an algorithm to take this path and transform it to follow the mesh. The orientation along the tangent space to the surface must be preserved as that was reconciled previously. The arc length of the path must also be preserved as that is not affected by deformability **MAKE SURE THIS IS PREVIOUSLY ESTABLISHED**. When we start recording our path, the user specifies the point on the virtual surface corresponding to our location on the real surface, thus our starting point will be on the surface and won't change. Each sampling of probe data gives us displacement and orientation, thus we will structure our input as such **IMPROVE THIS**. 
 
 \begin{figure}[ht]
 \centering
@@ -60,9 +61,16 @@ After calibration, due to deformability and possible measurement errors, our ren
 \label{pathsAboveAndBelow}
 \end{figure}
 
-Even after calibration, due to measurement error and deformability, when we render the path in the virtual world there will be segments above or below the virtual surface. The overall arc length of the path will still be preserved. The path was still recorded on the real surface and we thus want to have a visualization of where the path was located on that surface. We thus need a method of converting the inaccurate path in the virtual world into a path that follows the virtual surface and shows the locations on the real surface that the probe traversed. \\
+Our path is defined as a starting point $p$ and a set of $n$ segments $s_0,...,s_{n-1}$ where each segment is a vector with direction and magnitude. The starting point of $s_0$ is $p_0$ and for all $i>0$ the starting point of $s_i$ is the ending point of $s_{i-1}$. The mesh is a triangular manifold mesh **MAKE SURE THIS IS PREVIOUSLY ESTABLISHED**. \\
 \\
-The path being referenced is a sequence of connected segments that starts at a specific point on the mesh. The mesh is a triangular manifold mesh. We will repeat our procedure for each segment in the path thus we only need to consider a single segment as our input. This segment has a start point on the mesh as well as a direction and length. We need to make sure the projection preserves the length of the segment. We are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
+After finding how the first segment follows the mesh, we will have a new start point on the mesh as well as $n-1$ segments that need to be projected onto the mesh. We can thus have an algorithm that finds a projection for a single vector and starting point and then recursively computes the rest of the path, below:.\\
+\\
+Project( $p$, ${s_0,s_1,...,s_{n-1}}$,$M$ ):\\
+-Project $s_0$ onto $M$\\
+-Get new start point $p'$\\
+-Project( $p'$, ${s_1,...,s_{n-1}}$,$M$)\\ 
+\\
+The path being referenced is a sequence of connected segments that starts at a specific point on the mesh. . We will repeat our procedure for each segment in the path thus we only need to consider a single segment as our input. This segment has a start point on the mesh as well as a direction and length. We need to make sure the projection preserves the length of the segment. We are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
 \\
 We will let $v$ be the vector for our input segment, $N$ be the normal, and $E$ be the resultant vector that is both on the plane formed by $N$ and $v$ and and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
