@@ -96,11 +96,18 @@ We will draw $E$ on the mesh $M_0$. If the segment lies entirely inside $M_0$ as
 In the total, the algorithm takes in a starting point on the mesh $p$, a sequence of segments that starts from that point, and a triangular manifold mesh $M$. It outputs a sequence of points $\{ p_0, p_1, ... , p_m\}$ that lie on the mesh. The pseudo-code is in algorithm \ref{pseudocode}.\\
 \\
 \begin{algorithm}[t]
-Input: Data units and their access requirements (AR) \;
-\For{start and end unit of each AR i}{
-	Find optimal location $j$ for copy\;
-	Calculate $\Delta EST_M(i,j)$ and insert into $E_M$ \;
-	Calculate $\Delta EST_C(i,j)$ and insert into $E_C$ \;
+Input: Starting point $p_0$, Segments $s_0,...,s_m$, Mesh $M$\;
+Set $p \leftarrow p_0$ \;
+Initialize list $P$ of points and add $p_0$ to it \;
+Set $T$ to be the triangle of $p_0$ \;
+\For{each segment $s_i$ in order}{
+	Set $N$ to be normal for $T$\;
+	Clear $M_0$ and add $T$ to it \;
+	Set $v$ to be the vector for $s_i$ \;
+	Set $E \leftarrow v - N(v.N)$ \;
+	Add Triangles to $M_0$ until $p+E$ is in $M_0$ \;
+	Add points computed to $P$ \;
+	Set $p$ $\leftarrow$ $p+E$ \;
 }
 \While{{\bf true}}{
 		\While{top element of $E_M$ is positive}{
@@ -115,11 +122,6 @@ Input: Data units and their access requirements (AR) \;
 \caption{Pseudo-code for our algorithm}
 \label{pseudocode}
 \end{algorithm}
-Project( $p$, $\{s_0,s_1,...,s_{n-1}\}$,$M$ ):\\
--Project $s_0$ onto $M$\\
--Get new start point $p'$\\
--Project( $p'$, $\{s_1,...,s_{n-1}\}$,$M$)\\ 
-\\
 
 \begin{figure}[ht]
 \centering
