@@ -1,0 +1,15 @@
+\section{Introduction}
+
+In various medical applications, a probe moves across a patient's body and takes measurements. It is very important to know the exact location where those measurements were taken. Currently they attach a grid to the patient and painstakingly take measurements at each point in the grid. We felt that they could save a lot of time by automating that process using motion tracking technology. After realizing that magnetic tracking or a kinect would not work, we thought that using an ordinary optical mouse sensor on the surface itself could work well. Because the surface is not flat, we will need to know the orientation so we put a gyroscope, compass, and accelerometer into the probe. \\
+\\
+This now meant that we had a displacement sensor to get us $(x,y)$ displacements as well as orientation information to find out how that displacement was oriented. This leads to the problem of how do we translate that information into $(x,y,z)$ coordinates in our virtual space so that we may produce an accurate visualization of our path. Our measurements were taken on the surface of the object, so we needed to also make sure the coordinates we ended up with were on the surface. This proved to be an especially difficult problem due to the fact that our surface is deformable. \\
+\\
+For the purposes of our algorithm, we are assuming that the mesh of the patient is pre-loaded into our virtual environment. We are also assuming the presence of distinct calibration points on the surface of the patient where we can place the probe. This will allow us to have initial points as places to begin our paths as well as desired end points when we need to calibrate the readings. Our problem is now given these things and a continuous stream of orientation and displacement data, how do we produce an accurate path in real-time.\\
+\\
+We first start by taking the orientation and displacement data and making 3D paths in our virtual environment. These paths are initially not accurate because the scaling and orientation of the virtual world and the real world are different. We first work on calibrating the scale. Calibrating the orientation information is a more difficult task. These paths are recorded on the surface, so there are three things that must be done during the calibration phase: \\
+\\
+1. Rotate the path onto the surface\\
+2. Rotate the path along the surface\\
+3. Make sure the transformed path follows the surface\\
+\\
+Once the calibration steps are done, reasonably approximate paths of the probe on the surface will be produced. We will also be taking data continuously so coloring the different segments of the path will provide an accurate visualization of where certain things are located on the path that the probe took on the patient.
