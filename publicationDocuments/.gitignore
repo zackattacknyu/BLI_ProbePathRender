@@ -4,3 +4,4 @@
 *.log
 /*.synctex.gz(busy)
 /*.synctex.gz
+*.pdf
