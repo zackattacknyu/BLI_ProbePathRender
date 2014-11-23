@@ -20,7 +20,7 @@ Project( $p$, $\{s_0,s_1,...,s_{n-1}\}$,$M$ ):\\
 -Get new start point $p'$\\
 -Project( $p'$, $\{s_1,...,s_{n-1}\}$,$M$)\\ 
 \\
-When we project the first segment, we want it to follow the geodesic path along the mesh. **JUSTIFY THIS**. We will therefore flatten the mesh around the local area that the segment traverses. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and its neighbors. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
+When we project the first segment, we want it to follow the geodesic path along the mesh. **JUSTIFY THIS**. We will therefore flatten the mesh around the local area that the segment traverses. Our segments are short enough that if $\epsilon$ is the length, then the $\epsilon$-neighborhood around the start point will be homeomorphic to $R^2$ thus the flattening will exist. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and its neighbors. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
 \\
 We will let $v$ be the vector for our input segment, $N$ be the normal of $T$, and $E$ be the resultant vector that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
@@ -88,10 +88,7 @@ Set $T$ to be the triangle of $p_0$ \;
 
 \subsection{Justification}
 
-%In Theorem 9.10.11 of \ref{mathText}, the geodesic is defined to be the curve of shortest %length between two points on the surface. 
-We have a recorded path and an algorithm to transform that to the surface. Because a path is a series of short segments, we just need to justify that algorithm for a single segment. Each segment of our path represents the distance and direction traveled in a very small amount of time. We are given a start point on the surface and vector and need to calculate the path on the surface. \\
-\\
-This tracking system is meant to be used with a system that rapidly samples the location of a probe. This means that an individual segment is thus quite short. Additionally, the surface is generally assumed to a low curvature. The surface we are tracking over must be a manifold. The combination of short segments and low curvature leads to the following assertion that will be used in my justification: {\it If $\epsilon$ is the length of the segment, then the $\epsilon$-neighborhood around the start point of the segment is homeomorphic to $R^2$}. This is illustrated in figure \ref{manifolddiagram}.\\
+This tracking system is meant to be used with a system that rapidly samples the location of a probe. This means that an individual segment is thus quite short. The surface we are tracking over must be a manifold. The combination of short segments and low curvature leads to the following assertion that will be used in my justification: {\it If $\epsilon$ is the length of the segment, then the $\epsilon$-neighborhood around the start point of the segment is homeomorphic to $R^2$}. This is illustrated in figure \ref{manifolddiagram}.\\
 \\
 \begin{figure}[ht]
 \centering
@@ -101,7 +98,7 @@ This tracking system is meant to be used with a system that rapidly samples the 
 \end{figure}
 Because the sampling rate was so rapid, we can assert that between samples, a straight line on the surface was followed. We can thus assert the following: {\it The segment follows the geodesic path from start to end point along the surface}. We do not have the end point on the surface but when we assert an end point later, the path that was calculated will be the geodesic path from start to end point along the surface. \\
 \\
-**IMPROVE THIS** Because the output of our algorithm is the path along the surface, we must make sure the orientation of the probe along the surface is improved. We thus assert that we can only rotate the vector in the plane formed by the segment vector and the normal. Rotating it in any other plane would change the orientation along the surface. The transformed vector still needs to be perpendicular to the normal, thus we will have two options for it. We must pick the option that leaves us with an acute angle between the transformed vector and original vector as picking the other one would also change the orientation. We have now justified the following facts that were used to make the formula for the transformed segment vector: \\
+**IMPROVE THIS** Because the output of our algorithm is the path along the surface, we must make sure the orientation of the probe along the surface is preserved. We thus assert that we can only rotate the vector in the plane formed by the segment vector and the normal. Rotating it in any other plane would change the orientation along the surface. The transformed vector still needs to be perpendicular to the normal, thus we will have two options for it. We must pick the option that leaves us with an acute angle between the transformed vector and original vector as picking the other one would also change the orientation. We have now justified the following facts that were used to make the formula for the transformed segment vector: \\
 {\it The transformed vector must be rotated along the same plane as the normal and the original vector}\\
 {\it The transformed vector and original vector must form an acute angle}
 \\
