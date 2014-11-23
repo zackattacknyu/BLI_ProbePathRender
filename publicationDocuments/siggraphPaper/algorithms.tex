@@ -1,0 +1,135 @@
+\section{Tracking Algorithm}
+
+\subsection{Coordinate Systems}
+
+The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems:\\
+1. Mouse sensor coordinate system, subscript $m$\\
+2. Probe coordinate system,  subscript $p$\\
+3. Real world coordinate system, subscript $k$\\
+4. Virtual coordinate system, subscript $w$.\\
+\\
+The mouse sensor gives us $x,y$ values for each displacement. Thus the positive x-vector corresponds to an $x$ displacement read by the mouse sensor and the positive y-vector corresponds to a $y$ displacement read by the mouse sensor. The negative z-direction corresponds to the direction that the mouse sensor points which in practice will be the direction towards the surface. Thus the positive z-axis will point away from the surface. Due to the nature of the hardware, we can assume that these vectors are orthogonal to each other.\\
+\\
+The probe gives us orientation data in the form of yaw, pitch, and roll angles. We want to combine this with the $x,y$ data to get the proper displacement vector. We will thus define a probe coordinate system. In this system, the $x,y,z$ vectors are the same as for the mouse sensor system if all the angles are $0$. Also, in this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
+\\
+The real world coordinate system has the units in millimeters and corresponds to displacements from an origin point. The virtual world will be virtual displacements from an origin point on the scanned model. For the sake of the simplicity, the $x,y,z$ directions in the real world system will be the same as in the virtual world system. The point of keeping track of the real world coordinates will just be scaling the displacements. \\
+\\
+There are a few assumptions we can make that simplify the process of converting between coordinate systems. All of the basis vectors are orthogonal in each of the coordinate systems. Therefore any conversions between them is an orthogonal matrix. Every orthogonal matrix is the product of one rotation and one reflection, which simplifies the process of finding out which orthogonal matrix will do the conversion we need. \\
+\\
+We also have rigid motion so the probe coordinate system and the virtual coordinate system stay constant. Additionally, any changes in the probe's position only come from the $x,y$ data. The angle data only gives us the orientation when there is a change in position registered. This means that we can equivalently formulate the problem as taking the $x,y,z$ vectors from the mouse sensor space and finding their equivalent orthogonal vectors in the virtual space given particular $\theta$ values for the angles. If there is a reflection then, it would only be one about the $y-z$ plane to flip the x-axis or about the $x-z$ plane to flip the y-axis. 
+
+\subsection{Mouse Sensor to Probe Coordinates}
+
+Now that we have scaling, we only have to worry about direction. The map from the mouse sensor coordinate system to probe coordinate system is not a static map. It is a transformation that depends on the orientation angle reading from the probe. In this system, the yaw angle means a rotation about the z-axis. The pitch angle is a rotation about the x-axis. The roll angle is a rotation about the y-axis. \\
+\\
+We use an Euler Angle to Quaternion conversion to get the rotation we should apply to the mouse sensor coordinate system in order to obtain coordinates in the probe coordinate system. The API that we used had a method \cite{jmonkeyrotation} and the logic used in the method is a common one to go from Euler Angles to Quaternions \cite{quaternionTextboook}.
+
+\subsection{Path Recording Algorithm}
+
+**INCORPORATE THIS BETTER. TALKS ABOUT THE COMPRESSION ALGORITHM**. \\
+\\
+Due to the nature of the recording, we need a way to compress the vertex list to be meaningful so all the vertices are distinct and no segment is too little. This is the algorithm I used: \\
+**INSERT COMPRESSION ALGORITHM**
+
+\section{Mesh Traversal Algorithms}
+
+\subsection{Following a Deformable mesh}
+
+For the purposes of our application, we need to have paths on the mesh itself so that we know the location on the mesh of particular data points. Due to the deformability, the paths ends up being close to the mesh, but not on the mesh itself, no matter how accurate the calibration was. Additionally, in order to do the calibration, we need the path to follow the mesh itself so that the end points line up. We thus came up with an algorithm for projecting a path onto the triangles of the mesh. \\
+\\
+A path is just a series of connected segments and the mesh is just a series of triangles. Thus the input of our algorithm is a segment with a start and end point as well as the triangle where it originates and the triangles neighbors. We need to make sure the projection preserves the length of the segment. We also want to preserve the orientation along the surface thus we are restricted to rotating the segment along the plane that it makes with the triangle's normal. \\
+\\
+If we let $v$ be the segment vector, $N$ be the normal, and $E$ be the resultant vector that is the projection of $v$ onto the plane described by $N$, then the following equation will get us $E$
+\[
+E = v - proj_N(v)
+\]
+This can be furthur simplified to say
+\[
+E = v - N(v.N)
+\]
+We then find the intersection of the vector $E$ with the current triangle. If the segment is entirely in the triangle, then we move onto the next segment starting from the endpoint of $E$. If the segment leaves the triangle, then we find which edge the segment intersects and repeat the projection procedure for the end part of the segment that is not in the triangle. This procedure of course relied on finding the intersection of the triangle with the segment which proved to be non-trivial.\\
+\\
+When finding the triangle and segment intersection, we had a triangle in a 3D space as well as a segment that was supposed to be coplanar to the triangle but could be slightly off due to floating-point errors with the coordinates. To find the intersection point, I converted the segment and triangle coordinates to the coordinate system where one of the vertices of the triangle is the origin and the basis vectors are the two vectors made by the segments coming off that vertex as well as the cross product of those vectors. In this coordinate system, the third coordinate should be zero. In practice, it was near zero due to floating point errors. Once in the new coordinate system, we just had to find the 2D intersection of the triangle and the segment. \\
+\\
+The above procedure describes what we did with a single segment. With paths, we just iterated this procedure for each segment of the path. We assumed that the important aspect of each segment is its vector and not its origin point, since that is what we get from the probe. This meant that the end point of a projected segment was treated as the start point for the rest of the path when doing the loop to project the entire path onto the mesh.
+
+\subsection{Calibration of Rotation and Scale}
+
+After taking a 3D scan and importing the mesh into our environment, we have our object in a virtual world with a virtual coordinate system. Our probe operates in the real world. We thus need to know how to translate between the two in order to get an accurate visualization. We first needed to translate displacement readings from the probe to displacement in the virtual world. Afterwards, we needed to get rotation and reflection calibrated so that the displacement vectors went in accurate directions in the virtual world. \\
+\\
+The Scale Calibration was relatively straightforward. The probe gave numerical displacement readings that ranged from -127 to 127. We then made the probe travel 100 mm in every direction and summed up the displacement values. This gave us a probe unit to millimeters conversion factor. We then measured the distance between the calibration points in the virtual world and in the real world in millimeters and this gave us a virtual unit to millimeters conversion ratio. We then combined the two ratios and obtained a probe unit to virtual unit conversion ratio. \\
+\\
+The Rotation Calibration was difficult. This involved recording a path that went between calibration points and finding the correct rotation to apply in the virtual world so that the start and end point of the path are the points on the mesh. Making the start point match is easy as you just translate the path. With making the end points match, the path has to follow the mesh in order to conclude that the end points truly match. We needed to find a rotation to apply to the path that would make end points match as close as possible while the path is projected onto the mesh. In order to do this, I first rotated the path onto the mesh meaning the first segment of the path was on the same plane as its triangle. I then rotated the path along the plane made by the first triangle until the end points matched up closely. I then took the rotated path and projected it onto the mesh. I then found the rotation required to match the projected path endpoint with the target endpoint. I used that angle and rotated the original rotated path along the surface that much. I then projected that path and repeated the process until I got convergence. The aggregate rotation that resulted was used as the rotation calibration and applied to the rotation found by the probe to get the rotation in the virtual world. Here is the pseudo-code for the rotation calibration:
+
+\begin{verbatim}
+N: normal to the first triangle
+P: original path
+P': current path rotated
+P'': the path P' projected onto the mesh
+
+Rotations will be in axis-angle form as (T,E) 
+where T is the angle and E is the axis
+
+1. Let p be the projection of the first segment of P onto the first triangle
+2. Rotate P so that its first segment matches p and call the rotated path P'
+3. Find the rotation (Theta,E) that will make the end point of P' 
+   match the target end point
+4. Apply the rotation (Theta,N) to P' to rotate it along the 
+   same plane as the first triangle
+5. Find the path P'' which is P' projected onto the mesh
+6. Find the rotation (Theta,E) that will make the end point 
+   of P'' match the target end point
+7. Apply the rotation (Theta,N) to P'
+8. Repeat steps 5-7 until P' converges
+
+Output the quaternion Q such that P' = Q*P
+
+\end{verbatim}
+
+\section{Calibration Steps}
+
+\subsection{Scaling calibration}
+
+In order to do scale calibration, I just consider $x,y$ displacement without any angles being involved. In order to simplify the calibration factor, I find two linear transformation $S_1,S_2$ such that 
+\[
+S_1(x,y,0)_m = (x,y,0)_k
+\]
+\[
+S_2(x,y,z)_k = (x,y,z)_w
+\]
+For $S_1$ we only care about $x,y$ scale, so it is a diagonal matrix. We measure a certain distance in the real world and find out the total displacement in probe coordinates. We repeat this for both $x,y$ and this allows us to get $s_{1x},s_{1y}$, the scale factors for $x,y$ respectively. \\
+\\
+For $S_2$, we are assuming that the real world and virtual world are scaled uniformly. Therefore, we measure the euclidean distance between points in the virtual world and points in the real world and assume that the factor we get can be uniformly applied to the 3 coordinates. Once we get that factor $s_2$, we make $S_2$ as the diagonal matrix with only $s$ on the diagonal. \\
+\\
+We then find $S=S_2S_1$ although order does not matter since we have diagonal matrices. This gets us $s_x=s_{1x} \cdot s_2$ and $s_y=s_{1y} \cdot s_2$ which are the scale factors to go from probe coordinates the virtual coordinates with $x$ and $y$. We will now let
+\[
+(x',y',0)_m = S(x,y,0)_m = (x \cdot s_x, y \cdot s_y, 0)_m
+\]
+
+\subsection{Rotation and Reflection Calibration}
+
+Now that the scale is calibrated and we have a direction for the displacement, the rest of the process of changing coordinates involves converting one set of orthogonal unit vectors to another set of orthogonal unit vectors, which is just a rotation and reflection. We are given the following at a single point, A, in order to convert between coordinate systems:\\
+1. The normal to the plane in both probe and virtual coordinates\\
+2. A path from A to a point B on the surface in probe and virtual coordinates\\
+3. A path from A to a point C on the surface in probe and virtual coordinates. The AC line should be perpendicular to the AB line. \\
+\\
+To reconcile 1, we just have two vectors, so we can come up with a rotation matrix $R_1$ to go from one vector to another. This means that one of the unit vectors has been reconciled. \\
+\\
+To reconcile 2, we just have to rotate the path along the normal until the desired path and the recorded path have the same end point on the surface **INSERT DETAIL**. This will give us a rotation $R_2$. \\
+\\
+We now have 2 out of the 3 vectors and in order for the unit vectors to stay all orthogonal, there are only two choices with regards to the third vector. We thus have to reconcile 3 in order to see if the positive or negative direction is better. We follow the same procedure as in 2 in order to get the new path but then we see if the reflection will work well. This gives us a reflection matrix $K$ which is the reflection of the $x$ or $y$ axis at the original point.
+
+\section{Implementation Details}
+
+Our process started with taking a 3D scan of the surface to get the mesh. After creating and refining the 3D mesh, we loaded it into a video game style environment that allowed us to produce live updates. Every few milliseconds we obtained displacement and orientation readings from the probe and we used those to update the visualization of the location of the probe in the virtual environment. In order for this to work properly, we needed to know how to convert between the displacement readings from the probe and the displacement in the virtual world. We also needed to know how to convert between the rotation read by the probe and the rotation that corresponds to in the virtual world. Finally, due to the deformability of the surface, we needed an algorithm to approximate the probe's location on the surface in the virtual world.\\
+\\
+**SHOW PICTURE OF PROBE IN REAL WORLD**\\
+**SHOW PICTURE OF PROBE IN VIRTUAL WORLD**
+
+We use a Kinect to get the data and then used software that worked on top of the Point Cloud Library \cite{pointcloudlibrary} to take the data and get a mesh and texture from it. We then edited the mesh using Meshlab \cite{meshlab}. We took out some of the noisy areas and using the Quadric Edge Collapse Decimation filter, which is an implementation of QSlim \cite{qslim}, to refine and simplify the mesh. After that, we load the mesh into our tracking environment. Our tracking environment is an application that takes in the mesh as well as probe data readings and gives live updates as to the probe's position and data. It operates similarly to a video game and was developed using JMonkeyEngine **INSERT DETAIL**, a video game library written in Java that is similar to Ogre **INSERT REFERENCE**. \\
+\\
+Once the scale is calibrated we know that we have accurate displacements. We know need to ensure that the displacement goes in the right direction. The orientation data from the probe gives us a set of orthogonal vectors. We then need to transform this set into the virtual world.\\
+\\
+Once the scale is calibrated, we start recording paths on the mesh itself. We then have a problem. Because the rotation has not been calibrated, it is likely that the paths will have a shape similar to the part of the mesh they were on but they will not actually be on the mesh **INSERT PICTURE OF THIS**. We thus need to figure out what rotation to apply to the probe reading's rotation in order to get the rotation in the virtual world. After that though, there is still a problem. Because the surface is deformable, the path would still not perfectly follow the mesh. We thus need an algorithm that will approximate the probe's position on the mesh given the deformability. \\
+\\
+This paper presents two algorithms. The first one takes a path that almost follows the mesh and projects it onto the mesh in such a way that preserves its orientation along the mesh as well as its arc length. The second one takes a recorded 3D path between two known points on the mesh and figures out how to rotate it and project it onto the mesh so that its start and end points match the ones on the mesh. The rotation found by the second algorithm gives us the rotation calibration we need. Once the rotation is calibration is found, we can then live track the probe and use the first algorithm to keep it along the mesh. 
