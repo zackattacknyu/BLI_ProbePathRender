@@ -2,7 +2,7 @@
 
 \subsection{Mesh Following Algorithm}
 
-After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. Because we already calibrated the scale of the movements, we must preserve arc length in our transformation. Additionally, we must preserve orientation along the surface as that was established through rotation calibration.
+After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. We will thus do a transformation of the virtual path to better match where the real path traversed. Because we already calibrated the scale of the movements, the transformation will preserve arc length. Because the rotation was already calibrated, the orientation along the surface will be preserved.
 
 \begin{figure}[ht]
 \centering
@@ -11,7 +11,7 @@ After calibration, due to deformability and possible measurement errors, our ren
 \label{pathsAboveAndBelow}
 \end{figure}
 
-Our path is defined as a starting point $p$ which does not change and a set of $n$ segments $s_0,...,s_{n-1}$ where each segment is a vector with direction and magnitude. The starting point of $s_0$ is $p_0$ and for all $i>0$ the starting point of $s_i$ is the ending point of $s_{i-1}$. The mesh is a triangular manifold mesh **MAKE SURE THIS IS PREVIOUSLY ESTABLISHED**. \\
+We have a known and rigid starting point $p_0$ on the triangular manifold mesh $M$ for our path (TODO: The fact that it is a triangular manifold mesh will be established in previous sections). The rest of the path is a set of $n$ segments $s_0,...,s_{n-1}$ where the starting point of $s_0$ is $p_0$ and the rest of the segments start at the point where the previous segment ended. We need a new set of segments that all lie on triangles of the mesh. Our goal is thus a new path consisting of $m$ points, $p_0, p_1,...,p_{m-1}$, such that each $p_i$ is on $M$ and for each $i>0$, $p_{i}$ and $p_{i-1}$ lie on the same triangle. \\
 \\
 After finding how the first segment follows the mesh, we will have a new start point on the mesh as well as $n-1$ segments that need to be projected onto the mesh. We can thus have an algorithm that finds a projection for a single vector and starting point and then recursively computes the rest of the path, below:.\\
 \\
