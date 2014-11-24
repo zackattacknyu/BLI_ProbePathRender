@@ -88,12 +88,12 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         
         if(lineMoveAction.arePointsNewlyPicked()){
-            //displaySegment(lineMoveAction.getCurrentSegment());
+            displaySegment(lineMoveAction.getCurrentSegment());
             attachSegmentToTexture(lineMoveAction.getCurrentSegment());
         }
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
-            //displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
+            displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
             attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
