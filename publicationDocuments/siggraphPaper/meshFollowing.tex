@@ -2,7 +2,7 @@
 
 \subsection{Mesh Following Algorithm}
 
-After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. We will thus do a transformation of the virtual path to better match where the real path traversed. Because we already calibrated the scale of the movements, the transformation will preserve arc length. Because the rotation was already calibrated, the orientation along the surface will be preserved.
+After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. We will thus do a transformation of the virtual path to better match where the real path traversed. Because we already calibrated the scale of the movements and deformability does not affect affect distance traversed (TODO: Make sure this is established in a previous section where I talk about the properties of the surface that I scan), the transformation will preserve arc length. Because the rotation was already calibrated, the orientation along the surface will be preserved.
 
 \begin{figure}[ht]
 \centering
@@ -11,7 +11,7 @@ After calibration, due to deformability and possible measurement errors, our ren
 \label{pathsAboveAndBelow}
 \end{figure}
 
-We have a known and rigid starting point $p_0$ on the triangular manifold mesh $M$ for our path (TODO: The fact that it is a triangular manifold mesh will be established in previous sections). The rest of the path is a set of $n$ segments $s_0,...,s_{n-1}$ where the starting point of $s_0$ is $p_0$ and the rest of the segments start at the point where the previous segment ended. We need a new set of segments that all lie on triangles of the mesh. Our goal is thus a new path consisting of $m$ points, $p_0, p_1,...,p_{m-1}$, such that each $p_i$ is on $M$ and for each $i>0$, $p_{i}$ and $p_{i-1}$ lie on the same triangle. \\
+We have a known and rigid starting point $p_0$ on the triangular manifold mesh $M$ for our path (TODO: Establish the fact that it is a triangular manifold mesh in previous sections). The rest of the path is a set of $n$ segments $s_0,...,s_{n-1}$ where the starting point of $s_0$ is $p_0$ and the rest of the segments start at the point where the previous segment ended. We need a new set of segments that all lie on triangles of the mesh. Our goal is thus a new path consisting of $m$ points, $p_0, p_1,...,p_{m-1}$, such that each $p_i$ is on $M$ and for each $i>0$, $p_{i}$ and $p_{i-1}$ lie on the same triangle. \\
 \\
 Once the first segment is transformed to follow the mesh, we will have a new point $p_j$ on the mesh where the first segment ends and the second segment begins. Because each segment starts where the previous one ended, we will transform the second segment using $p_j$ as its starting point. By this same logic, we can repeat this procedure for the rest of the segments. We thus need to focus now on how to transform a single segment with a starting point to points on the mesh making sure to preserve length and orientation along the surface. \\
 \\
@@ -56,18 +56,19 @@ Set $T$ to be the triangle of $p_0$ \;
 \label{pseudocode}
 \end{algorithm}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\columnwidth]{flatteningdiagram_oneTriangleAndNeighbors.jpg}
-\caption{The triangle at $p$ and its neighbors}
-\label{flatteningDiagram_oneTriangle}
-\end{figure}
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\columnwidth]{flatteningdiagram_neighborhood.jpg}
-\caption{The triangles in the neighborhood around $p$}
-\label{flatteningDiagram_neighborhood}
-\end{figure}
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=\columnwidth]{flatteningdiagram_oneTriangleAndNeighbors.jpg}
+%\caption{The triangle at $p$ and its neighbors}
+%\label{flatteningDiagram_oneTriangle}
+%\end{figure}
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=\columnwidth]{flatteningdiagram_neighborhood.jpg}
+%\caption{The triangles in the neighborhood around $p$}
+%\label{flatteningDiagram_neighborhood}
+%\end{figure}
 
 \begin{figure}[ht]
 \centering
