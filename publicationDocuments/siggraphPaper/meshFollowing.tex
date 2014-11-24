@@ -33,7 +33,7 @@ Thus we can easily calculate $E$ using the formula
 \[
 E = v - N(v.N)
 \]
-We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$. We will calculate the points $p$, $p'$ and the ones in $Q'$ in their own triangle's coordinate systems. By doing this, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$ and consecutive pairs lie on the same triangle. We now have the desired output. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
+We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$, as illustrated in Figure \ref{segmentonmesh}. We will calculate the points $p$, $p'$ and the ones in $Q'$ in their own triangle's coordinate systems. By doing this, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$ and consecutive pairs lie on the same triangle. We now have the desired output. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
 \\
 \begin{algorithm}[t]
 Input: Starting point $p_0$, Segments $s_0,...,s_m$, Mesh $M$\;
@@ -55,6 +55,13 @@ Set $T$ to be the triangle of $p_0$ \;
 \caption{Pseudo-code for our algorithm}
 \label{pseudocode}
 \end{algorithm}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{segmentonmesh.jpg}
+\caption{The segment's points on $M_0$}
+\label{segmentonmesh}
+\end{figure}
 
 %\begin{figure}[ht]
 %\centering
