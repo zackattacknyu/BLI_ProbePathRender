@@ -15,9 +15,9 @@ We have a known and rigid starting point $p_0$ on the triangular manifold mesh $
 \\
 Once the first segment is transformed to follow the mesh, we will have a new point $p_j$ on the mesh where the first segment ends and the second segment begins. Because each segment starts where the previous one ended, we will transform the second segment using $p_j$ as its starting point. By this same logic, we can repeat this procedure for the rest of the segments. We thus need to focus now on how to transform a single segment with a starting point to points on the mesh making sure to preserve length and orientation along the surface. \\
 \\
-When we transform a segment, it needs to follow a straight-line path in its direction for its length, thus it should follow the geodesic path along the surface. We will therefore flatten the mesh around the local area that the segment traverses. Let $\epsilon$ be the length of our segment and $p$ be its starting point. The $\epsilon$-neighborhood around $p$ will be homeomorphic to $R^2$, as illustrated in Figure \ref{manifolddiagram}, thus when we flatten the neighborhood, there will be no gaps or overlaps. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and the triangles that intersect the $\epsilon$-neighborhood of $T$. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
+When we transform a segment, it needs to follow a straight-line path in its direction for its length, thus it should follow the geodesic path along the surface. We will therefore flatten the mesh around the local area that the segment traverses. Let $\epsilon$ be the length of our segment and $p$ be its starting point. The $\epsilon$-neighborhood around $p$ will be homeomorphic to $R^2$ due to the short length of our segments (TODO: Establish this in previous section that describes how the tracking system works and how quickly it samples points), as illustrated in Figure \ref{manifolddiagram}, thus when we flatten the neighborhood, there will be no gaps or overlaps. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and the triangles that intersect the $\epsilon$-neighborhood of $T$. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
 \\
-We now have a vector and a flat plane it needs to follow. We will let $v$ be the vector for our input segment, $N$ be the normal of that plane. In order to preserve orientation along the plane, we need to find a vector $E$ that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
+We now have a vector and a flat plane it needs to follow. We will let $v$ be the vector for our segment, $N$ be the normal of the flat plane. In order to preserve orientation along the plane, we need to find a vector $E$ that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
 E + proj_N(v) = v
 \]
@@ -33,7 +33,7 @@ Thus we can easily calculate $E$ using the formula
 \[
 E = v - N(v.N)
 \]
-We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$. The points $p$ and $p'$ will also be calculated in their own triangle's coordinate system. The points in $Q'$ that lie on edges between triangles will be calculated in the coordinate systems of both triangles. By finding the point coordinates in the triangle's coordinate system, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
+We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$. We will calculate the points $p$, $p'$ and the ones in $Q'$ in their own triangle's coordinate systems. By doing this, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$ and consecutive pairs lie on the same triangle. We now have the desired output. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
 \\
 \begin{algorithm}[t]
 Input: Starting point $p_0$, Segments $s_0,...,s_m$, Mesh $M$\;
@@ -45,8 +45,7 @@ Set $T$ to be the triangle of $p_0$ \;
 	Set $\epsilon \leftarrow length(s_i)$ \;
 	Set $M_0$ equal to triangles which intersect the $\epsilon$-neighborhood around $p$ \;
 	Flatten $M_0$ so its global normal is $N$ \;
-	Set $v$ to be the vector for $s_i$ \;
-	Set $E \leftarrow v - N(v.N)$ \;
+	Set $E \leftarrow s_i - N(s_i.N)$ \;
 	Set $p' \leftarrow p+E$ \;
 	Set $Q'$ to be intersections of $p-p'$ segment with triangle edges in $M_0$ \;
 	Transform $p$,$Q'$,$p'$ back to points on M and add them to $P$ \;
