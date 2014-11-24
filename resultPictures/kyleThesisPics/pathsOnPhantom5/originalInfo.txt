@@ -2,7 +2,11 @@ Red are original Paths
 
 Black are modified Paths
 
-original_woScaling.png has the original and modified paths
-	on phantom 5. It just shows the paths unlabelled. 
-	
-labeledPaths_noScaling.png shows the modified paths labelled.
+All paths went between the calibration points A and B
+
+Path 1 & 3 went from A to B
+Path 2 & 4 went from B to A
+
+Path 1&2 took direct routes
+Path 3&4 took longer paths
+
