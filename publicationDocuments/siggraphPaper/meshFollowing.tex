@@ -15,9 +15,9 @@ We have a known and rigid starting point $p_0$ on the triangular manifold mesh $
 \\
 Once the first segment is transformed to follow the mesh, we will have a new point $p_j$ on the mesh where the first segment ends and the second segment begins. Because each segment starts where the previous one ended, we will transform the second segment using $p_j$ as its starting point. By this same logic, we can repeat this procedure for the rest of the segments. We thus need to focus now on how to transform a single segment with a starting point to points on the mesh making sure to preserve length and orientation along the surface. \\
 \\
-When we transform a segment, it needs to follow a straight-line path in its direction for its length, thus it should follow the geodesic path along the surface. We will therefore flatten the mesh around the local area that the segment traverses. Let $\epsilon$ be the length of our segment and $p$ be its starting point. The $\epsilon$-neighborhood around $p$ will be homeomorphic to $R^2$ thus when we flatten the neighborhood, there will be no gaps or overlaps. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and its neighbors. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
+When we transform a segment, it needs to follow a straight-line path in its direction for its length, thus it should follow the geodesic path along the surface. We will therefore flatten the mesh around the local area that the segment traverses. Let $\epsilon$ be the length of our segment and $p$ be its starting point. The $\epsilon$-neighborhood around $p$ will be homeomorphic to $R^2$, as illustrated in Figure \ref{manifolddiagram}, thus when we flatten the neighborhood, there will be no gaps or overlaps. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and the triangles that intersect the $\epsilon$-neighborhood of $T$. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
 \\
-We will let $v$ be the vector for our input segment, $N$ be the normal of $T$, and $E$ be the resultant vector that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. Having a vector with both of those properties ensures that we are preserving orientation along the surface. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
+We now have a vector and a flat plane it needs to follow. We will let $v$ be the vector for our input segment, $N$ be the normal of that plane. In order to preserve orientation along the plane, we need to find a vector $E$ that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
 E + proj_N(v) = v
 \]
@@ -29,16 +29,11 @@ E + proj_N(v) = v
 \label{vectordiagram}
 \end{figure}
 
-Thus, the following equation will get us $E$
-\[
-E = v - proj_N(v)
-\]
-This can be further simplified to say
+Thus we can easily calculate $E$ using the formula
 \[
 E = v - N(v.N)
 \]
-We will draw $E$ on the mesh $M_0$. If the segment lies entirely inside $M_0$ as in Figure \ref{flatteningDiagram_oneTriangle}, then we are done. Otherwise, we will add triangles to $M_0$, rotate them to be on the same plane as $T$, and extend $E$ onto them, as in Figure \ref{flatteningDiagram_neighborhood}.By the manifold property, the flattening will always exists **JUSTIFY THIS** and this path will thus be a geodesic path **JUSTIFY THIS**. This will leave us with a series of connected points either on the interior or edges of each of the triangles. These points are computed in each triangle's coordinate system, so that the coordinates of these points in $M$ are easily computed and those coordinates are used to get the path that follows the mesh.\\
-In the total, the algorithm takes in a starting point on the mesh $p$, a sequence of segments that starts from that point, and a triangular manifold mesh $M$. It outputs a sequence of points $\{ p_0, p_1, ... , p_m\}$ that lie on the mesh. The pseudo-code is in algorithm \ref{pseudocode}.\\
+We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$. The points $p$ and $p'$ will also be calculated in their own triangle's coordinate system. The points in $Q'$ that lie on edges between triangles will be calculated in the coordinate systems of both triangles. By finding the point coordinates in the triangle's coordinate system, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
 \\
 \begin{algorithm}[t]
 Input: Starting point $p_0$, Segments $s_0,...,s_m$, Mesh $M$\;
@@ -47,22 +42,16 @@ Initialize list $P$ of points and add $p_0$ to it \;
 Set $T$ to be the triangle of $p_0$ \;
 \For{each segment $s_i$ in order}{
 	Set $N$ to be normal for $T$\;
-	Clear $M_0$ and add $T$ to it \;
+	Set $\epsilon \leftarrow length(s_i)$ \;
+	Set $M_0$ equal to triangles which intersect the $\epsilon$-neighborhood around $p$ \;
+	Flatten $M_0$ so its global normal is $N$ \;
 	Set $v$ to be the vector for $s_i$ \;
 	Set $E \leftarrow v - N(v.N)$ \;
-	Add Triangles to $M_0$ until $p+E$ is in $M_0$ \;
-	Add points computed to $P$ \;
-	Set $p$ $\leftarrow$ $p+E$ \;
-}
-\While{{\bf true}}{
-		\While{top element of $E_M$ is positive}{
-			Pop top element and move the data unit to its destination \;
-			Update $E_M$ and $E_C$ \;
-		}
-		\eIf{there is more space for redundancy}{
-		Pop top element and copy the data unit to its destination \;
-		Update $E_M$ and $E_C$ \;
-		}{{\bf break}}
+	Set $p' \leftarrow p+E$ \;
+	Set $Q'$ to be intersections of $p-p'$ segment with triangle edges in $M_0$ \;
+	Transform $p$,$Q'$,$p'$ back to points on M and add them to $P$ \;
+	Set $p$ to transformed $p'$. \;
+	Set $T$ to triangle at $p'$ \;
 }
 \caption{Pseudo-code for our algorithm}
 \label{pseudocode}
