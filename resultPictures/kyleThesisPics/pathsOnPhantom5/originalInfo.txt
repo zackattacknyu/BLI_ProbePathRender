@@ -1,0 +1,8 @@
+Red are original Paths
+
+Black are modified Paths
+
+original_woScaling.png has the original and modified paths
+	on phantom 5. It just shows the paths unlabelled. 
+	
+labeledPaths_noScaling.png shows the modified paths labelled.
