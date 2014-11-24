@@ -1,0 +1,70 @@
+%%% template.tex
+%%%
+%%% This LaTeX source document can be used as the basis for your technical
+%%% paper or abstract. Intentionally stripped of annotation, the parameters
+%%% and commands should be adjusted for your particular paper - title, 
+%%% author, article DOI, etc.
+%%% The accompanying ``template.annotated.tex'' provides copious annotation
+%%% for the commands and parameters found in the source document. (The code
+%%% is identical in ``template.tex'' and ``template.annotated.tex.'')
+
+\documentclass[conference]{acmsiggraph}
+
+\usepackage{authblk}
+\usepackage[]{algorithm2e}
+
+\TOGonlineid{45678}
+\TOGvolume{0}
+\TOGnumber{0}
+\TOGarticleDOI{1111111.2222222}
+\TOGprojectURL{}
+\TOGvideoURL{}
+\TOGdataURL{}
+\TOGcodeURL{}
+
+
+
+\title{Tracking Objects on a Deformable Surface using Displacement and Orientation Information}
+
+\input{authorList}
+
+\keywords{Tracking, Deformable Surface}
+
+\begin{document}
+
+%% \teaser{
+%%   \includegraphics[height=1.5in]{images/sampleteaser}
+%%   \caption{Spring Training 2009, Peoria, AZ.}
+%% }
+
+\maketitle
+
+\begin{CRcatlist}
+  \CRcat{I.3.5}{Computer Graphics}{Computational Geometry and Object Modeling}{Geometric algorithms, languages, and systems};
+\end{CRcatlist}
+
+\keywordlist
+
+%% Use this only if you're preparing a technical paper to be published in the 
+%% ACM 'Transactions on Graphics' journal.
+
+\TOGlinkslist
+
+%% Required for all content. 
+
+\copyrightspace
+
+\input{introduction}
+
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=3in]{examplePic_startingProblem.png}
+%\caption{Data Units with varying access requirements}
+%\end{figure}
+
+
+\bibliographystyle{acmsiggraph}
+\bibliography{trackingRefs}
+
+\end{document}
