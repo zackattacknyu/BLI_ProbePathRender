@@ -1,0 +1,12 @@
+Red are original Paths
+
+Black are modified Paths
+
+All paths went between the calibration points A and B
+
+Path 1 & 3 went from A to B
+Path 2 & 4 went from B to A
+
+Path 1&2 took direct routes
+Path 3&4 took longer paths
+
