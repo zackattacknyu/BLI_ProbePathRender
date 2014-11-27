@@ -95,12 +95,22 @@ public class Main extends SimpleApplication {
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
             attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
             displaySegment(recordedPathSet.getCurrentSegment());
         }
         
+    }
+    
+    private void attachSegmentAreaToTexture(SegmentSet segment){
+        currentTextureImage = PathRenderHelper.createCirclesOnImage(
+                currentTextureImage, segment, signalProcessor);
+        ImageFileHelper.writePNGimageToDefaultOutputFile(currentTextureImage);
+        Material newMaterial = MaterialHelper.getTextureMaterial(
+                assetManager, currentTextureImage);
+        shootableSurface.setMaterial(newMaterial);
     }
     
     private void attachSegmentToTexture(SegmentSet segment){

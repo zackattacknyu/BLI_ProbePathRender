@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
@@ -38,6 +39,63 @@ public class PathRenderHelper {
     public static final ColorRGBA LINE_COLOR = ColorRGBA.Black;
     
     public static final float IMAGE_LINE_STROKE_WIDTH = 2.0f;
+    
+    public static final float RADIUS_OF_DATA = 4F;
+    
+    public static BufferedImage createCirclesOnImage(BufferedImage image, SegmentSet lineWithData,StringToColorConversion converter){
+        ArrayList<Vector2f> texCoordsFromData = lineWithData.getVertexTextureCoords();
+        ArrayList<String[]> dataAtVerticesFromObj = lineWithData.getDataAtVertices();
+        
+        //makes copies so that we can delete bad entries
+        ArrayList<Vector2f> texCoords = (ArrayList<Vector2f>) texCoordsFromData.clone();
+        ArrayList<String[]> dataAtVertices = (ArrayList<String[]>) dataAtVerticesFromObj.clone();
+        
+        //deletes bad entries
+        for(int index = 0; index < texCoords.size(); index++){
+            if(texCoords.get(index).equals(GeometryDataHelper.getBadTexCoord())){
+                /*System.out.println("BAD TEXTURE COORDINATES FOR TRIANGLE");
+                if(index > 0){
+                    System.out.println("Tex Coord Before: " + 
+                            texCoords.get(index-1) + 
+                            "; Tex Coord After: " + 
+                            texCoords.get(index+1));
+                }*/
+                
+                texCoords.remove(index);
+                dataAtVertices.remove(index);
+            }
+        }
+        
+        Graphics2D imageGraphics = image.createGraphics();
+        BasicStroke stroke = new BasicStroke(IMAGE_LINE_STROKE_WIDTH);
+        imageGraphics.setStroke(stroke);
+        
+        float xCenter,yCenter,xUpperLeft,yUpperLeft;
+        float diameter = 2*RADIUS_OF_DATA;
+        Vector2f vertex;
+        Color currentColor;
+        for(int index = 0; index < texCoords.size(); index++){
+            
+            currentColor = ColorHelper.convertJMEcolorToJavaColor(
+                    converter.convertStringToColor(dataAtVertices.get(index)));
+            imageGraphics.setColor(currentColor);
+            vertex = texCoords.get(index);
+            
+            xCenter = vertex.getX()*image.getWidth();
+            yCenter = (1-vertex.getY())*image.getHeight();
+            
+            /*
+             * (xCenter,yCenter) defines center of circle
+             * 
+             */
+            xUpperLeft = xCenter-RADIUS_OF_DATA;
+            yUpperLeft = yCenter-RADIUS_OF_DATA;
+            
+            imageGraphics.draw(new Ellipse2D.Float(xUpperLeft, yUpperLeft, diameter, diameter));
+        }
+        
+        return image;
+    }
     
     public static BufferedImage createLineOnImage(BufferedImage image, SegmentSet lineWithData,StringToColorConversion converter){
         ArrayList<Vector2f> texCoordsFromData = lineWithData.getVertexTextureCoords();
