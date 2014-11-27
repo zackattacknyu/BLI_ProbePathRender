@@ -94,8 +94,8 @@ public class Main extends SimpleApplication {
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
-            attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
-            //attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){

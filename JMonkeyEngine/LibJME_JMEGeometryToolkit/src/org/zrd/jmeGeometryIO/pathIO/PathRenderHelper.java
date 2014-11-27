@@ -27,6 +27,7 @@ import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.jmeUtil.ColorHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
+import java.awt.AlphaComposite;
 
 /**
  * 
@@ -65,10 +66,17 @@ public class PathRenderHelper {
                 dataAtVertices.remove(index);
             }
         }
+
         
+ 
         Graphics2D imageGraphics = image.createGraphics();
         BasicStroke stroke = new BasicStroke(IMAGE_LINE_STROKE_WIDTH);
         imageGraphics.setStroke(stroke);
+        
+        /*int type = AlphaComposite.SRC_OVER;
+        float alpha = 0.5f;
+        AlphaComposite alphaComp = AlphaComposite.getInstance(type,alpha);
+        imageGraphics.setComposite(alphaComp);*/
         
         float xCenter,yCenter,xUpperLeft,yUpperLeft;
         float diameter = 2*RADIUS_OF_DATA;
