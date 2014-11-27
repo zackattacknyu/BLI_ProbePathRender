@@ -17,9 +17,9 @@ Once the first segment is transformed to follow the mesh, we will have a new poi
 \\
 When we transform a segment, it needs to follow a straight-line path in its direction for its length, thus it should follow the geodesic path along the surface. We will therefore flatten the mesh around the local area that the segment traverses. Let $\epsilon$ be the length of our segment and $p$ be its starting point. The $\epsilon$-neighborhood around $p$ will be homeomorphic to $R^2$ due to the short length of our segments (TODO: Establish this in previous section that describes how the tracking system works and how quickly it samples points), as illustrated in Figure \ref{manifolddiagram}, thus when we flatten the neighborhood, there will be no gaps or overlaps. We will denote $T$ as the triangle where the starting point lies. We will develop a secondary mesh $M_0$ that consists of $T$ and the triangles that intersect the $\epsilon$-neighborhood of $T$. The triangles in $M_0$ will be rotated so that they lie on the same plane as $T$. \\
 \\
-We now have a vector and a flat plane it needs to follow. We will let $v$ be the vector for our segment, $N$ be the normal of the flat plane. In order to preserve orientation along the plane, we need to find a vector $E$ that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
+We now have a vector and a flat plane it needs to follow. We will let $v$ be the vector for our segment, $N$ be the normal of the flat plane. In order to preserve orientation along the plane, we need to find a vector $E'$ that is both on the plane formed by $N$ and $v$ and has an acute angle with $v$. In order to preserve arc length, we need to find a vector $E$ that is in the direction of $E'$ and has the magnitude of $v$. As can be observed in figure \ref{vectordiagram}, the following equation will then hold
 \[
-E + proj_N(v) = v
+E' + proj_N(v) = v
 \]
 
 \begin{figure}[ht]
@@ -29,9 +29,13 @@ E + proj_N(v) = v
 \label{vectordiagram}
 \end{figure}
 
-Thus we can easily calculate $E$ using the formula
+This equation can be simplified to
 \[
-E = v - N(v.N)
+E' = v - N(v.N)
+\]
+We can now calculate $E$ using the formula
+\[
+E = ||v|| \frac{E'}{||E'||}
 \]
 We will now let $p' = p+E$ which will be the ending point on $M_0$ of our segment. We then take the $p-p'$ line segment and calculate its intersections with edges of the triangles in $M_0$, denoting that set as $Q'$, as illustrated in Figure \ref{segmentonmesh}. We will calculate the points $p$, $p'$ and the ones in $Q'$ in their own triangle's coordinate systems. By doing this, we can easily transform the $p-Q'-p'$ set of points into the set $\{p_0,...,p_j\}$ where each of those points lie on the mesh $M$ and consecutive pairs lie on the same triangle. We now have the desired output. As a summary, the pseudo-code of the algorithm is presented in algorithm \ref{pseudocode}. \\
 \\
