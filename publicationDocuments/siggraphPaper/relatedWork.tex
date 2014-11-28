@@ -6,6 +6,8 @@ Various solutions have been proposed for tracking objects in 3D space. For the c
 \\
 Electromagnetic Tracking is the most popular system in medicine for tracking across a patient \ref{emTrackingReview}. We needed to track on the surface of a patient however, so it did not fit our needs **TODO: ADD MORE INFO**. \\
 \\
+Tracking human motion was approached in \ref{humanMotionTracking}. It still however does a rough calculation of the motion and does not consider the deformability of a surface\\
+\\
 The problem of tracking a sensor on the skin's surface was approached in \ref{3dUltrasound}. Much of the initial work on tracking the position of a probe using the orientatation and displacement was inspired by this method. In the paper however they do not deal with the deformability of the surface. This paper attempts to reconcile that problem. \\
 \\
 Real-time RF location systems seemed like an ideal solution due to the fact that they give a 3D location using the signal strength between the object and transmitters. Unfortunately it turned out they would not work for our needs due to the lack of accuracy. Chintalapudi et al \cite{ezlocation} described the EZ location by Microsoft as well as other location systems. As said in the conclusion of that paper, the most accurate system they described was accurate up to 70 cm. Since we need millimeter level accuracy this would not work for us. \\
