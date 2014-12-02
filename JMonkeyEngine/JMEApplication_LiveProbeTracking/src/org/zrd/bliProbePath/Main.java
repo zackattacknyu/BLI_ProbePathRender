@@ -48,14 +48,8 @@ public class Main extends SimpleApplication {
     
     private LiveTrackingText outputText;
     private SignalProcessingOutput_Threaded signalTracker;
-    
-    /*
-     * This turns on real-time rendering
-     * If it is on, the min arc length determines how long in the virtual world
-     *      the path is before it is rendered
-     */
-    private boolean renderPathsDuringRecording = true;
-    private float MIN_ARC_LENGTH_FOR_RENDER = 0.5F;
+
+    private boolean renderPathsDuringRecording;
     
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
@@ -89,9 +83,18 @@ public class Main extends SimpleApplication {
         Path defaultOutputPath = FilePathHelper.getDefaultOutputFolder();
         boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(props, "surfaceTrackingOn");
         boolean showTriangleNormals = PropertiesHelper.getBooleanValueProperty(props, "showTriangleNormals");
+        boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
+        
+        /*
+        * This turns on real-time rendering
+        * If it is on, the min arc length determines how long in the virtual world
+        *      the path is before it is rendered
+        */
+        renderPathsDuringRecording=PropertiesHelper.getBooleanValueProperty(props, "realTimeRenderingEnabled");
+        float minArcLengthForRender = PropertiesHelper.getFloatValueProperty(props, "minArcLengthForRender");
+        
         Material lineMaterial = MaterialHelper.getColorMaterial(assetManager,ColorRGBA.Black);
         recordedPathSet = new RecordedPathSet();
-        boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
         outputText = new LiveTrackingText(guiNode,assetManager);
         
         //initializes the mesh session variables
@@ -142,7 +145,7 @@ public class Main extends SimpleApplication {
         probeMoveAction = ProbeMoveAction.initializeProbeMoveAction(inputManager, 
                 cam, shootables, activeTracker, meshInfo, 
                 fixedPtsToPick, useFixedPointsIfExists);
-        probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial,MIN_ARC_LENGTH_FOR_RENDER);
+        probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial,minArcLengthForRender);
         
         //initialize fixed points actions
         new RecordFixedPoints(inputManager,probeMoveAction,defaultOutputPath,meshInterFiles);
