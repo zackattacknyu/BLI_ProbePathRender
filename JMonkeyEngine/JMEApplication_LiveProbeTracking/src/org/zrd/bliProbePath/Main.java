@@ -49,7 +49,13 @@ public class Main extends SimpleApplication {
     private LiveTrackingText outputText;
     private SignalProcessingOutput_Threaded signalTracker;
     
-    private boolean renderPathsDuringRecording = false;
+    /*
+     * This turns on real-time rendering
+     * If it is on, the min arc length determines how long in the virtual world
+     *      the path is before it is rendered
+     */
+    private boolean renderPathsDuringRecording = true;
+    private float MIN_ARC_LENGTH_FOR_RENDER = 0.5F;
     
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
@@ -136,7 +142,7 @@ public class Main extends SimpleApplication {
         probeMoveAction = ProbeMoveAction.initializeProbeMoveAction(inputManager, 
                 cam, shootables, activeTracker, meshInfo, 
                 fixedPtsToPick, useFixedPointsIfExists);
-        probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial);
+        probeTrackerRender = new ProbeTrackerRender(activeTracker,moveableObject,lineMaterial,MIN_ARC_LENGTH_FOR_RENDER);
         
         //initialize fixed points actions
         new RecordFixedPoints(inputManager,probeMoveAction,defaultOutputPath,meshInterFiles);

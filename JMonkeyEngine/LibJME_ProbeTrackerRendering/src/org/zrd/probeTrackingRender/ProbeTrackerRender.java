@@ -24,14 +24,24 @@ public class ProbeTrackerRender {
     private Material lineMaterial;
     private boolean newRenderedPathsExist;
     
-    public static final float MIN_ARC_LENGTH_FOR_RENDER = 0.5F;
+    private float minArcLengthForRender;
+    public static final float DEFAULT_MIN_ARC_LENGTH = 0.5F;
     
-    public ProbeTrackerRender(LocationTracker activeTracker, Spatial probeObject, Material lineMaterial){
+    public ProbeTrackerRender(LocationTracker activeTracker, Spatial probeObject, Material lineMaterial, float minArcLengthForRender){
         this.activeTracker = activeTracker;
         this.probeObject = probeObject;
         lastPosition = activeTracker.getCurrentPosition().clone();
         this.renderedPaths = new Node();
         this.lineMaterial = lineMaterial;
+        this.minArcLengthForRender = minArcLengthForRender;
+    }
+    
+    public ProbeTrackerRender(LocationTracker activeTracker, Spatial probeObject, Material lineMaterial){
+        this(activeTracker,probeObject,lineMaterial,DEFAULT_MIN_ARC_LENGTH);
+    }
+
+    public void setMinArcLengthForRender(float minArcLengthForRender) {
+        this.minArcLengthForRender = minArcLengthForRender;
     }
     
     public void updateInfo(){
@@ -45,7 +55,7 @@ public class ProbeTrackerRender {
     
     public void updateRenderPathInfo(){
         
-        if(activeTracker.isRecordingPath() && (activeTracker.getArcLengthSinceLastRead() > MIN_ARC_LENGTH_FOR_RENDER)){
+        if(activeTracker.isRecordingPath() && (activeTracker.getArcLengthSinceLastRead() > minArcLengthForRender)){
             renderedPaths.attachChild(
                     PathRenderHelper.createLineFromVertices(
                     activeTracker.getVerticesSinceLastRead(), 
