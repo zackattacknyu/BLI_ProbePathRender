@@ -1,5 +1,17 @@
 \section{Tracking the Probe on a Deformable Surface}
 
+\subsection{Properties of our surface}
+
+The optical mouse sensor which we are using is flat on the bottom. We are thus only able to use surfaces which deform in such a way that a flat region is possible when a flat object applies pressure to it. \\
+\\
+We are also only thinking about objects which retain their shape. Thus, if you were to mark where on the surface the mouse sensor was, the virtual location would be the location of that mark when the surface has regained its shape. \\
+\\
+Since our probe can only measure changes, the requirements of the system are that the user will specify the initial location. We can thus assume that our probe is on a known and marked starting point. We will flatten the mesh there due to the flattening property that we have. \\
+\\
+Because our surface can be flattened around the mouse sensor, this tells us that the region the mouse sensor takes up is homeomorphic to $R^2$. After two consecutive samples from the mouse sensor, there are two regions measured. The sampling is so rapid that these two regions will overlap. We can thus assume that the second sample is part of the same flat plane as the first sample. \\
+\\
+This fact will enable us in the next section to flatten the triangles around the region that the probe recorded. This will make it very easy to project the path onto the surface itself. 
+
 \subsection{Mesh Following Algorithm}
 
 After calibration, due to deformability and possible measurement errors, our rendered path in the virtual world will have segments that are above or below the virtual surface as shown in Figure \ref{pathsAboveAndBelow}. Because the path was recorded on the real surface, we want a visualization on the virtual surface of the probe's location on the real surface. We will thus do a transformation of the virtual path to better match where the real path traversed. Because we already calibrated the scale of the movements and deformability does not affect affect distance traversed (TODO: Make sure this is established in a previous section where I talk about the properties of the surface that I scan), the transformation will preserve arc length. Because the rotation was already calibrated, the orientation along the surface will be preserved.
