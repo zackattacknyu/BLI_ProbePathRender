@@ -2,7 +2,12 @@
 
 \subsection{Mouse Sensor Tracking}
 
-A typical optical mouse sensor gives 2D coordinates on a flat surface. It does not however give orientation information thus the clinical accuracy is not there. We could attach a compass sensor. However, our surface is not flat and a compass would measure orientation relative to the earth. We thus add more sensors to give a complete picture of the 3D orientation. This allows us to simulataneously track displacement directly on a surface and know its orientation in 3D space. 
+With a typical mouse sensor, $x$ and $y$ displacements are outputted by comparing the images taken by the low-resolution camera at the bottom of the sensor. It thus works quite well a computer mouse since it just needs to lie on a rough surface. With a computer mouse, every movement updates the mouse position for the user and the user only cares about the position in the virtual desktop. There is no consideration for where the mouse is located on the surface and indeed mouse sensors were never designed with that in mind.\\
+\\
+For our purposes, we want to measure displacement on a 2D surface but we care quite a bit about its exact location on that surface. If the user only moves the mouse horizontally or vertically then we could obtain an accurate location on the real surface easily. However, the probe is bound to be rotated on the surface and when that happens, the axis by which the mouse sensor reads $x$ and $y$ displacement also changes.\\
+\\
+To overcome the problem of not knowing the orientation of the $x$ and $y$ directions, we could attach a compass to the hardware. That combined system would work well if we were measuring on flat surfaces. However, we are aiming to measure on curved surfaces, thus when the orientation changes, it might be in a direction that a compass could not detect. We thus add an accelerometer and gyroscope to the system in order to get a complete picture of the orientation. 
+
 
 \subsection{3D Tracking}
 
