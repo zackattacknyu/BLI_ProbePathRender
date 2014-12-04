@@ -168,10 +168,18 @@ public class PathRecorder {
         
     }
     
+    /**
+     * This gets the most recently read vertices. Before returning the most recent vertices,
+     *      it clears that list. It does retain the last vertex though
+     *      in that list. 
+     * @return 
+     */
     public ArrayList<Vector3f> getMostRecentVertices(){
         arcLengthSinceLastRead = 0;
         ArrayList<Vector3f> returnVerts = PathHelper.getCopyOfPath(verticesSinceLastRead);
+        Vector3f lastVertex = PathHelper.getLastPoint(returnVerts);
         verticesSinceLastRead.clear();
+        verticesSinceLastRead.add(lastVertex);
         return returnVerts;
     }
 
