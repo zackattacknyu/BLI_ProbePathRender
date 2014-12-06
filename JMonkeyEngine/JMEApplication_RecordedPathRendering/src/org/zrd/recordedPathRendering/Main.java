@@ -20,6 +20,7 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
 
 import org.zrd.util.fileHelper.FilePathHelper;
 import java.awt.image.*;
+import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.ImageFileHelper;
 /**
@@ -124,6 +125,7 @@ public class Main extends SimpleApplication {
     
     private void displaySegment(SegmentSet segment){
         paths.attachChild(PathRenderHelper.createLineFromVerticesWithData(segment, assetManager, signalProcessor));
+        GeometryDataHelper.writePathVerticesToDefaultOutputFile(segment.getPathVertices());
         signalProcessor.switchRedBlack();
     }
 

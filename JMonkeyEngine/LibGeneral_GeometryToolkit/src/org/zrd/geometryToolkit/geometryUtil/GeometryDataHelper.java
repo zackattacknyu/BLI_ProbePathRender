@@ -26,6 +26,13 @@ public class GeometryDataHelper {
         return new Vector2f(Float.NaN,Float.NaN);
     }
     
+    public static void writePathVerticesToDefaultOutputFile(ArrayList<Vector3f> vertices){
+        writePathVerticesToOutputFile(vertices,"currentPathVertices");
+    }
+    public static void writePathVerticesToOutputFile(ArrayList<Vector3f> vertices, String outputFileName){
+        writeVerticesToFile(vertices,GeneralFileHelper.getNewOutputFilePath(outputFileName));
+    }
+    
     public static void writeTexCoordToDefaultOutputFile(ArrayList<Vector2f> texCoords){
         writeTexCoordToOutputFile(texCoords,"textureCoordinateOutput");
     }
