@@ -35,7 +35,7 @@ public class SegmentSet {
      * This is the same path, but with a start point
      *      and vectors for each of the following segments
      */
-    private Vector3f startPoint;
+    //private Vector3f startPoint;
     private ArrayList<Vector3f> segmentVectors;
     
     private ArrayList<Long> timestamps;
@@ -168,9 +168,13 @@ public class SegmentSet {
     public ArrayList<Vector3f> getPathVertices() {
         return pathVertices;
     }
+    
+    public Vector3f getLastPoint(){
+        return PathHelper.getLastPoint(pathVertices);
+    }
 
     public Vector3f getStartPoint() {
-        return startPoint;
+        return PathHelper.getFirstPoint(pathVertices);
     }
 
     public ArrayList<Vector3f> getSegmentVectors() {

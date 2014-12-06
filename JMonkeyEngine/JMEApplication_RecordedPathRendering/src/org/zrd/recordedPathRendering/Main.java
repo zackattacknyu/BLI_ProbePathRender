@@ -89,13 +89,13 @@ public class Main extends SimpleApplication {
         
         if(lineMoveAction.arePointsNewlyPicked()){
             displaySegment(lineMoveAction.getCurrentSegment());
-            attachSegmentToTexture(lineMoveAction.getCurrentSegment());
+            //attachSegmentToTexture(lineMoveAction.getCurrentSegment());
         }
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
             //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
-            attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
         
         if(!hideInitialPaths && pathImport.isNewPathExists()){
