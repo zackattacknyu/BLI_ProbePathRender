@@ -167,10 +167,6 @@ public class LineMoveAction extends PickTwoPointsOnMesh{
      * @return  current path as list of vertices
      */
     public SegmentSet getCurrentSegment() {
-        System.out.println("First Vertex in Current Segment: " + 
-                currentSegmentSet.getStartPoint());
-        System.out.println("Last Vertex in Current Segment: " + 
-                currentSegmentSet.getLastPoint());
         return currentSegmentSet;
     }
     
