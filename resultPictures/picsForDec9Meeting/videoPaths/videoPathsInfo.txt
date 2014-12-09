@@ -1,15 +1,24 @@
 
 mm to Virtual Unit conversion: 0.08
 
-Path A:
+Path A (Left):
 
 Start: -0.049918532,-0.23559606,-0.5396538
 End: 3.347777,-2.6813462,0.07476092
+Target End: 3.8329744,-2.053442,0.5716591
 Virtual Dist from Start to End (virtual units): 4.2313
 Virtual Dist from Start to End (mm): 52.8907
-Real Dist From Start to End (mm): 
+Real Dist From Start to End (mm): 57
+Virtual Dist from End to Target End (virtual units): 0.9363
+Virtual Dist from End to Target End (mm): 11.7033
 
-Path B:
+Path B (Right):
 
 Start: -0.049918532,-0.23559606,-0.5396538
 End: -1.5842005,-3.3702698,0.1428974
+Target End: -4.405612,-2.9428997,0.40361214
+Virtual Dist from Start to End (virtual units): 3.5561
+Virtual Dist from Start to End (mm): 44.4517
+Real Dist From Start to End (mm): 62
+Virtual Dist from End to Target End (virtual units): 2.8655
+Virtual Dist from End to Target End (mm): 35.8185 
