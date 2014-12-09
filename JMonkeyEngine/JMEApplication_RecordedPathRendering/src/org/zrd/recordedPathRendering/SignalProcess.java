@@ -36,10 +36,20 @@ public class SignalProcess implements StringToColorConversion{
         return signalData.get(1).getPower();
         */
         
-        //data contains peak
-        return Double.parseDouble(data[2]);
+        /*
+         * CODE IF DATA ALREADY CONTAINS PEAK
+         */
+        //return Double.parseDouble(data[2]);
+        
+        /*
+         * CODE TO NOT DISPLAY ANY DATA
+         */
+        return 0;
     }
 
+    public ColorRGBA convertStringToColor2(String[] data){
+        return ColorRGBA.Black;
+    }
     public ColorRGBA convertStringToColor(String[] data) {
         double dataPeak = getWavePeak(data);
         //System.out.println("Peak=" + dataPeak);
