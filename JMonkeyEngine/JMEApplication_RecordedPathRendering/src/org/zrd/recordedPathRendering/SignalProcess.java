@@ -39,12 +39,12 @@ public class SignalProcess implements StringToColorConversion{
         /*
          * CODE IF DATA ALREADY CONTAINS PEAK
          */
-        //return Double.parseDouble(data[2]);
+        return Double.parseDouble(data[2]);
         
         /*
          * CODE TO NOT DISPLAY ANY DATA
          */
-        return 0;
+        //return 0;
     }
 
     public ColorRGBA convertStringToColor2(String[] data){
