@@ -16,6 +16,7 @@ import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
 import org.zrd.geometryToolkit.pointTools.FixedPointPicker;
 import org.zrd.geometryToolkit.meshDataStructure.MeshTriangle;
 import org.zrd.geometryToolkit.meshDataStructure.TriangleSet;
+import org.zrd.geometryToolkit.meshTraversal.PathOnMeshCalculator;
 import org.zrd.geometryToolkit.pathDataStructure.RecordedPathSet;
 import org.zrd.geometryToolkit.pathDataStructure.SegmentSet;
 import org.zrd.geometryToolkit.pathTools.PathCompression;
@@ -45,68 +46,65 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
      * Name of the action hitting the keyboard to signify
      *      moving the current line
      */
-    public static final String LINE_MOVE_TO_FIXED_PT_ACTION_NAME = "lineMoveToFixedPtAction";
+    public static final String PICK_FIXED_PT_ON_MESH_AND_PROJECT_ACTION_NAME = "pickFixedPtOnMeshAndProjectAction";
     
     /**
      * Name of the action for hitting the mouse to signify either a start
      *      or end point for the path
      */
-    public static final String POINT_CLICK_FOR_LINE_MOVE_TO_FIXED_PT_ACTION_NAME = "pickFixedPtPointForLineMove";
-    
-    /**
-     * The keyboard key to trigger the line move action
-     */
-    public static final int LINE_MOVE_TO_FIXED_PT_ACTION_KEY = KeyInput.KEY_K;
+    public static final String PICK_FIXED_PT_ON_MESH_FOR_PROJECTION_ACTION_NAME = "pickPtOnMeshAndProjectAction";
     
     /**
      * Name of the action hitting the keyboard to signify
      *      moving the current line
      */
-    public static final String LINE_MOVE_ACTION_NAME = "lineMoveAction";
+    public static final String PICK_PT_ON_MESH_AND_PROJECT_ACTION_NAME = "pickFixedPtOnMeshForProjectionAction";
     
     /**
      * Name of the action for hitting the mouse to signify either a start
      *      or end point for the path
      */
-    public static final String POINT_CLICK_FOR_LINE_MOVE_ACTION_NAME = "pickPointForLineMove";
+    public static final String PICK_PT_ON_MESH_FOR_PROJECTION_ACTION_NAME = "pickPtOnMeshForProjectionAction";
     
     /**
      * The keyboard key to trigger the line move action
      */
-    public static final int LINE_MOVE_ACTION_KEY = KeyInput.KEY_L;
+    public static final int PICK_FIXED_PT_ON_MESH_AND_PROJECT_ACTION_KEY = KeyInput.KEY_B;
     
+    /**
+     * The keyboard key to trigger the line move action
+     */
+    public static final int PICK_PT_ON_MESH_AND_PROJECT_ACTION_KEY = KeyInput.KEY_N;
+
     /**
      * This message is displayed to the user to tell them that line moving 
      *      has been enabled
      */
-    public static final String LINE_MOVE_ENABLING_MESSAGE = "Last Line will be moved to next 2 points clicked";
+    public static final String PICK_PT_ON_MESH_ENABLING_MESSAGE = "Last Line will be moved to next point clicked and projected";
     
     /**
      * This message is displayed to the user to tell them that line moving 
      *      has been cancelled
      */
-    public static final String LINE_MOVE_CANCEL_MESSAGE = "Line Moving Cancelled";
+    public static final String PICK_PT_ON_MESH_CANCEL_MESSAGE = "Line Moving Cancelled";
 
     private boolean pointPickingEnabled = false;
-    private boolean onStartPoint = true;
-    private Vector3f lastPointClicked;
     protected MeshTriangle startingTriangle;
     protected MeshTriangle endingTriangle;
     private TriangleSet meshInfo;
-    private SpacebarHitImpl spacebarHit;
     
     private boolean pointNewlyPicked = false;
     
     public PickPointOnMeshAndProject(InputManager inputManager, Camera cam, Node shootableMesh, RecordedPathSet recordedPathSet, TriangleSet meshInfo){
-        this(LINE_MOVE_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_ACTION_NAME,
-                LINE_MOVE_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,null);
+        this(PICK_PT_ON_MESH_AND_PROJECT_ACTION_NAME,PICK_PT_ON_MESH_FOR_PROJECTION_ACTION_NAME,
+                PICK_PT_ON_MESH_AND_PROJECT_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,null);
         this.recordedPathSet = recordedPathSet;
     }
 
     public PickPointOnMeshAndProject(InputManager inputManager, Camera cam, Node shootableMesh, 
             RecordedPathSet recordedPathSet, TriangleSet meshInfo, FixedPointPicker pointPicker) {
-        this(LINE_MOVE_TO_FIXED_PT_ACTION_NAME,POINT_CLICK_FOR_LINE_MOVE_TO_FIXED_PT_ACTION_NAME,
-                LINE_MOVE_TO_FIXED_PT_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,pointPicker);
+        this(PICK_FIXED_PT_ON_MESH_AND_PROJECT_ACTION_NAME,PICK_FIXED_PT_ON_MESH_FOR_PROJECTION_ACTION_NAME,
+                PICK_FIXED_PT_ON_MESH_AND_PROJECT_ACTION_KEY,inputManager,cam,shootableMesh,meshInfo,pointPicker);
         this.recordedPathSet = recordedPathSet;
     }
     
@@ -127,7 +125,6 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
         super(inputManager,actionName,keyTrigger);
         new PickPointOnMesh(pointPickName,inputManager,cam,this,shootableMesh,fixedPtPicker);
         this.meshInfo = meshInfo;
-        this.spacebarHit = new SpacebarHitImpl(inputManager);
     }
     
     /**
@@ -154,7 +151,7 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
      * @return      message for the console to say action is enabled
      */
     protected String messageUponEnabling(){
-        return "";
+        return PICK_PT_ON_MESH_ENABLING_MESSAGE;
     }
     
     /**
@@ -163,7 +160,7 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
      * @return      message for the console to say action is cancelled
      */
     protected String messageUponCancelling(){
-        return "";
+        return PICK_PT_ON_MESH_CANCEL_MESSAGE;
     }
     
     @Override
@@ -201,9 +198,9 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
             currentSegmentSet = PathCompression.getCompressedPath(currentSegmentSet,PathHelper.MIN_SEGMENT_LENGTH);
             
             //projects path onto surface
-            //PathOnMeshCalculator currentPathProjectedOntoSurface = 
-            //        new PathOnMeshCalculator(currentSegmentSet,triangleOnMesh.clone(),meshInfo);
-            //currentSegmentSet = currentPathProjectedOntoSurface.getCurrentSegmentSetOnSurface();
+            PathOnMeshCalculator currentPathProjectedOntoSurface = 
+                    new PathOnMeshCalculator(currentSegmentSet,triangleOnMesh.clone(),meshInfo);
+            currentSegmentSet = currentPathProjectedOntoSurface.getCurrentSegmentSetOnSurface();
 
             GeometryDataHelper.writeTexCoordToDefaultOutputFile(currentSegmentSet.getVertexTextureCoords());
 
@@ -225,6 +222,10 @@ public class PickPointOnMeshAndProject extends GeneralKeyboardActionMethod imple
         }else{
             return false;
         }        
+    }
+
+    public SegmentSet getCurrentSegmentSet() {
+        return currentSegmentSet;
     }
     
 }

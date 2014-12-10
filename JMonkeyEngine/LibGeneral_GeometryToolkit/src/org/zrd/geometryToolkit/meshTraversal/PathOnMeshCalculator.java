@@ -107,6 +107,22 @@ public class PathOnMeshCalculator {
         performRotationOntoInitialPlane();
         approximatePathLocationOnMesh();
     }
+    
+    /**
+     * Initializes the object which will calculate the 
+     *      path projected directly onto the mesh
+     * @param initPath              initial path
+     * @param startingTriangle      initial triangle on mesh
+     * @param meshInfo              mesh to track on
+     */
+    public PathOnMeshCalculator(SegmentSet initSegmentSet, MeshTriangle startingTriangle, TriangleSet meshInfo){
+        aggregateRotation = null;
+        this.initSegmentSet = initSegmentSet;
+        startingPoint = PathHelper.getFirstPoint(initSegmentSet.getPathVertices());
+        initTriangleNormal = startingTriangle.getNormal();
+        this.startingTriangle = startingTriangle;
+        this.meshInfo = meshInfo;
+    }
 
     /**
      * this does the initial transformation onto the plane of the first triangle
@@ -146,12 +162,19 @@ public class PathOnMeshCalculator {
      * This gets the initial path rotated using the current
      *      aggregate rotation and the origin point of rotation
      *      as the origin point of the path
+     * 
+     * If aggregateRotation is null, so we only want the projection, then this
+     *      will just return the original path
      * @return      path vertices after being rotated by current aggregate rotation
      */
     public ArrayList<Vector3f> getCurrentRotatedPath(){
-        return PathTransformHelper.getTransformedVertices(
+        if(aggregateRotation == null){
+            return initSegmentSet.getPathVertices();
+        }else{
+            return PathTransformHelper.getTransformedVertices(
                 PathHelper.getCopyOfPath(initSegmentSet.getPathVertices()), 
                 RotationTransformHelper.getRotationAroundPoint(startingPoint, aggregateRotation));
+        }
     }
     
     /**

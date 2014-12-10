@@ -21,6 +21,7 @@ import org.zrd.util.fileHelper.MeshInteractionFiles;
 import org.zrd.util.fileHelper.FilePathHelper;
 import java.awt.image.*;
 import org.zrd.geometryToolkit.geometryUtil.GeometryDataHelper;
+import org.zrd.jmeGeometryInteractions.meshPathInteractions.PickPointOnMeshAndProject;
 import org.zrd.jmeUtil.materials.MaterialHelper;
 import org.zrd.util.fileHelper.ImageFileHelper;
 /**
@@ -34,6 +35,9 @@ public class Main extends SimpleApplication {
     private LineMoveAction lineMoveActionToFixedPt;
     private PathImport pathImport;
     private SignalProcess signalProcessor;
+    
+    private PickPointOnMeshAndProject pickPtAndProject;
+    private PickPointOnMeshAndProject pickFixedPtAndProject;
     
     private Node shootables;
     private Node paths;
@@ -79,6 +83,9 @@ public class Main extends SimpleApplication {
         lineMoveActionToFixedPt = new LineMoveAction(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
         pathImport = new PathImport(inputManager,recordedPathSet,FilePathHelper.getDefaultInputFolder().toFile());
         
+        pickPtAndProject = new PickPointOnMeshAndProject(inputManager, cam, shootables, recordedPathSet, meshInfo);
+        pickFixedPtAndProject = new PickPointOnMeshAndProject(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
+        
         //rootNode.attachChild(currentMeshSession.getFixedPointNode());
         
         paths = new Node();
@@ -95,6 +102,17 @@ public class Main extends SimpleApplication {
         
         if(lineMoveActionToFixedPt.arePointsNewlyPicked()){
             displaySegment(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+            //attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
+        }
+        
+        if(pickPtAndProject.isPointNewlyPicked()){
+            displaySegment(pickPtAndProject.getCurrentSegmentSet());
+            //attachSegmentToTexture(lineMoveAction.getCurrentSegment());
+        }
+        
+        if(pickFixedPtAndProject.isPointNewlyPicked()){
+            displaySegment(pickFixedPtAndProject.getCurrentSegmentSet());
             //attachSegmentToTexture(lineMoveActionToFixedPt.getCurrentSegment());
             //attachSegmentAreaToTexture(lineMoveActionToFixedPt.getCurrentSegment());
         }
