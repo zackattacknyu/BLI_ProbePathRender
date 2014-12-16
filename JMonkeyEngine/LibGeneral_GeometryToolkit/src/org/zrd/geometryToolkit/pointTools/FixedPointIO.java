@@ -30,6 +30,7 @@ import org.zrd.util.fileHelper.GeneralFileHelper;
 public class FixedPointIO {
     
     private ArrayList<Vector3f> outputVertices;
+    private ArrayList<Vector3f> pointCoords;
     private Collection<PointData> fixedPointsOnMesh;
     
     /**
@@ -38,6 +39,7 @@ public class FixedPointIO {
      */
     public FixedPointIO(){
         outputVertices = new ArrayList<Vector3f>();
+        pointCoords = new ArrayList<Vector3f>();
     }
     
     /**
@@ -110,6 +112,8 @@ public class FixedPointIO {
         outputVertices.add(correspondingTriangle.getVertex1().getVertex());
         outputVertices.add(correspondingTriangle.getVertex2().getVertex());
         outputVertices.add(correspondingTriangle.getVertex3().getVertex());
+        
+        pointCoords.add(fixedPoint);
     }
     
     /**
@@ -122,6 +126,9 @@ public class FixedPointIO {
         System.out.println("Now putting vertices into text file");
         Path textFilePath = GeneralFileHelper.getNewDataFilePath(dataPath, "fixedPoints");
         GeometryDataHelper.writeVerticesToFile(outputVertices, textFilePath);
+        
+        Path pointCoordFilePath = GeneralFileHelper.getNewDataFilePath(dataPath, "fixedPointsCoords");
+        GeometryDataHelper.writeVerticesToFile(pointCoords, pointCoordFilePath);
         System.out.println("Finished adding vertices to text file");
         return textFilePath.toFile();
     }
