@@ -19,7 +19,7 @@ len_4_5=25.5;
 len_5_6=46.5;
 len_6_7=32;
 len_71_72=26.5;
-len_6_71=26.5; %**********TODO: VERIFY THIS************
+len_6_71=24.5;
 
 %all the angles we can now get
 ang_1_O_2 = getAngleFromSSS(len_O_1,len_O_2,len_1_2);
