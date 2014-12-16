@@ -60,6 +60,8 @@ point_5=getXYFromRTheta(r_5,theta_5);
 point_6=getXYFromRTheta(r_6,theta_6);
 point_7=getXYFromRTheta(r_7,theta_7);
 
+points = [point_1;point_2;point_3;point_4;point_5;point_6;point_7];
+dists = getPairwise(points);
 
 
 
