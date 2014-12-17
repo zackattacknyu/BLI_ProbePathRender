@@ -97,7 +97,44 @@ transform = translateToOrigin*reflect;
 
 pointFrom1_inOspace = transform*pointsFrom1;
 
-additionalPoints_1 = [point_12 point_11];
+additionalPoints_1 = [point_12;point_11];
+
+%{
+this is used to get x,y coordinates for points 6,7,71,72
+    in the coordinate system where 7 is the origin and O_7 is the positive x-axis
+%}
+r_O = len_O_7;
+theta_O = 0;
+r_6 = len_6_7;
+theta_6 = ang_6_7_O;
+r_71 = len_1_12;
+theta_71 = ang_6_7_71 + theta_6;
+r_72 = len_1_11;
+theta_72 = ang_72_7_71 + theta_71;
+
+point_O=[getXYFromRTheta(r_O,theta_O) 1]';
+point_7_new = [0 0 1]';
+point_6_new = [getXYFromRTheta(r_6,theta_6) 1]';
+point_71=[getXYFromRTheta(r_71,theta_71) 1]';
+point_72=[getXYFromRTheta(r_72,theta_72) 1]';
+
+%in 7's coordinate system
+pointsFrom7 = [point_O point_7_new point_6_new  point_71 point_72];
+
+%transformation to go from 7's coords to O's coords
+%TODO: FIX THIS. IT DOES NOT WORK RIGHT NOW
+rotAngle=-(theta_7-pi);
+rotation = [cos(rotAngle) -sin(rotAngle) 0;sin(rotAngle) cos(rotAngle) 0; 0 0 1];
+translateToOrigin = eye(3);
+translateToOrigin(:,3) = rotation*point_O;
+transform = translateToOrigin*rotation;
+
+pointFrom7_inOspace = transform*pointsFrom7;
+
+additionalPoints_7 = [point_71;point_72];
 
 
+%THIS IS WHAT WE CURRENTLY HAVE
+allPoints = [points;additionalPoints_1];
+dists = getPairwise(allPoints);
 
