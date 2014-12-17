@@ -32,6 +32,8 @@ ang_72_7_71 = getAngleFromSSS(len_7_72,len_7_71,len_71_72);
 ang_6_7_71 = getAngleFromSSS(len_6_7,len_7_71,len_6_71);
 ang_2_1_O = getAngleFromSSS(len_1_2,len_O_1,len_O_2);
 ang_6_7_O = getAngleFromSSS(len_O_7,len_6_7,len_O_6);
+ang_2_1_12 = getAngleFromSSS(len_1_2,len_1_12,len_12_2);
+ang_12_1_11 = getAngleFromSSS(len_1_12,len_1_11,len_11_12);
 
 %used to get x,y coordinates for points where we can use the
 %   following coordinate system:
@@ -52,6 +54,7 @@ r_7=len_O_7;
 theta_7 = ang_6_O_7 + theta_6;
 
 %gets x,y coordinates from above
+point_0= [0 0];
 point_1=getXYFromRTheta(r_1,theta_1);
 point_2=getXYFromRTheta(r_2,theta_2);
 point_3=getXYFromRTheta(r_3,theta_3);
@@ -60,9 +63,41 @@ point_5=getXYFromRTheta(r_5,theta_5);
 point_6=getXYFromRTheta(r_6,theta_6);
 point_7=getXYFromRTheta(r_7,theta_7);
 
-points = [point_1;point_2;point_3;point_4;point_5;point_6;point_7];
+points = [point_0;point_1;point_2;point_3;point_4;point_5;point_6;point_7];
 dists = getPairwise(points);
 
+%{
+this is used to get x,y coordinates for points 1,2,11,12
+    in the coordinate system where 1 is the origin and O_1 is the positive x-axis
+%}
+r_O = len_O_1;
+theta_O = 0;
+r_2 = len_1_2;
+theta_2 = ang_2_1_O;
+r_12 = len_1_12;
+theta_12 = ang_2_1_12 + theta_2;
+r_11 = len_1_11;
+theta_11 = ang_12_1_11 + theta_12;
+
+point_O=[getXYFromRTheta(r_O,theta_O) 1]';
+point_1_new = [0 0 1]';
+point_2_new = [getXYFromRTheta(r_2,theta_2) 1]';
+point_12=[getXYFromRTheta(r_12,theta_12) 1]';
+point_11=[getXYFromRTheta(r_11,theta_11) 1]';
+
+%in 1's coordinate system
+pointsFrom1 = [point_O point_1_new point_2_new  point_12 point_11];
+
+%transformation to go from 1's coords to O's coords
+translateToOrigin = eye(3);
+translateToOrigin(1:2,3) = point_O(1:2);
+reflect = eye(3);
+reflect(1:2,1:2) = [-1 0; 0 1];
+transform = translateToOrigin*reflect;
+
+pointFrom1_inOspace = transform*pointsFrom1;
+
+additionalPoints_1 = [point_12 point_11];
 
 
 
