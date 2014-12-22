@@ -64,7 +64,6 @@ point_6=getXYFromRTheta(r_6,theta_6);
 point_7=getXYFromRTheta(r_7,theta_7);
 
 points = [point_0;point_1;point_2;point_3;point_4;point_5;point_6;point_7];
-dists = getPairwise(points);
 
 %{
 this is used to get x,y coordinates for points 1,2,11,12
@@ -133,5 +132,5 @@ pointFrom7_inOspace = transform*pointsFrom7;
 additionalPoints_7 = [point_71(1:2)';point_72(1:2)'];
 
 allPoints = [points;additionalPoints_1;additionalPoints_7];
-dists = getPairwise(allPoints);
+distsReal = getPairwise(allPoints);
 
