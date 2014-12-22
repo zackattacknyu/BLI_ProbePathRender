@@ -1,3 +1,5 @@
+%Correct Order: point_0;point_1;point_2;point_3;point_4;point_5;point_6;
+%               point_7;point_12;point_11;point_71;point_72
 3.9276478,3.2633536,-0.6027527         %point 72
 3.525603,1.1844974,-0.85734653         %point 71
 4.733175,-0.3154255,-1.0268326         %point 6
