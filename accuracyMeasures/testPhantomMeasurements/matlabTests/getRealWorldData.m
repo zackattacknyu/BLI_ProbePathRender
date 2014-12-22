@@ -1,3 +1,7 @@
+function [ distsReal ] = getRealWorldData( )
+%GETREALWORLDDATA gets the distance matrix for real-world data
+%   Detailed explanation goes here
+
 %length between points
 len_O_1=25.5;
 len_O_2=51;
@@ -137,3 +141,7 @@ additionalPoints_7 = [point_71_new(1:2)';point_72_new(1:2)'];
 
 allPoints = [points;additionalPoints_1;additionalPoints_7];
 distsReal = getPairwise(allPoints);
+
+
+end
+
