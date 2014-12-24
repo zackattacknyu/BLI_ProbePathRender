@@ -52,5 +52,11 @@ point_71 = getPointFromTwoCircles(point_7,len_7_71,point_6,len_6_71,0);
 %point 72 is to the right of the 7-71 line
 point_72 = getPointFromTwoCircles(point_7,len_7_72,point_71,len_71_72,0);
 
+%point 4 is to the left of the O-5 line
+point_4 = getPointFromTwoCircles(point_O,len_O_4,point_5,len_4_5,1);
+
+%point 3 is to the left of the O-4 line
+point_3 = getPointFromTwoCircles(point_O,len_O_3,point_4,len_3_4,1);
+
 
 
