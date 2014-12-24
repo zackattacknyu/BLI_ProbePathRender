@@ -14,15 +14,11 @@ ratios3 = getRatiosArray(distsReal,distsVirtual3);
 meanRatios3 = mean(ratios3);
 stdRatios3 = std(ratios3);
 
-percentError13 = getPercentErrorArray(distsVirtual1,distsVirtual3);
-meanPercentError13 = mean(percentError13);
-stdPercentError13 = std(percentError13);
-
-percentError31 = getPercentErrorArray(distsVirtual3,distsVirtual1);
-meanPercentError31 = mean(percentError31);
-stdPercentError31 = std(percentError31);
+percentErrorVirtualDists = getPercentErrorArray(distsVirtual1,distsVirtual3);
+meanPercentVirtualDists = mean(percentErrorVirtualDists);
+stdPercentVirtualDists = std(percentErrorVirtualDists);
 
 distsReal2 = getRealWorldData();
-percentErrorDists = getPercentErrorArray(distsReal,distsReal2);
-meanPercentErrorDists = mean(percentErrorDists);
-stdPercentErrorDists = std(percentErrorDists);
+percentErrorRealDists = getPercentErrorArray(distsReal,distsReal2);
+meanPercentErrorRealDists = mean(percentErrorRealDists);
+stdPercentErrorRealDists = std(percentErrorRealDists);
