@@ -45,3 +45,12 @@ c1 = len_O_7;
 c2 = len_6_7;
 a1 = sqrt(c1*c1-b*b); a2 = sqrt(c2*c2-b*b); a = a1+a2;
 testVal7 = a-len_O_6; %should be close to zero
+
+%point 71 is to the right of the 7-6 line
+point_71 = getPointFromTwoCircles(point_7,len_7_71,point_6,len_6_71,0);
+
+%point 72 is to the right of the 7-71 line
+point_72 = getPointFromTwoCircles(point_7,len_7_72,point_71,len_71_72,0);
+
+
+
