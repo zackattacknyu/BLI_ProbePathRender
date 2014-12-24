@@ -37,11 +37,11 @@ b = abs(point_5(2));
 c1 = len_O_5;
 c2 = len_5_6;
 a1 = sqrt(c1*c1-b*b); a2 = sqrt(c2*c2-b*b); a = a1+a2;
-testVal1 = a-len_O_6; %should be close to zero
+testVal5 = a-len_O_6; %should be close to zero
 
 %test 7 coords
 b = abs(point_7(2));
 c1 = len_O_7;
 c2 = len_6_7;
 a1 = sqrt(c1*c1-b*b); a2 = sqrt(c2*c2-b*b); a = a1+a2;
-testVal2 = a-len_O_6; %should be close to zero
+testVal7 = a-len_O_6; %should be close to zero
