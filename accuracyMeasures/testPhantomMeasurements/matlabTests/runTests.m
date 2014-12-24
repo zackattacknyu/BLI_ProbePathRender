@@ -22,3 +22,12 @@ distsReal2 = getRealWorldData();
 percentErrorRealDists = getPercentErrorArray(distsReal,distsReal2);
 meanPercentErrorRealDists = mean(percentErrorRealDists);
 stdPercentErrorRealDists = std(percentErrorRealDists);
+
+% there is a 2 mm error for measuring
+errorReal = 2;
+sampleReal = min(getArray(distsReal));
+errorVirtual = 0.2; %GUESS FOR NOW. TODO: FIND MORE PRECISE ERROR LATER
+sampleVirtual = max(getArray(distsVirtual1));
+targetRatio = sampleVirtual/sampleReal;
+worstRatio = (sampleVirtual+errorVirtual)/(sampleReal-errorReal);
+worstPercentError = abs(targetRatio-worstRatio)/targetRatio;
