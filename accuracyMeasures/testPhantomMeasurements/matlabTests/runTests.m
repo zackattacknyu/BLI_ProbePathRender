@@ -24,7 +24,7 @@ meanPercentErrorRealDists = mean(percentErrorRealDists);
 stdPercentErrorRealDists = std(percentErrorRealDists);
 
 errorReal = 2; % there is a 2 mm error for measuring
-errorVirtual = 0.2; %GUESS FOR NOW. TODO: FIND MORE PRECISE ERROR LATER
+errorVirtual = 0.12; %rough diameter in virtual units for the circle
 distsRealArray = getArray(distsReal);
 distsVirtualArray = getArray(distsVirtual1);
 distsRealErrored = distsRealArray - errorReal;
@@ -33,3 +33,4 @@ ratiosErrored = distsVirtualErrored./distsRealErrored;
 ratiosFound = distsVirtualArray./distsRealArray;
 percentErrors = abs(ratiosFound-ratiosErrored)./ratiosFound;
 maxError = max(percentErrors);
+meanError = mean(percentErrors);
