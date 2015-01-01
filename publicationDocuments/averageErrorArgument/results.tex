@@ -1,0 +1,12 @@
+\section{Average Error Argument}
+
+Let $x,y$ be the error amounts. Let $\epsilon_x$ and $\epsilon_y$ be the max error for both, thus we care about the range $x \in (-\epsilon_x,\epsilon_x)$ and $y \in (-\epsilon_y,\epsilon_y)$. Let $A$ be the measured value for the $x$ variable and $B$ be the measured value for the y variable.\\
+\\
+The error is as follows
+\[
+E(x,y) = |\frac{A + x}{B + y} - \frac{A}{B} |
+\]
+To get the average, you need to integrate this over the range of $x$ and $y$\\
+We need to split this into two regions depending on whether the abs value fraction is positive or negative. \\
+In the region $y < \frac{B}{A} x$, the term inside the absolute value is positive\\
+In the region $y > \frac{B}{A} x$, the term inside the absolute value is negative\\
