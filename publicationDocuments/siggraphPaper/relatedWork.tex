@@ -1,43 +1,28 @@
 \section{Related Work}
 
-\subsection{Mouse Sensor Tracking}
-
-With a typical mouse sensor, $x$ and $y$ displacements are outputted by comparing the images taken by the low-resolution camera at the bottom of the sensor. It thus works quite well a computer mouse since it just needs to lie on a rough surface. With a computer mouse, every movement updates the mouse position for the user and the user only cares about the position in the virtual desktop. There is no consideration for where the mouse is located on the surface and indeed mouse sensors were never designed with that in mind.\\
-\\
-For our purposes, we want to measure displacement on a 2D surface but we care quite a bit about its exact location on that surface. If the user only moves the mouse horizontally or vertically then we could obtain an accurate location on the real surface easily. However, the probe is bound to be rotated on the surface and when that happens, the axis by which the mouse sensor reads $x$ and $y$ displacement also changes.\\
-\\
-To overcome the problem of not knowing the orientation of the $x$ and $y$ directions, we could attach a compass to the hardware. That combined system would work well if we were measuring on flat surfaces. However, we are aiming to measure on curved surfaces, thus when the orientation changes, it might be in a direction that a compass could not detect. We thus add an accelerometer and gyroscope to the system in order to get a complete picture of the orientation. 
-
-
 \subsection{3D Tracking}
 
-Even though we are tracking on a surface we would still need a tracking system that gives us the 3D location of an object. This is due to the fact that our surfaces are arbitrary. 
-
-For our purposes, we needed a tracking system that gave us a 3D location. This is due to the fact that we want to track on a surface but won't know the shape of the surface in advance. Because we do not know its shape in advance, we cannot make assumptions about tracking on it the way we would a 2D plane. Instead we need to acquire 3D coordinates and reconcile them with the surface. \\
+The displacement and orientation sensors give us a 3D location that is then reconciled with the surface. There are other technologies that exist that could give us a 3D location. These technologies all have significant disadvantages that make them impractical for our purposes. \\
 \\
-Motion capture in the entertainment industry would give us 3D location. Additionally, using a Kinect with a depth map would also give us 3D location. We could have also tried using multiple images to get the sense of depth and acquire a 3D location using that method. All of these ideas however require the object to always be in view of the camera. For the purposes of a clinical setting, that is not practical and we thus needed to explore alternatives. \\
+Motion capture that is used for movies or the Kinect system are examples of simple systems that provide 3D location. We could have also tried using multiple images to get the sense of depth and acquire a 3D location using that method. All of these ideas however require the object to always be in view of the camera. For the purposes of a clinical setting, that is not practical due to the fact that the operator's hand or something else could easily obstruct the view. Additionally, these methods do not provide very precise 3D locations and precision is quite important for our purposes. \\
 \\
-There is currently considerable research on Electromagnetic Tracking for clinical applications \ref{emTrackingReview}. This would give a 3D location for a medical device probe. The systems currently in development do provide millimeter-level precision. These systems have proven to be expensive and difficult to implement. Once our system has been perfected, it would be inexpensive and simple to operate. Additionally, our system guarantees that we are tracking on the surface of a patient which is the main goal of this project. 
+There is a major technology currently being researched called Electromagnetic Tracking \ref{emTrackingReview}. This would give a 3D location for a medical device probe. The systems currently in development do provide millimeter-level precision. These systems however have proven to be expensive and difficult to implement. Once our system has been perfected, it would be inexpensive and simple to operate.
 
 \subsection{3D Ultrasound}
 
-There are 3D ultrasound systems **INSERT REFERENCE** which do track on the surface of a patient. It takes ultrasound readings and uses orientation and displacement sensors to help align the readings in order to generate a 3D data set of the inside of the patient. Using this system, orientation and displacement information is combined to generate complete paths. The paper did not consider the exact location on the surface where they placed the probe. They just used the path information to help stitch together the data set. \\
+There have been other attempts to track a probe on the surface of a patient, most notably as a method to produce 3D ultrasounds \ref{3dUltrasound}. The ultrasound readings were taken continuously. The data from the orientation and displacement sensors was used to generate the path of the probe. The path data was used to align the ultrasound readings and ultimately generate a 3D data set of the inside of a patient. Much of the work in this paper on tracking the position of a probe using orientation and displacement was inspired by this paper. \\
 \\
-Our technology is meant to use this path information as well as a preloaded mesh in order visualize the path of the probe on the patient. \\
-**MENTION 3D ULTRASOUND**\\
-
-The problem of tracking a sensor on the skin's surface was approached in \ref{3dUltrasound}. Much of the initial work on tracking the position of a probe using the orientatation and displacement was inspired by this method. In the paper however they do not deal with the deformability of the surface. This paper attempts to reconcile that problem.\\
+Our paper seeks to extend this work. The 3D ultrasound system only generated a path on the surface and did not reconcile the path with a 3D scan of the surface. They just used path information to help stitch together the data set. Our technology is meant to use this path information as well as a preloaded mesh in order visualize the path of the probe on the patient. \\
 \\
-The paper also did a very simplified approach to the orientation of the sensor. We aim for a more complete solutinos. 
-\subsection{Human Tracking}
-
-Tracking human motion was approached in \ref{humanMotionTracking}. It figures out a 3D path and integrates orientation and displacement information. It does not reconcile it though with a 3D mesh of the patient. It also does not consider the deformations of the surface of a patient. With our research, we incorporate the deformations. 
+The fact that the surface of a patient is deformable means the paths recorded will have to be reconciled with the surface. The 3D ultrasound paper did not consider the deformations of the surface of a patient. In our paper, we reconcile our recorded path with a 3D scan of the surface in order to modify our paths and make them more accurate. \\
+\\
+The 3D ultrasound paper also did a very simplified approach to the orientation of the sensor. We aim for more complete solutions. **INSERT DETAIL ON THIS** 
 
 \subsection{Deformable Surface Tracking}
 
-Current work on deformable surface tracking is focused on tracking the deformations of the surface itself \cite{deformableobjecttracking,convexopt}. Additionally these works focus on surfaces that do not retain their shape after deformation. For our purposes the surfaces are elastic and thus retain their shape. This paper focuses on surfaces that deform when pressure is applied but then retain their shape afterwards. It is also focused on tracking objects on the surface rather than the surface itself.\\
+Current work on deformable surface tracking is focused on tracking the deformations of the surface itself \cite{deformableobjecttracking,convexopt}. Additionally these works focus on surfaces that do not retain their shape after deformation. For our purposes the surfaces are elastic and thus retain their shape. This paper is also focused on tracking objects on the surface rather than the surface itself.\\
 \\
 
 \subsection{Mesh Unfolding}
 
-Being that we are tracking on a 2D surface embedded into 3D space, we thought about trying to flatten the mesh first and then track on it. We considered using a mesh flattening algorithm that used topological surgery \cite{meshunfolding}. There are other mesh flattening algorithms that exist but in the end we only used mesh flattening for a small neighborhood around where the probe currently was located. Even though the mesh flattening does not have any holes or gaps when using this algorithm, there is no way to assure that our path will not leave the boundary of the flattened mesh. Additionally, we need an algorithm to work on arbitrary meshes and the mesh flattening was only proven to work with a handful of meshes. Due to these difficulties, we decided not to flatten the entire mesh and only do local flattening when we want the path to follow the mesh, which means we care about the triangle where the path is currently as well as its neighboring triangles. 
+Since we are tracking on a 2D surface embedded in 3D space and using a 2D displacement sensor, we need to be able to do some flattening in order show accurately where the probe is currently located on the surface. There are mesh flattening algorithms which attempt to flatten an entire 3D model \cite{meshunfolding}. For our purposes however, flattening the entire model is not practical. Because this has to work on arbitrary surfaces, there is no guarantee that a flattening without holes or gaps will exist. Even if it does exist, there is no guarantee that the path will not travel beyond the boundary of the flattened mesh. Because of these shortfalls, we decided to only flatten a local neighborhood around the probe's current location. Due to the fact that we are only tracking on surfaces that can deform to accommodate a flat probe, we can guarantee that a local flattening will exist.
