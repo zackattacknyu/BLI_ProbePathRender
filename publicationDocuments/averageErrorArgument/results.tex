@@ -2,11 +2,26 @@
 
 Let $x,y$ be the error amounts. Let $\epsilon_x$ and $\epsilon_y$ be the max error for both, thus we care about the range $x \in (-\epsilon_x,\epsilon_x)$ and $y \in (-\epsilon_y,\epsilon_y)$. Let $A$ be the measured value for the $x$ variable and $B$ be the measured value for the y variable.\\
 \\
-The error is as follows
+The error variables are as follows
 \[
-E(x,y) = |\frac{A + x}{B + y} - \frac{A}{B} |
+D(x,y) = \frac{A + x}{B + y} - \frac{A}{B}
+\]
+\[
+E(x,y) = |D(x,y)|
 \]
 To get the average, you need to integrate this over the range of $x$ and $y$\\
 We need to split this into two regions depending on whether the abs value fraction is positive or negative. \\
 In the region $y < \frac{B}{A} x$, the term inside the absolute value is positive\\
 In the region $y > \frac{B}{A} x$, the term inside the absolute value is negative\\
+\\
+Denote $R_1$ as the intersection of $(-\epsilon_x,\epsilon_x) \times (-\epsilon_y,\epsilon_y)$ and the region $y < \frac{B}{A} x$. \\
+Denote $R_2$ as the intersection of $(-\epsilon_x,\epsilon_x) \times (-\epsilon_y,\epsilon_y)$ and the region $y > \frac{B}{A} x$. \\
+\\
+We must find the following:
+\[
+\int_{R_1} D(x,y) + \int_{R_2} -D(x,y)
+\]
+$\frac{A}{B}$ is a constant and $R_1$ and $R_2$ have equal area. Thus the above simplifies to:
+\[
+\int_{R_1} \frac{A + x}{B + y} - \int_{R_2} \frac{A + x}{B + y}
+\]
