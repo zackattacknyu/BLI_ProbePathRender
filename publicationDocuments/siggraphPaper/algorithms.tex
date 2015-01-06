@@ -2,7 +2,8 @@
 
 \subsection{Coordinate Systems}
 
-The basic problem we have is that we are given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. In order to illustrate how the conversion will work, we will use 4 coordinate systems:\\
+In order to produce an accurate paths for visualization, we have the problem of given 5 values from the probe, $(x_{probe},y_{probe},\theta_{yaw},\theta_{pitch},\theta_{roll})$ and we need to translate that into 3 values for the virtual world, $(x_{virtual},y_{virtual},z_{virtual})$. Here the $x,y,z$ refer to displacements in those directions. We have 4 coordinate systems that we need to consider:\\
+\\
 1. Mouse sensor coordinate system, subscript $m$\\
 2. Probe coordinate system,  subscript $p$\\
 3. Real world coordinate system, subscript $k$\\

@@ -17,8 +17,11 @@ Subsection: Coordinate Systems
   - mouse sensor, probe, real world, virtual world
 Subsection: Rigid and Deformable Coordinate Systems Transformations
  - Using coordinate systems mentioned above, stress the fact that tracking on the surface is required.
- - Why you also need to find the rotation of the probe on the surface (in the tangent space of the surface).
- - What else do we need to know to correctly track the probe on the surface.  (For example, for every sweep -- path traversed by the probe without getting out of the surface --  you need to know at least two point coorespondences) 
+ - Why you also need to find the rotation of the probe on the surface 
+       (in the tangent space of the surface).
+ - What else do we need to know to correctly track the probe on the surface.  
+       (For example, for every sweep -- path traversed by the probe without getting out of the surface --  
+        you need to know at least two point coorespondences) 
  
 Subsection: Tracking System Components
   -- Leverage the previous subsection to summarize what kind of sensors, markers, and other components you need to build a successful tracker.
