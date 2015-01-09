@@ -90,8 +90,9 @@ We then compute the mean and std of those expected errors.
 Using this method, the expected error is 6.53% and the 
     standard deviation is 3.73%
 %}
-errorReal = 2; % there is a 2 mm error for measuring
-errorVirtual = 0.12; %rough diameter in virtual units for the circle
+errorReal = 0.5; % there is a 0.5 mm error for measuring
+%diameter in virtual units for the circle was x. error then is x/2
+errorVirtual = 0.06; %rough diameter in virtual units for the circle
 distsRealArray = getArray(distsReal);
 distsVirtualArray = getArray(distsVirtual1);
 distsRealErrored = distsRealArray - errorReal;
