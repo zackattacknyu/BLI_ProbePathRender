@@ -188,7 +188,7 @@ public class PathOnMeshCalculator {
     }
     
     public SegmentSet getCurrentSegmentSetOnSurface(){
-        SegmentSet segSetToProject = new SegmentSet(getCurrentRotatedPath(),initSegmentSet.getDataAtVertices());
+        SegmentSet segSetToProject = new SegmentSet(getCurrentRotatedPath(),initSegmentSet.getDataAtVertices(),initSegmentSet.getOriginalVertices(),4);
         return PathProjectionOntoMesh.getPathProjectedOntoMesh(segSetToProject, startingTriangle, meshInfo);
     }
     

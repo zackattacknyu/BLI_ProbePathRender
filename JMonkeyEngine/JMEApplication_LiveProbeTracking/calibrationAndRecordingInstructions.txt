@@ -1,0 +1,38 @@
+NOTE:
+First property in live tracking is now whether or not to turn on signal tracking
+
+To Record Paths:
+
+1. Locate the probe at the desired start point
+2. Press N to begin recording
+3. Move the probe along the desired path
+4. Press N to stop recording
+5. The output folder will contain the result files
+
+To begin calibration:
+1. Find one of the files with prefix "calibrationProperties_..."
+2. Copy it and make the suffix the name of your current mesh
+
+Doing scale calibration:
+
+1. Measure the real world distance between the points
+2. Find the virtual distance between the points. 
+	- This is accomplished by looking at the file "compressedPathInfo..." for the recorded path
+3. Find out the (virtualDistance)/(realDistance) ratio and put it into the scale factor
+		field in the calibration properties file for your mesh
+
+Doing Rotation Calibration:
+
+1. Put the probe on a calibration point
+2. Press B
+3. Click the calibration point you are on
+4. Move the probe to another calibration point
+5. Hit space bar
+6. Click the calibration point moved to
+7. The rotation quaternion will be in the text file with prefix "CalibrationResults..."
+	in the output folder
+8. If the result was good, then put the quaternion into the calibration properties 
+	file for the mesh
+
+
+

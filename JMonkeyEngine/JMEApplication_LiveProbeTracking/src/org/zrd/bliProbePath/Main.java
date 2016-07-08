@@ -51,6 +51,8 @@ public class Main extends SimpleApplication {
 
     private boolean renderPathsDuringRecording;
     
+    private boolean enableSignalTracking = true;
+    
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
     }
@@ -84,6 +86,7 @@ public class Main extends SimpleApplication {
         boolean surfaceTrackingOn = PropertiesHelper.getBooleanValueProperty(props, "surfaceTrackingOn");
         boolean showTriangleNormals = PropertiesHelper.getBooleanValueProperty(props, "showTriangleNormals");
         boolean useFixedPointsIfExists = PropertiesHelper.getBooleanValueProperty(props, "useFixedPointsIfExists");
+        enableSignalTracking = PropertiesHelper.getBooleanValueProperty(props, "enableSignalTracking");
         
         /*
         * This turns on real-time rendering
@@ -130,9 +133,12 @@ public class Main extends SimpleApplication {
         activeTracker = surfaceTrackingOn ? probeTrackerOnSurface : probeTracker;
         
         //makes the signal tracker
-        signalTracker = new SignalProcessingOutput_Threaded(100,14);
-        activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
-        activeTracker.setOutputStreaming(signalTracker);
+        if(enableSignalTracking){
+            signalTracker = new SignalProcessingOutput_Threaded(100,14);
+            activeTracker.setDataArrayToStringConvertor(signalTracker.getDataTracker());
+            activeTracker.setOutputStreaming(signalTracker);
+        }
+        
         
         //initialize tracker actions
         new ResetTracker(inputManager,probeTracker);
@@ -186,6 +192,9 @@ public class Main extends SimpleApplication {
         outputText.setProbeMoveModeText(probeMoveAction.getProbeMoveModeText());
         
         //signalTracker.setData(activeTracker.getCurrentDataStrings());
-        outputText.setDataText(activeTracker.getStreamingOutput());
+        if(enableSignalTracking){
+           outputText.setDataText(activeTracker.getStreamingOutput()); 
+        }
+        
     }
 }

@@ -198,11 +198,14 @@ public abstract class PickTwoPointsOnMesh extends GeneralKeyboardActionMethod im
                     ScaleCalibration currentScaleCalib = new ScaleCalibration(activeSegmentSet.getPathVertices(),endPoint);
                     //activeSegmentSet = new SegmentSet(currentScaleCalib.getScaledPath(),activeSegmentSet.getDataAtVertices());
                     activeSegmentSet = PathCompression.getCompressedPath(activeSegmentSet,PathHelper.MIN_SEGMENT_LENGTH);
+                    
+                    
                     PathOnMeshCalculator currentRotCalib = 
                             new PathOnMeshCalculator(activeSegmentSet,endPoint,startingTriangle,meshInfo);
                     activeSegmentSet = currentRotCalib.getCurrentSegmentSetOnSurface();
-                    
+                    GeometryDataHelper.writeSegmentSetWithOrigIndexToFile(activeSegmentSet);
                     GeometryDataHelper.writeTexCoordToDefaultOutputFile(activeSegmentSet.getVertexTextureCoords());
+                    
                     
                     //calls the method that handles the result
                     handleEndPointResult(endPoint,currentScaleCalib,currentRotCalib,activeSegmentSet);

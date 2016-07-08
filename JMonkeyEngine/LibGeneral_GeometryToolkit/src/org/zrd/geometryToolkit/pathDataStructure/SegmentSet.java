@@ -38,6 +38,16 @@ public class SegmentSet {
     //private Vector3f startPoint;
     private ArrayList<Vector3f> segmentVectors;
     
+    private ArrayList<Integer> originalVertices = new ArrayList<Integer>();
+
+    public ArrayList<Integer> getOriginalVertices() {
+        return originalVertices;
+    }
+    
+    public void addToOrigVertices(int vertex){
+        originalVertices.add(vertex);
+    }
+    
     private ArrayList<Long> timestamps;
 
     public ArrayList<Long> getTimestamps() {
@@ -62,6 +72,18 @@ public class SegmentSet {
     public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices){
         this(pathVertices);
         this.dataAtVertices = dataAtVertices;
+    }
+    
+    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices, ArrayList<Integer> origIndices, int dummy){
+        this(pathVertices);
+        this.dataAtVertices = dataAtVertices;
+        this.originalVertices = origIndices;
+    }
+    
+    public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices, ArrayList<Vector2f> texVertices, ArrayList<Integer> origIndices){
+        this(pathVertices,dataAtVertices);
+        vertexTextureCoords = texVertices;
+        this.originalVertices = origIndices;
     }
     
     public SegmentSet(ArrayList<Vector3f> pathVertices, ArrayList<String[]> dataAtVertices, ArrayList<Vector2f> texVertices){

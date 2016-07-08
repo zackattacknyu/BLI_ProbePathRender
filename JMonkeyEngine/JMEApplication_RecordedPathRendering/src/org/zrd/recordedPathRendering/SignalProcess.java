@@ -39,18 +39,27 @@ public class SignalProcess implements StringToColorConversion{
         /*
          * CODE IF DATA ALREADY CONTAINS PEAK
          */
-        return Double.parseDouble(data[2]);
+        //return Double.parseDouble(data[2]);
         
         /*
          * CODE TO NOT DISPLAY ANY DATA
          */
         //return 0;
+        
+        if(data[2] == null){
+            return 0;
+        }else{
+            return Double.parseDouble(data[2]);
+        }
     }
 
     public ColorRGBA convertStringToColor2(String[] data){
         return ColorRGBA.Black;
     }
     public ColorRGBA convertStringToColor(String[] data) {
+        float lowThreshold = 52;
+        float highThreshold = 57;
+        
         double dataPeak = getWavePeak(data);
         //System.out.println("Peak=" + dataPeak);
         float brightness = (float)(dataPeak*-1);
@@ -65,12 +74,12 @@ public class SignalProcess implements StringToColorConversion{
         }
         */
         
-        if(brightness < 52){
+        if(brightness < lowThreshold){
             brightness = 1;
-        }else if(brightness > 57){
+        }else if(brightness > highThreshold){
             brightness = 0;
         }else{
-            brightness = 1 - (brightness-52)/5;
+            brightness = 1 - (brightness-lowThreshold)/(highThreshold-lowThreshold);
         }
         
         //System.out.println("Brightness: " + brightness);

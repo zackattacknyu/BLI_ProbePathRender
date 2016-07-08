@@ -48,7 +48,7 @@ public class Main extends SimpleApplication {
 
     private boolean meshIsFlat = true;
     
-    private boolean hideInitialPaths = false;
+    private boolean hideInitialPaths = true;
     
     public static void main(String[] args) {
         ApplicationHelper.initializeApplication(new Main());
@@ -86,7 +86,7 @@ public class Main extends SimpleApplication {
         pickPtAndProject = new PickPointOnMeshAndProject(inputManager, cam, shootables, recordedPathSet, meshInfo);
         pickFixedPtAndProject = new PickPointOnMeshAndProject(inputManager, cam, shootables, recordedPathSet, meshInfo,fixedPtsToPick);
         
-        //rootNode.attachChild(currentMeshSession.getFixedPointNode());
+        rootNode.attachChild(currentMeshSession.getFixedPointNode());
         
         paths = new Node();
         rootNode.attachChild(paths);

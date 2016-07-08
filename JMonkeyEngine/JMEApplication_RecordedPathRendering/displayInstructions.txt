@@ -1,0 +1,14 @@
+To Display Paths:
+
+1. Press I to start import process
+2. Select the desired path and import it
+	- The files that begin with "compressedPathVertices..." are ideal
+
+To Move Last Imported Path
+1. Use K to move to only fixed points (if they are stored)
+	- Use L to move between any points
+2. Select the start point
+3. Hit spacebar
+4. Select the end point
+5. The results of the move will be in the output folder
+	- File will be called "currentPathVertices_{timestamp}"

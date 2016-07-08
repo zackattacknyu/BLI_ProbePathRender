@@ -106,8 +106,12 @@ public class PathProjectionOntoMesh {
         ArrayList<String[]> finalPathData = new ArrayList<String[]>(currentPath.getSize());
         ArrayList<Vector2f> finalPathTex = new ArrayList<Vector2f>(currentPath.getSize());
         
+        ArrayList<Integer> origVerticesFinalPath = new ArrayList<Integer>(currentPath.getSize());
+        
         SegmentSet currentProjectedPath;
         int index = 0;
+        int origVertIndex = 0;
+        int sizNewPath = 0;
         
         //goes through each segment
         for(Vector3f segmentVec: currentPath.getSegmentVectors()){
@@ -117,6 +121,18 @@ public class PathProjectionOntoMesh {
             
             //adds the projection to the final output path
             finalPath.addAll(currentProjectedPath.getPathVertices());
+            
+            if(currentPath.getOriginalVertices().size() > 0){
+                origVerticesFinalPath.add(origVertIndex);
+                sizNewPath = currentProjectedPath.getPathVertices().size();
+                if(sizNewPath>1){
+                    //origVerticesFinalPath.add(0);
+                    for(int jj = 0; jj < sizNewPath; jj++){
+                        origVerticesFinalPath.add(0);
+                    }
+                }
+            }
+            origVertIndex++;
             
             if(currentProjectedPath.getVertexTextureCoords() != null){
                 finalPathTex.addAll(currentProjectedPath.getVertexTextureCoords());
@@ -139,7 +155,7 @@ public class PathProjectionOntoMesh {
             finalPathData.add(currentPath.getDataAtVertices().get(currentPath.getSize()-1));
         }
         
-        return new SegmentSet(finalPath,finalPathData,finalPathTex);
+        return new SegmentSet(finalPath,finalPathData,finalPathTex,origVerticesFinalPath);
     }
     
     /**

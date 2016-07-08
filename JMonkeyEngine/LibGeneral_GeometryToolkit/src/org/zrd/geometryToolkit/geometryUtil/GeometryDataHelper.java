@@ -56,6 +56,31 @@ public class GeometryDataHelper {
         writeSegmentSetInfoToFile(new SegmentSet(vertices),null,filePath);
     }
     
+    public static void writeSegmentSetWithOrigIndexToFile(SegmentSet segments){
+        writeSegmentSetWithOrigIndexToFile(segments,"verticesAndIndexOutput");
+    }
+    public static void writeSegmentSetWithOrigIndexToFile(SegmentSet segments, String outputFileName){
+        writeSegmentSetWithOrigIndexToFile(segments,GeneralFileHelper.getNewOutputFilePath(outputFileName));
+    }
+    public static void writeSegmentSetWithOrigIndexToFile(SegmentSet segments, Path filePath){
+        ArrayList<String> dataStrings = new ArrayList<String>(segments.getSize());
+        ArrayList<Integer> originalInds = segments.getOriginalVertices();
+        String timePart = "";
+        String vertexPart;
+        Vector3f vertex;
+        for(int index = 0; index < segments.getSize(); index++){
+            vertex = segments.getDataAtIndex(index).getVertex();
+            vertexPart = OutputHelper.getPositionOutputText(vertex.getX(), vertex.getY(), vertex.getZ());
+            
+            if(originalInds.size()>0){
+                timePart = String.valueOf(originalInds.get(index));
+            }
+            
+            dataStrings.add(vertexPart + "," + timePart);
+        }
+        FileDataHelper.exportLinesToFile(dataStrings, filePath);
+    }
+    
     public static void writeSegmentSetInfoToFile(SegmentSet segments, DataArrayToStringConversion converter, Path filePath){
         ArrayList<String> dataStrings = new ArrayList<String>(segments.getSize());
         String signalInfoPart = "";
@@ -85,9 +110,9 @@ public class GeometryDataHelper {
         ArrayList<Vector3f> lineVertices = new ArrayList<Vector3f>(lines.size());
         String previousLine = "";
         for(String line: lines){
-            if(!line.equals(previousLine)){
+            //if(!line.equals(previousLine)){
                 lineVertices.add(getVertexFromLine(line));
-            }
+            //}
             previousLine = line;
         }
         
@@ -120,10 +145,10 @@ public class GeometryDataHelper {
         
         String previousLine = "";
         for(String line: lines){
-            if(!line.equals(previousLine)){
+            //if(!line.equals(previousLine)){
                 lineVertices.add(getVertexFromLine(line));
                 dataAtLines.add(dataProcesor.getDataFromRawString(line));
-            }
+            //}
             previousLine = line;
         }
         

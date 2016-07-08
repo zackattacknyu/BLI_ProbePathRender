@@ -31,6 +31,7 @@ public class PathCompression {
         return newPathVertices;
     }
 
+    /*
     public static ArrayList<Vector3f> getCompressedPath(ArrayList<Vector3f> inputPath, float minSegmentLength) {
         ArrayList<Integer> compressedPathVertexIndices = getCompressedPathVertexIndices(inputPath,minSegmentLength);
         ArrayList<Vector3f> newPath = new ArrayList<Vector3f>(inputPath.size());
@@ -38,14 +39,21 @@ public class PathCompression {
             newPath.add(inputPath.get(index));
         }
         return newPath;
-    }
+    }*/
     
     public static SegmentSet getCompressedPath(SegmentSet inputPath, float minSegmentLength) {
         ArrayList<Integer> compressedPathVertexIndices = 
                 getCompressedPathVertexIndices(inputPath.getPathVertices(),minSegmentLength);
+        ArrayList<Integer> originalCompressedVertices = inputPath.getOriginalVertices();
         SegmentSet newPath = new SegmentSet(inputPath.getSize());
         for(Integer index: compressedPathVertexIndices){
             newPath.addToSet(inputPath.getDataAtIndex(index));
+            if(originalCompressedVertices.size() > 0){
+                newPath.addToOrigVertices(originalCompressedVertices.get(index));
+            }
+            else{
+                newPath.addToOrigVertices(index);
+            }
         }
         newPath.finalizeSegment();
         return newPath;
