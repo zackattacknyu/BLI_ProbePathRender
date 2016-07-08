@@ -60,7 +60,7 @@ public class PathOnMeshCalculator {
      * The maximum number of rotation attempts done before 
      *      quitting and settling with the results
      */
-    public static final int MAX_ROTATION_ATTEMPTS = 100;
+    public static final int MAX_ROTATION_ATTEMPTS = 1000;
     
     /**
      * The Epsilon we are using for this algorithm

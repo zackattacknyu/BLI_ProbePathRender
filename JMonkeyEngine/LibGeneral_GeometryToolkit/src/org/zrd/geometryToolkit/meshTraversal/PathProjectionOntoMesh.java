@@ -179,13 +179,17 @@ public class PathProjectionOntoMesh {
              * If no triangle, then just return the start point
              *      plus the segment vector
              */
-            return new SegmentSet(getPathPoints(segmentVector));
+            
+            return findCurrentSegmentProjectionOntoMesh(segmentVector);
+            //return new SegmentSet(getPathPoints(segmentVector));
         }else{
             
             /*
              * If we still have a triangle, then project the segment
              *      onto the mesh and return the result
              */
+            
+  //          System.out.println("Current Triangle: "+currentTriangle);
             return findCurrentSegmentProjectionOntoMesh(segmentVector);
         }
     }
@@ -250,7 +254,11 @@ public class PathProjectionOntoMesh {
              */
             currentVector = remainingSegments.peek().clone();
             currentVectorOnPlane = VectorProjectionHelper.getVectorProjectedOntoPlane(currentNormal, currentVector);
-            
+            float dot1 = currentNormal.dot(currentVectorOnPlane);
+            if (dot1>0)
+            {
+            //     System.out.println(dot1);
+            }
             /*
              * This finds the end point of the projected segment and finds
              *      where it intersects the current triangle
@@ -276,6 +284,7 @@ public class PathProjectionOntoMesh {
              *      and deal with the cases
              */
             intersectingEdge = intersection.getIntersectionEdge(intersectingEdge);
+//            System.out.println("Mesh Intersection Edge: "+intersectingEdge);
             if (intersectingEdge != null) {
                 
                 //finds correct adjacent triangle
